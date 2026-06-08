@@ -259,7 +259,7 @@ Use these modes, prompts, or agents in order for every significant change:
 
 | Agent | Purpose |
 | --- | --- |
-| `critical-thinking.agent.md` | Challenge assumptions before committing to a design or approach. |
+| `critical-thinking.agent.md` (or `critical-thinking.chatmode.md`) | Challenge assumptions via open Socratic questioning before committing to a design or approach. Asks questions only — never writes code — with a single carve-out to flag data-loss, security, or Production-safety risks. Ends with a neutral recap of assumptions tested. |
 | `debug.agent.md` | Systematic troubleshooting when tests fail or behaviour is unexpected. |
 
 Never skip step 4 (tests green) before step 5 (docs update).

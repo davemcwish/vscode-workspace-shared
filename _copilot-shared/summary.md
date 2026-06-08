@@ -89,7 +89,7 @@ selecting it in the agent dropdown.
 | `doc-writer.agent.md` | Writes and updates beginner-friendly project documentation. |
 | `pre-commit-check.agent.md` | Runs the full quality gate and summarises results before a PR is raised. |
 | `docstring-auditor.agent.md` | Audits and improves beginner-friendly Python docstrings without changing runtime behaviour. |
-| `critical-thinking.agent.md` | Challenges assumptions via Socratic questioning — asks questions only, never writes code. |
+| `critical-thinking.agent.md` | Challenges assumptions via open Socratic questioning — asks questions only, never writes code (one carve-out: may flag a data-loss/security/Production risk). Ends with a neutral recap of assumptions tested. Mirrored with the chatmode version. |
 | `debug.agent.md` | Systematic 4-phase bug diagnosis: assess → investigate → resolve → verify. |
 
 **Recommended agent chain** (the order you'd use them for a full feature):
@@ -119,7 +119,7 @@ persona and ruleset that persist for the entire conversation.
 | `accessibility-review.chatmode.md` | Review HTML, CSS, Markdown, reports, and user-facing output for practical accessibility. |
 | `backlog-gate.chatmode.md` | Check whether an idea already exists in the backlog before creating a new entry. |
 | `capability-planner.chatmode.md` | Scope, size, and prioritise new capabilities and technical debt items. |
-| `critical-thinking.chatmode.md` | Challenge assumptions before committing to a design or approach. Only asks questions. |
+| `critical-thinking.chatmode.md` | Challenge assumptions before committing to a design or approach via open Socratic questioning. Only asks questions (one carve-out: may flag a data-loss/security/Production risk). Ends with a neutral recap. Mirrored with the agent version. |
 | `debug.chatmode.md` | Systematically diagnose and resolve bugs using a structured 4-phase process. |
 | `dependency-manager.chatmode.md` | Manage Python dependencies safely with pip-tools. |
 | `doc-writer.chatmode.md` | Write beginner-friendly project documentation. |
