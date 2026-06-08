@@ -1,0 +1,12 @@
+# Ignore everything by default (project folders have their own repos)
+*
+
+# Explicitly include workspace-level shared files
+!.gitignore
+!.gitattributes
+!_copilot-shared/
+!_copilot-shared/**
+!sync-shared-copilot.ps1
+!repair-git-state.ps1
+!adding-a-new-subworkspace.md
+!Visual Studio Code.code-workspace

@@ -1,0 +1,27 @@
+{
+	"folders": [
+		{
+			"name": "Visual Studio Code",
+			"path": "."
+		},
+		{
+			"name": "Salesforce",
+			"path": "Salesforce"
+		},
+		{
+			"name": "Trails and Tails",
+			"path": "Trails and Tails"
+		},
+		{
+			"name": "WOPR (Joshua) War Games CRT Terminal and Game Hub",
+			"path": "woprcrt-terminal-main"
+		}
+	],
+	"settings": {
+		"chat.promptFiles": true,
+		"github.copilot.chat.codeGeneration.useInstructionFiles": true,
+		"terminal.integrated.shellIntegration.enabled": true,
+		"github.copilot.chat.terminalChatLocation": "chatView",
+		"github.copilot.chat.customOAIModels": {}
+	}
+}
