@@ -246,6 +246,38 @@ When using Web Components (`class extends HTMLElement`):
 - The only acceptable globals are the Custom Element registration
   (`customElements.define(...)`) and minimal page-wiring code.
 
+### WebSocket Client (Socket.IO)
+
+When connecting to a Flask-SocketIO backend:
+
+- Load the Socket.IO client library from the Flask server (not a CDN):
+  ```html
+  <script src="/static/js/socket.io.min.js"></script>
+  ```
+- Connect with:
+  ```javascript
+  // socket.io creates a persistent WebSocket connection to the server.
+  // Unlike fetch (which is request/response), WebSocket stays open so the
+  // server can push data to the browser in real-time (e.g. log lines).
+  const socket = io();
+  ```
+- Listen for server events using `socket.on("event_name", callback)`:
+  ```javascript
+  socket.on("log", function(data) {
+    // data = { level: "INFO", message: "...", timestamp: "..." }
+    appendToTerminal(data.message, data.level);
+  });
+  ```
+- Emit events to the server using `socket.emit("event_name", payload)`.
+- Explain in a comment what WebSocket is and how it differs from HTTP fetch
+  (persistent connection, server can push, no polling needed).
+- Handle disconnection gracefully:
+  ```javascript
+  socket.on("disconnect", function() {
+    appendToTerminal("Connection lost. Reconnecting...", "WARNING");
+  });
+  ```
+
 ---
 
 ## Commenting & Documentation Standards

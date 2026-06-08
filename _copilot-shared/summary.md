@@ -64,6 +64,8 @@ in the agent dropdown.
 | `doc-writer.agent.md` | Writes and updates beginner-friendly project documentation. |
 | `pre-commit-check.agent.md` | Runs the full quality gate and summarises results before a PR is raised. |
 | `docstring-auditor.agent.md` | Audits and improves beginner-friendly Python docstrings without changing runtime behaviour. |
+| `critical-thinking.agent.md` | Challenges assumptions via Socratic questioning — asks questions only, never writes code. |
+| `debug.agent.md` | Systematic 4-phase bug diagnosis: assess → investigate → resolve → verify. |
 
 **Recommended agent chain:**
 
@@ -71,6 +73,13 @@ in the agent dropdown.
 scope-change → business-analyst → architect → dev-manager → team-lead → dev
                                                     ↓
                               code-reviewer → docstring-auditor → pre-commit-check → doc-writer
+```
+
+**Supporting agents (use at any step):**
+
+```text
+critical-thinking  — challenge assumptions before committing to a design
+debug              — systematic troubleshooting when tests fail
 ```
 
 ---
@@ -113,11 +122,13 @@ No manual action required.
 | --- | --- | --- |
 | `docstrings.instructions.md` | `src/**/*.py, scripts/**/*.py, tests/**/*.py` | Mandatory beginner-friendly Python docstring rules. |
 | `docs.instructions.md` | `docs/**/*.md, *.md, CONTRIBUTING.md, README.md` | Audience and tone rules for all project documentation. |
+| `flask-websocket-subprocess.instructions.md` | `frontend/**/*.py, src/**/job_runner*.py, **/app.py` | Flask 3.x REST API, Flask-SocketIO WebSocket, and subprocess.Popen patterns. |
+| `html-css-javascript.instructions.md` | `**/*.html, **/*.css, **/*.js, frontend/**` | Authoring standards for HTML, CSS, and JavaScript. |
 | `markdown.instructions.md` | `**/*.md` | Markdown style for project documentation. |
 | `python.instructions.md` | `**/*.py` | Python coding standards for beginner-friendly maintainability. |
 | `salesforce.instructions.md` | `src/**/*.py, scripts/**/*.py` | Salesforce API usage and Production-safety rules. |
-| `security.instructions.md` | `**` | Secrets handling and sensitive data rules. |
-| `testing.instructions.md` | `tests/**/*.py` | Pytest conventions and coverage expectations. |
+| `security.instructions.md` | `**` | Secrets handling, sensitive data, OWASP web security for Flask endpoints. |
+| `testing.instructions.md` | `tests/**/*.py` | Pytest conventions, coverage expectations, Flask/SocketIO test patterns. |
 | `transcript-extraction.instructions.md` | `docs/**/*.md, transcripts/**/*.md, **/*transcript*.md, **/*guide*.md` | Rules for extracting beginner-friendly task guides from transcripts. |
 
 ---
@@ -155,7 +166,9 @@ tasks. Not auto-applied — agents load them explicitly.
 | --- | --- |
 | `cli.skill.md` | argparse patterns, help text, exit codes, and dry-run conventions. |
 | `docstring.skill.md` | Mandatory beginner-friendly Google-style docstring rules, examples, and review checklist. |
+| `flask-websocket.skill.md` | Flask 3.x, Flask-SocketIO, subprocess.Popen patterns for the JOSHUA frontend. |
 | `html-css.skill.md` | HTML and CSS patterns for static Salesforce reports. |
+| `html-css-static-report.skill.md` | Constraints and file structure for generated HTML reports. |
 | `python.skill.md` | Core Python standards: style, typing, error handling, logging. |
 | `salesforce.skill.md` | Salesforce API safety, SOQL patterns, PII handling, Production guardrails. |
 | `security.skill.md` | Subprocess safety (Cycode SAST), secret handling, TLS, path traversal. |

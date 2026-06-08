@@ -15,6 +15,10 @@
 		{
 			"name": "WOPR (Joshua) War Games CRT Terminal and Game Hub",
 			"path": "woprcrt-terminal-main"
+		},
+		{
+			"name": "PowerPoint Reformat",
+			"path": "powerpoint-reformat"
 		}
 	],
 	"settings": {

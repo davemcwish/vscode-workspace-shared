@@ -160,7 +160,86 @@ with open(safe_path, "w", ...) as fh:
 - Treat reports containing Salesforce usernames, emails, manager names, or user
   IDs as confidential.
 
-## Personal Information in Comments
+## Flask / Web Endpoint Security (OWASP)
+
+When building Flask REST API endpoints (e.g. the JOSHUA frontend), apply these
+rules in addition to the subprocess and file-path rules above.
+
+### Input Validation (OWASP A05 — Injection)
+
+- **Validate ALL request data** — `request.get_json()`, `request.args`,
+  `request.form` — before use. Never trust client input.
+- **Use allowlists** over denylists. If a parameter should be one of 8 script
+  names, check `if value not in ALLOWED_SCRIPTS`.
+- **Type-check** JSON fields: verify strings are strings, numbers are numbers.
+- **Limit lengths** — reject excessively long strings before further processing.
+
+### XSS Prevention (OWASP A05)
+
+- **Use `textContent`** (not `innerHTML`) when inserting dynamic text in the
+  frontend JavaScript.
+- **Jinja2 auto-escapes by default** — never use `| safe` unless the content
+  is trusted and static.
+- **Never** construct HTML from user-submitted data in Python code. Use Jinja2
+  templates with auto-escaping enabled.
+- **Content-Security-Policy header** — set it even for localhost to catch issues
+  early:
+
+```python
+@app.after_request
+def set_security_headers(response):
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self'; "
+        "style-src 'self' 'unsafe-inline'; "
+        "connect-src 'self' ws://localhost:*"
+    )
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
+```
+
+### CSRF Protection
+
+- For a localhost-only app, CSRF risk is minimal but not zero (browser
+  extensions, malicious local pages).
+- Flask-SocketIO uses its own session-based verification.
+- For REST endpoints that mutate state (`POST`, `PUT`, `DELETE`), verify the
+  `Origin` or `Referer` header matches `localhost`:
+
+```python
+def _is_local_origin(request) -> bool:
+    origin = request.headers.get("Origin", "")
+    return origin.startswith("http://localhost:") or origin.startswith("http://127.0.0.1:")
+```
+
+### Authentication & Authorisation
+
+- For a single-user local app, authentication is not required.
+- **Bind to `127.0.0.1` only** — never `0.0.0.0`. This is the primary access
+  control mechanism.
+- If ever exposed beyond localhost, add authentication before deployment.
+
+### Error Information Leakage (OWASP A10)
+
+- **Never** return stack traces or internal paths in JSON error responses.
+- Log the full exception server-side; return only a user-friendly message.
+- Set `debug=False` in production. `debug=True` exposes the Werkzeug debugger
+  which allows arbitrary code execution.
+
+### Denial of Service (Local Context)
+
+- **Limit request body size**: `app.config["MAX_CONTENT_LENGTH"] = 1_048_576`
+  (1 MB).
+- **Limit subprocess runtime** with a timeout (see
+  `flask-websocket-subprocess.instructions.md`).
+- **One job at a time** — reject concurrent launch requests.
+
+## Generated Data Files
+
+- Do not commit generated CSV, Excel, PDF, ZIP, log, or report files unless they
+  are intentionally sanitized samples.
+- Treat reports containing Salesforce usernames, emails, manager names, or user
+  IDs as confidential.
 
 - **Never** commit real usernames, personal directory paths, or
   workstation-specific paths in comments, docstrings, or example snippets.

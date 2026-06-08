@@ -39,20 +39,22 @@ $Shared = Join-Path $Root "_copilot-shared"
 
 # Add new project folder names here as you create them.
 $DefaultProjects = @(
+    "asus-router-decoder",
+    "powerpoint-reformat",
     "Salesforce",
-    "Trails and Tails"
+    "Trails and Tails",
     "woprcrt-terminal-main"
 )
 
 # Subfolders inside _copilot-shared\ to mirror into each project's .github\
 $Folders = @(
+    ".spec-workflow",
     "agents",
     "chatmodes",
     "instructions",
     "prompts",
     "skills",
-    "workflows",
-    ".spec-workflow"
+    "workflows"
 )
 
 # ── Resolve target project list ───────────────────────────────────────────────

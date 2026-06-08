@@ -20,7 +20,38 @@
 - **Security:** [e.g., "Must not log user email addresses"]
 - **Cross-platform:** [e.g., "Must work on Windows and Linux CI"]
 
-## 4. Acceptance Criteria (BDD)
+## 4. Formal Requirements (EARS Notation)
+
+Use EARS (Easy Approach to Requirements Syntax) for precise, testable
+statements. Choose the pattern that best fits each requirement:
+
+| Pattern | Template |
+| --- | --- |
+| Ubiquitous | THE SYSTEM SHALL [behaviour]. |
+| Event-driven | WHEN [trigger], THE SYSTEM SHALL [behaviour]. |
+| State-driven | WHILE [state], THE SYSTEM SHALL [behaviour]. |
+| Unwanted behaviour | IF [condition], THEN THE SYSTEM SHALL [response]. |
+| Optional feature | WHERE [feature included], THE SYSTEM SHALL [behaviour]. |
+
+Each requirement must be: **Testable**, **Unambiguous**, **Necessary**,
+**Feasible**, and **Traceable**.
+
+**Examples:**
+
+- WHEN the user clicks [▶ LAUNCH MISSION], THE SYSTEM SHALL validate all
+  parameters and POST to `/api/jobs`.
+- WHILE a job is running, THE SYSTEM SHALL stream log output to the terminal
+  panel via WebSocket.
+- IF the target org is PROD, THEN THE SYSTEM SHALL display a confirmation
+  modal before proceeding.
+
+**Requirements:**
+
+- [EARS-001]: [EARS statement]
+- [EARS-002]: [EARS statement]
+- [EARS-003]: [EARS statement]
+
+## 5. Acceptance Criteria (BDD)
 
 **Scenario 1: [Happy path]**
 
@@ -34,7 +65,7 @@
 - **When** [Action]
 - **Then** [Observable outcome — e.g., clear error message, exit code 1]
 
-## 5. Out of Scope
+## 6. Out of Scope
 
 - [Explicitly excluded items to keep this story small]
 - [e.g., "Does not include HTML report generation — separate story"]

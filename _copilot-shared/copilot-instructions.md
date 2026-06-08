@@ -17,6 +17,21 @@ Before starting any task, complete these steps:
 2. List the **behaviors** that will change.
 3. List the **test cases** to add or update.
 4. Check if existing code can be **reused or reconfigured** before writing new code.
+5. Assess **confidence** (see below) and adapt strategy accordingly.
+
+### Confidence Assessment
+
+Before committing to an implementation plan, assess confidence on a 0–100 scale:
+
+| Confidence | Strategy |
+| --- | --- |
+| **High (>85%)** | Proceed with full implementation plan. |
+| **Medium (66–85%)** | Build a proof-of-concept or MVP first. Define success criteria, validate, then expand. |
+| **Low (<66%)** | Research phase first. Use `semantic_search`, read docs, study similar implementations. Re-assess after research. If still low, escalate to the user. |
+
+Factors that lower confidence: unfamiliar library, unclear requirements,
+complex integration, no existing tests to validate against, no prior art in
+the codebase.
 
 ---
 
@@ -75,6 +90,26 @@ AI recommends. The user decides. This overrides all other rules.
 - If a task needs 1 tool call, don't use 3. Plan before acting.
 - Do not summarise what you just did unless the result is ambiguous or you
   need additional input.
+
+---
+
+## Context Engineering
+
+Practices that help Copilot produce better suggestions and reduce
+misunderstandings:
+
+- **Keep relevant files open in tabs.** Copilot uses open tabs as context
+  signals. Working on auth? Open auth-related files.
+- **Position cursor intentionally.** Copilot prioritises code near your cursor.
+- **Use Chat for complex tasks.** Inline completions have limited context;
+  Chat mode sees more files.
+- **Reference patterns explicitly.** "Follow the same pattern as
+  `src/sf_admin_utils/query_helpers.py`" gives Copilot a concrete example.
+- **Describe scope first for multi-file changes.** Tell Copilot all files
+  involved before asking for changes.
+- **Work incrementally.** One file at a time, verifying each change.
+- **If Copilot struggles:** open relevant files, restart the session, be more
+  specific, add constraints, reference existing code.
 
 ---
 
@@ -220,8 +255,27 @@ Use these modes, prompts, or agents in order for every significant change:
 | 10 | `code-reviewer.agent.md` or `review.prompt.md` | Review completed changes. |
 | 11 | `pr-merge.chatmode.md` | Prepare commit and PR text, then push after approval. |
 
+**Supporting agents (use at any step):**
+
+| Agent | Purpose |
+| --- | --- |
+| `critical-thinking.agent.md` | Challenge assumptions before committing to a design or approach. |
+| `debug.agent.md` | Systematic troubleshooting when tests fail or behaviour is unexpected. |
+
 Never skip step 4 (tests green) before step 5 (docs update).
 Never skip step 6 (quality gate) before step 7 (review).
+
+---
+
+## Code Review Priority Levels
+
+When reviewing code (or interpreting review feedback), classify issues:
+
+| Level | Label | Action |
+| --- | --- | --- |
+| 🔴 | **CRITICAL** | Blocks merge. Security, correctness, data loss, breaking changes. |
+| 🟡 | **IMPORTANT** | Requires discussion. SOLID violations, missing tests, performance, architecture drift. |
+| 🟢 | **SUGGESTION** | Non-blocking. Readability, naming, minor optimisations, documentation gaps. |
 
 
 ##  Canonical Quality Gate
