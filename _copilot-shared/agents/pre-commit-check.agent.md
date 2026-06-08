@@ -55,10 +55,13 @@ running it. Report each as PASS / ❌ NEEDS FIX / N/A.
 
 - [ ] Any use of `random.Random`, `random.choice`, `random.randint`, etc. is for
       non-security purposes only (mock data, shuffling, simulation).
-- [ ] The instantiation line carries `# noqa: S311  # nosec B311`.
-- [ ] **Every call-site** (`.choice()`, `.randint()`, `.random()`, etc.) on that
-      instance also carries `# nosec B311`. Suppressing only the instantiation is
-      not enough — Cycode traces the PRNG taint to each usage site individually.
+- [ ] **Preferred fix for deterministic mock/prototype code:** eliminate the PRNG
+      entirely — derive agency, date, and other values from a counter using
+      modular arithmetic. No import, no suppression, Cycode cannot flag it.
+- [ ] **If randomness is genuinely needed (non-deterministic):** use
+      `random.SystemRandom()` (backed by `os.urandom()`), which Cycode accepts.
+- [ ] **`# nosec B311` suppresses bandit only — it does NOT satisfy Cycode SAST.**
+      Cycode runs its own engine and will still flag the violations as unresolved.
 - [ ] No `random` module usage for tokens, session IDs, passwords, or
       cryptographic nonces — use `secrets` instead.
 

@@ -168,42 +168,50 @@ with open(safe_path, "w", ...) as fh:
 
 ## PRNG Usage (Cycode SAST Rule: "Usage of weak Pseudo-Random Number Generator")
 
-`random.Random()` (and module-level `random.choice`, `random.randint`, etc.)
-triggers Cycode's B311/S311 SAST rule at **High severity** on both the
-**instantiation** and **every subsequent call-site** where a method is invoked
-on the instance. Cycode performs taint-flow analysis — it identifies that the
-instance was created from a weak PRNG and flags all downstream usages.
+`random.Random()` and all module-level `random.*` functions trigger Cycode's
+B311/S311 SAST rule at **High severity**. Cycode traces the PRNG taint from
+the constructor to **every downstream call-site** (`.choice()`, `.randint()`,
+etc.) and flags each one individually.
+
+> ⚠ **`# nosec B311` does NOT satisfy Cycode SAST.**
+> `# nosec` is a bandit suppression comment. It suppresses the local `bandit`
+> scan in `sanity.bat` but has no effect on Cycode's own engine. If you add
+> `# nosec B311` to all call-sites and push, Cycode will still report the
+> violations as unresolved.
 
 | Context | Correct approach |
 | --- | --- |
-| Mock/test data, shuffling, simulation, non-security randomness | `random.Random(seed)` is correct. Suppress with `# nosec B311` on the instantiation **and** every flagged call-site. |
-| Tokens, session IDs, passwords, cryptographic nonces | Use the `secrets` module. **Never suppress** — fix the code. |
+| **Security-sensitive** (tokens, session IDs, nonces, passwords) | Use `secrets.choice()`, `secrets.randbelow()`, `secrets.token_hex()`. Never suppress. |
+| **Non-security randomness where determinism is NOT required** (shuffling, sampling) | Use `random.SystemRandom()` — it uses `os.urandom()` internally and is Cycode-safe. |
+| **Non-security randomness where determinism IS required** (mock data, test fixtures, prototype generation) | **Eliminate the PRNG entirely.** Derive values from a counter or index using modular arithmetic. This is fully deterministic, Cycode cannot flag it, and it requires no suppression. |
 
-**Key rule:** Suppressing only the instantiation line is not enough. Cycode
-traces the taint to each usage. Every `.choice()`, `.randint()`, `.random()`,
-etc. call on the instance must also carry the suppression comment.
-
-**Pattern for non-security PRNG usage:**
+**Preferred pattern for deterministic mock data (no PRNG at all):**
 
 ```python
-# Acceptable: fixed-seed PRNG for deterministic mock data (not security-sensitive).
-# A module-level random.seed() is avoided; the seed is isolated to this instance.
-rng = random.Random(42)  # noqa: S311  # nosec B311  # DevSkim: ignore DS148264
-
-...
-
-value = rng.choice(options)          # nosec B311
-value = rng.randint(0, 100)          # nosec B311
-value = rng.choice(other_options)    # nosec B311
+# Derive agency, agent, and date from the order counter.
+# Modular arithmetic gives realistic variety without any PRNG.
+# Every run produces identical results — no seed, no suppression needed.
+for idx, _ in enumerate(range(count)):
+    agency = _MOCK_AGENCIES[idx % len(_MOCK_AGENCIES)]
+    agent  = agents[idx % len(agents)]
+    days   = idx % 365
 ```
 
-> **Why `# nosec B311` and not `# noqa: S311` on the call-sites?**
-> `ruff`'s S311 rule fires on module-level calls (`random.choice(...)`) but
-> typically does not fire on instance method calls (`rng.choice(...)` where
-> `rng` is a `random.Random` object). Adding `# noqa: S311` to call-sites would
-> therefore create stale suppression comments, which check 2j (RUF100) would
-> flag as a lint error. Use `# nosec B311` only on call-sites — this satisfies
-> Cycode (which maps its PRNG rule to B311) without creating a ruff violation.
+**If `random.SystemRandom()` is used (non-deterministic, but Cycode-safe):**
+
+```python
+rng = random.SystemRandom()  # Uses os.urandom() — Cycode-safe, no seed support
+value = rng.choice(options)
+```
+
+Note: `random.SystemRandom()` does not support seeding. Do not use it when
+the test suite requires `test_is_deterministic_across_calls` to pass.
+
+**Bandit suppression reference** (local `sanity.bat` only, NOT Cycode):
+
+The suppression comment `# nosec B311` on the instantiation line covers the
+local `bandit` scan. It has no effect on Cycode. Do not rely on it to clear
+Cycode SAST violations — use one of the code-level approaches above.
 
 ## Flask / Web Endpoint Security (OWASP)
 
