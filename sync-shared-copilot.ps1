@@ -98,6 +98,32 @@ Write-Host "=== sync-shared-copilot ===" -ForegroundColor Cyan
 Write-Host "  Source : $Shared"
 Write-Host ""
 
+# ── Sync into root workspace .github\ ─────────────────────────────────────────
+# The root workspace folder itself needs .github\ so that chatmodes, agents,
+# and prompts appear in the VS Code Copilot dropdown for all workspace roots.
+
+$rootGithub = Join-Path $Root ".github"
+Write-Host "  -> ROOT (.github\)" -ForegroundColor Green
+
+foreach ($folder in $Folders) {
+    Sync-Folder `
+        -Source      (Join-Path $Shared $folder) `
+        -Destination (Join-Path $rootGithub $folder)
+}
+
+Sync-File `
+    -Source      (Join-Path $Shared "copilot-instructions.md") `
+    -Destination (Join-Path $rootGithub "copilot-instructions.md")
+
+Sync-File `
+    -Source      (Join-Path $Shared "summary.md") `
+    -Destination (Join-Path $rootGithub "summary.md")
+
+Write-Host "    Done." -ForegroundColor DarkGreen
+Write-Host ""
+
+# ── Sync into each project .github\ ───────────────────────────────────────────
+
 foreach ($project in $Projects) {
     $projectPath = Join-Path $Root $project
     $githubPath  = Join-Path $projectPath ".github"
