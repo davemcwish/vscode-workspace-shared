@@ -51,6 +51,17 @@ running it. Report each as PASS / ❌ NEEDS FIX / N/A.
 - [ ] No real usernames or workstation paths (e.g. `C:\Users\jsmith\`) in
       comments, docstrings, or example snippets.
 
+#### PRNG usage (Cycode: "Usage of weak Pseudo-Random Number Generator")
+
+- [ ] Any use of `random.Random`, `random.choice`, `random.randint`, etc. is for
+      non-security purposes only (mock data, shuffling, simulation).
+- [ ] The instantiation line carries `# noqa: S311  # nosec B311`.
+- [ ] **Every call-site** (`.choice()`, `.randint()`, `.random()`, etc.) on that
+      instance also carries `# nosec B311`. Suppressing only the instantiation is
+      not enough — Cycode traces the PRNG taint to each usage site individually.
+- [ ] No `random` module usage for tokens, session IDs, passwords, or
+      cryptographic nonces — use `secrets` instead.
+
 #### Network calls
 
 - [ ] TLS verification is not disabled (`verify=True` or absent — never
@@ -82,9 +93,9 @@ from `copilot-instructions.md` § Canonical Quality Gate instead.
 ### Phase 1b: Cross-Platform Static Checks
 
 `sanity.bat` runs on Windows and cannot catch some Linux-CI-only failures. Also
-run the static checks 2a–2j documented in `pre-commit-check.chatmode.md`
+run the static checks 2a–2l documented in `pre-commit-check.chatmode.md`
 (e.g. `_mock_sf_cli` fixture coverage, `.secrets.baseline` backslash paths,
-RUF100 stale `# noqa`). Report each as PASS/FAIL.
+RUF100 stale `# noqa`, importlib script tracking). Report each as PASS/FAIL.
 
 ### Phase 2: Collect Results
 

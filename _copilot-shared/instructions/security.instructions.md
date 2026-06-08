@@ -166,6 +166,45 @@ with open(safe_path, "w", ...) as fh:
 - This includes Windows paths like `C:\Users\jsmith\...` — replace the username
   portion with a generic placeholder.
 
+## PRNG Usage (Cycode SAST Rule: "Usage of weak Pseudo-Random Number Generator")
+
+`random.Random()` (and module-level `random.choice`, `random.randint`, etc.)
+triggers Cycode's B311/S311 SAST rule at **High severity** on both the
+**instantiation** and **every subsequent call-site** where a method is invoked
+on the instance. Cycode performs taint-flow analysis — it identifies that the
+instance was created from a weak PRNG and flags all downstream usages.
+
+| Context | Correct approach |
+| --- | --- |
+| Mock/test data, shuffling, simulation, non-security randomness | `random.Random(seed)` is correct. Suppress with `# nosec B311` on the instantiation **and** every flagged call-site. |
+| Tokens, session IDs, passwords, cryptographic nonces | Use the `secrets` module. **Never suppress** — fix the code. |
+
+**Key rule:** Suppressing only the instantiation line is not enough. Cycode
+traces the taint to each usage. Every `.choice()`, `.randint()`, `.random()`,
+etc. call on the instance must also carry the suppression comment.
+
+**Pattern for non-security PRNG usage:**
+
+```python
+# Acceptable: fixed-seed PRNG for deterministic mock data (not security-sensitive).
+# A module-level random.seed() is avoided; the seed is isolated to this instance.
+rng = random.Random(42)  # noqa: S311  # nosec B311  # DevSkim: ignore DS148264
+
+...
+
+value = rng.choice(options)          # nosec B311
+value = rng.randint(0, 100)          # nosec B311
+value = rng.choice(other_options)    # nosec B311
+```
+
+> **Why `# nosec B311` and not `# noqa: S311` on the call-sites?**
+> `ruff`'s S311 rule fires on module-level calls (`random.choice(...)`) but
+> typically does not fire on instance method calls (`rng.choice(...)` where
+> `rng` is a `random.Random` object). Adding `# noqa: S311` to call-sites would
+> therefore create stale suppression comments, which check 2j (RUF100) would
+> flag as a lint error. Use `# nosec B311` only on call-sites — this satisfies
+> Cycode (which maps its PRNG rule to B311) without creating a ruff violation.
+
 ## Flask / Web Endpoint Security (OWASP)
 
 When building Flask REST API endpoints (e.g. the JOSHUA frontend), apply these

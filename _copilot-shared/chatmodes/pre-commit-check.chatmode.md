@@ -49,6 +49,17 @@ running it. Report each as ✅ PASS / ❌ NEEDS FIX / N/A.
 - [ ] No hardcoded tokens, passwords, API keys, or connection strings.
 - [ ] No real usernames or workstation paths in comments, docstrings, or examples.
 
+### PRNG usage (Cycode: "Usage of weak Pseudo-Random Number Generator")
+
+- [ ] Any use of `random.Random`, `random.choice`, `random.randint`, etc. is for
+      non-security purposes only (mock data, shuffling, simulation).
+- [ ] The instantiation line carries `# noqa: S311  # nosec B311`.
+- [ ] **Every call-site** (`.choice()`, `.randint()`, `.random()`, etc.) on that
+      instance also carries `# nosec B311`. Suppressing only the instantiation is
+      not enough — Cycode traces the PRNG taint to each usage site individually.
+- [ ] No `random` module usage for tokens, session IDs, passwords, or
+      cryptographic nonces — use `secrets` instead.
+
 ### Network calls
 
 - [ ] TLS verification is not disabled (never `verify=False`).
@@ -402,6 +413,37 @@ docs/reviews/code-review-YYYY-MM-DDTHH-MM-remediation.md  (the remediation)
 FAIL if any review has no remediation partner or any remediation is orphaned.
 PASS if `docs/reviews/` does not exist or all pairs are complete.
 
+### 2l — importlib script tracking (CI vs local gap)
+
+Any test that loads a `scripts/*.py` file via `importlib.util.spec_from_file_location`
+will pass locally (the file is on disk) but fail on CI with `FileNotFoundError`
+if that script is absent from the git index — whether gitignored, untracked, or
+accidentally omitted from staging.
+
+Run:
+
+```powershell
+# Find all script names loaded via importlib in test files
+$refs = Select-String -Path "tests\*.py" -Pattern 'spec_from_file_location\s*\(\s*"([\w_]+)"' |
+    ForEach-Object { $_.Matches.Groups[1].Value } | Sort-Object -Unique
+
+# Check each one is tracked by git
+$untracked = $refs | Where-Object { -not (git ls-files "scripts/$_.py").Trim() }
+
+if ($untracked) {
+    Write-Host "FAIL: the following scripts are referenced by tests but NOT tracked by git:"
+    $untracked | ForEach-Object { Write-Host "  scripts/$_.py" }
+    Write-Host "Fix: either commit the file (git add -f if gitignored) or add a gitignore exception."
+} else {
+    Write-Host "PASS"
+}
+```
+
+**Rule:** FAIL if any referenced script is not tracked by git. This is a
+🔴 CRITICAL CI failure — tests will always error on the Linux runner even
+though they pass on Windows. PASS if no `spec_from_file_location` calls are
+found, or all referenced scripts are tracked.
+
 ---
 
 ## Step 3 — Final summary
@@ -422,6 +464,7 @@ Produce a single summary table covering all checks:
 | 2i Test return annotations | | |
 | 2j Stale `# noqa` comments | | |
 | 2k Code review pairs | | |
+| 2l importlib script tracking | | |
 
 If **all** checks are PASS: output **"Quality gate passed — safe to raise PR."**
 
