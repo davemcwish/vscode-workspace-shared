@@ -61,7 +61,7 @@ Before proceeding with analysis:
 1. Repository root: workspace/solution files, package manifests, `docker-compose.*`, `kubernetes/`, `helm/`, `.env*`, CI/CD pipelines.
 2. Service/project directories: for each, check for `overview.md` first (see rule above). If absent, read the entry-point and configuration files to infer the service's role and communication contracts.
 3. Shared contracts: any `contracts/`, `proto/`, `schemas/`, `events/`, or `api-specs/` folders at the repository root or shared library level.
-4. Shared contracts: `contracts/`, `proto/`, `schemas/`, `events/`, or `api-specs/` folders at the repository root or shared library level.
+4. Service entry points: bootstrap/startup and DI/service-container wiring for each service.
 5. Infrastructure-as-code: `docker-compose.*`, Kubernetes manifests, Helm charts, Terraform/Bicep/CDK files.
 6. Gateway / proxy configuration: API gateway config, reverse proxy rules, ingress definitions.
 7. Broker / messaging configuration: broker topology files, topic/queue/exchange definitions.

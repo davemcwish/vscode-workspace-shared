@@ -1,0 +1,55 @@
+# ============================================================================
+# DEVELOPMENT DEPENDENCIES (loose pins)
+# ============================================================================
+# Everything from requirements.in PLUS the tools needed to develop, test,
+# lint, type-check, security-check, and ship the project.  Runtime packages
+# are pulled in automatically via the -r line below.
+#
+# THIS FILE IS A SCAFFOLD TEMPLATE.
+# It was copied from _copilot-shared\scaffold\requirements-dev.in.
+# Edit this file when adding or removing a dev-only dependency, then
+# regenerate the locked file:
+#
+#   pip-compile requirements-dev.in
+#
+# That command creates requirements-dev.txt with exact version pins.
+# Commit requirements-dev.txt.
+# ============================================================================
+
+-r requirements.in
+
+# --- Testing -----------------------------------------------------------------
+pytest                          # Test framework for unit and integration tests
+pytest-cov                      # Coverage reporting plugin for pytest
+pytest-mock                     # Thin mocker fixture wrapping unittest.mock
+pytest-xdist                    # Parallel test execution (-n auto in sanity.bat)
+
+# --- Linting / formatting / typing ------------------------------------------
+ruff                            # Fast Python linter and formatter (replaces flake8/black)
+mypy                            # Static type checker for type-hint correctness
+
+# --- Security scanning -------------------------------------------------------
+bandit                          # Find common security issues in Python code
+detect-secrets                  # Prevent secrets from being committed
+
+# --- Build / dependency management -------------------------------------------
+pip-tools                       # Provides pip-compile for deterministic dependency locks
+pre-commit                      # Git-hook automation (.pre-commit-config.yaml)
+
+# ============================================================================
+# COMMON ADDITIONS — uncomment what you need
+# ============================================================================
+
+# --- Type stubs (add stubs for any typed third-party libraries you use) ------
+# pandas-stubs                  # Official type stubs for pandas (PEP 561)
+# types-requests                # Type stubs for the requests library
+
+# --- HTTP mocking for tests --------------------------------------------------
+# responses                     # Mock HTTP responses in unit tests (requests-based)
+# pytest-httpserver             # Spin up a local HTTP server inside tests
+
+# --- NOT always on internal mirrors — install separately if needed -----------
+# pip-audit                     # Audit installed packages for known CVEs
+
+# --- pip version pin (uncomment if pip-tools is incompatible with latest pip) -
+# pip<25                        # pip-tools 7.4.x is incompatible with pip 25+

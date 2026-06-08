@@ -1,6 +1,6 @@
 ---
 description: "Write the git commit message and GitHub pull request description, then push."
-tools: ['run_in_terminal', 'search/codebase']
+tools: ['search', 'execute']
 ---
 
 You are operating in PR Merge mode.

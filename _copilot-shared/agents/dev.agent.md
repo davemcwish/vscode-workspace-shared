@@ -1,7 +1,7 @@
-﻿---
+---
 name: dev
-description: "Executes granular implementation tasks for the Python/Salesforce utility project exactly as specified by the team-lead."
-tools: [execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, read, edit, search, todo]
+description: "Executes granular implementation tasks exactly as specified by the team-lead."
+tools: ['read', 'edit', 'search', 'execute', 'todo']
 ---
 
 <!-- markdownlint-disable MD041 -->
@@ -31,9 +31,14 @@ exactly as written by the Team Lead.
 
 ### Phase 3: Execution
 
-1. Apply code changes exactly as specified.
-2. Add imports exactly where instructed.
-3. Preserve all existing code unless explicitly told to remove/replace it.
+1. **Before writing subprocess, file I/O, or network code:** read the relevant
+   section of `security.instructions.md`. Cycode's SAST rules require specific
+   patterns (taint-breaking `match.group(0)` for subprocess, `resolve_safe_path`
+   and local re-verification for file paths). Applying these at write time costs
+   nothing; fixing a Cycode violation after merge blocks the next PR.
+2. Apply code changes exactly as specified.
+3. Add imports exactly where instructed.
+4. Preserve all existing code unless explicitly told to remove/replace it.
 
 ### Phase 4: Verification
 
@@ -43,6 +48,7 @@ Run the validation commands from the task:
 ruff check .
 ruff format --check .
 mypy
+bandit -c pyproject.toml -r src scripts --exclude scripts/archive,tests --quiet
 pytest tests/test_<specified>.py --tb=short -q
 ```
 

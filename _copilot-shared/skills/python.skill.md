@@ -10,7 +10,7 @@
 
 - PEP 8 enforced by `ruff check` and `ruff format`.
 - Type hints on all function parameters and return types.
-- Imports ordered: standard library → third-party → local (`src/sf_admin_utils`).
+- Imports ordered: standard library → third-party → local application modules.
 
 ## Naming
 
@@ -42,10 +42,12 @@
 
 ```text
 scripts/          # Runnable CLI scripts (argparse, main guard)
-src/sf_admin_utils/  # Shared library (importable modules)
+src/              # Shared library (importable modules)
 tests/            # pytest test files (test_*.py)
 docs/             # Beginner-friendly Markdown guides
 ```
+
+Adapt paths to match the actual project layout (check `architecture.md`).
 
 ## Validation Commands
 

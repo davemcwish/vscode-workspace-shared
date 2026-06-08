@@ -24,11 +24,12 @@ For the file currently in focus:
 
 4. Add or update pytest tests.
 
-5. For Salesforce-related code:
+5. For Salesforce-related code (follow `salesforce.instructions.md`):
    - never hit a real org,
-   - mock `subprocess.run`,
-   - mock `simple_salesforce.Salesforce`,
-   - mock `requests.get` and `requests.Session` where used,
+   - mock `subprocess.run` during module load (prevents CLI auth),
+   - mock `requests.get` and `requests.Session` for all HTTP calls,
+   - do NOT use or mock `simple_salesforce` — this project uses `requests`
+     directly via `sf_get()` / `build_client()`,
    - use `sf_env` for alias environment variables.
 
 6. For standalone scripts in `scripts/`, load modules with `importlib` if direct
@@ -50,3 +51,4 @@ For the file currently in focus:
 ruff check src tests scripts
 pytest
 mypy src tests scripts
+```

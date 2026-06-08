@@ -7,15 +7,19 @@ description: "Audience and tone rules for all project documentation."
 
 ## Target Audience
 
-All documentation in this project must be written for three overlapping audiences:
+All documentation in this project must be written for **complete beginners**.
+The bar is: "could a person who has never written Python, never used Salesforce
+APIs, and never worked in a software team understand this?" If not, rewrite it.
 
-- **Beginner/novice coders** — someone who can copy-paste a command but may not
-  know what it does without an explanation.
-- **Beginner/novice Python developers** — someone who knows Python basics but
+More specifically, write for these three overlapping audiences simultaneously:
+
+- **Complete beginner coders** — someone who can copy-paste a command but may
+  not know what it does without an explanation.
+- **Complete beginner Python developers** — someone who knows Python basics but
   hasn't used virtual environments, type hints, or package management before.
-- **Beginner Salesforce users** — someone who uses Salesforce day-to-day but has
-  never written a SOQL query, used the CLI, or dealt with API concepts like
-  ContentDocumentLink, org aliases, or access tokens.
+- **Complete beginner Salesforce users** — someone who uses Salesforce
+  day-to-day but has never written a SOQL query, used the CLI, or dealt with
+  API concepts like ContentDocumentLink, org aliases, or access tokens.
 
 ## Writing Rules
 

@@ -1,7 +1,7 @@
-﻿---
+---
 name: architect
-description: "Translates approved Functional Requirements into module-level design documents for the Python/Salesforce utility project."
-tools: [read/readFile, edit/createDirectory, edit/createFile, edit/editFiles, search/fileSearch, search/listDirectory, search/textSearch, todo]
+description: "Translates approved Functional Requirements into module-level design documents."
+tools: ['read', 'edit', 'search', 'todo']
 agents: ["Explore"]
 ---
 

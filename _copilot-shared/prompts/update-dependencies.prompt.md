@@ -25,3 +25,4 @@ pip install -r requirements-dev.txt
 ruff check src tests scripts
 pytest
 mypy src tests scripts
+```

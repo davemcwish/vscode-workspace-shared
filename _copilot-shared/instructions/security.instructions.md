@@ -160,6 +160,12 @@ with open(safe_path, "w", ...) as fh:
 - Treat reports containing Salesforce usernames, emails, manager names, or user
   IDs as confidential.
 
+- **Never** commit real usernames, personal directory paths, or
+  workstation-specific paths in comments, docstrings, or example snippets.
+- Use `<you>`, `<username>`, or `<your-path>` as placeholders.
+- This includes Windows paths like `C:\Users\jsmith\...` — replace the username
+  portion with a generic placeholder.
+
 ## Flask / Web Endpoint Security (OWASP)
 
 When building Flask REST API endpoints (e.g. the JOSHUA frontend), apply these
@@ -234,15 +240,3 @@ def _is_local_origin(request) -> bool:
   `flask-websocket-subprocess.instructions.md`).
 - **One job at a time** — reject concurrent launch requests.
 
-## Generated Data Files
-
-- Do not commit generated CSV, Excel, PDF, ZIP, log, or report files unless they
-  are intentionally sanitized samples.
-- Treat reports containing Salesforce usernames, emails, manager names, or user
-  IDs as confidential.
-
-- **Never** commit real usernames, personal directory paths, or
-  workstation-specific paths in comments, docstrings, or example snippets.
-- Use `<you>`, `<username>`, or `<your-path>` as placeholders.
-- This includes Windows paths like `C:\Users\jsmith\...` — replace the username
-  portion with a generic placeholder.

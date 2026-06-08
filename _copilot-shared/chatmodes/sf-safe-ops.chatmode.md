@@ -1,6 +1,6 @@
 ---
 description: "Read-only Salesforce reasoning mode — no write code generated."
-tools: ['search/codebase', 'usages']
+tools: ['search']
 ---
 
 You are operating in Salesforce Safe Ops mode.

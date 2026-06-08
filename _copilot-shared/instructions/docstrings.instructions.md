@@ -1,18 +1,42 @@
 ---
-applyTo: "src/**/*.py,scripts/**/*.py,tests/**/*.py"
-description: "Mandatory beginner-friendly Python docstring rules."
+applyTo: "src/**/*.py,scripts/**/*.py,tests/**/*.py,**/*.bat,**/*.ps1,**/*.sh"
+description: "Mandatory complete-beginner docstring and comment-block rules for Python, PowerShell, batch, and shell scripts."
 ---
 
-# Beginner-Friendly Docstring Rules
+# Complete-Beginner Docstring Rules
 
 ## Primary Rule
 
-Every Python source file in this project must be understandable by a beginner
-who is new to this repository, new to Salesforce automation, and still learning
-Python.
+Every source file in this project — Python, PowerShell, batch (`.bat`), and
+shell script (`.sh`) — must be understandable by a **complete beginner**:
+someone who may never have written code professionally, who has never touched
+Salesforce APIs, and who cannot ask a senior developer for help.
 
-Docstrings are the primary tool for making code understandable. They are
-**mandatory**, not optional.
+**Assume zero prior knowledge.** Do not assume the reader knows what a
+decorator is, what a SOQL query does, what an access token is, or why a
+function might raise a `ValueError`. Explain all of it.
+
+Docstrings and comment blocks are the primary tool for making code
+understandable. They are **mandatory**, not optional.
+
+---
+
+## The Doubt Rule
+
+**If you are ever unsure whether a docstring or comment block is needed —
+always add it.**
+
+The cost of an unnecessary docstring is near-zero. The cost of a missing
+docstring to a confused maintainer is hours of investigation. When in doubt,
+document it at complete-beginner level.
+
+This rule applies to:
+
+- Python functions, classes, methods, modules, and fixtures.
+- PowerShell functions (comment-based help blocks: `.SYNOPSIS`, `.DESCRIPTION`,
+  `.PARAMETER`, `.OUTPUTS`, `.EXAMPLE`).
+- Batch script header blocks and individual step comments.
+- Shell script header blocks and function comments.
 
 ---
 
@@ -47,9 +71,11 @@ side effect instead (e.g. "Writes records to `output_path`").
 
 ---
 
-## Beginner-Friendly Content Requirements
+## Complete-Beginner Content Requirements
 
-Every docstring must:
+Every docstring must be written as if the reader is a **complete beginner** —
+no assumed Python experience, no assumed Salesforce knowledge, no assumed
+familiarity with this codebase. Concretely, every docstring must:
 
 - Explain **Salesforce terms** on first use (e.g. "SOQL — Salesforce's version of SQL").
 - Explain **why a safety check exists**, not just that it exists.
@@ -87,6 +113,76 @@ def estimate_row_count(session: SalesforceSession, object_name: str) -> int:
     Returns:
         The total number of matching records.
     """
+```
+
+---
+
+## Batch, PowerShell, and Shell Script Comment Blocks
+
+The same complete-beginner principle applies to non-Python scripts. The tool
+changes, but the obligation to explain does not.
+
+### Batch Scripts (`.bat`)
+
+Every batch script must open with a `REM` header block that explains:
+
+- What the script does (one sentence).
+- How to run it (usage line with example).
+- What each step does (one comment line per numbered step).
+
+```bat
+@echo off
+REM ============================================================================
+REM  example.bat — short description of what this script does
+REM  Usage:  example.bat [optional-arg]
+REM
+REM  Steps:
+REM    1. Activates the virtual environment.
+REM    2. Runs the main Python script.
+REM    3. Shows success/failure message.
+REM ============================================================================
+```
+
+### PowerShell Scripts (`.ps1`)
+
+Every PowerShell script must have a comment-based help block at the top:
+
+```powershell
+<#
+.SYNOPSIS
+    One-sentence summary of what the script does.
+
+.DESCRIPTION
+    Two-to-four sentences of plain English. Explain what problem it solves
+    and when someone should use it.
+
+.PARAMETER ParamName
+    What this parameter controls. Include valid values and the default.
+
+.EXAMPLE
+    .\example.ps1 -ParamName value
+    Description of what this example does.
+#>
+```
+
+Every **named function** inside a PowerShell script must also have its own
+comment-based help (`.SYNOPSIS`, `.DESCRIPTION`, `.PARAMETER`, `.OUTPUTS`)
+unless the function is trivially obvious from its 3-line body alone.
+
+### Shell Scripts (`.sh`)
+
+Every shell script must open with a comment header:
+
+```bash
+#!/usr/bin/env bash
+# ==============================================================================
+# example.sh — short description
+# Usage: ./example.sh [optional-arg]
+#
+# What it does:
+#   1. Step one explanation.
+#   2. Step two explanation.
+# ==============================================================================
 ```
 
 ---

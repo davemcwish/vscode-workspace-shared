@@ -1,6 +1,6 @@
 ---
 applyTo: "**/*.py"
-description: "Python coding standards for beginner-friendly maintainability."
+description: "Python coding standards for complete-beginner maintainability."
 ---
 
 # Python Coding Standards
@@ -23,8 +23,13 @@ description: "Python coding standards for beginner-friendly maintainability."
 
 ## Docstrings Are Mandatory
 
-Every Python source file must be understandable by a beginner without needing to
-ask another developer what the code is for.
+Every Python source file must be understandable by a **complete beginner** —
+someone who may never have written Python professionally, who has never touched
+Salesforce APIs, and who cannot ask a colleague what the code does.
+
+**Assume zero prior knowledge.** Explain every parameter, every return value,
+every exception. Explain Salesforce terms inline. Show an example for anything
+non-obvious.
 
 Every module, class, public function, private helper, and test fixture must have
 a beginner-friendly Google-style docstring unless it is a trivial nested helper
@@ -84,8 +89,28 @@ Every module, class, and function must have a docstring covering:
 - Do not hand-edit generated `requirements.txt` or `requirements-dev.txt`.
 - See `dependency_management.md`.
 
-## Design Principles
-- Prefer **explicit code over implicit behavior** — avoid hidden side effects,
+## Cross-Platform Correctness
+
+Code is developed on **Windows 11** but runs in **two Linux environments**: the
+GitHub Actions CI pipeline (`ubuntu-latest`) and the Cycode security scanner.
+Write for Linux by default; add Windows guards only where unavoidable.
+
+| Rule | Correct | Incorrect |
+| --- | --- | --- |
+| File paths | `pathlib.Path("output") / "report.csv"` or `os.path.join("output", "report.csv")` | `"output\\report.csv"` |
+| File opens | `open(path, encoding="utf-8")` | `open(path)` |
+| Line endings in generated text | `"\n"` explicitly | `os.linesep` (returns `"\r\n"` on Windows) |
+| Windows-only packages | `pywin32; sys_platform == "win32"` in requirements | unconditional import |
+| Windows-only code blocks | `if sys.platform == "win32": ...` | unconditional code |
+| Module/file names | lowercase, matching the import | mixed-case names that pass on Windows but fail on Linux |
+
+**`.secrets.baseline` paths:** The baseline file stores detected-secret
+locations. On Windows these may be recorded with backslashes. If
+`detect-secrets` on CI (Linux) cannot find entries because of path mismatches,
+re-run `detect-secrets scan --baseline .secrets.baseline` on a Linux machine
+or in WSL and commit the result.
+
+
   overly dynamic patterns, or "magic" unless clearly justified.
 - Optimize for **readability before cleverness** — a new developer should
   understand the code without extra explanation.
@@ -95,10 +120,9 @@ Every module, class, and function must have a docstring covering:
 ## Comments
 - Explain *why*, not *what*. The code already says what it does.
 - Mark assumptions, business rules, and Salesforce-specific quirks explicitly.
-- Wording must be suitable for:
-  - a beginner or novice coder,
-  - a beginner or novice Python developer,
-  - a beginner Salesforce user.
+- Wording must be suitable for a **complete beginner**: no assumed Python
+  experience, no assumed Salesforce knowledge, no assumed familiarity with
+  this codebase. If a comment would confuse someone on their first day, rewrite it.
 - **Explain standard-library and third-party API calls on first use** — if a
   function uses `re.fullmatch`, `dataclass`, `csv.DictWriter`, or similar for
   the first time in the file, add a brief inline comment explaining what it

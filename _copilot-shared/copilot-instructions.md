@@ -5,7 +5,7 @@
 - **Language:** Python 3.12+
 - **Purpose:** Utility scripts to administer Salesforce (UAT and Production orgs)
 - **Platform:** Windows 11, Visual Studio Code
-- **Target audience:** Beginner-to-intermediate Python developers who will maintain this code
+- **Target audience:** Complete beginners to Python who will maintain this code
 
 ---
 
@@ -128,12 +128,15 @@ misunderstandings:
 - Keep functions **small and focused** — each does one clear thing.
 - If a function is hard to explain in one sentence, split it into helpers.
 - Add **type hints** for all parameters and return types.
-- Write **beginner-friendly docstrings** that explain:
-  - What the function does
-  - What each parameter means
-  - What it returns
-  - Exceptions it may raise
-  - A simple usage example (when helpful)
+- Write **complete-beginner docstrings** — assume the reader has never used
+  Python professionally, has never touched Salesforce APIs, and cannot ask a
+  colleague for help. Every docstring must explain:
+  - What the function does in plain English
+  - What each parameter means (with the type, and what values are valid)
+  - What it returns (value and meaning, not just the type)
+  - Exceptions it may raise, and what a beginner should do when they see one
+  - Salesforce or business terms explained inline, not assumed
+  - A simple usage example for any non-obvious function
 
 ### Constants & Configuration
 
@@ -192,8 +195,9 @@ misunderstandings:
 
 - **No duplicated code** — extract reusable functions, but don't over-engineer early.
 - **No obfuscation** — optimize for readability before cleverness.
-- A new developer should be able to: read the code, understand its purpose, run
-  the tests, and safely make changes.
+- A **complete beginner** should be able to: read the code, understand its
+  purpose, run the tests, and safely make changes — without needing to ask
+  anyone what the code does or why.
 - Include **examples** when introducing new concepts or patterns.
 - Format and lint code before submitting for review.
 
@@ -203,13 +207,32 @@ misunderstandings:
 
 | Item | Value |
 |------|-------|
-| OS | Windows 11 |
+| OS (local dev) | Windows 11 |
 | CPU | Intel Core Ultra 7 165U (12 cores, 14 logical) |
 | RAM | 32 GB |
 | Python | 3.12 |
 | IDE | Visual Studio Code with GitHub Copilot |
 | Auth | Salesforce CLI (`sf org display`) |
 | HTTP | `requests` library with session management |
+| CI/CD | GitHub Actions — `ubuntu-latest` (Linux) |
+| Security scanner | Cycode — SAST + secrets + SCA; runs on Linux on every PR |
+
+---
+
+## Platform Independence
+
+Code is written on **Windows 11** but runs in **two Linux environments**:
+`ci.yml` (`ubuntu-latest`) and the Cycode scanner. Treat cross-platform
+correctness as a baseline requirement, not an afterthought.
+
+| Rule | Why |
+| --- | --- |
+| Use `pathlib.Path` or `os.path.join()` — never backslash string literals | Backslash path separators fail on Linux |
+| Always specify `encoding='utf-8'` on `open()` | Windows may default to cp1252; Linux defaults to UTF-8; explicit is always safer |
+| Guard Windows-only imports/packages with `sys_platform == "win32"` | CI will `ImportError` without the guard |
+| Use lowercase, consistent module and file names | Linux filesystems are case-sensitive; a wrong-case import passes on Windows, fails on Linux |
+| Use `\n` for line endings in generated text — never `\r\n` | CRLF causes cross-platform diffs and breaks Unix tools |
+| `.secrets.baseline` path entries must use forward slashes | Backslash paths in the baseline file fail on Linux |
 
 --
 
@@ -261,9 +284,13 @@ Use these modes, prompts, or agents in order for every significant change:
 | --- | --- |
 | `critical-thinking.agent.md` (or `critical-thinking.chatmode.md`) | Challenge assumptions via open Socratic questioning before committing to a design or approach. Asks questions only — never writes code — with a single carve-out to flag data-loss, security, or Production-safety risks. Ends with a neutral recap of assumptions tested. |
 | `debug.agent.md` | Systematic troubleshooting when tests fail or behaviour is unexpected. |
+| `Explore.agent.md` | Read-only codebase exploration — locates code, traces call sites and dependencies, confirms what already exists. Used by architect, business-analyst, and team-lead during context discovery. |
+
 
 Never skip step 4 (tests green) before step 5 (docs update).
 Never skip step 6 (quality gate) before step 7 (review).
+Never skip Step 8 (documentation update) once Step 6 (implementation) is complete.
+Never skip Step 9 (quality gate) before Step 10 (code review).
 
 ---
 
@@ -280,10 +307,36 @@ When reviewing code (or interpreting review feedback), classify issues:
 
 ##  Canonical Quality Gate
 
+The single source of truth is `.github/workflows/ci.yml` (remote, blocks merge).
+`sanity.bat` is the **local mirror** of that pipeline — run it before every
+commit. The `pre-commit-check` agent and prompt must invoke `sanity.bat` (or run
+the identical commands below), not a simplified variant.
+
+The gate runs these six tool steps in order:
+
+```
 ruff format --check src tests scripts
 ruff check src tests scripts
 mypy
 bandit -c pyproject.toml -r src scripts --exclude scripts/archive,tests
 python -m detect_secrets scan --baseline .secrets.baseline
-pytest --tb=short -q
-pytest --cov=src --cov=scripts --cov-report=term-missing --cov-fail-under=90
+pytest -n auto
+```
+
+**Coverage flags are defined once** in `pyproject.toml` under
+`[tool.pytest.ini_options] addopts` and are automatically inherited by every
+`pytest` invocation — `ci.yml`, `sanity.bat`, and plain `pytest` at the
+terminal. Never pass `--cov`, `--cov-report`, or `--cov-fail-under` directly
+in `ci.yml` or `sanity.bat`. Change the threshold in `pyproject.toml` only.
+
+If you change the gate, update **all four** in the same commit: `ci.yml`,
+`sanity.bat`, this section, and the `pre-commit-check` agent/prompt/chatmode.
+
+**Cycode is a separate, additional gate** that runs automatically on every pull
+request (not locally). It scans for SAST violations, committed secrets, and
+vulnerable dependencies (SCA). Cycode runs on Linux — findings that only
+reproduce on Linux can still block merge. Any Cycode finding is 🔴 CRITICAL.
+The patterns that satisfy Cycode's SAST rules are documented in
+`security.instructions.md`. Running `sanity.bat` locally before pushing catches
+most issues that Cycode will flag (bandit covers SAST, detect-secrets covers
+secrets) but is not a guarantee — Cycode has additional rules.

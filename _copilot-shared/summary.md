@@ -79,12 +79,13 @@ selecting it in the agent dropdown.
 
 | File | Purpose |
 | --- | --- |
+| `Explore.agent.md` | Read-only codebase exploration agent — locates code, traces call sites and dependencies, and confirms what already exists. Delegated to by architect, business-analyst, and team-lead. Never edits files or runs code. |
 | `scope-change.agent.md` | Captures and validates a new scope change request before it enters the backlog. |
 | `business-analyst.agent.md` | Translates a scope change into structured functional requirements. |
 | `architect.agent.md` | Produces a module-level technical design for approved requirements. |
 | `team-lead.agent.md` | Decomposes designs into sequential beginner-friendly implementation tasks. |
 | `dev.agent.md` | Implements tasks produced by the team-lead. |
-| `dev-manager.agent.md` | Reviews and approves designs and task plans before implementation. |
+| `dev-manager.agent.md` | Orchestrates implementation by coordinating the `dev` agent sequentially through the task checklist and maintaining checklist state. Writes no code itself, but runs the full canonical quality gate once after the loop to catch cross-task regressions. |
 | `code-reviewer.agent.md` | Reviews completed code for correctness, security, style, and test coverage. |
 | `doc-writer.agent.md` | Writes and updates beginner-friendly project documentation. |
 | `pre-commit-check.agent.md` | Runs the full quality gate and summarises results before a PR is raised. |
@@ -95,9 +96,9 @@ selecting it in the agent dropdown.
 **Recommended agent chain** (the order you'd use them for a full feature):
 
 ```text
-scope-change -> business-analyst -> architect -> dev-manager -> team-lead -> dev
-                                                    |
-                              code-reviewer -> docstring-auditor -> pre-commit-check -> doc-writer
+scope-change -> business-analyst -> architect -> team-lead -> dev-manager -> dev
+                                                                  |
+                            code-reviewer -> docstring-auditor -> pre-commit-check -> doc-writer
 ```
 
 **Supporting agents (use at any step when you need them):**
@@ -105,6 +106,7 @@ scope-change -> business-analyst -> architect -> dev-manager -> team-lead -> dev
 ```text
 critical-thinking  -- challenge assumptions before committing to a design
 debug              -- systematic troubleshooting when tests fail
+Explore            -- read-only codebase discovery (used by architect, BA, team-lead)
 ```
 
 ---
@@ -175,7 +177,7 @@ to do.
 | File | Purpose |
 | --- | --- |
 | `add-tests.prompt.md` | Add or improve pytest coverage for a selected module. |
-| `component-overview.prompt.md` | Generate a plain-English overview of a module or script. |
+| `component-overview.prompt.md` | Generate a machine-readable, component-level overview (`overview.md`) for consumption by other AI agents — explicit labelled fields, no prose. |
 | `conversion-review.prompt.md` | Review a website for conversion, lead generation, trust, calls to action, and customer journey friction. |
 | `docs-update.prompt.md` | Update project documentation after a code or workflow change. |
 | `docstring-audit.prompt.md` | Audit Python docstrings and produce a beginner-friendly remediation plan. |
@@ -283,3 +285,4 @@ and review quality** over speed or cost.
 | Workflow | A step-by-step process for completing a type of work (e.g. launching a website, making a code change). |
 | Quality gate | A set of automated checks (formatting, linting, type-checking, security scanning, tests) that must all pass before code can be merged. |
 | Command Palette | VS Code's search bar for commands -- open it with `Ctrl+Shift+P`. |
+| `sanity.bat` | The local quality-gate runner (Windows). Runs ruff, mypy, bandit, detect-secrets, and pytest+coverage in one command — the local mirror of `ci.yml`. Run it before every commit. |

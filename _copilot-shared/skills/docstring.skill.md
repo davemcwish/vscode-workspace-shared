@@ -2,12 +2,26 @@
 
 ## Purpose
 
-Every Python file in this project must be understandable to a beginner who
-has not worked on this repository before — including beginners who are new to
-Python, new to Salesforce automation, or both.
+Every Python file — and every batch, PowerShell, and shell script — in this
+project must be understandable to a beginner who has not worked on this
+repository before, including beginners who are new to Python, new to the
+project's domain, or both.
 
-Docstrings are not optional decoration. They are part of the maintainability,
-onboarding, testing, and review standard for this project.
+Docstrings and script comment blocks are not optional decoration. They are
+part of the maintainability, onboarding, testing, and review standard for
+this project.
+
+---
+
+## The Doubt Rule
+
+**If you are ever unsure whether a docstring or comment block is needed —
+always add it.**
+
+The cost of an unnecessary docstring is near-zero. The cost of a missing
+docstring to a confused maintainer is hours of investigation. Always document
+at complete-beginner level when in doubt. This rule applies to Python, batch
+scripts (`.bat`), PowerShell scripts (`.ps1`), and shell scripts (`.sh`).
 
 ---
 
@@ -18,10 +32,10 @@ Google-style docstring that explains:
 
 - **What it does** — one clear summary sentence.
 - **Why it exists** — the business or technical reason (not obvious from the name alone).
-- **What each argument means** — type, purpose, valid values, and Salesforce context where relevant.
+- **What each argument means** — type, purpose, valid values, and domain context where relevant.
 - **What it returns** — the type and meaning of the return value.
 - **What exceptions it may raise** — and under what conditions.
-- **Any Salesforce or business assumptions** — org type, SOQL limits, PII, Production safety.
+- **Any domain or business assumptions** — system type, API limits, PII, production safety.
 - **A short usage example** — for any function that is non-obvious.
 
 ---
@@ -32,22 +46,21 @@ Every Python file must begin with a module-level docstring immediately after
 any `from __future__ import annotations` line.
 
 The module docstring explains what the file is for, what its public API is,
-and whether it modifies Salesforce data.
+and whether it modifies external state (databases, APIs, files).
 
 **Example:**
 
 ```python
-"""Export contract PDF files from Salesforce.
+"""Export records from the reporting system to local CSV files.
 
-This module contains the command-line workflow for finding contract records in
-Salesforce, downloading their attached PDF files, and writing them to a local
-output folder.
+This module provides the command-line workflow for querying records,
+downloading attachments, and writing them to a local output folder.
 
-The script is read-only. It does not change any Salesforce data.
+The script is read-only with respect to the external system.
 
 Usage::
 
-    python scripts/export_contract_pdfs_prod.py --org uat --output-dir output/
+    python scripts/export_records.py --target prod --output-dir output/
 """
 ```
 
@@ -58,29 +71,28 @@ Usage::
 **Example:**
 
 ```python
-def chunk_record_ids(record_ids: list[str], chunk_size: int = 200) -> list[list[str]]:
-    """Split Salesforce record IDs into safe SOQL query chunks.
+def chunk_ids(ids: list[str], chunk_size: int = 200) -> list[list[str]]:
+    """Split a list of record IDs into smaller groups for safe batch queries.
 
-    Salesforce queries become unreliable when too many IDs are placed into a
-    single ``WHERE Id IN (...)`` clause. This helper keeps each chunk small
-    enough for predictable API behaviour.
+    Many APIs and query systems become unreliable when too many IDs are placed
+    into a single request. This helper keeps each chunk small enough for
+    predictable behaviour.
 
     Args:
-        record_ids: Salesforce record IDs to split into smaller groups.
-        chunk_size: Maximum number of IDs per group. Defaults to 200 because
-            that is the project standard for Salesforce ``IN`` queries.
+        ids: Record IDs to split into smaller groups.
+        chunk_size: Maximum number of IDs per group. Defaults to 200.
 
     Returns:
         A list of ID groups. Each inner list contains at most ``chunk_size``
-        record IDs. Returns an empty list when ``record_ids`` is empty.
+        IDs. Returns an empty list when ``ids`` is empty.
 
     Raises:
         ValueError: If ``chunk_size`` is less than 1.
 
     Example:
         ```python
-        chunks = chunk_record_ids(["001AA", "001BB", "001CC"], chunk_size=2)
-        # Returns: [["001AA", "001BB"], ["001CC"]]
+        chunks = chunk_ids(["A1", "A2", "A3"], chunk_size=2)
+        # Returns: [["A1", "A2"], ["A3"]]
         ```
     """
 ```
@@ -92,22 +104,20 @@ def chunk_record_ids(record_ids: list[str], chunk_size: int = 200) -> list[list[
 **Example:**
 
 ```python
-class SalesforceSession:
-    """Manage an authenticated Salesforce REST API session.
+class APISession:
+    """Manage an authenticated REST API session.
 
-    Authenticates using the Salesforce CLI (``sf org display``) and wraps the
-    resulting access token in a ``requests.Session`` for all downstream API
-    calls. Sessions are read-only by default — mutation requires explicit
-    method calls that confirm Production safety.
+    Authenticates using the project's configured credentials and wraps the
+    resulting token in a ``requests.Session`` for downstream API calls.
+    Sessions are read-only by default — mutation requires explicit method
+    calls that confirm production safety.
 
     Args:
-        alias: The Salesforce CLI org alias (e.g. ``"AXP_PROD"`` or
-            ``"AXP_UAT"``). Must match an alias already authenticated
-            via ``sf org login``.
+        alias: The org/environment alias (e.g. ``"prod"`` or ``"staging"``).
+            Must match an alias already configured in the project's `.env`.
 
     Raises:
-        RuntimeError: If the CLI is not installed or the alias is not
-            authenticated.
+        RuntimeError: If credentials are missing or authentication fails.
     """
 ```
 
@@ -122,18 +132,17 @@ state must have docstrings explaining what they fake and why.
 
 ```python
 @pytest.fixture
-def fake_salesforce_query_response() -> dict[str, object]:
-    """Return a minimal fake Salesforce query response for unit tests.
+def fake_api_query_response() -> dict[str, object]:
+    """Return a minimal fake query response for unit tests.
 
-    The tests use this fixture instead of calling a real Salesforce org.
+    The tests use this fixture instead of calling a real external service.
     This keeps tests fast, repeatable, and safe for offline development.
 
-    The structure mirrors the real ``simple_salesforce`` query response:
-    ``{"totalSize": N, "done": True, "records": [...]}``.
+    The structure mirrors the real API response format used by this project.
     """
     return {"totalSize": 2, "done": True, "records": [
-        {"Id": "001AA", "Status": "Submitted"},
-        {"Id": "001BB", "Status": "InProduction"},
+        {"id": "A1", "status": "active"},
+        {"id": "A2", "status": "inactive"},
     ]}
 ```
 
@@ -149,7 +158,8 @@ Docstrings in this project must be written for someone who may be:
 
 That means:
 
-- Explain Salesforce terms on first use (e.g. "SOQL — Salesforce's version of SQL").
+- Explain domain terms on first use (e.g. "SOQL — Salesforce's version of SQL", or
+  whatever domain-specific term applies to this project).
 - Explain why a safety check exists, not just that it exists.
 - Describe whether the function is **read-only or mutating**.
 - Mention if data may contain **PII** (Personally Identifiable Information).
@@ -168,10 +178,20 @@ When reviewing or writing Python code, check every file for:
       obvious from the name alone.
 - [ ] Complex test fixtures have docstrings.
 - [ ] `Args`, `Returns`, `Raises`, and `Example` sections are present where useful.
-- [ ] Salesforce and business terms are explained in plain English.
+- [ ] Domain and business terms are explained in plain English.
 - [ ] Docstrings accurately reflect the actual behaviour of the code.
 - [ ] Improving a docstring has not accidentally changed runtime behaviour.
 - [ ] Existing nearby docstrings were reviewed and improved if stale or missing.
+
+When reviewing or writing batch, PowerShell, or shell scripts, check for:
+
+- [ ] Header comment block (`.bat`/`.sh`) or comment-based help block (`.ps1`)
+      exists at the top of every script file.
+- [ ] Every named PowerShell function has `.SYNOPSIS` and `.DESCRIPTION`.
+- [ ] Each numbered step in a batch or shell script has a short explanatory
+      `REM` or `#` comment.
+- [ ] Usage example is present in the header block.
+- [ ] When in doubt — add the comment. The Doubt Rule applies to all file types.
 
 ---
 
@@ -191,13 +211,9 @@ Avoid these common docstring mistakes:
 
 ## Validation
 
-There is no fully automated docstring enforcement tool in the current pipeline.
-
-Until a `scripts/audit_docstrings.py` tool is added:
+There is no fully automated docstring enforcement tool in the standard pipeline.
 
 - The **code reviewer** must manually check all new and modified Python files
   against this skill during every code review.
-- The **docstring-auditor agent** can be used to perform a systematic scan on
-  request.
-- The `--fail-on-missing` capability is a planned future improvement tracked
-  in §8.6 of `docs/salesforce-admin-utilities-guide.md`.
+- The **docstring-auditor agent** (or `docstring-review.chatmode.md`) can be
+  used to perform a systematic scan on request.
