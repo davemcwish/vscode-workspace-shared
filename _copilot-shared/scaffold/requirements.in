@@ -1,0 +1,41 @@
+# ============================================================================
+# RUNTIME DEPENDENCIES (loose pins)
+# ============================================================================
+# These are the packages the scripts need to actually RUN in production.
+# No dev tools, no test tools — just what is needed when the code executes.
+#
+# THIS FILE IS A SCAFFOLD TEMPLATE.
+# It was copied from _copilot-shared\scaffold\requirements.in.
+# Edit this file to match your project's actual runtime dependencies,
+# then regenerate the locked file:
+#
+#   pip-compile requirements.in
+#
+# That command creates requirements.txt with exact version pins for every
+# package and its transitive dependencies.  Commit requirements.txt.
+# ============================================================================
+
+# --- HTTP & networking -------------------------------------------------------
+requests                       # HTTP sessions and REST API calls
+
+# --- Configuration -----------------------------------------------------------
+python-dotenv                  # Load .env files for credentials and settings
+
+# ============================================================================
+# COMMON ADDITIONS — uncomment what you need
+# ============================================================================
+
+# --- HTML / XML parsing ------------------------------------------------------
+# beautifulsoup4               # Parse HTML or XML documents
+# lxml                         # Fast XML/HTML parser (used by beautifulsoup4)
+
+# --- Data / reporting --------------------------------------------------------
+# pandas                       # DataFrames, pivot tables, data manipulation
+# openpyxl                     # Read and write .xlsx workbooks
+# tabulate                     # Pretty-print tables to the terminal
+
+# --- Dates and times ---------------------------------------------------------
+# python-dateutil              # Flexible date parsing beyond stdlib datetime
+
+# --- Windows-only automation (guard with sys_platform marker) ----------------
+# pywin32; sys_platform == "win32"   # COM automation (e.g. Outlook 365)

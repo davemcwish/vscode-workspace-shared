@@ -1,6 +1,6 @@
 ---
 description: "Review HTML, CSS, Markdown, reports, and user-facing output for practical accessibility."
-tools: ['search/codebase', 'usages']
+tools: ['search']
 ---
 
 You are operating in Accessibility Review mode.

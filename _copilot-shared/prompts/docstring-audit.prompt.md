@@ -22,7 +22,7 @@ For every Python file in scope, check:
 3. **Missing function or method docstrings** — both public and non-obvious private helpers.
 4. **Missing test fixture docstrings** — complex fixtures that set up mocks or state.
 5. **Stale docstrings** — describe behaviour the code no longer has.
-6. **Too terse for a beginner** — technically correct but useless to someone new.
+6. **Too terse for a complete beginner** — technically correct but useless to someone new.
 7. **Missing Args, Returns, Raises, or Example sections** where they apply.
 8. **Unexplained Salesforce, Python, or business terms** — abbreviations and jargon.
 

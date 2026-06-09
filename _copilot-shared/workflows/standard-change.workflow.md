@@ -2,8 +2,7 @@
 
 ## Purpose
 
-Use this workflow for any non-trivial change to the Salesforce Admin Utilities
-project.
+Use this workflow for any non-trivial change to a project in this workspace.
 
 This workflow is designed for beginner developers, beginner Salesforce users,
 and users who are learning how to work with VS Code Copilot. It explains what
@@ -378,6 +377,49 @@ Documentation accurately matches the implemented behavior.
 - `pre-commit-check.chatmode.md`
 - `pre-commit-check.prompt.md`
 
-**Preferred Windows command:**
+Run the full canonical quality gate:
 
-```bat
+**Why this matters:** Every check must pass before review. Coverage must stay
+at or above 90%.
+
+**Success looks like:** All checks pass locally before the change is reviewed.
+
+---
+
+## Step 11: Review the Change
+
+**Use:**
+
+- `code-reviewer.agent.md`
+- `review.prompt.md`
+
+Classify findings using the priority levels (🔴 CRITICAL, 🟡 IMPORTANT,
+🟢 SUGGESTION). All 🔴 issues block merge.
+
+**Success looks like:** No outstanding CRITICAL issues; IMPORTANT issues are
+resolved or explicitly accepted.
+
+---
+
+## Step 12: Prepare and Raise the Pull Request
+
+**Use:**
+
+- `pr-merge.chatmode.md`
+
+Confirm: tests green, docs updated, no secrets/PII committed, generated artifacts
+gitignored. Then write the commit message + PR description and push after approval.
+
+---
+
+## Done Checklist
+
+- [ ] Backlog checked for duplicates.
+- [ ] Scope clarified and approved.
+- [ ] PR boundaries planned.
+- [ ] Requirements/design/tasks produced where needed.
+- [ ] Code, tests, and docstrings updated.
+- [ ] Documentation updated.
+- [ ] Quality gate passed (coverage ≥ 90%).
+- [ ] Code review complete with no open CRITICAL issues.
+- [ ] PR raised with clear commit message and description.

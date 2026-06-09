@@ -15,10 +15,11 @@
 
 ## Fixtures
 
-- `sf_env` — sets Salesforce environment variables (UAT, Prod, SIT).
 - `tmp_path` — pytest built-in for temporary directories.
 - `monkeypatch` — replace real dependencies with fakes during testing.
 - `caplog` — capture log output for assertion.
+- `capsys` — capture stdout/stderr for assertion.
+- Project-specific fixtures should be defined in `tests/conftest.py`.
 
 ## Mocking Strategy
 
@@ -38,5 +39,9 @@
 
 ```bash
 pytest --tb=short -q
-pytest --cov=src --cov=scripts --cov-report=term-missing
 ```
+
+Coverage flags are defined in `pyproject.toml` under `[tool.pytest.ini_options]
+addopts` and are inherited automatically by every `pytest` invocation.
+Never pass `--cov`, `--cov-report`, or `--cov-fail-under` directly on the
+command line — change the threshold in `pyproject.toml` only.

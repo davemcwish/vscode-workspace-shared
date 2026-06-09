@@ -7,15 +7,11 @@ Run the project's pre-commit sanity workflow.
 
 ##  Canonical Quality Gate
 
-Use this order:
+Run `sanity.bat` from the project root — it mirrors `ci.yml` and runs the full
+gate (ruff format, ruff lint, mypy, bandit, detect-secrets, pytest + coverage
+with `--cov-fail-under=90`). If `sanity.bat` is unavailable, run the equivalent
+commands listed in `copilot-instructions.md` § Canonical Quality Gate.
 
-ruff format --check src tests scripts
-ruff check src tests scripts
-mypy
-bandit -c pyproject.toml -r src scripts --exclude scripts/archive,tests
-python -m detect_secrets scan --baseline .secrets.baseline
-pytest --tb=short -q
-pytest --cov=src --cov=scripts --cov-report=term-missing --cov-fail-under=90
 
 If any command fails:
 

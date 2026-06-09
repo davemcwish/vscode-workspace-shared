@@ -160,6 +160,59 @@ with open(safe_path, "w", ...) as fh:
 - Treat reports containing Salesforce usernames, emails, manager names, or user
   IDs as confidential.
 
+- **Never** commit real usernames, personal directory paths, or
+  workstation-specific paths in comments, docstrings, or example snippets.
+- Use `<you>`, `<username>`, or `<your-path>` as placeholders.
+- This includes Windows paths like `C:\Users\jsmith\...` — replace the username
+  portion with a generic placeholder.
+
+## PRNG Usage (Cycode SAST Rule: "Usage of weak Pseudo-Random Number Generator")
+
+`random.Random()` and all module-level `random.*` functions trigger Cycode's
+B311/S311 SAST rule at **High severity**. Cycode traces the PRNG taint from
+the constructor to **every downstream call-site** (`.choice()`, `.randint()`,
+etc.) and flags each one individually.
+
+> ⚠ **`# nosec B311` does NOT satisfy Cycode SAST.**
+> `# nosec` is a bandit suppression comment. It suppresses the local `bandit`
+> scan in `sanity.bat` but has no effect on Cycode's own engine. If you add
+> `# nosec B311` to all call-sites and push, Cycode will still report the
+> violations as unresolved.
+
+| Context | Correct approach |
+| --- | --- |
+| **Security-sensitive** (tokens, session IDs, nonces, passwords) | Use `secrets.choice()`, `secrets.randbelow()`, `secrets.token_hex()`. Never suppress. |
+| **Non-security randomness where determinism is NOT required** (shuffling, sampling) | Use `random.SystemRandom()` — it uses `os.urandom()` internally and is Cycode-safe. |
+| **Non-security randomness where determinism IS required** (mock data, test fixtures, prototype generation) | **Eliminate the PRNG entirely.** Derive values from a counter or index using modular arithmetic. This is fully deterministic, Cycode cannot flag it, and it requires no suppression. |
+
+**Preferred pattern for deterministic mock data (no PRNG at all):**
+
+```python
+# Derive agency, agent, and date from the order counter.
+# Modular arithmetic gives realistic variety without any PRNG.
+# Every run produces identical results — no seed, no suppression needed.
+for idx, _ in enumerate(range(count)):
+    agency = _MOCK_AGENCIES[idx % len(_MOCK_AGENCIES)]
+    agent  = agents[idx % len(agents)]
+    days   = idx % 365
+```
+
+**If `random.SystemRandom()` is used (non-deterministic, but Cycode-safe):**
+
+```python
+rng = random.SystemRandom()  # Uses os.urandom() — Cycode-safe, no seed support
+value = rng.choice(options)
+```
+
+Note: `random.SystemRandom()` does not support seeding. Do not use it when
+the test suite requires `test_is_deterministic_across_calls` to pass.
+
+**Bandit suppression reference** (local `sanity.bat` only, NOT Cycode):
+
+The suppression comment `# nosec B311` on the instantiation line covers the
+local `bandit` scan. It has no effect on Cycode. Do not rely on it to clear
+Cycode SAST violations — use one of the code-level approaches above.
+
 ## Flask / Web Endpoint Security (OWASP)
 
 When building Flask REST API endpoints (e.g. the JOSHUA frontend), apply these
@@ -234,15 +287,3 @@ def _is_local_origin(request) -> bool:
   `flask-websocket-subprocess.instructions.md`).
 - **One job at a time** — reject concurrent launch requests.
 
-## Generated Data Files
-
-- Do not commit generated CSV, Excel, PDF, ZIP, log, or report files unless they
-  are intentionally sanitized samples.
-- Treat reports containing Salesforce usernames, emails, manager names, or user
-  IDs as confidential.
-
-- **Never** commit real usernames, personal directory paths, or
-  workstation-specific paths in comments, docstrings, or example snippets.
-- Use `<you>`, `<username>`, or `<your-path>` as placeholders.
-- This includes Windows paths like `C:\Users\jsmith\...` — replace the username
-  portion with a generic placeholder.

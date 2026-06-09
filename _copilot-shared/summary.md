@@ -16,6 +16,10 @@ configuration). This keeps all projects consistent.
 With them, Copilot follows your team's coding style, security rules, and
 documentation standards automatically.
 
+> **Two symbols do most of the work in Copilot Chat:** `/` runs a **prompt**
+> (a one-off recipe), and `@` calls an **agent** (a persona that does a whole
+> job). Keep this distinction in mind as you read on.
+
 ---
 
 ## Overview
@@ -25,7 +29,7 @@ The configuration is organised into eight groups:
 | Category | What it does | How it activates |
 | --- | --- | --- |
 | `.spec-workflow` | Templates for requirements, tasks, and checklists | Used by the `team-lead` agent |
-| `agents` | Autonomous role-based workers (like virtual team members) | You select one in Chat |
+| `agents` | Autonomous role-based workers (like virtual team members) | Type `@name` in Chat |
 | `chatmodes` | Persistent conversation personas | You select one in Chat |
 | `instructions` | Auto-applied rules matched by file type | Copilot reads them automatically |
 | `prompts` | Reusable task recipes | You type `/prompt-name` in Chat |
@@ -36,8 +40,17 @@ The configuration is organised into eight groups:
 **"Activates automatically"** means Copilot reads the file without you doing
 anything — it pattern-matches against the file you're editing.
 
-**"You select"** means you must explicitly choose it (from a dropdown or by
-typing a command).
+**"You select" / "You type"** means you must explicitly choose or trigger it
+(from a dropdown, or by typing `/` or `@` in Chat).
+
+### How You Start Each Group (Quick Reference)
+
+| Group | How you start it |
+| --- | --- |
+| Instruction | Automatic (no action needed) |
+| Prompt | Type `/name` in Copilot Chat |
+| Agent | Type `@name` in Copilot Chat |
+| Chat mode | Pick from the dropdown in the Chat panel |
 
 ---
 
@@ -52,7 +65,8 @@ Think of it like a team at work:
 - **Chat modes** are like choosing which department to talk to — select one at
   the start of a conversation to set the mindset for the whole session.
 - **Agents** are specialist staff who do the work — each has a defined workflow,
-  required inputs, and output format.
+  required inputs, and output format. Summon one by typing `@name` in Copilot
+  Chat.
 - **Skills** are the training manuals agents read before starting — detailed
   standards for code, tests, security, etc.
 - **Spec workflow templates** are the scaffolding agents use to produce
@@ -74,17 +88,41 @@ Templates used by the `team-lead` agent when decomposing designs into tasks.
 
 ## 2. Agents (`agents/`)
 
-Specialist AI personas. Invoke by naming the agent in Copilot Chat or
-selecting it in the agent dropdown.
+Specialist AI personas. Type `@agent-name` in Copilot Chat (or pick it from the
+agent dropdown) to invoke one.
+
+### How to Invoke an Agent
+
+You don't need to open any special menu to use a pre-built agent. Just:
+
+1. Open a **regular Copilot Chat** session (the normal chat panel you already use).
+2. In the chat input box, type **`@`** followed by the agent's name.
+3. Carry on typing your request as usual, then press **Enter**.
+
+As you type `@`, Copilot shows a list of available agents — you can click one
+instead of typing the full name. You can invoke an agent **at any time**, even
+in the middle of an ongoing conversation.
+
+**Example:**
+
+```text
+@team-lead break this design down into beginner-friendly tasks
+```
+
+> **Tip:** The agent name is the part of the filename before `.agent.md`. For
+> example, the file `code-reviewer.agent.md` is invoked as `@code-reviewer`.
+> If an agent ever doesn't respond to `@`, the fallback is the agent dropdown
+> in the Chat panel.
 
 | File | Purpose |
 | --- | --- |
+| `Explore.agent.md` | Read-only codebase exploration agent — locates code, traces call sites and dependencies, and confirms what already exists. Delegated to by architect, business-analyst, and team-lead. Never edits files or runs code. |
 | `scope-change.agent.md` | Captures and validates a new scope change request before it enters the backlog. |
 | `business-analyst.agent.md` | Translates a scope change into structured functional requirements. |
 | `architect.agent.md` | Produces a module-level technical design for approved requirements. |
 | `team-lead.agent.md` | Decomposes designs into sequential beginner-friendly implementation tasks. |
 | `dev.agent.md` | Implements tasks produced by the team-lead. |
-| `dev-manager.agent.md` | Reviews and approves designs and task plans before implementation. |
+| `dev-manager.agent.md` | Orchestrates implementation by coordinating the dev agent sequentially through the task checklist and maintaining checklist state. Writes no code itself, but runs the full canonical quality gate once after the loop to catch cross-task regressions. |
 | `code-reviewer.agent.md` | Reviews completed code for correctness, security, style, and test coverage. |
 | `doc-writer.agent.md` | Writes and updates beginner-friendly project documentation. |
 | `pre-commit-check.agent.md` | Runs the full quality gate and summarises results before a PR is raised. |
@@ -92,19 +130,22 @@ selecting it in the agent dropdown.
 | `critical-thinking.agent.md` | Challenges assumptions via open Socratic questioning — asks questions only, never writes code (one carve-out: may flag a data-loss/security/Production risk). Ends with a neutral recap of assumptions tested. Mirrored with the chatmode version. |
 | `debug.agent.md` | Systematic 4-phase bug diagnosis: assess → investigate → resolve → verify. |
 
-**Recommended agent chain** (the order you'd use them for a full feature):
+**Recommended agent chain** (the order you'd use them for a full feature). You
+won't always need every agent — this just shows the typical order for building
+a full feature from scratch:
 
 ```text
-scope-change -> business-analyst -> architect -> dev-manager -> team-lead -> dev
-                                                    |
-                              code-reviewer -> docstring-auditor -> pre-commit-check -> doc-writer
+scope-change -> business-analyst -> architect -> team-lead -> dev-manager -> dev
+                                                                  |
+                            code-reviewer -> docstring-auditor -> pre-commit-check -> doc-writer
 ```
 
-**Supporting agents (use at any step when you need them):**
+Supporting agents (use at any step when you need them):
 
 ```text
 critical-thinking  -- challenge assumptions before committing to a design
 debug              -- systematic troubleshooting when tests fail
+Explore            -- read-only codebase discovery (used by architect, BA, team-lead)
 ```
 
 ---
@@ -128,7 +169,7 @@ persona and ruleset that persist for the entire conversation.
 | `pr-merge.chatmode.md` | Write the git commit message and PR description, then push. |
 | `pre-commit-check.chatmode.md` | Run the full quality gate and summarise results before raising a PR. |
 | `release-pr-planner.chatmode.md` | Split approved capabilities into safe, reviewable pull requests. |
-| `sf-safe-ops.chatmode.md` | Read-only Salesforce reasoning mode -- no write code generated. |
+| `sf-safe-ops.chatmode.md` | Read-only Salesforce reasoning mode — no write code generated. |
 | `test-engineer.chatmode.md` | Design and improve pytest coverage without real Salesforce calls. |
 | `transcript-extractor.chatmode.md` | Convert long transcripts into comprehensive beginner-friendly Markdown guides. |
 | `website-launch-planner.chatmode.md` | Guide a beginner from website idea to platform choice, social presence, design, build, and live launch. |
@@ -175,7 +216,7 @@ to do.
 | File | Purpose |
 | --- | --- |
 | `add-tests.prompt.md` | Add or improve pytest coverage for a selected module. |
-| `component-overview.prompt.md` | Generate a plain-English overview of a module or script. |
+| `component-overview.prompt.md` | Generate a machine-readable, component-level overview (`overview.md`) for consumption by other AI agents — explicit labelled fields, no prose. |
 | `conversion-review.prompt.md` | Review a website for conversion, lead generation, trust, calls to action, and customer journey friction. |
 | `docs-update.prompt.md` | Update project documentation after a code or workflow change. |
 | `docstring-audit.prompt.md` | Audit Python docstrings and produce a beginner-friendly remediation plan. |
@@ -275,7 +316,7 @@ and review quality** over speed or cost.
 | `_copilot-shared/` | This project's shared source of truth for Copilot configuration. The `sync-shared-copilot.ps1` script copies it into each sub-project's `.github/` folder. |
 | `.github/` directory | A special folder in a Git repository where VS Code looks for Copilot configuration files. |
 | `applyTo` glob | A filename pattern (like `**/*.py` meaning "all Python files in any subfolder") that tells Copilot when to activate a rule. |
-| Agent | An AI persona with a specific job, workflow, and output format -- like a virtual team member. |
+| Agent | An AI persona with a specific job, workflow, and output format -- like a virtual team member. Invoke it by typing `@name` in Copilot Chat. |
 | Chat mode | A persistent personality you select for an entire Copilot Chat conversation. |
 | Prompt | A reusable recipe you trigger with `/name` in Copilot Chat -- like a template for a specific task. |
 | Instruction | A rule file Copilot reads automatically (no action needed from you) when you edit matching files. |
@@ -283,3 +324,7 @@ and review quality** over speed or cost.
 | Workflow | A step-by-step process for completing a type of work (e.g. launching a website, making a code change). |
 | Quality gate | A set of automated checks (formatting, linting, type-checking, security scanning, tests) that must all pass before code can be merged. |
 | Command Palette | VS Code's search bar for commands -- open it with `Ctrl+Shift+P`. |
+| PR (Pull Request) | A request to merge your changes into the main codebase, where they can be reviewed before being accepted. |
+| CI/CD | Continuous Integration / Continuous Deployment -- automated checks and release steps that run when code is pushed. |
+| JOSHUA | The name of this project's Flask-based web frontend (referenced by the Flask/WebSocket skill and instruction files). |
+| `sanity.bat` | The local quality-gate runner (Windows). Runs ruff, mypy, bandit, detect-secrets, and pytest+coverage in one command — the local mirror of `ci.yml`. Run it before every commit. |

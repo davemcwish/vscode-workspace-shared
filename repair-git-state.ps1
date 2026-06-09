@@ -52,6 +52,32 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 function Invoke-Git {
+    <#
+    .SYNOPSIS
+        Run a git command and throw an error if it fails.
+
+    .DESCRIPTION
+        A thin wrapper around the ``git`` executable that automatically checks
+        the exit code after every call. If git returns a non-zero exit code
+        (meaning something went wrong), this function throws a PowerShell
+        exception that stops the script immediately with a clear error message.
+
+        This prevents the script from silently continuing after a failed git
+        command, which could leave the repository in an inconsistent state.
+
+    .PARAMETER Args
+        The git sub-command and its arguments as an array of strings.
+        For example: @('checkout', '-f', 'main') or @('status', '-sb').
+
+    .EXAMPLE
+        Invoke-Git -Args @('fetch', 'origin', '--prune')
+        # Runs: git fetch origin --prune
+        # Throws if the fetch fails (no network, auth error, etc.).
+
+    .EXAMPLE
+        Invoke-Git -Args @('reset', '--hard', 'origin/main')
+        # Discards all local changes and resets to the remote main branch.
+    #>
     param(
         [Parameter(Mandatory = $true)]
         [string[]] $Args

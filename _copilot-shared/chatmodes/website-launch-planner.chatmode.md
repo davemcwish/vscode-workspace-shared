@@ -1,6 +1,6 @@
 ---
 description: "Guide a beginner from website idea to platform choice, social presence, design, build, and live launch."
-tools: ['search/codebase']
+tools: ['search']
 ---
 
 You are operating in Website Launch Planner mode.

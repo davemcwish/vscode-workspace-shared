@@ -14,6 +14,7 @@ parent folder.
 ```text
 Visual Studio Code\                        <- parent folder (workspace root)
   _copilot-shared\                         <- single source of truth for Copilot config
+    scaffold\                              <- starter files copied into new projects once
   sync-shared-copilot.ps1                  <- copies _copilot-shared into each project
   Visual Studio Code.code-workspace        <- tells VS Code which folders to show
   Salesforce\                              <- project (its own git repo)
@@ -252,6 +253,56 @@ git push -u origin main
 
 ---
 
+## Step 7 - Copy the scaffold files into the new project
+
+The `_copilot-shared\scaffold\` folder contains ready-to-use starter files
+for any new Python project.  Copy them now so you have a local quality gate
+and dependency management setup from day one.
+
+From the parent folder, run:
+
+```powershell
+cd "C:\Users\<username>\Documents\Visual Studio Code"
+.\sync-shared-copilot.ps1 -Scaffold -ScaffoldTarget "My-New-Project"
+```
+
+This copies the following files into `My-New-Project\` (existing files are
+never overwritten):
+
+| File | What it does |
+| --- | --- |
+| `sanity.bat` | Local quality gate — run before every commit |
+| `sanity_v.bat` | Verbose version of `sanity.bat` — use when debugging a failure |
+| `requirements.in` | Starter list of runtime dependencies (Python template) |
+| `requirements-dev.in` | Starter list of dev/test dependencies (Python template) |
+| `README.md` | Project overview template — fill in what it does and how to use it |
+| `ARCHITECTURE.md` | System design template — components, data flows, security model |
+| `CHANGELOG.md` | Version history template (Keep a Changelog format) |
+| `CONTRIBUTING.md` | Developer guide template — setup, standards, PR process |
+| `SECURITY.md` | Security policy template — vulnerability reporting, controls |
+| `UPDATING_DEPENDENCIES.md` | Dependency management guide template |
+| `scaffold-README.md` | Explains what to customise in each file |
+
+Open `scaffold-README.md` in the new project and work through its
+customisation notes before running the gate for the first time.  Every
+section marked `[FILL IN]` in the documentation files must be completed.
+
+> **Note:** Scaffold files are copied once at project creation time.  After
+> that, your project owns its copies.  Changes to `_copilot-shared\scaffold\`
+> do not automatically propagate to existing projects (unlike `.github\` which
+> is always synced).
+
+Once you have customised the scaffold files, commit them:
+
+```powershell
+git add sanity.bat sanity_v.bat requirements.in requirements-dev.in
+git add README.md ARCHITECTURE.md CHANGELOG.md CONTRIBUTING.md SECURITY.md UPDATING_DEPENDENCIES.md scaffold-README.md
+git commit -m "chore: add scaffold files — quality gate, dependencies, and project docs"
+git push
+```
+
+---
+
 ## What the sync script copies
 
 The `$Folders` array inside `sync-shared-copilot.ps1` lists the subfolders
@@ -282,6 +333,7 @@ It also copies two root-level files:
 | --- | --- |
 | Sync all projects | `.\sync-shared-copilot.ps1` |
 | Sync one project only | `.\sync-shared-copilot.ps1 -Projects "My-New-Project"` |
+| Copy scaffold files into a new project | `.\sync-shared-copilot.ps1 -Scaffold -ScaffoldTarget "My-New-Project"` |
 | See script help | `Get-Help .\sync-shared-copilot.ps1` |
 
 ---
@@ -303,7 +355,9 @@ It also copies two root-level files:
 | Thing | Rule |
 | --- | --- |
 | `_copilot-shared\` | Always edit here for shared Copilot content. Never edit a project's `.github\` directly for shared files. |
+| `_copilot-shared\scaffold\` | Edit here to improve the project starter templates. Changes only affect new projects created after the edit. |
 | `sync-shared-copilot.ps1` | Run after any change to `_copilot-shared\`. Add new project folder names to `$DefaultProjects`. |
 | `Visual Studio Code.code-workspace` | Add new projects to the `"folders"` array. The `"path"` must match the `$DefaultProjects` entry exactly. |
 | Each project's `.github\` | A synced copy. Safe to add project-specific files, but shared files get overwritten on next sync. |
+| Each project's `sanity.bat` / `sanity_v.bat` | Copied once from scaffold. Project owns them. Keep in sync with each other and with `ci.yml`. |
 | Each project's `.git\` | Completely independent. Each project has its own history, branches, and remote. |

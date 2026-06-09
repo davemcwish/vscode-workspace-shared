@@ -31,6 +31,9 @@ jobs:
           pip install -r requirements.txt
           pip install -e .
 
+      - name: Markdown lint
+        run: npx markdownlint-cli2 "docs/**/*.md" "*.md"
+
       - name: ruff format check
         run: ruff format --check src tests scripts
 
@@ -47,4 +50,9 @@ jobs:
         run: python -m detect_secrets scan --baseline .secrets.baseline
 
       - name: pytest
-        run: pytest -n auto --cov=src --cov=scripts --cov-report=term-missing
+        # Coverage flags (--cov, --cov-report, --cov-fail-under, --strict-markers)
+        # are defined once in pyproject.toml [tool.pytest.ini_options] addopts and
+        # inherited automatically. Only -n auto is added here for CI parallelism.
+        # Never duplicate addopts flags in this file — change the threshold in
+        # pyproject.toml only.
+        run: pytest -n auto
