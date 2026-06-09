@@ -11,10 +11,15 @@
     Run this script after editing anything in _copilot-shared\ to propagate
     the changes to every project listed in $Projects.
 
+    SCAFFOLD SYNC: Certain scaffold files (listed in $ScaffoldSyncFiles) are
+    always synced into the project ROOT on every run.  These are shared-owned
+    files (sanity.bat, sanity_v.bat, .markdownlint.json) that must stay
+    consistent across all projects.  Edit them in _copilot-shared\scaffold\.
+
     NEW PROJECTS: use -Scaffold -ScaffoldTarget <folder> to copy the starter
-    files (sanity.bat, sanity_v.bat, requirements.in, requirements-dev.in,
-    scaffold-README.md) from _copilot-shared\scaffold\ into the new project
-    root.  Scaffold files are copied once and are not overwritten on subsequent
+    files (README.md, CONTRIBUTING.md, requirements.in, etc.) from
+    _copilot-shared\scaffold\ into the new project root.  These one-time
+    scaffold files are copied once and are not overwritten on subsequent
     syncs — the project owns them after the initial copy.
 
 .PARAMETER Projects
@@ -61,8 +66,7 @@ $Shared = Join-Path $Root "_copilot-shared"
 $DefaultProjects = @(
     "asus-router-decoder",
     "Salesforce",
-    "Trails and Tails",
-    "woprcrt-terminal-main"
+    "Trails and Tails"
 )
 
 # Subfolders inside _copilot-shared\ to mirror into each project's .github\
@@ -74,6 +78,15 @@ $Folders = @(
     "prompts",
     "skills",
     "workflows"
+)
+
+# Files in _copilot-shared\scaffold\ that are ALWAYS synced into the project
+# ROOT (not .github\).  These are shared-owned -- edits belong in scaffold\.
+# Files NOT in this list are copied only once via -Scaffold (project-owned).
+$ScaffoldSyncFiles = @(
+    ".markdownlint.json",
+    "sanity.bat",
+    "sanity_v.bat"
 )
 
 # -- Resolve target project list ---------------------------------------------
@@ -211,7 +224,21 @@ Write-Host "=== sync-shared-copilot ===" -ForegroundColor Cyan
 Write-Host "  Source : $Shared"
 Write-Host ""
 
+# -- Pre-sync validation -----------------------------------------------------
+# The masters in _copilot-shared\ are the single source of truth. Refuse to
+# propagate anything if the agent/chatmode pairing contract is broken.
+
+Write-Host "  -> Validating agent/chatmode pairs..." -ForegroundColor Green
+& python -m pytest (Join-Path $Shared "tests\test_agent_chatmode_sync.py") -q --no-cov
+if ($LASTEXITCODE -ne 0) {
+    throw "Agent/chatmode pairing validation FAILED. Fix the masters in _copilot-shared\ before syncing."
+}
+Write-Host "    Validation passed (5 pairs, 13 checks)." -ForegroundColor DarkGreen
+Write-Host ""
+
 # -- Sync into root workspace .github\ ----------------------------------------
+
+
 # The root workspace folder itself needs .github\ so that chatmodes, agents,
 # and prompts appear in the VS Code Copilot dropdown for all workspace roots.
 
@@ -269,6 +296,14 @@ foreach ($project in $Projects) {
     Sync-File `
         -Source      (Join-Path $Shared "summary.md") `
         -Destination (Join-Path $githubPath "summary.md")
+
+    # Sync shared-owned scaffold files into the PROJECT ROOT (not .github\)
+    $scaffoldDir = Join-Path $Shared "scaffold"
+    foreach ($scaffoldFile in $ScaffoldSyncFiles) {
+        Sync-File `
+            -Source      (Join-Path $scaffoldDir $scaffoldFile) `
+            -Destination (Join-Path $projectPath $scaffoldFile)
+    }
 
     Write-Host "    Done." -ForegroundColor DarkGreen
 }

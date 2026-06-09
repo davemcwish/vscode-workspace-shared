@@ -24,11 +24,11 @@ If you are unsure whether a file has a counterpart, check the pair table below.
 
 | Agent file | Chatmode file | Sync status |
 | --- | --- | --- |
-| `agents/critical-thinking.agent.md` | `chatmodes/critical-thinking.chatmode.md` | ✅ Paired |
-| `agents/pre-commit-check.agent.md` | `chatmodes/pre-commit-check.chatmode.md` | ✅ Paired |
-| `agents/debug.agent.md` | `chatmodes/debug.chatmode.md` | ✅ Paired |
-| `agents/doc-writer.agent.md` | `chatmodes/doc-writer.chatmode.md` | ✅ Paired |
-| `agents/docstring-auditor.agent.md` | `chatmodes/docstring-review.chatmode.md` | ✅ Paired |
+| `agents/critical-thinking.agent.md` | `chatmodes/critical-thinking.chatmode.md` | ✅ Paired (divergent) |
+| `agents/pre-commit-check.agent.md` | `chatmodes/pre-commit-check.chatmode.md` | ✅ Paired (divergent) |
+| `agents/debug.agent.md` | `chatmodes/debug.chatmode.md` | ✅ Paired (divergent) |
+| `agents/doc-writer.agent.md` | `chatmodes/doc-writer.chatmode.md` | ✅ Paired (identical) |
+| `agents/docstring-auditor.agent.md` | `chatmodes/docstring-review.chatmode.md` | ✅ Paired (divergent) |
 | `agents/architect.agent.md` | *(no chatmode — agent only)* | — |
 | `agents/business-analyst.agent.md` | *(no chatmode — agent only)* | — |
 | `agents/code-reviewer.agent.md` | *(no chatmode — agent only)* | — |
