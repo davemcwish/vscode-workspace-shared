@@ -22,6 +22,7 @@ REM    3. Mypy           — static type checking
 REM    4. Bandit         — security linter (Python-specific)
 REM    5. detect-secrets — scans for accidentally committed secrets
 REM    6. Pytest         — test suite with coverage (parallel)
+REM    7. markdownlint   — checks Markdown files for style issues
 REM
 REM  COVERAGE NOTE:
 REM    --cov flags are NOT passed here. They are defined once in
@@ -45,7 +46,7 @@ set PY_CMD=py -3.12
 
 echo.
 echo ============================================================================
-echo  [1/6] Ruff format check (verbose)
+echo  [1/7] Ruff format check (verbose)
 echo ============================================================================
 REM CUSTOMISE: adjust 'src tests scripts' to match your project's directory layout.
 %PY_CMD% -m ruff format --check src tests scripts --verbose
@@ -53,7 +54,7 @@ if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [2/6] Ruff lint (verbose + statistics)
+echo  [2/7] Ruff lint (verbose + statistics)
 echo ============================================================================
 REM CUSTOMISE: adjust directory list to match your project layout (same as step 1).
 %PY_CMD% -m ruff check src tests scripts --verbose
@@ -62,14 +63,14 @@ if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [3/6] Mypy (verbose)
+echo  [3/7] Mypy (verbose)
 echo ============================================================================
 %PY_CMD% -m mypy --verbose
 if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [4/6] Bandit (verbose — shows every file scanned)
+echo  [4/7] Bandit (verbose — shows every file scanned)
 echo ============================================================================
 REM CUSTOMISE: -r src scripts scans your source. --exclude tests is standard.
 REM Add more exclusions separated by commas (e.g. --exclude tests,scripts/archive).
@@ -78,18 +79,26 @@ if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [5/6] detect-secrets
+echo  [5/7] detect-secrets
 echo ============================================================================
 %PY_CMD% -m detect_secrets scan --baseline .secrets.baseline
 if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [6/6] Pytest (verbose + parallel, coverage flags from addopts)
+echo  [6/7] Pytest (verbose + parallel, coverage flags from addopts)
 echo ============================================================================
 REM Coverage flags come from [tool.pytest.ini_options] addopts in pyproject.toml.
 REM -v gives one PASSED/FAILED line per test; --tb=short keeps tracebacks brief.
 %PY_CMD% -m pytest -n auto -v --tb=short
+if errorlevel 1 set /a FAIL_COUNT+=1
+
+echo.
+echo ============================================================================
+echo  [7/7] markdownlint (autofix then verify)
+echo ============================================================================
+call npx markdownlint-cli2 --fix "docs/**/*.md" "*.md"
+call npx markdownlint-cli2 "docs/**/*.md" "*.md"
 if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.

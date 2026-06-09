@@ -31,6 +31,9 @@ jobs:
           pip install -r requirements.txt
           pip install -e .
 
+      - name: Markdown lint
+        run: npx markdownlint-cli2 "docs/**/*.md" "*.md"
+
       - name: ruff format check
         run: ruff format --check src tests scripts
 

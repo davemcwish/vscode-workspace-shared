@@ -18,6 +18,8 @@ REM    3. Mypy           — static type checking
 REM    4. Bandit         — security linter (Python-specific)
 REM    5. detect-secrets — scans for accidentally committed secrets
 REM    6. Pytest         — test suite with coverage (parallel)
+REM    7. markdownlint   — checks Markdown files for style issues
+REM   
 REM
 REM  COVERAGE NOTE:
 REM    --cov flags are NOT passed here. They are defined once in
@@ -36,7 +38,7 @@ set PY_CMD=py -3.12
 
 echo.
 echo ============================================================================
-echo  [1/6] Ruff format check
+echo  [1/7] Ruff format check
 echo ============================================================================
 REM CUSTOMISE: adjust 'src tests scripts' to match your project's directory layout.
 %PY_CMD% -m ruff format --check src tests scripts
@@ -44,7 +46,7 @@ if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [2/6] Ruff lint
+echo  [2/7] Ruff lint
 echo ============================================================================
 REM CUSTOMISE: adjust directory list to match your project layout (same as step 1).
 %PY_CMD% -m ruff check src tests scripts
@@ -53,14 +55,14 @@ if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [3/6] Mypy (static type checking)
+echo  [3/7] Mypy (static type checking)
 echo ============================================================================
 %PY_CMD% -m mypy
 if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [4/6] Bandit (security linter)
+echo  [4/7] Bandit (security linter)
 echo ============================================================================
 REM CUSTOMISE: -r src scripts scans your source. --exclude tests is standard.
 REM Add more exclusions separated by commas (e.g. --exclude tests,scripts/archive).
@@ -69,20 +71,28 @@ if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [5/6] detect-secrets (secret scanning)
+echo  [5/7] detect-secrets (secret scanning)
 echo ============================================================================
 %PY_CMD% -m detect_secrets scan --baseline .secrets.baseline
 if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [6/6] Pytest (with coverage, parallel)
+echo  [6/7] Pytest (with coverage, parallel)
 echo ============================================================================
 REM Coverage flags (--cov, --cov-report, --cov-fail-under, --strict-markers)
 REM come from addopts in pyproject.toml automatically.
 REM Only -n auto is added here for parallel execution.
 REM Never duplicate addopts flags here — change the threshold in pyproject.toml only.
 %PY_CMD% -m pytest -n auto
+if errorlevel 1 set /a FAIL_COUNT+=1
+
+echo.
+echo ============================================================================
+echo  [7/7] markdownlint (autofix then verify)
+echo ============================================================================
+call npx markdownlint-cli2 --fix "docs/**/*.md" "*.md"
+call npx markdownlint-cli2 "docs/**/*.md" "*.md"
 if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
