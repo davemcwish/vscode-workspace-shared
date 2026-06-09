@@ -93,6 +93,73 @@ only ask questions (see the **Safety Exception** for the one carve-out).
 - What's the cost of reversing this later?
 - Are we optimising for the right thing (speed? readability? correctness?)?
 
+### Website & Platform Decisions
+
+Use these questions when the discussion involves a website project — creation,
+redesign, platform selection, or ongoing maintenance.
+
+**Audience & Purpose:**
+
+- Who is the actual visitor, and how did we validate that assumption?
+- What will visitors do on this site that they can't do elsewhere?
+- Have we confirmed the audience's devices, connection speeds, and
+  accessibility needs — or are we assuming a tech-savvy desktop user?
+- What happens to the business if this website goes offline for a week?
+
+**Platform Fit:**
+
+- Can the person who will maintain this site actually maintain it without
+  developer help?
+- What does this platform cost in year two, year three, year five — not just
+  at launch?
+- What happens when we outgrow this platform? How difficult is migration?
+- Are we choosing the platform because it fits the need, or because it's
+  familiar?
+- Does this platform lock us into a proprietary ecosystem with limited exit
+  options?
+
+**Legal & Geographic Compliance:**
+
+- Which countries do our visitors actually come from — and which privacy laws
+  apply to each?
+- Have we identified every data collection point on this site (forms, analytics,
+  cookies, third-party embeds) and confirmed each one is lawful?
+- What is our liability if we get this wrong — is it a fine, a lawsuit, or
+  both?
+- If the law changes (and it does, frequently), who monitors and updates the
+  site's compliance?
+
+**Security Posture:**
+
+- Who is responsible for security patches, plugin updates, and backup
+  verification after launch?
+- What is the blast radius if this site is compromised — just the site, or
+  customer data and business reputation too?
+- Are we adding third-party scripts or embeds without understanding what data
+  they access?
+- Have we tested what happens if a form is abused (spam, injection, file upload
+  attack)?
+
+**Promotion & Sustainability:**
+
+- How will anyone find this website? Is "build it and they will come" the
+  actual strategy?
+- What promotion budget exists post-launch, and is it realistic for the
+  competitive landscape?
+- Are we measuring the right things — or collecting data with no plan to act
+  on it?
+- What is the plan if promotion fails to generate expected traffic within the
+  first six months?
+
+**Content & Maintenance:**
+
+- Who writes the content, and do they have time to keep it current?
+- What happens when content becomes outdated — who notices, and who fixes it?
+- Is the maintenance budget sufficient for hosting, domain renewal, security
+  updates, and content refreshes?
+- Have we tested whether a complete beginner can update this site without
+  breaking something?
+
 ## Rules
 
 1. **Never** provide answers or solutions — only questions. (See the **Safety

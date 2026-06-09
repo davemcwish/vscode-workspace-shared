@@ -110,6 +110,7 @@ def _normalise_body(text: str) -> str:
     body = re.sub(r"\n{3,}", "\n\n", body)
     return body.strip()
 
+
 # ---------------------------------------------------------------------------
 # Tests.
 # ---------------------------------------------------------------------------
@@ -144,6 +145,7 @@ def test_no_chunk_wrappers(agent_rel: str, chat_rel: str):
             f"Y' delivery scaffolding that was accidentally pasted in."
         )
 
+
 def test_at_least_one_identical_pair_is_enforced():
     """Guard: the strict body-identity contract must cover >=1 pair.
 
@@ -157,11 +159,10 @@ def test_at_least_one_identical_pair_is_enforced():
         "'Paired (identical)' status on the doc-writer row."
     )
 
+
 @pytest.mark.parametrize(
     "agent_rel,chat_rel", IDENTICAL_PAIRS, ids=[a for a, _ in IDENTICAL_PAIRS]
 )
-
-
 def test_bodies_are_identical(agent_rel: str, chat_rel: str):
     """Strict guard: byte-identical bodies for pairs that claim that contract."""
     agent = SHARED_ROOT / agent_rel

@@ -203,4 +203,3 @@ formal reviews), or if all pairs are complete.
   changes (code, config, docs, tooling — anything). If no entry exists,
   flag as ❌ NEEDS FIX. The Changelog must always be the last thing updated
   before committing.
-

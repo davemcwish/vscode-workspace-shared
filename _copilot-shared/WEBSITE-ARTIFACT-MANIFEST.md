@@ -1,0 +1,172 @@
+# Website Artifact Manifest
+
+## Purpose
+
+This file lists the Copilot artifacts used for planning, building, launching,
+promoting, measuring, documenting, and maintaining a website.
+
+It exists so a complete beginner can answer these questions:
+
+- Which artifacts are already installed?
+- Which artifacts are optional?
+- Which artifacts are still missing?
+- Which artifact should I use for each website task?
+
+If another document mentions an artifact that is not installed yet, check this
+manifest first.
+
+---
+
+## Status Legend
+
+| Status | Meaning |
+| --- | --- |
+| ✅ Installed | The artifact exists in this workspace |
+| 🔲 To create | The artifact is recommended but does not exist yet |
+| 🔲 To verify | The artifact may exist but needs confirmation |
+| ⚪ Optional | Useful for some projects but not required for every website |
+| 🔗 External | Depends on tools, services, or documentation outside this workspace |
+
+---
+
+## Core Entry Point
+
+| Artifact | Status | Purpose |
+| --- | --- | --- |
+| `START-HERE-WEBSITE.md` | ✅ Installed | Beginner entry point for understanding how to use the website artifact system |
+| `WEBSITE-ARTIFACT-MANIFEST.md` | ✅ Installed | Inventory of installed, missing, optional, and planned artifacts |
+
+---
+
+## Critical Thinking Artifacts
+
+| Artifact | Status | Purpose |
+| --- | --- | --- |
+| `critical-thinking.agent.md` | ✅ Installed | Agent version of the critical-thinking partner |
+| `critical-thinking.chatmode.md` | ✅ Installed | Chat mode version of the critical-thinking partner |
+
+> **Sync rule:** The agent and chat mode versions must remain behaviourally
+> identical. Any change to one must be applied to the other.
+
+---
+
+## Website Skills
+
+| Artifact | Status | Purpose |
+| --- | --- | --- |
+| `website-analytics.skill.md` | ✅ Installed | Analytics, measurement, conversion tracking, and privacy-aware data collection |
+| `website-promotion.skill.md` | ✅ Installed | SEO, paid ads, email, social media, partnerships, and offline promotion |
+| `website-performance.skill.md` | ✅ Installed | Website speed, Core Web Vitals, images, caching, JavaScript, fonts, and CDN guidance |
+| `website-security.skill.md` | ✅ Installed | HTTPS, headers, forms, CMS security, hosting security, backups, and incident response |
+| `website-privacy-legal.skill.md` | ✅ Installed | Privacy law, cookies, accessibility law, data collection, and legal compliance |
+| `website-content-copywriting.skill.md` | ✅ Installed | Website copy, page structure, CTAs, tone, scanning behaviour, and content maintenance |
+| `accessibility.skill.md` | 🔲 To verify | Detailed accessibility implementation and testing guidance |
+| `website-launch.skill.md` | 🔲 To verify | General website launch planning guidance |
+| `website-growth.skill.md` | 🔲 To verify | Ongoing growth, SEO, conversion, and improvement loops |
+
+---
+
+## Website Workflows
+
+| Artifact | Status | Purpose |
+| --- | --- | --- |
+| `website-documentation.workflow.md` | ✅ Installed | Creates beginner-friendly offline Markdown documentation |
+| `website-live-launch.workflow.md` | 🔲 To create | End-to-end go-live workflow covering domain, DNS, SSL, testing, launch, rollback, and post-launch checks |
+
+---
+
+## Website Chat Modes
+
+| Artifact | Status | Purpose |
+| --- | --- | --- |
+| `website-launch-planner.chatmode.md` | 🔲 To create | Main guided planning conversation from idea to launch |
+| `accessibility-review.chatmode.md` | 🔲 To verify | Accessibility review conversation |
+| `critical-thinking.chatmode.md` | ✅ Installed | Challenges assumptions before committing to decisions |
+
+---
+
+## Website Prompts
+
+| Artifact | Status | Purpose |
+| --- | --- | --- |
+| `website-from-idea-to-launch.prompt.md` | 🔲 To create | One-shot planning prompt for a new website |
+| `platform-decision.prompt.md` | 🔲 To create | Helps compare and choose website technology/platform |
+| `seo-review.prompt.md` | 🔲 To create | Reviews search engine readiness |
+| `local-seo-check.prompt.md` | 🔲 To verify | Reviews local search readiness |
+| `conversion-review.prompt.md` | 🔲 To create | Reviews whether visitors are likely to take the desired action |
+| `html-css-review.prompt.md` | 🔲 To verify | Reviews HTML/CSS/JS quality |
+| `monthly-website-review.prompt.md` | 🔲 To create | Monthly website health check |
+| `website-maintenance-plan.prompt.md` | 🔲 To create | Creates a long-term maintenance plan |
+
+---
+
+## Templates
+
+| Artifact | Status | Purpose |
+| --- | --- | --- |
+| `website-cost-model.template.md` | 🔲 To create | Records one-time, monthly, annual, and marketing costs |
+| `website-risk-register.template.md` | 🔲 To create | Tracks risks, impact, likelihood, owners, and mitigations |
+| `website-decision-log.template.md` | 🔲 To create | Records decisions, alternatives, reasoning, and revisit triggers |
+| `website-assumption-log.template.md` | 🔲 To create | Records assumptions, validation method, and risk if wrong |
+
+---
+
+## Instruction Files
+
+| Artifact | Status | Purpose |
+| --- | --- | --- |
+| `html-css-javascript.instructions.md` | 🔲 To verify | Auto-applied web coding standards for HTML, CSS, and JavaScript |
+| `security.instructions.md` | 🔲 To verify | Project-specific secure coding rules |
+
+> **Note:** Some Copilot environments apply instruction files automatically.
+> Others may not. If Copilot seems unaware of an artifact, open the relevant
+> file and explicitly ask Copilot to use it as guidance.
+
+---
+
+## Minimum Useful Set
+
+A beginner can start with only these files:
+
+1. `START-HERE-WEBSITE.md`
+2. `WEBSITE-ARTIFACT-MANIFEST.md`
+3. `critical-thinking.chatmode.md`
+4. `website-documentation.workflow.md`
+5. `website-privacy-legal.skill.md`
+6. `website-security.skill.md`
+7. `website-performance.skill.md`
+8. `website-analytics.skill.md`
+9. `website-promotion.skill.md`
+10. `website-content-copywriting.skill.md`
+
+The full recommended system also includes the launch planner, launch workflow,
+platform decision prompt, review prompts, and templates.
+
+---
+
+## Currentness Rule
+
+Anything involving laws, prices, platform features, advertising costs, privacy
+requirements, accessibility requirements, search engine behaviour, analytics
+tools, or security recommendations must be checked against current authoritative
+sources before final decisions are made.
+
+Record the following in the relevant project document:
+
+- What was checked.
+- Source used.
+- Date checked.
+- Decision made.
+- Who made the decision.
+
+---
+
+## Maintenance Rule
+
+Review this manifest whenever:
+
+- A new artifact is added.
+- An artifact is renamed.
+- An artifact is removed.
+- A document references another artifact.
+- The Copilot setup changes.

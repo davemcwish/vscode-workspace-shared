@@ -272,7 +272,10 @@ specific type of work.
 | File | Purpose |
 | --- | --- |
 | `ci.yml` | GitHub Actions CI workflow -- runs ruff, mypy, bandit, detect-secrets, and pytest automatically on every push. |
-| `docstring-remediation.workflow.md` | Step-by-step process to review and improve Python docstrings without changing runtime behaviour. |
+| `doc-writing.workflow.md` | End-to-end workflow for writing or updating project documentation (guides, README, Changelog). |
+| `doc-writer-remediation.workflow.md` | Verify and fix existing documentation guides against the code. |
+| `docstring-writing.workflow.md` | End-to-end workflow for writing new Python docstrings during development. |
+| `docstring-remediation.workflow.md` | Step-by-step process to review and improve existing Python docstrings without changing runtime behaviour. |
 | `standard-change.workflow.md` | End-to-end workflow for any non-trivial change -- from planning through to PR. |
 | `website-live-launch.workflow.md` | Beginner-friendly workflow from website idea to live launch. |
 

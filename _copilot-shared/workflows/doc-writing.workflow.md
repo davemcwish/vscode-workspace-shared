@@ -22,7 +22,8 @@ Use this workflow when you are:
 - preparing documentation as part of the standard change workflow (Step 8).
 
 For docstring improvements to Python files, use
-`workflows/docstring-remediation.workflow.md` instead.
+`workflows/docstring-writing.workflow.md` (for new code) or
+`workflows/docstring-remediation.workflow.md` (for existing code) instead.
 
 For auditing an existing guide's accuracy against the code (rather than writing
 new content), use `workflows/doc-writer-remediation.workflow.md`.
@@ -244,6 +245,7 @@ Quality checks:   ruff / mypy / pytest / markdownlint -- PASS or FAIL
 | `instructions/docs.instructions.md` | Audience, tone, accuracy rules |
 | `instructions/markdown.instructions.md` | Markdown style rules |
 | `workflows/doc-writer-remediation.workflow.md` | Verify/fix an existing guide against the code |
-| `workflows/docstring-remediation.workflow.md` | For Python docstring work specifically |
+| `workflows/docstring-writing.workflow.md` | For writing new Python docstrings |
+| `workflows/docstring-remediation.workflow.md` | For remediating existing Python docstrings |
 | `workflows/standard-change.workflow.md` | Step 8 of the full standard change workflow |
 

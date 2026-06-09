@@ -8,9 +8,34 @@ Improve docstrings in the selected Python file, folder, or changed files.
 ## Primary Goal
 
 Make the code easier for beginner developers and beginner Salesforce users to
-understand.
+understand — while ensuring every claim is accurate.
 
 Do not change runtime behavior.
+
+## Accuracy Before Prose (The Two Jobs)
+
+Docstrings have two distinct jobs:
+
+1. **WHAT the code does** — parameters, returns, exceptions, side effects.
+   A matter of FACT. Read the implementation to confirm.
+2. **HOW to explain it** — beginner prose, examples, domain context.
+   Applied ONLY to facts confirmed in job 1.
+
+**Before improving any docstring, read the function's implementation to
+establish ground truth.** Never improve wording while leaving inaccurate
+facts intact — fix facts first, then improve clarity.
+
+### Never Invent to Fill a Gap
+
+If you are unsure whether a function raises a particular exception, returns a
+specific type, or has a certain side effect — do NOT write a plausible-sounding
+description. Either confirm it from the code, or leave it out and flag it for
+manual review.
+
+### Never Copy from a Sibling Function
+
+Similar functions often have different behavior. Always read the target
+function's own implementation.
 
 ## Allowed Changes
 
@@ -54,16 +79,25 @@ standard.
 
 ## What To Improve
 
-For each selected Python file, check:
+For each selected Python file:
 
-1. Module docstring.
-2. Class docstrings.
-3. Function and method docstrings.
-4. CLI `parse_args()` docstring.
-5. CLI `main()` docstring.
-6. Complex pytest fixture docstrings.
-7. Docstrings that are stale or inaccurate.
-8. Docstrings that are too short for a beginner.
+1. **Read the implementation first** — establish ground truth.
+2. Then check the existing docstring using a 1:1 audit:
+   - **Invented** — claims something the code does not do → remove.
+   - **Omitted** — code does something undocumented → add.
+   - **Wrong type** — disagrees with implementation → correct.
+   - **Stale** — describes old behaviour → rewrite from implementation.
+   - **Too terse** — useless to a beginner → expand with plain English.
+   - **Missing** — no docstring → add.
+
+Also check:
+
+3. Module docstring.
+4. Class docstrings.
+5. Function and method docstrings.
+6. CLI `parse_args()` docstring.
+7. CLI `main()` docstring.
+8. Complex pytest fixture docstrings.
 9. Missing `Args`, `Returns`, `Raises`, or `Example` sections.
 10. Salesforce terms that need plain-English explanation.
 11. PII, Production, dry-run, or security behavior that needs explanation.
@@ -110,7 +144,8 @@ Docstrings should:
 - explain each argument in plain English,
 - explain return values,
 - explain exceptions,
-- explain Salesforce terms,
+- explain Salesforce terms on first use (see term tables in `docstring.skill.md`),
+- explain Python terms on first use for less common concepts,
 - explain safety behavior,
 - avoid unexplained acronyms,
 - avoid saying only "does X" when the purpose is not obvious.
@@ -143,10 +178,20 @@ After editing, return:
 ```markdown
 # Docstring Improvement Summary
 
+## Ground Truth Method
+
+All docstrings re-derived from reading each function's implementation.
+No existing docstring or sibling function used as source of truth.
+
 ## Files Updated
 
 | File | What Changed |
 | --- | --- |
+
+## Accuracy Fixes
+
+| File | Function | Category | Detail |
+| --- | --- | --- | --- |
 
 ## Files Reviewed But Not Changed
 

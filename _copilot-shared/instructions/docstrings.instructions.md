@@ -21,6 +21,49 @@ understandable. They are **mandatory**, not optional.
 
 ---
 
+## Accuracy Before Prose
+
+A beginner trusts docstrings completely and cannot spot an invented parameter
+description or a wrong return type the way an expert can. So accuracy is
+enforced first, and beginner-friendly prose is applied on top of confirmed
+facts — never instead of them.
+
+Two distinct jobs, never mixed:
+
+1. **WHAT the code does** (parameters accepted, values returned, exceptions
+   raised, side effects performed) — a matter of FACT, extracted
+   deterministically from reading the implementation. Never guessed.
+2. **HOW to explain it** (plain-English prose, examples, domain context) —
+   where your language skill applies, but ONLY to facts confirmed in job 1.
+
+Most docstring bugs come from letting job 2 invent facts that belong to job 1.
+A confidently wrong docstring is worse than a missing one — it actively
+misleads a beginner who has no way to verify it.
+
+### Never Invent to Fill a Gap
+
+If you are unsure whether a function raises a particular exception, returns a
+specific type, or has a certain side effect — do NOT write a plausible-sounding
+description. Either confirm it from the code, or leave it out and flag it for
+manual review.
+
+A missing `Raises` section is recoverable. A `Raises` section listing
+exceptions the function never raises sends a beginner on a wild goose chase.
+
+This rule exists because of real defects: docstrings that documented parameters
+which did not exist, described return values the function never produced, or
+listed exceptions it never raised. Reading the actual implementation and
+documenting only what you confirm prevents all three failure modes.
+
+### Never Copy from a Sibling Function
+
+Similar-looking functions (e.g. `export_orders()` and `export_users()`) often
+have legitimately different parameters, return types, and side effects.
+Copying one docstring into the other propagates errors. Always read each
+function's own implementation as the source of truth.
+
+---
+
 ## The Doubt Rule
 
 **If you are ever unsure whether a docstring or comment block is needed —
@@ -71,6 +114,34 @@ side effect instead (e.g. "Writes records to `output_path`").
 
 ---
 
+## Establishing Ground Truth (Read Before Writing)
+
+Before writing or updating any docstring, read the function's actual
+implementation to confirm:
+
+1. **What parameters it accepts** — names, types, valid values, defaults.
+2. **What it returns** — the actual type and meaning of the return value.
+3. **What exceptions it raises** — trace the `raise` statements and unhandled
+   propagations.
+4. **What side effects it performs** — file writes, API calls, database
+   mutations, logging.
+5. **Whether it is read-only or mutating** — does it change external state?
+
+Treat the implementation as the ONLY source of truth. Do not rely on:
+
+- an existing docstring that may be stale,
+- a similar function's docstring (it may be wrong or different),
+- your memory of what the function "probably" does,
+- what would make logical sense for a function with that name.
+
+If the implementation is unclear, write a cautious docstring describing what
+you can confirm and flag the ambiguity — do not fill the gap with invention.
+
+This rule parallels the documentation standard: just as CLI docs must come from
+`--help`, docstrings must come from reading the code.
+
+---
+
 ## Complete-Beginner Content Requirements
 
 Every docstring must be written as if the reader is a **complete beginner** —
@@ -84,6 +155,34 @@ familiarity with this codebase. Concretely, every docstring must:
 - Describe expected **file paths or directory structures** for I/O functions.
 - Avoid unexplained abbreviations.
 - Use plain English that a non-developer business user could follow.
+
+### Salesforce Terms to Always Explain in Docstrings
+
+| Term | Plain-English explanation to include |
+| --- | --- |
+| `__c` suffix | "(the `__c` suffix means this is a custom object, not a standard Salesforce one)" |
+| SOQL | "(Salesforce Object Query Language — Salesforce's version of SQL for querying its database)" |
+| Org | "(an 'org' is a single Salesforce environment — you typically have a Production org and one or more sandbox orgs for testing)" |
+| ContentDocumentLink | "(the Salesforce object that links an uploaded file to a record)" |
+| ContentVersion | "(represents one version of an uploaded file in Salesforce)" |
+| Access token / session | "(a temporary password-like string that proves you are logged in — it expires and must be refreshed)" |
+| CLI alias | "(a short nickname you give to an org when you log in, so you don't have to type a long URL each time)" |
+
+### Python Terms to Always Explain in Docstrings
+
+| Term | Plain-English explanation to include |
+| --- | --- |
+| Virtual environment | "(an isolated folder of Python packages — prevents conflicts between projects)" |
+| Type hint | "(a label on a function parameter that tells the reader — and the type checker — what kind of value is expected)" |
+| Decorator | "(a function that wraps another function to add behaviour — e.g. timing, retry logic)" |
+| monkeypatch | "(a pytest tool that temporarily replaces a real function with a fake one during testing)" |
+| Mocking | "(replacing a real dependency — like a network call — with a controlled fake during testing)" |
+| Generator | "(a function that yields values one at a time instead of returning them all at once — saves memory for large datasets)" |
+| Context manager | "(an object used with `with` statements that automatically handles setup and cleanup — e.g. opening and closing files)" |
+
+These tables are not exhaustive. Any term that would confuse a beginner who has
+never used Python or Salesforce professionally must be explained at the point it
+first appears in a docstring — not only in a separate glossary.
 
 ---
 
@@ -217,20 +316,36 @@ with 2-3 functions may omit the headers.
 
 ---
 
-## Existing Code Review Requirement
+## Existing Code Review Requirement (1:1 Audit)
 
 When Copilot modifies any Python file, it must also review all **existing
-docstrings in the same file**.
+docstrings in the same file** using a 1:1 audit against the implementation.
 
-If existing docstrings are:
+Perform this comparison mechanically — treat it as set arithmetic:
 
-- **missing** — add them,
-- **stale** (describe behaviour the code no longer has) — update them,
-- **misleading** — correct them,
-- **too terse for a beginner** — expand them,
+- **Invented** — docstring describes a parameter, return value, or exception
+  that does not exist in the code.
+- **Omitted** — code has a parameter, return path, or exception that the
+  docstring does not mention.
+- **Wrong type** — docstring states a type that disagrees with the type hint
+  or the actual implementation.
+- **Stale** — docstring describes behaviour the code no longer has.
+- **Too terse** — docstring is technically present but useless to a beginner.
+
+If existing docstrings have any of the above issues:
+
+- **invented** — remove the false claim,
+- **omitted** — add the missing information,
+- **wrong type** — correct to match the implementation,
+- **stale** — rewrite to match current behaviour,
+- **too terse** — expand to beginner level,
 
 then improve them as part of the same change, **unless the user explicitly
 says not to**.
+
+This parallels the documentation standard: just as a CLI table must match
+`--help` with no inventions and no omissions, a docstring must match the code
+with no inventions and no omissions.
 
 ---
 
@@ -244,7 +359,7 @@ separate code-change task.
 
 ---
 
-## Docstrings Are Mandatory
+## Docstrings Are Mandatory — But Accuracy Is Non-Negotiable
 
 Every Python source file must be understandable by a beginner without needing
 to ask another developer what the code is for.
@@ -262,3 +377,10 @@ Docstrings must explain:
 - what exceptions can be raised,
 - any Salesforce-specific or business-specific assumptions,
 - a short example for non-obvious functions.
+
+**But every claim in a docstring must be confirmed from the implementation.**
+A missing docstring is a gap. An inaccurate docstring is a trap. Beginners
+cannot tell the difference between a correct docstring and a confidently wrong
+one — so never guess, never copy from a similar function, and never write what
+"probably" happens. Read the code, confirm the facts, then explain them in
+plain English.

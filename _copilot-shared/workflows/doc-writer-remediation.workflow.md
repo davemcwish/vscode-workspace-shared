@@ -37,7 +37,9 @@ Use this workflow when:
 - periodically, as a scheduled documentation health check.
 
 For writing brand-new documentation, use `doc-writing.workflow.md` instead.
-For Python docstrings, use `docstring-remediation.workflow.md` instead.
+For writing new Python docstrings, use `docstring-writing.workflow.md` instead.
+For remediating existing Python docstrings, use
+`docstring-remediation.workflow.md` instead.
 
 ---
 
