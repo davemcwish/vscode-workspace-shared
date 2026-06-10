@@ -30,13 +30,16 @@ import pytest
 # ---------------------------------------------------------------------------
 
 
-def _find_shared_root() -> Path:
+def _find_shared_root() -> Path | None:
     """Locate _copilot-shared by walking upward from the test file.
 
     Works in two contexts:
       - Master copy: _copilot-shared/tests/ -> parent.parent has the sync doc.
       - Synced copy: Salesforce/tests/ -> walk up to workspace root, find
         _copilot-shared/ as a sibling directory.
+
+    Returns None when the sync doc cannot be found (e.g. CI runners that only
+    check out a single project repo without the workspace parent).
     """
     here = Path(__file__).resolve().parent
     # Case 1: we ARE inside _copilot-shared/tests/ (the master copy)
@@ -49,12 +52,21 @@ def _find_shared_root() -> Path:
         candidate = ancestor / "_copilot-shared"
         if (candidate / "AGENT-CHATMODE-SYNC.md").is_file():
             return candidate
-    raise FileNotFoundError(
-        f"Cannot locate _copilot-shared/AGENT-CHATMODE-SYNC.md. Searched upward from {here}"
-    )
+    return None
 
 
 SHARED_ROOT = _find_shared_root()
+
+# Skip the entire module when _copilot-shared is not reachable (e.g. CI).
+# This is a development-time contract test that validates the shared masters;
+# it cannot run without the workspace-level _copilot-shared/ directory.
+if SHARED_ROOT is None:
+    pytest.skip(
+        "Skipping agent/chatmode sync tests: _copilot-shared/ not found "
+        "(expected in CI where only the project repo is checked out).",
+        allow_module_level=True,
+    )
+
 SYNC_DOC = SHARED_ROOT / "AGENT-CHATMODE-SYNC.md"
 
 
