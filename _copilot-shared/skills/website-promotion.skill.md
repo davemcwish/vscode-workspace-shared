@@ -9,6 +9,13 @@ It covers both free (organic) and paid methods, with honest assessment of costs,
 time investment, and what to expect. The user makes all decisions — this skill
 presents options with trade-offs so they can choose what fits their situation.
 
+**Currentness warning:** Advertising costs, platform rules, social media
+algorithms, search engine behaviour, email deliverability requirements,
+review platform policies, and marketing tool pricing change frequently.
+Before committing budget, verify current costs and rules for the target
+country, industry, and platform, then record the date checked in the project
+documentation.
+
 ---
 
 ## Audience
@@ -47,8 +54,42 @@ many approaches at different price points and time investments.
 | Offline (print, QR codes, events) | Varies | Immediate | Low | Local businesses, events |
 | PR and media outreach | Free–High | Variable | Low–Medium | Major launches, newsworthy events |
 
-**Note:** Costs are indicative — they vary by industry, geography, competition,
-and currency. Use these as rough guidance for comparison, not as quotes.
+**Note:** Costs are indicative. They vary by country, currency, industry,
+competition, season, audience, and platform. Use the ranges in this document
+only for rough comparison. Before making a budget decision, research current
+local costs and record the source and date checked.
+
+Recommended budgeting currency:
+
+| Visitor / Business Geography | Budget In |
+| --- | --- |
+| United Kingdom | GBP |
+| European Union / Eurozone | EUR |
+| United States | USD |
+| Australia | AUD |
+| Canada | CAD |
+| Other regions | Local operating currency plus any platform billing currency |
+
+---
+
+## Promotion Strategy by Website Type
+
+Different websites need different promotion strategies. Do not use the same
+plan for every site.
+
+| Website Type | Strong Starting Channels | Usually Avoid Initially |
+| --- | --- | --- |
+| Local service business | Local SEO, Google Business Profile, reviews, referrals, local partnerships, flyers with QR codes | Broad national ads, too many social platforms |
+| eCommerce store | Product SEO, Google Shopping or equivalent shopping ads, email marketing, reviews, retargeting where lawful | Blogging without product/search intent, paid ads without conversion tracking |
+| Content/blog/resource site | SEO, content partnerships, newsletter, communities, social sharing | Heavy paid ads before content-market fit |
+| Portfolio/personal brand | LinkedIn or relevant social platform, niche communities, referrals, case studies, testimonials | Expensive paid ads before positioning is clear |
+| Community/membership site | Email list, partnerships, founder-led community building, content, referral loops | Paid acquisition before retention is proven |
+| B2B services | LinkedIn, SEO, case studies, email nurture, webinars/events, partnerships | Consumer-style social ads without clear targeting |
+| Restaurant/local venue | Google Business Profile, local SEO, reviews, social media, local press, QR codes, booking platforms | Long-form blog strategy unless there is a clear content angle |
+| Regulated industry | SEO, trust content, expert review, compliant ads, professional referrals | Unreviewed claims, aggressive retargeting, unsupported testimonials |
+
+Use this table as a starting point only. The right strategy depends on the
+audience, geography, budget, urgency, offer, and legal constraints.
 
 ---
 
@@ -94,6 +135,46 @@ to find, understand, and recommend to people searching for what you offer.
 
 See `seo-review.prompt.md` and `local-seo-check.prompt.md` for detailed
 SEO audits.
+
+---
+
+## Reviews and Reputation
+
+Reviews are critical for many websites, especially local businesses,
+eCommerce stores, professional services, hospitality, trades, and health or
+wellbeing providers.
+
+### Ethical Review Strategy
+
+- Ask real customers for honest reviews.
+- Make the review process easy by sending the correct review link.
+- Ask soon after a successful purchase, visit, appointment, or project.
+- Do not pressure customers to leave only positive reviews.
+- Do not offer rewards in a way that violates platform rules.
+- Never buy fake reviews.
+- Never write reviews for yourself.
+- Never ask staff, friends, or family to pose as customers.
+
+### Responding to Reviews
+
+- Thank people for positive reviews.
+- Respond calmly and professionally to negative reviews.
+- Do not reveal private customer information in a public response.
+- Move sensitive disputes to private communication.
+- Look for repeated themes and fix the underlying business issue.
+
+### Where Reviews May Matter
+
+| Business Type | Common Review Locations |
+| --- | --- |
+| Local business | Google Business Profile, Facebook, local directories |
+| Restaurant / hospitality | Google, TripAdvisor, booking platforms, delivery platforms |
+| eCommerce | Product reviews, marketplace reviews, Trustpilot or similar platforms |
+| Professional services | Google, industry directories, LinkedIn recommendations |
+| Apps / software | App stores, software review sites, marketplaces |
+
+Review platform rules change. Check the current rules before requesting,
+displaying, incentivising, or importing reviews.
 
 ---
 
@@ -157,7 +238,10 @@ useful content, updates, or offers.
 
 ### Email Marketing Legal Requirements
 
-- **Every country:** Must have recipient's consent before sending marketing emails.
+- **Best beginner default worldwide:** Send marketing emails only to people
+  who clearly agreed to receive them. Some jurisdictions allow limited
+  opt-out or implied-consent models in specific contexts, but consent is the
+  safest default for beginners.
 - **EU/UK (GDPR):** Consent must be explicit, freely given, and withdrawable.
 - **USA (CAN-SPAM):** Must include unsubscribe link and physical address.
 - **Canada (CASL):** Requires express or implied consent.
@@ -171,6 +255,22 @@ See `website-privacy-legal.skill.md` for full compliance details.
 
 You pay to appear at the top of Google search results for specific keywords.
 You pay each time someone clicks your ad (pay-per-click / PPC).
+
+### Before Spending Money
+
+Do not run paid ads until:
+
+- the website's primary conversion is defined,
+- conversion tracking is working,
+- privacy and cookie consent requirements are satisfied,
+- the landing page clearly matches the ad,
+- the budget has a stop-loss limit,
+- someone is responsible for reviewing performance,
+- the business knows roughly how much it can afford to pay for a lead or
+  customer.
+
+Paid ads can generate traffic immediately, but they can also waste money
+immediately.
 
 ### Google Ads Cost
 
@@ -347,6 +447,39 @@ QR codes, vehicle wraps, trade shows, local advertising, word of mouth.
 
 ---
 
+## Customer Economics: Can This Promotion Channel Pay For Itself?
+
+Promotion is not just about getting traffic. It must make economic sense.
+
+Key terms:
+
+| Term | Meaning |
+| --- | --- |
+| Customer acquisition cost | How much it costs to gain one customer |
+| Conversion rate | The percentage of visitors who complete the desired action |
+| Average order value | The average amount a customer spends in one purchase |
+| Lifetime value | The total value of a customer over the whole relationship |
+| Payback period | How long it takes to recover the marketing cost |
+
+Simple example:
+
+If you spend $300 on ads and get 3 customers, the customer acquisition cost
+is $100 per customer.
+
+That may be excellent if each customer is worth $1,000 in profit over time.
+It may be unprofitable if each customer is worth $40.
+
+Beginner rules:
+
+- Do not run paid ads without conversion tracking.
+- Know the maximum you can afford to spend to gain one customer.
+- Track spend, leads, sales, refunds, and customer quality.
+- Stop or adjust campaigns that cannot plausibly pay for themselves.
+- Remember that some channels build long-term value even if they do not
+  produce immediate sales.
+
+---
+
 ## Choosing Your Promotion Strategy
 
 ### Decision Framework
@@ -390,9 +523,67 @@ channels produces mediocre results everywhere. Master one, then expand.
 
 ---
 
+## Basic 30-Day Launch Promotion Plan
+
+Use this as a simple beginner-friendly launch plan. Adjust it to the website
+type, audience, geography, budget, and legal constraints.
+
+### Before Launch
+
+- Define the primary conversion goal.
+- Set up analytics and search visibility tools.
+- Create UTM naming conventions for campaign links.
+- Prepare launch announcement copy.
+- Prepare 3–5 social posts for the most relevant platform.
+- Prepare an email announcement if you have a lawful mailing list.
+- Claim or update Google Business Profile if local.
+- Prepare review request process if appropriate.
+- Check that privacy, cookie, advertising, and email marketing requirements
+  are satisfied.
+
+### Launch Week
+
+- Announce the website to existing customers, subscribers, partners, and
+  relevant communities where appropriate.
+- Publish launch posts on selected social channels.
+- Ask trusted partners to share if relevant.
+- Submit sitemap to Google Search Console and Bing Webmaster Tools.
+- Test contact forms, booking flows, purchases, phone links, and newsletter
+  signups.
+- Monitor analytics, conversions, and errors daily for the first few days.
+
+### Weeks 2 to 4
+
+- Review which traffic sources brought useful visitors.
+- Review conversion quality, not just visitor count.
+- Fix obvious friction points on important pages.
+- Continue one sustainable promotion channel rather than trying everything.
+- Ask real customers for reviews where appropriate.
+- Create one useful content piece or campaign based on real audience
+  questions.
+- Decide whether paid ads are worth testing based on budget, tracking, and
+  customer economics.
+
+### End of First Month
+
+- Record what worked.
+- Record what did not work.
+- Decide what to continue, stop, or test next.
+- Update the promotion plan document.
+- Schedule monthly promotion reviews.
+
+---
+
 ## Measuring Promotion Results
 
-You cannot know what works unless you measure. For each channel:
+You cannot know what works unless you measure.
+Use UTM tracking for campaign links so analytics tools can distinguish
+traffic from newsletters, paid ads, social posts, partner links, QR codes,
+and offline campaigns.
+
+See `website-analytics.skill.md` for UTM tracking guidance.
+
+For each channel:
 
 | What to Measure | Tool |
 | --- | --- |
@@ -418,6 +609,29 @@ better than 1,000 visitors who convert at 0.1%.
 
 ---
 
+## Promotion Checklist for Launch
+
+Before or during launch:
+
+- [ ] Primary audience defined.
+- [ ] Primary conversion goal defined.
+- [ ] Promotion budget documented.
+- [ ] Customer economics estimated.
+- [ ] Analytics and conversion tracking configured.
+- [ ] UTM naming convention documented.
+- [ ] Search visibility tools configured.
+- [ ] Google Business Profile claimed or updated if local.
+- [ ] Email list checked for lawful marketing permission.
+- [ ] Launch announcement prepared.
+- [ ] One or two priority promotion channels selected.
+- [ ] Review request process prepared if appropriate.
+- [ ] Paid ad stop-loss budget defined if ads are being used.
+- [ ] Privacy, cookie, email, and advertising compliance checked.
+- [ ] Promotion owner named.
+- [ ] First monthly promotion review scheduled.
+
+---
+
 ## Common Mistakes
 
 - **Trying to do everything at once.** Pick 1–2 channels, do them well, then add.
@@ -437,6 +651,15 @@ better than 1,000 visitors who convert at 0.1%.
 
 ## Critical Constraints
 
+- Never spend money on ads without conversion tracking and a stop-loss
+  budget.
+- Never judge promotion success by traffic alone; measure useful outcomes.
+- Never assume costs in this document are current; verify local pricing and
+  platform rules before budgeting.
+- Never add advertising pixels or remarketing tags without checking privacy,
+  cookie, and consent requirements.
+- Never send marketing emails to people who did not clearly agree unless
+  qualified advice confirms another lawful basis applies.
 - Never guarantee specific results (no one can promise "page 1 of Google").
 - Never buy backlinks, fake reviews, or followers — these risk permanent penalties.
 - Never spam people who haven't given consent (see privacy/legal skill).
@@ -444,6 +667,26 @@ better than 1,000 visitors who convert at 0.1%.
 - Always disclose paid partnerships and sponsored content (legal requirement in
   most countries).
 - Always track what you spend vs. what you get back.
+- Always record campaign links, UTM conventions, budget, owner, and review
+  dates.
 - Always start with one channel and expand deliberately.
 - Always comply with advertising standards in your geography (ASA in UK, FTC
   in US, ACCC in Australia).
+- Always check review platform rules before requesting, importing, gating, or
+  incentivising reviews.
+
+---
+
+## Ongoing Promotion Maintenance
+
+| Frequency | Action |
+| --- | --- |
+| Weekly during first month after launch | Check traffic sources, conversions, ad spend, form quality, and obvious issues |
+| Monthly | Review promotion results and choose one action for the next month |
+| Monthly | Check reviews and respond where appropriate |
+| Monthly | Check whether chosen social or content channel is sustainable |
+| Quarterly | Review customer economics, paid ad performance, SEO progress, and email list growth |
+| Quarterly | Check whether platform rules, ad policies, or review policies changed |
+| Quarterly | Refresh top-performing content and improve weak landing pages |
+| Biannually | Review channel strategy and stop channels that are not producing useful results |
+| Annually | Re-check budget, audience, positioning, competitors, legal requirements, and promotion strategy |
