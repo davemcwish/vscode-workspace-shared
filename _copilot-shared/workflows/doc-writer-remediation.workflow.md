@@ -286,11 +286,11 @@ Use this format:
  - Summary produced.
 
 ## Copilot Assets for This Workflow
-Asset	When to use
-prompts/docs-audit.prompt.md	One-command trigger for this audit
-agents/doc-writer.agent.md	Apply the fixes after the audit identifies them
-skills/doc-writing.skill.md	Writing and accuracy standards reference
-instructions/docs.instructions.md	Audience, tone, accuracy rules
-workflows/doc-writing.workflow.md	For creating/updating docs during a change
-workflows/docstring-remediation.workflow.md	For Python docstring work specifically
+Asset When to use
+prompts/docs-audit.prompt.md One-command trigger for this audit
+agents/doc-writer.agent.md Apply the fixes after the audit identifies them
+skills/doc-writing.skill.md Writing and accuracy standards reference
+instructions/docs.instructions.md Audience, tone, accuracy rules
+workflows/doc-writing.workflow.md For creating/updating docs during a change
+workflows/docstring-remediation.workflow.md For Python docstring work specifically
 

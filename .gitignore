@@ -4,6 +4,7 @@
 # Explicitly include workspace-level shared files
 !.gitignore
 !.gitattributes
+!README.md
 !_copilot-shared/
 !_copilot-shared/**
 !sync-shared-copilot.ps1

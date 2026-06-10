@@ -350,7 +350,7 @@ be written in plain language (not legalese) and cover:
 
 ## Accessibility Legislation
 
-Accessibility law requires websites to be usable by people with disabilities  - 
+Accessibility law requires websites to be usable by people with disabilities  -
 including those using screen readers, keyboard navigation, voice control, or
 other assistive technologies.
 
@@ -438,7 +438,7 @@ You should have Terms and Conditions covering:
 - Dispute resolution.
 - Governing law (which country's law applies).
 
-For simple brochure sites with a contact form only, Terms may not be necessary  - 
+For simple brochure sites with a contact form only, Terms may not be necessary  -
 a Privacy Policy is usually sufficient.
 
 ---

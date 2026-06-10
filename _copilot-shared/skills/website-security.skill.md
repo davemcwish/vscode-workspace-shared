@@ -127,7 +127,7 @@ they are a target for abuse.
 
 - Never trust user input. Validate on the server, not just in the browser.
 - Limit field lengths (a "name" field doesn't need 10,000 characters).
-- Reject or sanitise HTML in text fields to prevent XSS (Cross-Site Scripting  - 
+- Reject or sanitise HTML in text fields to prevent XSS (Cross-Site Scripting  -
   where an attacker injects malicious code through a form field that gets
   displayed to other users).
 

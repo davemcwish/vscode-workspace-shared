@@ -55,17 +55,24 @@ def _find_shared_root() -> Path | None:
     return None
 
 
-SHARED_ROOT = _find_shared_root()
+_shared_root = _find_shared_root()
 
 # Skip the entire module when _copilot-shared is not reachable (e.g. CI).
 # This is a development-time contract test that validates the shared masters;
 # it cannot run without the workspace-level _copilot-shared/ directory.
-if SHARED_ROOT is None:
+if _shared_root is None:
     pytest.skip(
         "Skipping agent/chatmode sync tests: _copilot-shared/ not found "
         "(expected in CI where only the project repo is checked out).",
         allow_module_level=True,
     )
+
+# Type narrowing: pytest.skip() raises Skipped (a BaseException subclass) so
+# execution never reaches here when _shared_root is None. The assert satisfies
+# mypy; the explicit Path annotation ensures function bodies see Path, not
+# Path | None (mypy does not propagate module-level narrowing into functions).
+assert _shared_root is not None
+SHARED_ROOT: Path = _shared_root
 
 SYNC_DOC = SHARED_ROOT / "AGENT-CHATMODE-SYNC.md"
 
@@ -193,7 +200,10 @@ def test_at_least_one_identical_pair_is_enforced():
     )
 
 
-@pytest.mark.parametrize("agent_rel,chat_rel", IDENTICAL_PAIRS, ids=[a for a, _ in IDENTICAL_PAIRS])
+_IDENTICAL_IDS = [a for a, _ in IDENTICAL_PAIRS]
+
+
+@pytest.mark.parametrize("agent_rel,chat_rel", IDENTICAL_PAIRS, ids=_IDENTICAL_IDS)
 def test_bodies_are_identical(agent_rel: str, chat_rel: str):
     """Strict guard: byte-identical bodies for pairs that claim that contract."""
     agent = SHARED_ROOT / agent_rel

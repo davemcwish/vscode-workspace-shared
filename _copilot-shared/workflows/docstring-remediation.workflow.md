@@ -47,7 +47,7 @@ For auditing existing documentation guides, use
 
 ## Primary Rule
 
-Docstring remediation is anchored to the code implementation itself  - 
+Docstring remediation is anchored to the code implementation itself  -
 never to an existing docstring or a similar function.
 
 Docstring remediation must also be behavior-neutral.

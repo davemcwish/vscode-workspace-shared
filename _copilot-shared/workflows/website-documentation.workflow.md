@@ -20,7 +20,7 @@ Use this workflow whenever:
 - A planning session, review, or audit is completed.
 - The user explicitly requests documentation of discussions.
 
-**Rule:** If the discussion produced a decision, recommendation, or action plan  - 
+**Rule:** If the discussion produced a decision, recommendation, or action plan  -
 it must be documented.
 
 ---

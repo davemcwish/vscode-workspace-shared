@@ -42,7 +42,7 @@ Two distinct jobs, never mixed:
 1. **WHAT the code does** (parameters accepted, values returned, exceptions
    raised, side effects performed) - a matter of FACT, extracted
    deterministically from reading the implementation. Never guessed.
-2. **HOW to explain it** (plain-English prose, examples, domain context)  - 
+2. **HOW to explain it** (plain-English prose, examples, domain context)  -
    where your language skill applies, but ONLY to facts confirmed in job 1.
 
 Most docstring bugs come from letting job 2 invent facts that belong to job 1.
@@ -90,7 +90,7 @@ implementation as the source of truth.
 
 ## The Doubt Rule
 
-**If you are ever unsure whether a docstring or comment block is needed  - 
+**If you are ever unsure whether a docstring or comment block is needed  -
 always add it.**
 
 The cost of an unnecessary docstring is near-zero. The cost of a missing
@@ -254,7 +254,7 @@ That means:
   or whatever domain-specific term applies to this project).
 - Explain why a safety check exists, not just that it exists.
 - Describe whether the function is **read-only or mutating**.
-- Mention if data may contain **PII** (Personally Identifiable Information  - 
+- Mention if data may contain **PII** (Personally Identifiable Information  -
   names, email addresses, phone numbers - treat as confidential).
 - Explain expected file paths or directory structures.
 - Do not use unexplained abbreviations.
@@ -306,7 +306,7 @@ Expand every acronym on first use within each docstring:
 
 ## Review Checklist (1:1 Audit)
 
-When reviewing or writing Python code, perform a 1:1 audit on every docstring  - 
+When reviewing or writing Python code, perform a 1:1 audit on every docstring  -
 compare what the docstring claims against what the code does, treating it as set
 arithmetic:
 
@@ -383,5 +383,5 @@ There is no fully automated docstring enforcement tool in the standard pipeline.
 - Always perform the 1:1 audit (invented / omitted / wrong / stale / terse)
   before finalising any docstring.
 - Always explain domain terms on first use within each docstring.
-- If behaviour is unclear, write a cautious docstring and flag the ambiguity  - 
+- If behaviour is unclear, write a cautious docstring and flag the ambiguity  -
   do not guess.

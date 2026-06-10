@@ -12,9 +12,14 @@ from tests.test_agent_chatmode_sync import (
     _read_utf8,
 )
 
+_root = SHARED_ROOT
+if _root is None:
+    raise RuntimeError("SHARED_ROOT must not be None")
+shared_root: pathlib.Path = _root
+
 for agent_rel, chat_rel in PAIRS:
-    a = _normalise_body(_read_utf8(SHARED_ROOT / agent_rel)).split("\n")
-    c = _normalise_body(_read_utf8(SHARED_ROOT / chat_rel)).split("\n")
+    a = _normalise_body(_read_utf8(shared_root / agent_rel)).split("\n")
+    c = _normalise_body(_read_utf8(shared_root / chat_rel)).split("\n")
     if a != c:
         print(f"\n{'=' * 70}\n{agent_rel}  vs  {chat_rel}\n{'=' * 70}")
         print("\n".join(difflib.unified_diff(a, c, "agent", "chatmode", lineterm="")))

@@ -1,5 +1,15 @@
 # Copilot Instructions
 
+Shared Copilot artefact ownership:
+- _copilot-shared is the only source of truth for shared Copilot artefacts.
+- Never edit project-local .github Copilot artefacts directly.
+- If a shared agent, prompt, instruction, skill, workflow, chatmode, or copilot-instructions file needs to change, edit _copilot-shared first.
+- After editing _copilot-shared, run shared validation, then run sync-shared-copilot.ps1.
+- After sync, inspect downstream project diffs before committing.
+- Normal project code loops must operate in one project repo only.
+- Shared Copilot system loops may edit _copilot-shared, sync to all projects, and inspect downstream diffs.
+- No loop may merge, push, deploy, or touch Salesforce Production without explicit human approval.
+
 ## Project Context
 
 - **Language:** Python 3.12+

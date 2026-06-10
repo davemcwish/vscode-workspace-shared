@@ -39,6 +39,11 @@
     Required when -Scaffold is used. The subfolder name of the new project
     (must already exist on disk as a git repo under the parent folder).
 
+.PARAMETER Validate
+    Switch. When present, runs sanity.bat in each synced project after the
+    sync completes. Reports pass/fail per project. Useful after shared
+    Copilot artefact changes to confirm no downstream breakage.
+
 .EXAMPLE
     # Sync all projects
     .\sync-shared-copilot.ps1
@@ -46,6 +51,10 @@
 .EXAMPLE
     # Sync only the Salesforce project
     .\sync-shared-copilot.ps1 -Projects Salesforce
+
+.EXAMPLE
+    # Sync all projects then validate each with sanity.bat
+    .\sync-shared-copilot.ps1 -Validate
 
 .EXAMPLE
     # Copy scaffold files into a newly created project
@@ -56,7 +65,8 @@
 param(
     [string[]] $Projects,
     [switch]   $Scaffold,
-    [string]   $ScaffoldTarget = ""
+    [string]   $ScaffoldTarget = "",
+    [switch]   $Validate
 )
 
 Set-StrictMode -Version Latest
@@ -109,6 +119,16 @@ if (-not $Projects) {
 
 # -- Helpers -----------------------------------------------------------------
 
+# Tracking counters for the end-of-sync report.
+$script:SyncReport = @{
+    FilesCopied      = 0
+    FilesSkipped     = 0
+    StaleFiles       = [System.Collections.Generic.List[string]]::new()
+    ProjectsSynced   = [System.Collections.Generic.List[string]]::new()
+    ProjectsSkipped  = [System.Collections.Generic.List[string]]::new()
+    ValidationResults = @{}
+}
+
 function Sync-Folder {
     <#
     .SYNOPSIS
@@ -146,6 +166,82 @@ function Sync-Folder {
     robocopy $Source $Destination /E /XO /XC /FFT /NFL /NDL /NJH /NJS /NP /MT:4 | Out-Null
     if ($LASTEXITCODE -ge 8) {
         throw "robocopy failed for '$Source' -> '$Destination' (exit $LASTEXITCODE)"
+    }
+}
+
+function Sync-FolderStrict {
+    <#
+    .SYNOPSIS
+        Mirror a source folder into a destination with source-always-wins.
+
+    .DESCRIPTION
+        Unlike Sync-Folder (which uses /XO to skip newer destination files),
+        this function ALWAYS overwrites the destination. Use this for managed
+        Copilot folders (.github/agents, .github/chatmodes, etc.) where
+        _copilot-shared is the single source of truth and project-local edits
+        are treated as drift.
+
+        Does NOT delete extra files in the destination (that is handled
+        separately by Find-StaleFiles for reporting purposes).
+
+    .PARAMETER Source
+        Absolute path to the folder to copy from.
+
+    .PARAMETER Destination
+        Absolute path to the folder to copy into. Created if missing.
+    #>
+    param([string] $Source, [string] $Destination)
+    if (-not (Test-Path $Source)) {
+        Write-Verbose "  Skipping '$Source' (not found in shared)"
+        return
+    }
+    $null = New-Item -ItemType Directory -Path $Destination -Force
+    # No /XO -- source always wins. /IS copies even same-timestamp files.
+    # /FFT still used for OneDrive timestamp granularity tolerance.
+    robocopy $Source $Destination /E /IS /FFT /NFL /NDL /NJH /NJS /NP /MT:4 | Out-Null
+    if ($LASTEXITCODE -ge 8) {
+        throw "robocopy strict-sync failed for '$Source' -> '$Destination' (exit $LASTEXITCODE)"
+    }
+}
+
+function Find-StaleFiles {
+    <#
+    .SYNOPSIS
+        Reports files in a destination folder that do not exist in the source.
+
+    .DESCRIPTION
+        Compares the destination folder against the source and identifies any
+        files in the destination that have no corresponding source file.
+        These are "stale" -- they may be leftovers from deleted shared
+        artefacts, or accidental project-local additions.
+
+        This function only REPORTS stale files (adds them to the sync report).
+        It does NOT delete anything. Manual cleanup is required.
+
+    .PARAMETER Source
+        The _copilot-shared subfolder (e.g. agents/).
+
+    .PARAMETER Destination
+        The project's .github subfolder (e.g. .github/agents/).
+
+    .PARAMETER ProjectName
+        Used for display in the report.
+    #>
+    param([string] $Source, [string] $Destination, [string] $ProjectName)
+    if (-not (Test-Path $Destination)) { return }
+    if (-not (Test-Path $Source)) { return }
+
+    $sourceFiles = Get-ChildItem $Source -Recurse -File |
+        ForEach-Object { $_.FullName.Substring($Source.Length).TrimStart('\', '/') }
+
+    $destFiles = Get-ChildItem $Destination -Recurse -File |
+        ForEach-Object { $_.FullName.Substring($Destination.Length).TrimStart('\', '/') }
+
+    foreach ($df in $destFiles) {
+        if ($df -notin $sourceFiles) {
+            $entry = "$ProjectName/.github/$(Split-Path $Destination -Leaf)/$df"
+            $script:SyncReport.StaleFiles.Add($entry)
+        }
     }
 }
 
@@ -248,6 +344,14 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "    Validation passed (5 pairs, 13 checks)." -ForegroundColor DarkGreen
 Write-Host ""
 
+# -- Regenerate MANIFEST.md ---------------------------------------------------
+# The manifest lists every artefact with its description, auto-extracted from
+# frontmatter. Regenerating on every sync ensures it never drifts.
+
+Write-Host "  -> Regenerating MANIFEST.md..." -ForegroundColor Green
+& powershell.exe -ExecutionPolicy Bypass -File (Join-Path $Root "build-manifest.ps1")
+Write-Host ""
+
 # -- Sync into root workspace .github\ ----------------------------------------
 
 
@@ -258,9 +362,13 @@ $rootGithub = Join-Path $Root ".github"
 Write-Host "  -> ROOT (.github\)" -ForegroundColor Green
 
 foreach ($folder in $Folders) {
-    Sync-Folder `
+    Sync-FolderStrict `
         -Source      (Join-Path $Shared $folder) `
         -Destination (Join-Path $rootGithub $folder)
+    Find-StaleFiles `
+        -Source      (Join-Path $Shared $folder) `
+        -Destination (Join-Path $rootGithub $folder) `
+        -ProjectName "ROOT"
 }
 
 Sync-File `
@@ -282,21 +390,28 @@ foreach ($project in $Projects) {
 
     if (-not (Test-Path $projectPath)) {
         Write-Warning "  Project '$project' not found at '$projectPath' -- skipping."
+        $script:SyncReport.ProjectsSkipped.Add($project)
         continue
     }
 
     if (-not (Test-Path (Join-Path $projectPath ".git"))) {
         Write-Warning "  '$project' does not appear to be a git repo (no .git folder) -- skipping."
+        $script:SyncReport.ProjectsSkipped.Add($project)
         continue
     }
 
     Write-Host "  -> $project" -ForegroundColor Green
+    $script:SyncReport.ProjectsSynced.Add($project)
 
-    # Sync each subfolder
+    # Sync each managed subfolder (source-wins, stale detection)
     foreach ($folder in $Folders) {
-        Sync-Folder `
+        Sync-FolderStrict `
             -Source      (Join-Path $Shared $folder) `
             -Destination (Join-Path $githubPath $folder)
+        Find-StaleFiles `
+            -Source      (Join-Path $Shared $folder) `
+            -Destination (Join-Path $githubPath $folder) `
+            -ProjectName $project
     }
 
     # Sync root copilot-instructions.md
@@ -318,6 +433,8 @@ foreach ($project in $Projects) {
     }
 
     # Sync root-level folders (e.g. tests\) into the PROJECT ROOT (not .github\)
+    # These use standard Sync-Folder (with /XO) because project-specific tests
+    # may coexist and we only want to add/update shared tests, not overwrite.
     foreach ($rootFolder in $RootFolders) {
         Sync-Folder `
             -Source      (Join-Path $Shared $rootFolder) `
@@ -328,8 +445,92 @@ foreach ($project in $Projects) {
 }
 
 Write-Host ""
-Write-Host "=== Sync complete. Remember to commit any changes inside each project repo. ===" -ForegroundColor Cyan
+Write-Host "=== Sync complete ===" -ForegroundColor Cyan
 Write-Host ""
+
+# -- Sync Verification Report ------------------------------------------------
+
+Write-Host "--- Sync Report ---" -ForegroundColor Yellow
+Write-Host "  Projects synced  : $($script:SyncReport.ProjectsSynced.Count) ($($script:SyncReport.ProjectsSynced -join ', '))"
+if ($script:SyncReport.ProjectsSkipped.Count -gt 0) {
+    Write-Host "  Projects skipped : $($script:SyncReport.ProjectsSkipped.Count) ($($script:SyncReport.ProjectsSkipped -join ', '))" -ForegroundColor DarkYellow
+}
+
+if ($script:SyncReport.StaleFiles.Count -gt 0) {
+    Write-Host ""
+    Write-Host "  STALE FILES DETECTED ($($script:SyncReport.StaleFiles.Count)):" -ForegroundColor Red
+    Write-Host "  These exist in project .github/ but NOT in _copilot-shared/." -ForegroundColor Red
+    Write-Host "  They may be leftovers from deleted artefacts or accidental local edits." -ForegroundColor Red
+    Write-Host "  Manual action required: delete them from each project, or add them to _copilot-shared/." -ForegroundColor Red
+    Write-Host ""
+    foreach ($stale in $script:SyncReport.StaleFiles) {
+        Write-Host "    - $stale" -ForegroundColor DarkRed
+    }
+    Write-Host ""
+} else {
+    Write-Host "  Stale files      : none (all project .github/ files have a source in _copilot-shared/)" -ForegroundColor DarkGreen
+}
+
+Write-Host ""
+Write-Host "  Remember to commit any changes inside each project repo." -ForegroundColor Cyan
+Write-Host ""
+
+# -- Downstream Validation (optional) ----------------------------------------
+
+if ($Validate) {
+    Write-Host "=== Downstream Validation (-Validate) ===" -ForegroundColor Cyan
+    Write-Host "  Running sanity.bat in each synced project..." -ForegroundColor Green
+    Write-Host ""
+
+    foreach ($project in $script:SyncReport.ProjectsSynced) {
+        $projectPath = Join-Path $Root $project
+        $sanityPath  = Join-Path $projectPath "sanity.bat"
+
+        if (-not (Test-Path $sanityPath)) {
+            Write-Host "  [$project] SKIPPED (no sanity.bat found)" -ForegroundColor DarkYellow
+            $script:SyncReport.ValidationResults[$project] = "SKIPPED"
+            continue
+        }
+
+        Write-Host "  [$project] Running sanity.bat..." -ForegroundColor Green
+        Push-Location $projectPath
+        try {
+            # Temporarily relax error preference for native commands.
+            # sanity.bat writes to stderr on failure which PowerShell treats
+            # as a terminating error under $ErrorActionPreference = "Stop".
+            $prevPref = $ErrorActionPreference
+            $ErrorActionPreference = "Continue"
+            try {
+                $null = & cmd.exe /c sanity.bat 2>&1
+            } finally {
+                $ErrorActionPreference = $prevPref
+            }
+            if ($LASTEXITCODE -eq 0) {
+                Write-Host "  [$project] PASSED" -ForegroundColor DarkGreen
+                $script:SyncReport.ValidationResults[$project] = "PASSED"
+            } else {
+                Write-Host "  [$project] FAILED (exit code $LASTEXITCODE)" -ForegroundColor Red
+                Write-Host "    Run sanity.bat manually in '$project' for details." -ForegroundColor DarkRed
+                $script:SyncReport.ValidationResults[$project] = "FAILED"
+            }
+        } finally {
+            Pop-Location
+        }
+    }
+
+    Write-Host ""
+    Write-Host "--- Validation Summary ---" -ForegroundColor Yellow
+    foreach ($kvp in $script:SyncReport.ValidationResults.GetEnumerator()) {
+        $color = switch ($kvp.Value) {
+            "PASSED"  { "DarkGreen" }
+            "FAILED"  { "Red" }
+            "SKIPPED" { "DarkYellow" }
+            default   { "Gray" }
+        }
+        Write-Host "  $($kvp.Key): $($kvp.Value)" -ForegroundColor $color
+    }
+    Write-Host ""
+}
 
 # -- Optional: scaffold a new project ----------------------------------------
 # Run with: .\sync-shared-copilot.ps1 -Scaffold -ScaffoldTarget "My-New-Project"
