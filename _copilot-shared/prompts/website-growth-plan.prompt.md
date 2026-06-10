@@ -480,3 +480,35 @@ conversion improvements.
 If current legal, compliance, analytics, payment, privacy, advertising, social,
 search, platform, provider, or pricing details matter, tell the user what to
 verify from official sources.
+
+## Severity rules
+
+Use these severities for growth planning risks:
+
+- **Critical:** Issue could create serious privacy, consent, security, accessibility, legal, brand, user-harm, advertising, or data misuse risk, or cause the team to scale a broken or misleading funnel.
+- **High:** Issue could significantly reduce qualified leads, revenue, trust, retention, conversion, discoverability, or campaign effectiveness.
+- **Medium:** Issue creates moderate funnel, content, SEO, analytics, testing, ownership, localization, or prioritization risk.
+- **Low:** Minor copy, layout, dashboard, documentation, cadence, experiment, or optimization improvement.
+
+## Recommendation rules
+
+For each growth recommendation, explain:
+
+- what growth opportunity or risk exists,
+- why it matters,
+- severity,
+- affected audience, page, funnel, channel, campaign, form, CTA, region, or metric,
+- recommended owner,
+- what to verify first,
+- what action to take,
+- how to measure it,
+- whether privacy, legal, consent, analytics, accessibility, brand, SEO, paid media, vendor, or technical review is needed,
+- whether it should be tested before scaling.
+
+Do not recommend growth tactics that rely on misleading claims, dark patterns, unnecessary personal data collection, weak consent, inaccessible experiences, or unverified analytics.
+
+## Escalation Needed
+
+Escalate when growth work involves legal claims, privacy or consent, paid advertising, tracking pixels, personal data, sensitive audiences, regulated products or services, pricing, testimonials, accessibility, localization, security, third-party vendors, CRM changes, email/SMS marketing, or leadership-level tradeoffs.
+
+Recommend review by the appropriate business owner, marketing owner, analytics owner, legal reviewer, privacy reviewer, accessibility reviewer, security reviewer, brand owner, CRM owner, vendor owner, or leadership decision-maker.

@@ -193,6 +193,7 @@ The website prompt library includes review, planning, governance, operations, pr
 - `prompts/website-search-review.prompt.md` — Reviews internal site search, search results, no-result handling, filters, relevance, accessibility, analytics, and governance.
 - `prompts/website-growth-plan.prompt.md` — Creates a practical website growth plan.
 - `prompts/conversion-review.prompt.md` — Reviews conversion paths, calls to action, lead capture, and user journey friction.
+- `prompts/website-forms-submissions-review.prompt.md` - Reviews website forms, submissions, contact forms, lead capture, newsletter signup, support requests, file uploads, validation, confirmations, notifications, CRM handoff, spam prevention, privacy, accessibility, localization, analytics, ownership, testing, and failure handling.
 - `prompts/website-experimentation-review.prompt.md` — Reviews A/B tests, feature flags, personalization tests, experiment governance, analytics, consent, accessibility, QA, and rollback.
 - `prompts/online-presence-review.prompt.md` — Reviews broader online presence, channels, listings, reputation, and discoverability.
 - `prompts/seo-review.prompt.md` — Reviews core SEO readiness.

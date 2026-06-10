@@ -480,3 +480,35 @@ conversion improvements.
 If current legal, compliance, analytics, payment, privacy, advertising, social,
 search, platform, provider, or pricing details matter, tell the user what to
 verify from official sources.
+
+## Severity rules
+
+Use these severities for performance risks:
+
+- **Critical:** Issue blocks critical pages or user journeys, causes severe load failure, prevents checkout or lead capture, creates major accessibility/usability impact, or breaks launch readiness.
+- **High:** Issue significantly slows key pages, harms conversion, search visibility, user trust, mobile usability, or core business journeys.
+- **Medium:** Issue creates moderate page speed, asset, script, hosting, image, caching, rendering, or monitoring risk.
+- **Low:** Minor optimization, cleanup, documentation, dashboard, measurement, or non-critical improvement.
+
+## Recommendation rules
+
+For each performance recommendation, explain:
+
+- what performance risk exists,
+- why it matters,
+- severity,
+- affected page, template, asset, script, vendor, device, browser, region, or user journey,
+- recommended owner,
+- what to verify first,
+- what action to take,
+- how to test before and after,
+- whether developer, hosting, vendor, analytics, accessibility, SEO, design, or content review is needed,
+- whether it blocks launch.
+
+Prefer practical fixes such as image compression, script reduction, caching review, font cleanup, third-party tag review, lazy loading, template optimization, monitoring, and performance budgets.
+
+## Escalation Needed
+
+Escalate when performance issues affect critical journeys, checkout, forms, login, search visibility, paid campaigns, accessibility, mobile users, major launches, hosting limits, third-party vendors, complex JavaScript, CDN behavior, backend APIs, or platform architecture.
+
+Recommend review by the appropriate developer, platform owner, hosting provider, vendor owner, analytics owner, accessibility reviewer, SEO owner, design owner, content owner, or leadership decision-maker.

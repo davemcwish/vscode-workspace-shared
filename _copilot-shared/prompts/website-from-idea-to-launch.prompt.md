@@ -370,3 +370,115 @@ List weekly, monthly, quarterly, annual, and change-triggered maintenance tasks.
 3.
 
 ## Open Questions
+
+**Currentness warning:** Website platforms, hosting options, analytics tools, consent requirements, accessibility expectations, search behavior, browser behavior, payment tools, AI tools, security practices, vendor pricing, and legal or regulatory requirements change over time. Where current platform, legal, privacy, security, accessibility, procurement, payment, or compliance details matter, verify them from official vendor documentation, internal policies, qualified reviewers, or appropriate professional advisors.
+
+## Output format
+
+Return:
+
+# Website From Idea To Launch Plan
+
+## Verdict
+
+READY TO PLAN / NEEDS MORE CONTEXT / HIGH RISK / DO NOT START YET
+
+## Beginner-Friendly Summary
+
+Summarize the website idea, the biggest planning risk, and the next practical step in plain English.
+
+## Important Note
+
+State that this is practical website planning guidance, not legal, privacy, cybersecurity, accessibility, procurement, contract, financial, tax, payment, regulated-content, public-sector, or internal-audit advice.
+
+## Assumptions and Missing Data
+
+List assumptions made and information still needed.
+
+## Website Goal
+
+Describe the website purpose, audience, key user journeys, success measures, and launch target.
+
+## Recommended Website Scope
+
+List the recommended pages, features, integrations, content, forms, analytics, governance, and launch requirements.
+
+## Launch Readiness Checklist
+
+| Area | Status | Notes | Action Needed |
+| --- | --- | --- | --- |
+| Purpose and audience | PASS/REVIEW/FAIL/N/A |  |  |
+| Content and pages | PASS/REVIEW/FAIL/N/A |  |  |
+| Platform and hosting | PASS/REVIEW/FAIL/N/A |  |  |
+| Forms and submissions | PASS/REVIEW/FAIL/N/A |  |  |
+| Accessibility | PASS/REVIEW/FAIL/N/A |  |  |
+| Privacy and consent | PASS/REVIEW/FAIL/N/A |  |  |
+| Security basics | PASS/REVIEW/FAIL/N/A |  |  |
+| SEO basics | PASS/REVIEW/FAIL/N/A |  |  |
+| Analytics | PASS/REVIEW/FAIL/N/A |  |  |
+| QA and launch testing | PASS/REVIEW/FAIL/N/A |  |  |
+| Ownership and maintenance | PASS/REVIEW/FAIL/N/A |  |  |
+
+## Findings
+
+| Severity | Area | Risk | Why It Matters | Recommended Action | Owner |
+| --- | --- | --- | --- | --- | --- |
+| Critical |  |  |  |  |  |
+| High |  |  |  |  |  |
+| Medium |  |  |  |  |  |
+| Low |  |  |  |  |  |
+
+## Priority Actions
+
+1.
+2.
+3.
+
+## 30-Day Launch Planning Plan
+
+| Priority | Action | Owner | Due Date | How To Verify |
+| --- | --- | --- | --- | --- |
+| Critical |  |  |  |  |
+| High |  |  |  |  |
+| Medium |  |  |  |  |
+| Low |  |  |  |  |
+
+## Escalation Needed
+
+List anything needing a business owner, developer, designer, content owner, analytics owner, privacy/legal reviewer, security reviewer, accessibility reviewer, procurement/contracts owner, payment provider, vendor, or leadership decision-maker.
+
+## Open Questions
+
+## Severity rules
+
+Use these severities for launch planning risks:
+
+- **Critical:** Issue could block launch, expose private or protected data, create serious legal, privacy, security, accessibility, payment, public-sector, regulated-content, or user-harm risk, or prevent the site from serving its core purpose.
+- **High:** Issue could significantly delay launch, damage trust, harm conversion, create major rework, confuse ownership, or undermine a core user journey.
+- **Medium:** Issue creates moderate planning, content, design, ownership, QA, analytics, SEO, vendor, localization, or maintenance risk.
+- **Low:** Minor improvement, clarification, documentation, formatting, wording, or future enhancement.
+
+## Recommendation rules
+
+For each recommendation, explain:
+
+- what planning risk exists,
+- why it matters,
+- severity,
+- affected page, feature, journey, audience, owner, vendor, system, or launch milestone,
+- recommended owner,
+- what to verify first,
+- what action to take,
+- how to test or confirm it,
+- whether legal, privacy, security, accessibility, content, analytics, procurement, contract, payment, localization, or technical review is needed,
+- whether it blocks launch.
+
+Prefer practical next steps that a small team can complete.
+
+## What Not To Do
+
+- Do not invent business goals, audiences, budgets, owners, deadlines, vendors, approvals, legal requirements, content, integrations, analytics data, or compliance status.
+- Do not claim the website will be secure, accessible, compliant, profitable, search-ranked, conversion-ready, or risk-free without evidence and appropriate qualified review.
+- Do not recommend launching high-risk features without ownership, testing, approval, and rollback planning.
+- Do not request or expose passwords, API keys, tokens, customer personal data, payment details, or confidential business information.
+- Do not treat this planning prompt as legal, privacy, security, accessibility, procurement, contract, financial, tax, payment, or compliance advice.

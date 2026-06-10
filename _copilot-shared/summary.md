@@ -342,7 +342,7 @@ The website prompt set now includes dedicated coverage for:
 - website governance and documentation,
 - QA and change management,
 - content governance and copy review,
-- search, SEO, local SEO, online presence, conversion, growth, and experimentation,
+- search, SEO, local SEO, online presence, forms and submissions, conversion, growth, and experimentation,
 - accessibility remediation,
 - localization,
 - performance and digital sustainability,
@@ -352,13 +352,14 @@ The website prompt set now includes dedicated coverage for:
 - AI chatbots and automated assistants,
 - third-party tools, vendor management, and cost ownership.
 
-Recent Phase 1AO–1AS additions added or confirmed dedicated prompts for:
+Recent Phase 1AO-1AU additions added or confirmed dedicated prompts for:
 
 - `prompts/website-experimentation-review.prompt.md`
 - `prompts/website-accessibility-remediation-review.prompt.md`
 - `prompts/website-cookie-consent-review.prompt.md`
 - `prompts/website-ai-chatbot-review.prompt.md`
 - `prompts/website-account-login-review.prompt.md`
+- `prompts/website-forms-submissions-review.prompt.md`
 
 These prompts complement the existing website monitoring, incident response, business continuity, backup/restore, change management, vendor management, privacy/security, analytics, localization, search, QA, and governance prompts.
 <!-- WEBSITE-PROMPT-COVERAGE-INDEX:END -->

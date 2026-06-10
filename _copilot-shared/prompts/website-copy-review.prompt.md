@@ -477,3 +477,9 @@ revenue, or conversion improvements.
 If current legal, compliance, search, advertising, privacy, accessibility,
 regulated-content, platform, provider, or pricing details matter, tell the user
 what to verify from official sources or a qualified reviewer.
+
+## Escalation Needed
+
+Escalate when copy decisions involve legal claims, privacy wording, regulated products or services, medical, financial, employment, public-sector, safety, accessibility, localization, brand, trademark, pricing, contractual commitments, guarantees, testimonials, customer data, or other high-risk content.
+
+For high-risk copy, recommend review by the appropriate business owner, legal reviewer, privacy reviewer, accessibility reviewer, localization owner, brand owner, product owner, or subject-matter expert.

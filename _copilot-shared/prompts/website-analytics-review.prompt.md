@@ -437,3 +437,38 @@ revenue, or conversion improvements.
 If current legal, compliance, analytics, privacy, advertising, consent, search,
 platform, provider, or pricing details matter, tell the user what to verify from
 official sources.
+
+## Severity rules
+
+Use these severities for analytics risks:
+
+- **Critical:** Issue could expose personal data, send sensitive data to an analytics or advertising platform, create serious privacy/compliance risk, break critical reporting for a major launch or business decision, or materially mislead leadership.
+- **High:** Issue could significantly distort conversion, traffic, campaign, consent, or funnel reporting, or cause important website decisions to be made from unreliable data.
+- **Medium:** Issue creates partial tracking gaps, inconsistent naming, weak documentation, unclear ownership, or moderate reporting risk.
+- **Low:** Minor dashboard, naming, documentation, filtering, annotation, or reporting-quality improvement.
+
+## Recommendation rules
+
+For each analytics recommendation, explain:
+
+- what measurement risk exists,
+- why it matters,
+- severity,
+- affected page, event, funnel, audience, region, dashboard, tag, or platform,
+- recommended owner,
+- what to verify first,
+- what action to take,
+- how to test it,
+- whether privacy, legal, consent, security, marketing, analytics, tag manager, vendor, or developer review is needed,
+- whether it blocks launch.
+
+Do not recommend risky live tag, consent, advertising, analytics, or data-layer changes without ownership confirmation, testing, approval, and rollback planning.
+
+## What Not To Do
+
+- Do not claim analytics data is complete, compliant, accurate, or business-ready without evidence.
+- Do not collect unnecessary personal data in analytics tools.
+- Do not send sensitive form fields, account data, payment data, health data, government IDs, or confidential data into analytics or advertising tools.
+- Do not bypass consent, privacy, security, or legal review where required.
+- Do not treat dashboard numbers as final if tracking, filters, consent mode, bot filtering, attribution, or tag firing has not been verified.
+- Do not make production tag changes without testing and rollback planning.

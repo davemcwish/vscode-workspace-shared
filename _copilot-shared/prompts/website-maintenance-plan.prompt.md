@@ -568,3 +568,38 @@ Clearly separate must-do maintenance from optional improvements.
 Mark unknown areas as risks to confirm.
 
 End with practical next actions.
+
+## Severity rules
+
+Use these severities for maintenance risks:
+
+- **Critical:** Issue could cause outage, data loss, private data exposure, serious security/privacy/accessibility/legal risk, broken critical journeys, failed backups, or inability to recover the site.
+- **High:** Issue could significantly reduce reliability, performance, trust, maintainability, search visibility, conversion, support access, or operational ownership.
+- **Medium:** Issue creates moderate update, documentation, QA, monitoring, ownership, vendor, content, analytics, or support risk.
+- **Low:** Minor cleanup, scheduling, documentation, naming, dashboard, review cadence, or non-critical improvement.
+
+## Recommendation rules
+
+For each maintenance recommendation, explain:
+
+- what maintenance risk exists,
+- why it matters,
+- severity,
+- affected page, plugin, platform, vendor, integration, content area, data flow, owner, or user journey,
+- recommended owner,
+- what to verify first,
+- what action to take,
+- how to test it,
+- what rollback or recovery step is needed,
+- whether security, privacy, accessibility, legal, vendor, hosting, analytics, content, or technical review is needed,
+- whether it blocks release or should be scheduled.
+
+Prefer practical maintenance actions that reduce recurring risk.
+
+## What Not To Do
+
+- Do not invent owners, vendors, versions, backups, approvals, incidents, monitoring, test results, security status, privacy status, accessibility status, or compliance status.
+- Do not make risky production changes without ownership, testing, approval, backups, and rollback planning.
+- Do not ignore failed backups, broken forms, security updates, expired domains, expired certificates, inaccessible critical journeys, or unresolved monitoring alerts.
+- Do not request or expose passwords, API keys, tokens, customer personal data, payment details, or confidential business information.
+- Do not claim the site is secure, private, accessible, compliant, fully maintained, or risk-free without evidence and appropriate qualified review.
