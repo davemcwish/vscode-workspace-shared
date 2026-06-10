@@ -82,7 +82,7 @@ if ($missing) {
 }
 
 Write-Host ""
-Write-Host "=== Today's Phase 1AO-1AS prompt check ==="
+Write-Host "=== Recent Phase 1AO-1AV website prompt check ==="
 Write-Host ""
 
 $todayPrompts = @(
@@ -90,7 +90,8 @@ $todayPrompts = @(
   "website-accessibility-remediation-review.prompt.md",
   "website-cookie-consent-review.prompt.md",
   "website-ai-chatbot-review.prompt.md",
-  "website-account-login-review.prompt.md"
+  "website-account-login-review.prompt.md",
+  "website-forms-submissions-review.prompt.md"
 )
 
 foreach ($name in $todayPrompts) {
