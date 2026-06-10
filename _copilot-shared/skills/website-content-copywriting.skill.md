@@ -9,6 +9,12 @@ It is for people who have never written website copy before and need practical,
 actionable guidance on making their content clear, compelling, and appropriate
 for their audience.
 
+**Currentness warning:** Website content can become inaccurate when prices,
+services, opening hours, staff, laws, platform rules, offers, testimonials,
+certifications, availability, or business priorities change. Before launch and
+during maintenance, verify factual claims and record who owns future content
+updates.
+
 ---
 
 ## Audience
@@ -36,18 +42,83 @@ visitor find what they need or take the action you want, remove it.
 
 ---
 
+## Audience Intent
+
+Before writing a page, identify why the visitor is there.
+
+Common visitor intents:
+
+| Intent | What the Visitor Wants | Page Should Provide |
+| --- | --- | --- |
+| Informational | Learn something or answer a question | Clear explanation, examples, next step |
+| Commercial research | Compare options before deciding | Benefits, proof, pricing, FAQs, trust signals |
+| Transactional | Buy, book, enquire, download, or sign up | Clear offer, CTA, low friction, reassurance |
+| Support | Solve a problem or contact someone | Contact details, instructions, troubleshooting |
+| Local | Find a nearby provider or place | Location, service area, opening hours, reviews |
+
+A page can serve more than one intent, but one should be primary. If the content
+tries to serve everyone equally, it usually becomes vague.
+
+---
+
 ## Before You Write: Questions to Answer
 
 Before writing any page, answer these questions:
 
-1. **Who is reading this page?** (Be specific: "busy parent looking for a local
-   plumber" not "everyone.")
-2. **What do they need to know?** (What question brought them here?)
-3. **What do you want them to do after reading?** (Call you? Buy? Sign up? Visit?)
-4. **What objection might stop them?** (Too expensive? Too far? Not trustworthy?)
+1. **Who is reading this page?** Be specific: "busy parent looking for a local
+   plumber" not "everyone."
+2. **What intent brought them here?** Are they learning, comparing, buying,
+   booking, enquiring, or looking for support?
+3. **What do they need to know?** What question, worry, or task brought them
+   here?
+4. **What do you want them to do after reading?** Call you? Buy? Sign up? Visit?
+   Download? Book?
+5. **What objection might stop them?** Too expensive? Too far? Not trustworthy?
+   Too complicated? Too risky?
+6. **What proof would make them believe you?** Reviews, photos, examples,
+   qualifications, guarantees, case studies, statistics, certifications, or
+   policies?
+7. **What claim needs checking before publication?** Prices, dates, legal
+   statements, health claims, financial claims, guarantees, comparisons, or
+   availability?
+8. **Who owns this page after launch?** Who updates it when something changes?
 
 Write the answers down. Refer to them while writing. If a sentence doesn't serve
 one of these purposes, delete it.
+
+---
+
+## Trust, Proof, and Evidence
+
+Visitors are more likely to act when they can see evidence that the website is
+credible.
+
+### Useful Trust Signals
+
+- real customer reviews,
+- testimonials with permission,
+- case studies or examples,
+- before-and-after photos where appropriate,
+- professional qualifications,
+- certifications or memberships,
+- client logos where permission is granted,
+- awards with dates,
+- clear pricing or pricing guidance,
+- real team photos,
+- clear contact details,
+- physical location or service area,
+- refund, cancellation, shipping, or returns information where relevant.
+
+### Proof Rules
+
+- Match proof to the claim. A strong claim needs strong evidence.
+- Keep proof current. Old awards, expired certifications, outdated reviews, and
+  discontinued guarantees damage trust.
+- Do not use testimonials, logos, photos, or case studies without permission.
+- Do not imply endorsement unless the person or organisation has agreed.
+- Do not use fake reviews, fake scarcity, fake countdowns, or fake urgency.
+- If a claim could affect health, finance, safety, legal rights, employment, or
+  regulated decisions, verify it carefully before publishing.
 
 ---
 
@@ -62,7 +133,8 @@ they're in the right place and guide them to the next step.**
 2. **Subheadline** — The key benefit or what makes you different.
 3. **Primary call to action** (CTA) — The one thing you most want visitors to do.
 4. **Brief overview** — 2–3 short sections covering key offerings or benefits.
-5. **Trust signals** — Reviews, testimonials, certifications, client logos.
+5. **Trust signals** — Reviews, testimonials, certifications, client logos,
+   examples, guarantees, policies, or evidence that supports your claims.
 6. **Secondary CTA** — Repeat the action or offer an alternative (learn more,
    browse services).
 
@@ -122,6 +194,39 @@ what happens next?"**
   - Benefit: "Your worktops will be cut perfectly straight with no chipping."
 - Use the customer's language, not industry jargon.
 - Include specifics where possible (numbers, timescales, areas served).
+- Keep pricing, availability, delivery times, service areas, guarantees, and
+  inclusions accurate. If these change often, name an owner for updating them.
+- If a price is only an estimate, say what affects the final price.
+
+---
+
+## Claims, Guarantees, and Regulated Content
+
+Some website copy creates legal, reputational, or safety risk.
+
+### Claims That Need Extra Care
+
+Check carefully before publishing claims about:
+
+- health, medical, wellbeing, supplements, or therapy outcomes,
+- financial results, savings, investments, tax, debt, or insurance,
+- legal rights or legal outcomes,
+- safety, security, compliance, or risk reduction,
+- environmental or sustainability benefits,
+- performance comparisons with competitors,
+- "best", "number one", "guaranteed", or "risk-free" statements,
+- discounts, limited-time offers, scarcity, or availability,
+- testimonials, reviews, ratings, awards, and certifications.
+
+### Safer Copywriting Rules
+
+- Say what you can evidence.
+- Avoid absolute promises unless they are genuinely guaranteed.
+- Explain important conditions clearly.
+- Do not hide limitations in tiny text.
+- Do not create false urgency.
+- Do not imply professional advice where none is being given.
+- For regulated industries, get qualified review before launch.
 
 ---
 
@@ -177,6 +282,21 @@ needs at least one.
 | eCommerce | "Buy" | "Add to Basket — Free Delivery Over £50" |
 | Newsletter | "Subscribe" | "Get Weekly Tips — Join 2,000+ Readers" |
 
+### CTA Friction Check
+
+Before publishing a CTA, ask:
+
+- Is it clear what happens after clicking?
+- Does the button text match the destination?
+- Is the form or checkout shorter than it needs to be?
+- Are visitors asked for only the information needed?
+- Is there reassurance near the CTA, such as pricing, privacy, availability,
+  refund terms, or response time?
+- If the CTA signs someone up for marketing, is consent clear and optional where
+  required?
+
+A CTA should guide the visitor, not trick them.
+
 ---
 
 ## Writing Tone and Voice
@@ -221,6 +341,36 @@ that doesn't serve the reader.
 
 ---
 
+## Plain Language and Accessibility
+
+Clear content helps everyone, including people using screen readers, mobile
+devices, translation tools, or assistive technology.
+
+### Plain Language Rules
+
+- Use common words where possible.
+- Explain unavoidable technical terms.
+- Keep sentences short.
+- Put the main point first.
+- Use active voice where practical.
+- Avoid vague phrases such as "solutions", "innovative", "world-class", or
+  "best-in-class" unless you explain what they mean.
+- Write button and link text that makes sense out of context.
+
+### Accessibility Content Rules
+
+- Use descriptive link text. "Read our pricing guide" is better than "click
+  here."
+- Use headings in logical order.
+- Do not use headings only for visual styling.
+- Write useful alt text for meaningful images.
+- Do not put important text only inside images.
+- Avoid instructions that rely only on colour, shape, or position, such as
+  "click the red button on the right."
+- Make error messages clear and helpful.
+
+---
+
 ## Formatting for the Web
 
 ### Rules for Readable Web Content
@@ -241,25 +391,74 @@ that doesn't serve the reader.
 - ALL CAPS (reads as shouting).
 - Excessive exclamation marks.
 - Underlined text (looks like a link and confuses visitors).
+- Link text such as "click here" or "read more" when the destination is unclear.
+- Important information hidden only in images, PDFs, screenshots, or carousels.
+- Text that is too small or low contrast to read comfortably.
 
 ---
 
 ## SEO Content Basics
 
-To help search engines understand your content:
+SEO content should help search engines understand the page without making the
+copy awkward for humans.
 
-1. **Include your main keyword naturally** in the page title, H1, first
-   paragraph, and a few subheadings.
-2. **Write for humans first, search engines second.** If it reads unnaturally,
-   remove the keyword.
-3. **Use related terms** — don't repeat the same phrase 20 times. Use synonyms
-   and related concepts.
-4. **Answer the search question directly.** If someone searches "how to unblock
-   a drain," your page should answer that clearly.
-5. **Write useful meta descriptions** (the snippet that appears in search
-   results) — 150–160 characters summarising the page.
+### Beginner SEO Rules
+
+1. **Match search intent.** If someone searches for a question, answer it. If
+   they search for a service, explain the service clearly.
+2. **Use the main topic naturally** in the page title, H1, first paragraph, and
+   relevant subheadings where it makes sense.
+3. **Write for humans first, search engines second.** If a keyword makes the
+   sentence sound unnatural, rewrite the sentence.
+4. **Use related terms and specifics.** Do not repeat the same phrase over and
+   over.
+5. **Answer the important questions directly.** Include price, location,
+   timescale, process, eligibility, or next steps where relevant.
+6. **Write useful meta descriptions.** Summarise the page clearly in around
+   150–160 characters where possible.
+7. **Use internal links.** Link to related services, FAQs, contact pages, case
+   studies, or guides where helpful.
+8. **Keep content current.** Outdated prices, offers, dates, and services can
+   harm trust and search performance.
+
+### Avoid Keyword Stuffing
+
+Do not force the same keyword into every sentence. It makes the page hard to
+read and can look manipulative.
+
+Weak:
+
+> We are Bristol plumbers offering Bristol plumbing for Bristol plumbing
+> customers who need a Bristol plumber.
+
+Better:
+
+> Need a plumber in Bristol? We repair leaks, unblock drains, and fix boiler
+> problems for homes and small businesses across the city.
 
 See `seo-review.prompt.md` for a complete SEO audit.
+
+---
+
+## Originality, Reuse, and AI-Assisted Drafting
+
+You can use templates, examples, and AI tools to help draft website copy, but
+the final content must be accurate, original, and specific to the business.
+
+### Rules
+
+- Do not copy content from competitor websites.
+- Do not publish generic AI text without reviewing and rewriting it.
+- Replace vague claims with specific facts.
+- Verify all prices, services, locations, opening hours, names, dates, and
+  credentials.
+- Check that the tone sounds like the actual business.
+- Make sure the content does not invent testimonials, awards, statistics,
+  guarantees, qualifications, or customer results.
+- Keep a human owner responsible for final approval.
+
+AI can help create a first draft. It should not be the final authority on facts,
+claims, legal wording, or brand voice.
 
 ---
 
@@ -284,8 +483,10 @@ Consider professional help if:
 - You've tried writing and consistently struggle.
 - You need sales pages, ad copy, or email sequences.
 
-Typical costs: £100–500 per page, £1,000–5,000 for a full website, depending on
-complexity and the writer's experience.
+Typical costs vary heavily by country, currency, industry, complexity, and the
+writer's experience. Before budgeting, check current local rates and define
+whether the work includes research, SEO, interviews, revisions, and strategy —
+not just writing.
 
 ---
 
@@ -293,13 +494,26 @@ complexity and the writer's experience.
 
 Website content is not "set and forget."
 
+Assign an owner for each important page or content area.
+
 | Frequency | Action |
 | --- | --- |
-| Monthly | Check for outdated information (prices, hours, team members) |
-| Quarterly | Review and update service/product descriptions |
-| Biannually | Refresh "About" page and key landing pages |
-| Annually | Full content audit — is everything still accurate and relevant? |
-| On every change | Update affected pages immediately (new price, new service, staff departure) |
+| Monthly | Check for outdated information such as prices, hours, offers, team members, service areas, stock, availability, and contact details |
+| Monthly | Review enquiries, search terms, and customer questions for content gaps |
+| Quarterly | Review and update service/product descriptions, FAQs, testimonials, and trust signals |
+| Quarterly | Check whether claims, guarantees, certifications, awards, and statistics are still accurate |
+| Biannually | Refresh "About" page, homepage, key landing pages, and high-traffic content |
+| Annually | Full content audit: accuracy, usefulness, SEO, accessibility, tone, duplication, and conversion performance |
+| On every business change | Update affected pages immediately, such as price, service, staff, location, availability, policy, legal, or contact changes |
+| On every legal or regulatory change | Review affected claims, policies, terms, disclaimers, and regulated content |
+
+For each important page, document:
+
+- page owner,
+- last reviewed date,
+- next review date,
+- facts or claims that need periodic verification,
+- source of truth for prices, services, policies, and contact details.
 
 ---
 
@@ -307,26 +521,50 @@ Website content is not "set and forget."
 
 Before going live:
 
-- [ ] Every page has a clear purpose and CTA.
+- [ ] Every page has a clear purpose, audience, intent, and CTA.
 - [ ] Headlines are specific and benefit-focused.
 - [ ] Content is written in the customer's language, not industry jargon.
-- [ ] All facts, prices, and contact details are current and accurate.
-- [ ] Content is formatted for scanning (short paragraphs, subheadings, bullets).
-- [ ] Each page answers: who is this for, what do they get, what should they
-      do next?
+- [ ] Each page answers: who is this for, what do they get, why trust us, and
+      what should they do next?
+- [ ] Key objections are addressed.
+- [ ] Claims are supported by evidence.
+- [ ] Prices, offers, service areas, opening hours, contact details, staff names,
+      policies, and availability are current and accurate.
+- [ ] Testimonials, reviews, photos, logos, case studies, awards, and
+      certifications have permission and are accurate.
+- [ ] Regulated or high-risk claims have been reviewed by a qualified person
+      where appropriate.
+- [ ] Content is formatted for scanning using short paragraphs, headings,
+      bullets, and white space.
+- [ ] Link text, headings, alt text, and instructions are accessible and clear.
+- [ ] SEO basics are covered without keyword stuffing.
 - [ ] Spelling and grammar have been checked.
 - [ ] Someone other than the author has read it and understood it.
+- [ ] A content owner and review date are documented for each important page.
 
 ---
 
 ## Critical Constraints
 
-- Never use placeholder text ("Lorem ipsum") on a live site.
-- Never copy content from another website (plagiarism and SEO penalty).
-- Never make claims you cannot substantiate (legal risk in advertising standards).
-- Never promise results you cannot guarantee ("Lose 10kg in a week!").
-- Never use fake testimonials or reviews.
-- Never ignore spelling and grammar — it affects trust.
+- Never use placeholder text such as "Lorem ipsum" on a live site.
+- Never copy content from another website.
+- Never publish generic AI-generated copy without human review, fact-checking,
+  and rewriting for the actual business.
+- Never make claims you cannot substantiate.
+- Never promise results you cannot genuinely guarantee.
+- Never use fake testimonials, fake reviews, fake scarcity, fake urgency, or
+  fake endorsements.
+- Never use testimonials, reviews, logos, case studies, or customer photos
+  without permission.
+- Never publish health, financial, legal, safety, environmental, or regulated
+  claims without appropriate review.
+- Never hide important limitations, prices, conditions, or exclusions in unclear
+  wording.
+- Never ignore spelling and grammar; it affects trust.
 - Always write for the visitor's needs, not your ego.
+- Always make content scannable and accessible.
 - Always have someone else proofread before going live.
-- Always keep content up to date — outdated content damages trust.
+- Always verify facts, prices, policies, availability, and contact details before
+  launch.
+- Always assign ownership for content updates after launch.
+- Always keep content up to date; outdated content damages trust.
