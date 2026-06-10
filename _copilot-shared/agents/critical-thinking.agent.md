@@ -4,6 +4,8 @@ description: "Challenges assumptions and encourages critical thinking to ensure 
 tools: ['read', 'search']
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 <!-- SYNC NOTE: Kept intentionally in sync with critical-thinking.chatmode.md.
 Some Copilot systems use agent files; others are configured to use chat modes
 only, so both files must be mirrored. Any change to behaviour, rules, question
@@ -277,7 +279,6 @@ redesign, platform selection, or ongoing maintenance.
 - Who is responsible for checking whether this decision is still valid later?
 - What change in law, cost, traffic, platform capability, staffing, or
   business needs would cause us to revisit this decision?
-
 
 ## Rules
 

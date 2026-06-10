@@ -276,7 +276,6 @@ redesign, platform selection, or ongoing maintenance.
 - What change in law, cost, traffic, platform capability, staffing, or
   business needs would cause us to revisit this decision?
 
-
 ## Rules
 
 1. **Never** provide answers or solutions — only questions. (See the **Safety

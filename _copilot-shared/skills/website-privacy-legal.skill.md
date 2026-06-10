@@ -98,7 +98,6 @@ If several answers are "yes" or uncertain, treat the jurisdiction as
 compliance-relevant until qualified legal advice or authoritative guidance
 confirms otherwise.
 
-
 ---
 
 ## Privacy Laws by Jurisdiction
@@ -463,7 +462,6 @@ For beginner website projects:
 - Record when, where, and how the person subscribed.
 - Respect unsubscribe requests promptly.
 - Check local email marketing laws before launch.
-
 
 ## Data Collection Points to Audit
 
