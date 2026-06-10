@@ -331,3 +331,34 @@ and review quality** over speed or cost.
 | CI/CD | Continuous Integration / Continuous Deployment -- automated checks and release steps that run when code is pushed. |
 | JOSHUA | The name of this project's Flask-based web frontend (referenced by the Flask/WebSocket skill and instruction files). |
 | `sanity.bat` | The local quality-gate runner (Windows). Runs ruff, mypy, bandit, detect-secrets, and pytest+coverage in one command — the local mirror of `ci.yml`. Run it before every commit. |
+
+<!-- WEBSITE-PROMPT-COVERAGE-INDEX:START -->
+## Website Prompt Coverage Summary
+
+The website prompt set now includes dedicated coverage for:
+
+- idea-to-launch planning,
+- monthly review and maintenance,
+- website governance and documentation,
+- QA and change management,
+- content governance and copy review,
+- search, SEO, local SEO, online presence, conversion, growth, and experimentation,
+- accessibility remediation,
+- localization,
+- performance and digital sustainability,
+- analytics,
+- privacy, security, access permissions, data retention, cookie consent, and account/login journeys,
+- monitoring, incident response, business continuity, backup/restore, and migration,
+- AI chatbots and automated assistants,
+- third-party tools, vendor management, and cost ownership.
+
+Recent Phase 1AO–1AS additions added or confirmed dedicated prompts for:
+
+- `prompts/website-experimentation-review.prompt.md`
+- `prompts/website-accessibility-remediation-review.prompt.md`
+- `prompts/website-cookie-consent-review.prompt.md`
+- `prompts/website-ai-chatbot-review.prompt.md`
+- `prompts/website-account-login-review.prompt.md`
+
+These prompts complement the existing website monitoring, incident response, business continuity, backup/restore, change management, vendor management, privacy/security, analytics, localization, search, QA, and governance prompts.
+<!-- WEBSITE-PROMPT-COVERAGE-INDEX:END -->

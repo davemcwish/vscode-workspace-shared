@@ -410,3 +410,68 @@ After reading this document, your next step is:
    to keep a permanent record.
 
 You can return to this document at any time as a reference map.
+
+<!-- WEBSITE-PROMPT-COVERAGE-INDEX:START -->
+## Website Prompt Coverage Index
+
+Use these prompts based on the kind of website work you are doing.
+
+### Start, Plan, Maintain, and Govern
+
+- `prompts/website-from-idea-to-launch.prompt.md`
+- `prompts/monthly-website-review.prompt.md`
+- `prompts/website-maintenance-plan.prompt.md`
+- `prompts/website-governance-review.prompt.md`
+- `prompts/website-documentation-review.prompt.md`
+- `prompts/website-change-management-review.prompt.md`
+- `prompts/website-qa-review.prompt.md`
+
+### Content, Copy, Search, Growth, and Experimentation
+
+- `prompts/website-copy-review.prompt.md`
+- `prompts/website-content-governance-review.prompt.md`
+- `prompts/website-search-review.prompt.md`
+- `prompts/website-growth-plan.prompt.md`
+- `prompts/conversion-review.prompt.md`
+- `prompts/website-experimentation-review.prompt.md`
+- `prompts/online-presence-review.prompt.md`
+- `prompts/seo-review.prompt.md`
+- `prompts/local-seo-check.prompt.md`
+
+### Accessibility, Localization, Performance, and Sustainability
+
+- `prompts/website-accessibility-remediation-review.prompt.md`
+- `prompts/website-localization-review.prompt.md`
+- `prompts/website-performance-review.prompt.md`
+- `prompts/digital-sustainability-review.prompt.md`
+
+### Privacy, Security, Consent, Accounts, and Access
+
+- `prompts/security-privacy-review.prompt.md`
+- `prompts/website-access-permissions-review.prompt.md`
+- `prompts/website-data-retention-review.prompt.md`
+- `prompts/website-cookie-consent-review.prompt.md`
+- `prompts/website-account-login-review.prompt.md`
+
+### Analytics, Monitoring, Incidents, Resilience, and Operations
+
+- `prompts/website-analytics-review.prompt.md`
+- `prompts/website-monitoring-review.prompt.md`
+- `prompts/website-incident-response-review.prompt.md`
+- `prompts/website-business-continuity-review.prompt.md`
+- `prompts/website-backup-restore-review.prompt.md`
+- `prompts/website-migration-review.prompt.md`
+
+### Vendors, Tools, AI, Costs, and Third Parties
+
+- `prompts/website-ai-chatbot-review.prompt.md`
+- `prompts/website-third-party-tools-review.prompt.md`
+- `prompts/website-vendor-management-review.prompt.md`
+- `prompts/website-cost-ownership-review.prompt.md`
+
+### Notes
+
+- `website-monitoring-review.prompt.md`, `website-incident-response-review.prompt.md`, `website-business-continuity-review.prompt.md`, and `website-backup-restore-review.prompt.md` are complementary, not duplicates.
+- `security-privacy-review.prompt.md`, `website-access-permissions-review.prompt.md`, `website-data-retention-review.prompt.md`, `website-cookie-consent-review.prompt.md`, and `website-account-login-review.prompt.md` cover different parts of the privacy/security/access lifecycle.
+- `website-ai-chatbot-review.prompt.md`, `website-search-review.prompt.md`, `website-third-party-tools-review.prompt.md`, and `website-vendor-management-review.prompt.md` overlap intentionally around tools, vendors, data, and user experience.
+<!-- WEBSITE-PROMPT-COVERAGE-INDEX:END -->
