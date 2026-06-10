@@ -1,7 +1,7 @@
-# Scaffold Files — What They Are and What to Customise
+# Scaffold Files - What They Are and What to Customise
 
 These files were copied into your project from `_copilot-shared\scaffold\`
-when the project was first created.  They are starter templates — your project
+when the project was first created.  They are starter templates - your project
 owns them, and you should edit them to match your project's actual layout and
 dependencies.
 
@@ -11,17 +11,17 @@ dependencies.
 
 | File | Purpose |
 | --- | --- |
-| `sanity.bat` | Local quality gate — run this before every commit |
-| `sanity_v.bat` | Verbose version of `sanity.bat` — use when debugging a failure |
+| `sanity.bat` | Local quality gate - run this before every commit |
+| `sanity_v.bat` | Verbose version of `sanity.bat` - use when debugging a failure |
 | `requirements.in` | Loose-pinned list of runtime dependencies (Python template) |
 | `requirements-dev.in` | Loose-pinned list of dev/test dependencies (Python template) |
-| `README.md` | Project overview — what it does, who it is for, how to use it |
+| `README.md` | Project overview - what it does, who it is for, how to use it |
 | `ARCHITECTURE.md` | System design, components, data flows, platform and security notes |
 | `CHANGELOG.md` | Version history in Keep a Changelog format |
 | `CONTRIBUTING.md` | Developer setup, standards, quality gate, PR process |
 | `SECURITY.md` | Security policy, vulnerability reporting, known controls |
 | `UPDATING_DEPENDENCIES.md` | How to add, update, and remove dependencies safely |
-| `scaffold-README.md` | This file — explains what to customise |
+| `scaffold-README.md` | This file - explains what to customise |
 
 **Language note:** `sanity.bat`, `requirements.in`, and `requirements-dev.in`
 are Python-specific templates. For other languages (Java, Node.js, etc.) replace
@@ -174,5 +174,5 @@ without asking anyone.
 ## Safe to delete
 
 Once you have customised these files, `scaffold-README.md` has done its job.
-You may delete it if you prefer a clean project root — or keep it as a
+You may delete it if you prefer a clean project root - or keep it as a
 reference for future maintainers.

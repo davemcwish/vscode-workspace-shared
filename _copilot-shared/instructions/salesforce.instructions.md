@@ -1,4 +1,4 @@
-﻿---
+---
 applyTo: "src/**/*.py,scripts/**/*.py"
 description: "Salesforce API usage and production-safety rules."
 ---
@@ -30,7 +30,7 @@ description: "Salesforce API usage and production-safety rules."
 
 ## Querying (SOQL)
 
-- SOQL (Salesforce Object Query Language — Salesforce's version of SQL)
+- SOQL (Salesforce Object Query Language - Salesforce's version of SQL)
   queries must select only the fields actually needed:
   `SELECT Id, Name FROM Object__c`, never `SELECT *`-equivalent patterns.
 - For unbounded result sets, use `query_all()` which follows
@@ -55,7 +55,7 @@ description: "Salesforce API usage and production-safety rules."
 ## Data Hygiene
 
 - Never log full record payloads containing PII (Personally Identifiable
-  Information — names, emails, phone numbers, etc.). Log record IDs and
+  Information - names, emails, phone numbers, etc.). Log record IDs and
   counts only.
 - Redact `access_token` and session cookie values before writing to any
   log output. Use `redact_sensitive_text()` for URL strings.

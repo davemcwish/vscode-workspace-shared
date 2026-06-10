@@ -8,12 +8,12 @@
   Versioning: https://semver.org/
 
   Types of change:
-    Added      — new feature or capability
-    Changed    — change to existing behaviour
-    Deprecated — feature that will be removed in a future version
-    Removed    — feature removed in this version
-    Fixed      — bug fix
-    Security   — security fix or vulnerability remediation
+    Added      - new feature or capability
+    Changed    - change to existing behaviour
+    Deprecated - feature that will be removed in a future version
+    Removed    - feature removed in this version
+    Fixed      - bug fix
+    Security   - security fix or vulnerability remediation
 -->
 
 All notable changes to this project will be documented in this file.

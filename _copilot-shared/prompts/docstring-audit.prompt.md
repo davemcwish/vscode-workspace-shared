@@ -17,8 +17,8 @@ Read these before starting:
 
 Docstrings have two distinct jobs:
 
-1. **WHAT the code does** — facts extracted from reading the implementation.
-2. **HOW to explain it** — beginner prose applied to confirmed facts only.
+1. **WHAT the code does** - facts extracted from reading the implementation.
+2. **HOW to explain it** - beginner prose applied to confirmed facts only.
 
 This audit focuses on job 1 first (accuracy), then job 2 (clarity).
 
@@ -45,21 +45,21 @@ existing docstring, a similar function, or what would "make sense".
 For every Python file in scope, perform a mechanical 1:1 comparison between
 each docstring and the code:
 
-1. **Invented** — docstring claims something the code does not do.
-2. **Omitted** — code does something the docstring does not mention.
-3. **Wrong type** — docstring type disagrees with implementation.
-4. **Stale** — docstring describes old behaviour.
-5. **Too terse** — technically correct but useless to a beginner.
-6. **Missing** — no docstring at all.
+1. **Invented** - docstring claims something the code does not do.
+2. **Omitted** - code does something the docstring does not mention.
+3. **Wrong type** - docstring type disagrees with implementation.
+4. **Stale** - docstring describes old behaviour.
+5. **Too terse** - technically correct but useless to a beginner.
+6. **Missing** - no docstring at all.
 
 Also check:
 
-- Missing module docstrings — every `.py` file must start with one.
-- Missing class docstrings — every class and its `__init__` must be documented.
-- Missing function or method docstrings — both public and non-obvious private helpers.
-- Missing test fixture docstrings — complex fixtures that set up mocks or state.
+- Missing module docstrings - every `.py` file must start with one.
+- Missing class docstrings - every class and its `__init__` must be documented.
+- Missing function or method docstrings - both public and non-obvious private helpers.
+- Missing test fixture docstrings - complex fixtures that set up mocks or state.
 - Missing `Args`, `Returns`, `Raises`, or `Example` sections where they apply.
-- Unexplained Salesforce, Python, or business terms — abbreviations and jargon.
+- Unexplained Salesforce, Python, or business terms - abbreviations and jargon.
 
 Do **not** change runtime behaviour. Audit only.
 
@@ -74,7 +74,7 @@ Return a structured report:
 
 ## Summary
 
-[Plain-English summary of overall docstring quality — 3-5 sentences.]
+[Plain-English summary of overall docstring quality - 3-5 sentences.]
 
 ## Ground Truth Method
 
@@ -105,14 +105,14 @@ No existing docstring or sibling function used as source of truth."]
 
 ## Recommended Remediation Order
 
-1. [Accuracy fixes first — invented and stale claims]
-2. [Omissions next — missing parameters or exceptions]
-3. [Then beginner expansions — too terse for a complete beginner]
+1. [Accuracy fixes first - invented and stale claims]
+2. [Omissions next - missing parameters or exceptions]
+3. [Then beginner expansions - too terse for a complete beginner]
 
 ## Safe to Auto-Fix?
 
-[Yes — all gaps are additions only, no behaviour changes required.]
-[or: No — some stale docstrings need behaviour confirmation before rewriting.]
+[Yes - all gaps are additions only, no behaviour changes required.]
+[or: No - some stale docstrings need behaviour confirmation before rewriting.]
 ```
 
 ---
@@ -123,7 +123,7 @@ When the user asks you to fix the docstrings after the audit:
 
 1. Update only docstrings and explanatory comments.
 2. Do **not** change imports, logic, tests, type hints, formatting, or behaviour.
-3. **Re-derive every claim from the implementation** — never from the existing
+3. **Re-derive every claim from the implementation** - never from the existing
    docstring text or a similar function.
 4. Keep all language beginner-friendly and plain-English.
 5. Use Google-style docstrings as shown in `./.github/skills/docstring.skill.md`.

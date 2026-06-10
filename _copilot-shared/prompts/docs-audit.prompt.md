@@ -5,7 +5,7 @@ mode: agent
 
 Audit the accuracy of an existing documentation guide against the code it
 describes. Do NOT rewrite the guide from scratch and do NOT trust any sibling
-document — verify everything against program-generated ground truth.
+document - verify everything against program-generated ground truth.
 
 Follow `workflows/doc-writer-remediation.workflow.md` for the full method.
 
@@ -24,11 +24,11 @@ Treat these program-generated sources as the ONLY source of truth. Never treat a
 ## Step 2: Diff the guide against ground truth
 Compare the guide's CLI table to --help as set arithmetic:
 
-Invented — in the guide but not in --help.
-Omitted — in --help but not in the guide.
-Wrong default — default disagrees with --help.
-Wrong choices — choices disagree with --help.
-Wrong required — requiredness disagrees with --help.
+Invented - in the guide but not in --help.
+Omitted - in --help but not in the guide.
+Wrong default - default disagrees with --help.
+Wrong choices - choices disagree with --help.
+Wrong required - requiredness disagrees with --help.
 Also check environment variable names against .env.example and any stated test count against the real collected count.
 
 ## Step 3: Report findings
@@ -43,7 +43,7 @@ Produce this table before changing anything:
 For each accuracy finding:
 
 1. Make the smallest change that corrects the fact.
-2. Re-derive every corrected value from the ground truth captured in Step 1 —
+2. Re-derive every corrected value from the ground truth captured in Step 1  - 
    never from another document.
 3. For omitted flags, add a beginner-friendly row: explain in plain English what
    the flag does, its default and choices, and when a beginner would use it.

@@ -7,7 +7,7 @@ Run the project's pre-commit sanity workflow.
 
 ##  Canonical Quality Gate
 
-Run `sanity.bat` from the project root — it mirrors `ci.yml` and runs the full
+Run `sanity.bat` from the project root - it mirrors `ci.yml` and runs the full
 gate (ruff format, ruff lint, mypy, bandit, detect-secrets, pytest + coverage
 with `--cov-fail-under=90`). If `sanity.bat` is unavailable, run the equivalent
 commands listed in `copilot-instructions.md` § Canonical Quality Gate.

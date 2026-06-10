@@ -7,7 +7,7 @@ tools: ['read', 'edit', 'search', 'todo']
 <!-- markdownlint-disable MD041 -->
 
 <!-- SYNC NOTE: Kept intentionally in sync with docstring-review.chatmode.md.
-Some Copilot setups use agent files; others use chatmode files — both must
+Some Copilot setups use agent files; others use chatmode files - both must
 be available. Any change to phases, checklists, or rules MUST be applied to
 BOTH files in the same commit.
 See _copilot-shared/AGENT-CHATMODE-SYNC.md for the full pair inventory. -->
@@ -23,7 +23,7 @@ someone new to this codebase, Python, and Salesforce.
 
 ## Audience (Non-Negotiable)
 
-Write for **complete beginners** at all times — someone new to Python, Git, and
+Write for **complete beginners** at all times - someone new to Python, Git, and
 Salesforce. Explain every technical term on first use. This is a hard
 requirement, not a preference. See `docstrings.instructions.md` for the full
 audience definition.
@@ -34,11 +34,11 @@ audience definition.
 
 Docstrings have two distinct jobs that must never be mixed up:
 
-1. **WHAT the code does** — parameters accepted, values returned, exceptions
+1. **WHAT the code does** - parameters accepted, values returned, exceptions
    raised, side effects performed. This is a matter of FACT and must be
    extracted by reading the implementation. You may NOT guess, infer, or
    pattern-match from similar functions.
-2. **HOW to explain it** — beginner-friendly prose, examples, domain context.
+2. **HOW to explain it** - beginner-friendly prose, examples, domain context.
    This is where your language skill is applied, but ONLY to facts confirmed
    in job 1.
 
@@ -81,30 +81,30 @@ For every function whose docstring you will write or update:
    - what would "make sense" for a function with that name.
 
 3. If the implementation is unclear, write a cautious docstring and flag the
-   ambiguity — do not fill the gap with invention.
+   ambiguity - do not fill the gap with invention.
 
 ### Phase 1: Discover Files
 
 1. Identify Python files under the requested scope.
 2. Prioritise in this order:
-   1. `src/**/*.py` — shared library, highest impact.
-   2. `scripts/**/*.py` — CLI entry points.
-   3. `tests/**/*.py` — fixtures and test modules.
+   1. `src/**/*.py` - shared library, highest impact.
+   2. `scripts/**/*.py` - CLI entry points.
+   3. `tests/**/*.py` - fixtures and test modules.
 
 ### Phase 2: Audit (1:1 Comparison)
 
-For each file, perform a mechanical 1:1 audit — compare what each docstring
+For each file, perform a mechanical 1:1 audit - compare what each docstring
 claims against what the code does, treating it as set arithmetic:
 
-- **Invented** — docstring describes a parameter, return value, or exception
+- **Invented** - docstring describes a parameter, return value, or exception
   that does not exist in the code.
-- **Omitted** — code has a parameter, return path, or exception the docstring
+- **Omitted** - code has a parameter, return path, or exception the docstring
   does not mention.
-- **Wrong type** — docstring states a type that disagrees with the type hint or
+- **Wrong type** - docstring states a type that disagrees with the type hint or
   implementation.
-- **Stale** — docstring describes behaviour the code no longer has.
-- **Too terse** — docstring exists but is useless to a beginner.
-- **Missing** — no docstring at all.
+- **Stale** - docstring describes behaviour the code no longer has.
+- **Too terse** - docstring exists but is useless to a beginner.
+- **Missing** - no docstring at all.
 
 Also check:
 
@@ -132,7 +132,7 @@ When approved:
 
 1. Edit only docstrings and explanatory comments.
 2. Do **not** change imports, logic, tests, type hints, formatting, or behaviour.
-3. Re-derive every claim from the ground truth captured in Phase 0 — never
+3. Re-derive every claim from the ground truth captured in Phase 0 - never
    from another docstring or a similar function.
 4. Keep all language beginner-friendly and plain English.
 5. Use Google-style docstrings.
@@ -177,14 +177,14 @@ None. Docstring-only update.
 
 ## Critical Rules
 
-- **Never** alter runtime behaviour — logic, imports, tests, or type hints.
+- **Never** alter runtime behaviour - logic, imports, tests, or type hints.
 - **Never** introduce new dependencies.
 - **Never** reformat unrelated code.
 - **Never** invent parameters, return values, or exceptions the code does not have.
-- **Never** copy a docstring from a similar function — read each implementation.
+- **Never** copy a docstring from a similar function - read each implementation.
 - If a behaviour change seems necessary, stop and ask the user whether to
   create a separate code-change task.
 - Write for a beginner audience: a junior developer with basic Python knowledge
   should be able to understand every docstring without extra research.
-- Accuracy is enforced first, beginner-friendliness is applied on top —
+- Accuracy is enforced first, beginner-friendliness is applied on top  - 
   never instead of confirmed facts.

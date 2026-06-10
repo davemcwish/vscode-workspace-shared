@@ -24,7 +24,7 @@ Analyse the repository at `{project}` and produce a single Markdown file at `{pr
 The document must answer these questions for any consuming agent:
 1. What services exist in the system?
 2. How do they communicate with each other (protocol, channel, direction)?
-3. What is the topology — which service calls which, and why?
+3. What is the topology - which service calls which, and why?
 4. Where can an agent find detailed component-level information for a specific service?
 
 ### Pre-flight check
@@ -45,18 +45,18 @@ Before proceeding with analysis:
 - For each service or project, apply the `overview.md`-first rule described in the File discovery section. Do **not** scan source files of a service that already has an `overview.md`.
 - Do **not** produce any diagrams, Mermaid blocks, ASCII art, or visual representations.
 - Do **not** write prose paragraphs. Use labeled fields, bullet lists, and structured entries throughout.
-- Do **not** infer or imply service interactions — state every interaction explicitly and bidirectionally.
-- When a section has no applicable content, write `NONE` — never omit the section heading.
+- Do **not** infer or imply service interactions - state every interaction explicitly and bidirectionally.
+- When a section has no applicable content, write `NONE` - never omit the section heading.
 - Code snippets must be ≤ 15 lines. Only include one when it directly supports a stated claim.
 - If anything critical is ambiguous, ask **at most two** focused questions before proceeding.
 
 ---
 
-## File discovery — follow this order
+## File discovery - follow this order
 
 > **Use the Explore agent** (`#tool:agent/runSubagent`) to traverse the repository and read files. Invoke it with the discovery steps below as the search target. Do not attempt to enumerate files manually.
 >
-> **`overview.md`-first rule**: for every service or project directory found, instruct the Explore agent to check for an `overview.md` file first. If one exists, read only that file for that service's internal structure — do **not** read any of its source files. Only fall back to source files when no `overview.md` is present.
+> **`overview.md`-first rule**: for every service or project directory found, instruct the Explore agent to check for an `overview.md` file first. If one exists, read only that file for that service's internal structure - do **not** read any of its source files. Only fall back to source files when no `overview.md` is present.
 
 1. Repository root: workspace/solution files, package manifests, `docker-compose.*`, `kubernetes/`, `helm/`, `.env*`, CI/CD pipelines.
 2. Service/project directories: for each, check for `overview.md` first (see rule above). If absent, read the entry-point and configuration files to infer the service's role and communication contracts.
@@ -73,13 +73,13 @@ Before proceeding with analysis:
 Produce **exactly** the following headings in the output file, in this order.
 
 ### 1. Title
-Repository name — one sentence describing the system's overall purpose.
+Repository name - one sentence describing the system's overall purpose.
 
 ### 2. Summary
-3–5 bullet points: what the system does, the number and names of its services, primary communication styles (synchronous / asynchronous), and the deployment model.
+3 - 5 bullet points: what the system does, the number and names of its services, primary communication styles (synchronous / asynchronous), and the deployment model.
 
 ### 3. Technology Stack
-Derived from discovery — do not assume. For each technology found:
+Derived from discovery - do not assume. For each technology found:
 - CATEGORY: e.g., `Runtime`, `API Framework`, `Database`, `Message Broker`, `Cache`, `Frontend`, `Container`, `Cloud Platform`, `Auth`
 - TECHNOLOGY: name and version if determinable
 - USED_BY: list of services that use it
@@ -155,7 +155,7 @@ For each identified pattern:
 - DEPLOYMENT_MODEL: `Monolith` | `Microservices` | `Modular Monolith` | `Serverless` | `Hybrid`
 - CONTAINER_RUNTIME: Docker, Podman, etc., or NONE
 - ORCHESTRATION: Kubernetes, Compose, Helm, Nomad, etc., or NONE
-- SERVICES_AND_PORTS: for each service, its container name and exposed port(s) — derived from compose/manifest files
+- SERVICES_AND_PORTS: for each service, its container name and exposed port(s) - derived from compose/manifest files
 - CONFIG_REFS: paths to Dockerfiles, compose files, manifests, or IaC files
 
 ### 11. Assumptions
@@ -167,7 +167,7 @@ List any assumption made where evidence was absent or ambiguous. Format:
 
 ## Output example
 
-The following is a **partial example** for the Services and Service Communication Map sections. Use it as a structural template — do not copy its content.
+The following is a **partial example** for the Services and Service Communication Map sections. Use it as a structural template - do not copy its content.
 
 ```markdown
 ## Services

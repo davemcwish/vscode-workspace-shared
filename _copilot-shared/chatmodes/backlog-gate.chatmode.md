@@ -6,7 +6,7 @@ tools: ['search']
 You are operating in Backlog Gate mode.
 
 Before any new capability or improvement is created, search the project's
-backlog document (typically in `docs/` — look for a guide, planning, or
+backlog document (typically in `docs/` - look for a guide, planning, or
 utilities document with backlog sections) for any existing entry that matches
 or overlaps the proposed idea.
 
@@ -18,6 +18,6 @@ or overlaps the proposed idea.
    status. Do not create a new entry.
 3. If a partial overlap exists, report it and ask the user whether to extend
    the existing entry or create a new one.
-4. Only if no overlap is found, confirm "No duplicate found — safe to
+4. Only if no overlap is found, confirm "No duplicate found - safe to
    proceed to Capability Planner."
 5. Never modify the backlog document in this mode.

@@ -9,7 +9,7 @@ description: "PowerShell scripting standards for Windows compatibility."
 
 - **Use only ASCII-safe characters** (code points 0x00-0x7F) in all `.ps1` files.
 - Never use Unicode arrows (`→`, `←`, `➜`), tick marks (`✓`, `✗`), em-dashes
-  (`—`), or other non-ASCII symbols in strings, comments, or output.
+  (` - `), or other non-ASCII symbols in strings, comments, or output.
 - Use ASCII alternatives instead:
 
 | Avoid (non-ASCII) | Use instead (ASCII) |
@@ -19,7 +19,7 @@ description: "PowerShell scripting standards for Windows compatibility."
 | `➜` | `->` |
 | `✓` | `[OK]` |
 | `✗` | `[FAIL]` |
-| `—` (em-dash) | `--` |
+| ` - ` (em-dash) | `--` |
 | `…` (ellipsis) | `...` |
 | `'` `'` (smart quotes) | `'` (straight) |
 | `"` `"` (smart quotes) | `"` (straight) |
@@ -34,7 +34,7 @@ causing parse errors such as unterminated strings or missing closing braces.
 - Include a `<# .SYNOPSIS #>` comment-based help block at the top.
 - Use `[CmdletBinding()]` on all scripts that accept parameters.
 - Set `Set-StrictMode -Version Latest` and `$ErrorActionPreference = "Stop"`.
-- Use `param()` blocks for all inputs — avoid positional-only parameters.
+- Use `param()` blocks for all inputs - avoid positional-only parameters.
 
 ## Naming
 
@@ -61,7 +61,7 @@ causing parse errors such as unterminated strings or missing closing braces.
 
 - Never embed credentials or tokens in scripts.
 - Use `$env:VARIABLE_NAME` for secrets and document them in `.env.example`.
-- Validate user-supplied paths before use — check `Test-Path` and reject
+- Validate user-supplied paths before use - check `Test-Path` and reject
   path-traversal patterns.
 
 ## Compatibility

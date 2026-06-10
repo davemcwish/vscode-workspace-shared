@@ -20,7 +20,7 @@ Start by understanding the website's purpose, audience, country or region,
 maintenance owner, social media and online presence, platform needs, content,
 risks, and launch process.
 
-## Phase 1: Strategy — Why and Who
+## Phase 1: Strategy - Why and Who
 
 Ask these questions unless already answered:
 

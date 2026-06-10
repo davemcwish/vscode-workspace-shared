@@ -7,7 +7,7 @@ tools: ['read', 'search', 'execute', 'todo']
 <!-- markdownlint-disable MD041 -->
 
 <!-- SYNC NOTE: Kept intentionally in sync with pre-commit-check.chatmode.md.
-Some Copilot setups use agent files; others use chatmode files — both must
+Some Copilot setups use agent files; others use chatmode files - both must
 be available. Any change to phases, checklists, rules, or report format MUST
 be applied to BOTH files in the same commit.
 See _copilot-shared/AGENT-CHATMODE-SYNC.md for the full pair inventory. -->
@@ -21,7 +21,7 @@ code is committed and pushed.
 
 ## Your Strict Workflow
 
-### Phase 0: Cycode Pre-Flight (static review — no commands needed)
+### Phase 0: Cycode Pre-Flight (static review - no commands needed)
 
 Before running any tool, scan the changed Python files visually for patterns
 that Cycode's SAST rules will flag. These checks require reading the code, not
@@ -32,7 +32,7 @@ running it. Report each as PASS / ❌ NEEDS FIX / N/A.
 - [ ] Every `subprocess.run` / `subprocess.Popen` call uses a list, not a string.
 - [ ] Every tainted input (CLI arg, env var, API response) is validated before
       reaching the command list.
-- [ ] The validator returns `match.group(0)` — not the original input — to break
+- [ ] The validator returns `match.group(0)` - not the original input - to break
       Cycode's intra-procedural taint chain.
 - [ ] A local inline re-verification (`_m = re.fullmatch(...); safe_x = _m.group(0)`)
       is present in the **same function** that calls `subprocess.run`.
@@ -56,18 +56,18 @@ running it. Report each as PASS / ❌ NEEDS FIX / N/A.
 - [ ] Any use of `random.Random`, `random.choice`, `random.randint`, etc. is for
       non-security purposes only (mock data, shuffling, simulation).
 - [ ] **Preferred fix for deterministic mock/prototype code:** eliminate the PRNG
-      entirely — derive agency, date, and other values from a counter using
+      entirely - derive agency, date, and other values from a counter using
       modular arithmetic. No import, no suppression, Cycode cannot flag it.
 - [ ] **If randomness is genuinely needed (non-deterministic):** use
       `random.SystemRandom()` (backed by `os.urandom()`), which Cycode accepts.
-- [ ] **`# nosec B311` suppresses bandit only — it does NOT satisfy Cycode SAST.**
+- [ ] **`# nosec B311` suppresses bandit only - it does NOT satisfy Cycode SAST.**
       Cycode runs its own engine and will still flag the violations as unresolved.
 - [ ] No `random` module usage for tokens, session IDs, passwords, or
-      cryptographic nonces — use `secrets` instead.
+      cryptographic nonces - use `secrets` instead.
 
 #### Network calls
 
-- [ ] TLS verification is not disabled (`verify=True` or absent — never
+- [ ] TLS verification is not disabled (`verify=True` or absent - never
       `verify=False`).
 
 #### Dependencies
@@ -76,7 +76,7 @@ running it. Report each as PASS / ❌ NEEDS FIX / N/A.
 
 #### Cross-platform (CI and Cycode run on Linux)
 
-- [ ] No backslash path separators — use `pathlib.Path` or `os.path.join()`.
+- [ ] No backslash path separators - use `pathlib.Path` or `os.path.join()`.
 - [ ] All `open()` calls specify `encoding='utf-8'`.
 - [ ] Windows-only imports/code are guarded with `sys_platform == "win32"`.
 - [ ] `.secrets.baseline` path entries use forward slashes.
@@ -96,7 +96,7 @@ from `copilot-instructions.md` § Canonical Quality Gate instead.
 ### Phase 1b: Cross-Platform Static Checks
 
 `sanity.bat` runs on Windows and cannot catch some Linux-CI-only failures. Also
-run the static checks 2a–2l documented in `pre-commit-check.chatmode.md`
+run the static checks 2a - 2l documented in `pre-commit-check.chatmode.md`
 (e.g. `_mock_sf_cli` fixture coverage, `.secrets.baseline` backslash paths,
 RUF100 stale `# noqa`, importlib script tracking). Report each as PASS/FAIL.
 
@@ -150,8 +150,8 @@ pytest -n auto
 
 ## Ready to Commit?
 
-[YES — all gates green, safe to commit.]
-[NO — fix the above issues first.]
+[YES - all gates green, safe to commit.]
+[NO - fix the above issues first.]
 ```
 
 ### Phase 4: Cross-Platform Warning
@@ -179,18 +179,18 @@ docs/reviews/code-review-YYYY-MM-DDTHH-MM-remediation.md  (the remediation)
 - [ ] Every `-remediation.md` file references the correct source review in
       its header (`Source review:` field).
 - [ ] If a review file exists with no remediation partner, flag as
-      ❌ NEEDS FIX — "Review findings not yet remediated."
+      ❌ NEEDS FIX - "Review findings not yet remediated."
 - [ ] If a remediation file exists with no review partner, flag as
-      ❌ NEEDS FIX — "Orphaned remediation file (missing source review)."
+      ❌ NEEDS FIX - "Orphaned remediation file (missing source review)."
 
 Report as PASS if no `docs/reviews/` directory exists (not all projects use
 formal reviews), or if all pairs are complete.
 
 ## Critical Rules
 
-- Run ALL checks — never skip one because others passed.
-- Report exact error text — don't paraphrase error messages.
-- Do NOT fix code yourself — only report. Fixes are the dev's job.
+- Run ALL checks - never skip one because others passed.
+- Report exact error text - don't paraphrase error messages.
+- Do NOT fix code yourself - only report. Fixes are the dev's job.
 - If pytest has failures, include the test name and assertion error.
 - If detect-secrets finds a potential secret, flag it as CRITICAL.
 - Compare test count against last known count (from docs) and flag if lower.
@@ -200,6 +200,6 @@ formal reviews), or if all pairs are complete.
   the `--cov-fail-under=90` threshold).
 - **⚠ Check `Changelog.md` is updated.** Before declaring the gate green,
   confirm that `Changelog.md` contains an entry for the current session's
-  changes (code, config, docs, tooling — anything). If no entry exists,
+  changes (code, config, docs, tooling - anything). If no entry exists,
   flag as ❌ NEEDS FIX. The Changelog must always be the last thing updated
   before committing.

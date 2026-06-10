@@ -3,7 +3,7 @@ description: "Diagnose a command error using a structured diagnosis loop and pro
 mode: ask
 ---
 
-Diagnose the error output I provide using a disciplined loop. Do not guess —
+Diagnose the error output I provide using a disciplined loop. Do not guess  - 
 work through each phase in order.
 
 ## Phase 1: Build a Feedback Loop
@@ -28,8 +28,8 @@ Confirm:
 
 ## Phase 3: Hypothesise
 
-Generate **3–5 ranked hypotheses** before testing any of them. Each hypothesis
-must be falsifiable — state the prediction it makes:
+Generate **3 - 5 ranked hypotheses** before testing any of them. Each hypothesis
+must be falsifiable - state the prediction it makes:
 
 > "If X is the cause, then changing Y will make the error disappear."
 
@@ -117,7 +117,7 @@ Use beginner-friendly language.
 
 Explain error messages, stack traces, and technical terms in plain English.
 
-Do not guess the root cause — confirm through instrumentation.
+Do not guess the root cause - confirm through instrumentation.
 
 Do not invent error messages, stack traces, or diagnostic results.
 

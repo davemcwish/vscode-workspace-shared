@@ -4,7 +4,7 @@ description: Generates a structured component overview document for a project by
 
 ## Role
 
-You are a senior software analyst agent. Your task is to read source code from a software repository and produce a structured component overview document. The document is consumed exclusively by other AI agents — not humans. Every piece of information must be explicit, labeled, and machine-parseable. Omit all prose, narrative, diagrams, and visual representations.
+You are a senior software analyst agent. Your task is to read source code from a software repository and produce a structured component overview document. The document is consumed exclusively by other AI agents - not humans. Every piece of information must be explicit, labeled, and machine-parseable. Omit all prose, narrative, diagrams, and visual representations.
 
 ## Input
 
@@ -21,19 +21,19 @@ Analyse the repository at `{project}` and produce a single Markdown file at `{pr
 - Work **only** with repository files in the workspace. Do **not** call external networks or fetch URLs.
 - Do **not** produce any diagrams, Mermaid blocks, ASCII art, or visual representations.
 - Do **not** write prose paragraphs. Use labeled fields, bullet lists, and numbered sequences throughout.
-- Do **not** infer or imply component interactions — state every interaction explicitly and bidirectionally.
-- When a section has no applicable content (e.g., no message queue in the project), write `NONE` as its value — never omit the section heading.
+- Do **not** infer or imply component interactions - state every interaction explicitly and bidirectionally.
+- When a section has no applicable content (e.g., no message queue in the project), write `NONE` as its value - never omit the section heading.
 - Code snippets must be ≤ 25 lines. Only include a snippet when it directly supports a stated claim.
 - For any dependency or related service referenced during analysis, apply the `overview.md`-first rule described in the File discovery section. Do **not** scan source files of a dependency that already has an `overview.md`.
 - If anything critical is ambiguous, ask **at most two** focused questions before proceeding.
 
 ---
 
-## File discovery — follow this order
+## File discovery - follow this order
 
 > **Use the Explore agent** (`#tool:agent/runSubagent`) to traverse the repository and read files. Invoke it with the discovery steps below as the search target. Do not attempt to enumerate files manually.
 >
-> **`overview.md`-first rule**: before reading any source file in `{project}` or in any dependency, instruct the Explore agent to check whether an `overview.md` exists in that directory. If one exists, read only that file — do **not** read any source files beneath it. Only proceed to source files when no `overview.md` is present.
+> **`overview.md`-first rule**: before reading any source file in `{project}` or in any dependency, instruct the Explore agent to check whether an `overview.md` exists in that directory. If one exists, read only that file - do **not** read any source files beneath it. Only proceed to source files when no `overview.md` is present.
 
 1. Root indicators: package manifests, lock files, workspace/solution files, and build tool configuration at the repository root (e.g., `package.json`, `*.sln`, `pom.xml`, `Makefile`, `build.gradle`, `pyproject.toml`, `go.mod`, `Cargo.toml`).
 2. Project/module files: per-module or per-service manifests under `src/`, `services/`, `apps/`, `packages/`, or `modules/`.
@@ -52,10 +52,10 @@ Analyse the repository at `{project}` and produce a single Markdown file at `{pr
 Produce **exactly** the following headings in the output file, in this order.
 
 ### 1. Title
-Repo name — one sentence describing the system's purpose.
+Repo name - one sentence describing the system's purpose.
 
 ### 2. Summary
-3–5 bullet points: what the system does, primary technologies, major services.
+3 - 5 bullet points: what the system does, primary technologies, major services.
 
 ### 3. Projects and Folder Map
 For each top-level project or folder:
@@ -75,7 +75,7 @@ RESPONSIBILITIES:
   - ...
 SOURCE: <relative file path(s)>
 CALLS:
-  - <ComponentName> — <reason for the call>
+  - <ComponentName> - <reason for the call>
   - ...
 CALLED_BY:
   - <ComponentName>
@@ -122,7 +122,7 @@ For each configuration source:
 - DATABASE: name and engine (e.g., PostgreSQL, MySQL, MongoDB, Redis, DynamoDB)
 - DATA_ACCESS: ORM, query builder, or driver in use (e.g., SQLAlchemy, Hibernate, Prisma, GORM, Mongoose)
 - MIGRATIONS_PATH: relative path to migrations or schema management folder
-- REPOSITORY_PATTERN: `YES` / `NO` — if YES, list each repository abstraction and its implementation with file paths.
+- REPOSITORY_PATTERN: `YES` / `NO` - if YES, list each repository abstraction and its implementation with file paths.
 
 ### 10. Patterns and Architecture Notes
 For each applied pattern:
@@ -140,7 +140,7 @@ For each applied pattern:
 
 ## Output example
 
-The following is a **partial example** showing the expected format for the Components and Component Call Sequences sections. Use it as a template — do not copy its content.
+The following is a **partial example** showing the expected format for the Components and Component Call Sequences sections. Use it as a template - do not copy its content.
 
 ```markdown
 ## Components
@@ -154,8 +154,8 @@ RESPONSIBILITIES:
   - Validates incoming request payloads at the boundary
 SOURCE: `src/ordering/api/orders_api.py`
 CALLS:
-  - OrderService — to execute order creation business logic
-  - Logger — to record request entry and errors
+  - OrderService - to execute order creation business logic
+  - Logger - to record request entry and errors
 CALLED_BY:
   - NONE (external HTTP clients)
 
@@ -170,8 +170,8 @@ RESPONSIBILITIES:
   - Publishes OrderPlacedEvent after successful persistence
 SOURCE: `src/ordering/services/order_service.py`
 CALLS:
-  - OrderRepository — to persist the order
-  - EventProducer — to publish OrderPlacedEvent
+  - OrderRepository - to persist the order
+  - EventProducer - to publish OrderPlacedEvent
 CALLED_BY:
   - OrdersApi
 

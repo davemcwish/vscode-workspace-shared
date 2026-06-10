@@ -7,8 +7,8 @@ description: "Mandatory complete-beginner docstring and comment-block rules for 
 
 ## Primary Rule
 
-Every source file in this project — Python, PowerShell, batch (`.bat`), and
-shell script (`.sh`) — must be understandable by a **complete beginner**:
+Every source file in this project - Python, PowerShell, batch (`.bat`), and
+shell script (`.sh`) - must be understandable by a **complete beginner**:
 someone who may never have written code professionally, who has never touched
 Salesforce APIs, and who cannot ask a senior developer for help.
 
@@ -26,24 +26,24 @@ understandable. They are **mandatory**, not optional.
 A beginner trusts docstrings completely and cannot spot an invented parameter
 description or a wrong return type the way an expert can. So accuracy is
 enforced first, and beginner-friendly prose is applied on top of confirmed
-facts — never instead of them.
+facts - never instead of them.
 
 Two distinct jobs, never mixed:
 
 1. **WHAT the code does** (parameters accepted, values returned, exceptions
-   raised, side effects performed) — a matter of FACT, extracted
+   raised, side effects performed) - a matter of FACT, extracted
    deterministically from reading the implementation. Never guessed.
-2. **HOW to explain it** (plain-English prose, examples, domain context) —
+2. **HOW to explain it** (plain-English prose, examples, domain context)  - 
    where your language skill applies, but ONLY to facts confirmed in job 1.
 
 Most docstring bugs come from letting job 2 invent facts that belong to job 1.
-A confidently wrong docstring is worse than a missing one — it actively
+A confidently wrong docstring is worse than a missing one - it actively
 misleads a beginner who has no way to verify it.
 
 ### Never Invent to Fill a Gap
 
 If you are unsure whether a function raises a particular exception, returns a
-specific type, or has a certain side effect — do NOT write a plausible-sounding
+specific type, or has a certain side effect - do NOT write a plausible-sounding
 description. Either confirm it from the code, or leave it out and flag it for
 manual review.
 
@@ -66,7 +66,7 @@ function's own implementation as the source of truth.
 
 ## The Doubt Rule
 
-**If you are ever unsure whether a docstring or comment block is needed —
+**If you are ever unsure whether a docstring or comment block is needed  - 
 always add it.**
 
 The cost of an unnecessary docstring is near-zero. The cost of a missing
@@ -87,13 +87,13 @@ This rule applies to:
 
 Add or update Google-style docstrings for:
 
-- Every **module** — immediately after any `from __future__ import annotations` line.
+- Every **module** - immediately after any `from __future__ import annotations` line.
 - Every **class** and its `__init__` method.
 - Every **public function** and method.
 - Every **private helper** (`_name`) whose purpose is not obvious from its name alone.
 - Every `parse_args()` and `main()` CLI function.
 - Every **complex pytest fixture** that sets up mocks, fake data, or multi-step state.
-- Every **test module** — a one-line description of what it covers is sufficient.
+- Every **test module** - a one-line description of what it covers is sufficient.
 
 ---
 
@@ -103,7 +103,7 @@ Use Google-style docstrings with these sections where applicable:
 
 | Section | When to include |
 | --- | --- |
-| **Summary** | Always — one sentence on the first line. |
+| **Summary** | Always - one sentence on the first line. |
 | **Args** | Any function with parameters. |
 | **Returns** | Any function that returns a non-`None` value. |
 | **Raises** | Any function that raises an exception. |
@@ -119,13 +119,13 @@ side effect instead (e.g. "Writes records to `output_path`").
 Before writing or updating any docstring, read the function's actual
 implementation to confirm:
 
-1. **What parameters it accepts** — names, types, valid values, defaults.
-2. **What it returns** — the actual type and meaning of the return value.
-3. **What exceptions it raises** — trace the `raise` statements and unhandled
+1. **What parameters it accepts** - names, types, valid values, defaults.
+2. **What it returns** - the actual type and meaning of the return value.
+3. **What exceptions it raises** - trace the `raise` statements and unhandled
    propagations.
-4. **What side effects it performs** — file writes, API calls, database
+4. **What side effects it performs** - file writes, API calls, database
    mutations, logging.
-5. **Whether it is read-only or mutating** — does it change external state?
+5. **Whether it is read-only or mutating** - does it change external state?
 
 Treat the implementation as the ONLY source of truth. Do not rely on:
 
@@ -135,7 +135,7 @@ Treat the implementation as the ONLY source of truth. Do not rely on:
 - what would make logical sense for a function with that name.
 
 If the implementation is unclear, write a cautious docstring describing what
-you can confirm and flag the ambiguity — do not fill the gap with invention.
+you can confirm and flag the ambiguity - do not fill the gap with invention.
 
 This rule parallels the documentation standard: just as CLI docs must come from
 `--help`, docstrings must come from reading the code.
@@ -144,11 +144,11 @@ This rule parallels the documentation standard: just as CLI docs must come from
 
 ## Complete-Beginner Content Requirements
 
-Every docstring must be written as if the reader is a **complete beginner** —
+Every docstring must be written as if the reader is a **complete beginner**  - 
 no assumed Python experience, no assumed Salesforce knowledge, no assumed
 familiarity with this codebase. Concretely, every docstring must:
 
-- Explain **Salesforce terms** on first use (e.g. "SOQL — Salesforce's version of SQL").
+- Explain **Salesforce terms** on first use (e.g. "SOQL - Salesforce's version of SQL").
 - Explain **why a safety check exists**, not just that it exists.
 - State whether the function is **read-only or mutating** when relevant.
 - Mention when data may contain **PII** (Personally Identifiable Information).
@@ -161,28 +161,28 @@ familiarity with this codebase. Concretely, every docstring must:
 | Term | Plain-English explanation to include |
 | --- | --- |
 | `__c` suffix | "(the `__c` suffix means this is a custom object, not a standard Salesforce one)" |
-| SOQL | "(Salesforce Object Query Language — Salesforce's version of SQL for querying its database)" |
-| Org | "(an 'org' is a single Salesforce environment — you typically have a Production org and one or more sandbox orgs for testing)" |
+| SOQL | "(Salesforce Object Query Language - Salesforce's version of SQL for querying its database)" |
+| Org | "(an 'org' is a single Salesforce environment - you typically have a Production org and one or more sandbox orgs for testing)" |
 | ContentDocumentLink | "(the Salesforce object that links an uploaded file to a record)" |
 | ContentVersion | "(represents one version of an uploaded file in Salesforce)" |
-| Access token / session | "(a temporary password-like string that proves you are logged in — it expires and must be refreshed)" |
+| Access token / session | "(a temporary password-like string that proves you are logged in - it expires and must be refreshed)" |
 | CLI alias | "(a short nickname you give to an org when you log in, so you don't have to type a long URL each time)" |
 
 ### Python Terms to Always Explain in Docstrings
 
 | Term | Plain-English explanation to include |
 | --- | --- |
-| Virtual environment | "(an isolated folder of Python packages — prevents conflicts between projects)" |
-| Type hint | "(a label on a function parameter that tells the reader — and the type checker — what kind of value is expected)" |
-| Decorator | "(a function that wraps another function to add behaviour — e.g. timing, retry logic)" |
+| Virtual environment | "(an isolated folder of Python packages - prevents conflicts between projects)" |
+| Type hint | "(a label on a function parameter that tells the reader - and the type checker - what kind of value is expected)" |
+| Decorator | "(a function that wraps another function to add behaviour - e.g. timing, retry logic)" |
 | monkeypatch | "(a pytest tool that temporarily replaces a real function with a fake one during testing)" |
-| Mocking | "(replacing a real dependency — like a network call — with a controlled fake during testing)" |
-| Generator | "(a function that yields values one at a time instead of returning them all at once — saves memory for large datasets)" |
-| Context manager | "(an object used with `with` statements that automatically handles setup and cleanup — e.g. opening and closing files)" |
+| Mocking | "(replacing a real dependency - like a network call - with a controlled fake during testing)" |
+| Generator | "(a function that yields values one at a time instead of returning them all at once - saves memory for large datasets)" |
+| Context manager | "(an object used with `with` statements that automatically handles setup and cleanup - e.g. opening and closing files)" |
 
 These tables are not exhaustive. Any term that would confuse a beginner who has
 never used Python or Salesforce professionally must be explained at the point it
-first appears in a docstring — not only in a separate glossary.
+first appears in a docstring - not only in a separate glossary.
 
 ---
 
@@ -232,7 +232,7 @@ Every batch script must open with a `REM` header block that explains:
 ```bat
 @echo off
 REM ============================================================================
-REM  example.bat — short description of what this script does
+REM  example.bat - short description of what this script does
 REM  Usage:  example.bat [optional-arg]
 REM
 REM  Steps:
@@ -275,7 +275,7 @@ Every shell script must open with a comment header:
 ```bash
 #!/usr/bin/env bash
 # ==============================================================================
-# example.sh — short description
+# example.sh - short description
 # Usage: ./example.sh [optional-arg]
 #
 # What it does:
@@ -289,7 +289,7 @@ Every shell script must open with a comment header:
 ## Module-Level Structure & Section Headers
 
 Every Python module must be organised into clearly labelled sections using
-boxed comment headers. This makes the file scannable — like chapters in a book:
+boxed comment headers. This makes the file scannable - like chapters in a book:
 
 ```python
 # ============================================================================
@@ -321,24 +321,24 @@ with 2-3 functions may omit the headers.
 When Copilot modifies any Python file, it must also review all **existing
 docstrings in the same file** using a 1:1 audit against the implementation.
 
-Perform this comparison mechanically — treat it as set arithmetic:
+Perform this comparison mechanically - treat it as set arithmetic:
 
-- **Invented** — docstring describes a parameter, return value, or exception
+- **Invented** - docstring describes a parameter, return value, or exception
   that does not exist in the code.
-- **Omitted** — code has a parameter, return path, or exception that the
+- **Omitted** - code has a parameter, return path, or exception that the
   docstring does not mention.
-- **Wrong type** — docstring states a type that disagrees with the type hint
+- **Wrong type** - docstring states a type that disagrees with the type hint
   or the actual implementation.
-- **Stale** — docstring describes behaviour the code no longer has.
-- **Too terse** — docstring is technically present but useless to a beginner.
+- **Stale** - docstring describes behaviour the code no longer has.
+- **Too terse** - docstring is technically present but useless to a beginner.
 
 If existing docstrings have any of the above issues:
 
-- **invented** — remove the false claim,
-- **omitted** — add the missing information,
-- **wrong type** — correct to match the implementation,
-- **stale** — rewrite to match current behaviour,
-- **too terse** — expand to beginner level,
+- **invented** - remove the false claim,
+- **omitted** - add the missing information,
+- **wrong type** - correct to match the implementation,
+- **stale** - rewrite to match current behaviour,
+- **too terse** - expand to beginner level,
 
 then improve them as part of the same change, **unless the user explicitly
 says not to**.
@@ -359,7 +359,7 @@ separate code-change task.
 
 ---
 
-## Docstrings Are Mandatory — But Accuracy Is Non-Negotiable
+## Docstrings Are Mandatory - But Accuracy Is Non-Negotiable
 
 Every Python source file must be understandable by a beginner without needing
 to ask another developer what the code is for.
@@ -381,6 +381,6 @@ Docstrings must explain:
 **But every claim in a docstring must be confirmed from the implementation.**
 A missing docstring is a gap. An inaccurate docstring is a trap. Beginners
 cannot tell the difference between a correct docstring and a confidently wrong
-one — so never guess, never copy from a similar function, and never write what
+one - so never guess, never copy from a similar function, and never write what
 "probably" happens. Read the code, confirm the facts, then explain them in
 plain English.

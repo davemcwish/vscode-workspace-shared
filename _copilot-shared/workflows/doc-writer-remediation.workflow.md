@@ -270,7 +270,7 @@ Use this format:
 
 ## Changelog
 
-[Entry added — date and file paths.]
+[Entry added - date and file paths.]
 
 ## Done Checklist
  - Scope selected.

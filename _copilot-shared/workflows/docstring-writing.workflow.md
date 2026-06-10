@@ -32,13 +32,13 @@ For project documentation (guides, README, Changelog), use
 
 Before writing anything, load these files:
 
-- `.github/skills/docstring.skill.md` — **all writing rules, accuracy rules,
+- `.github/skills/docstring.skill.md` - **all writing rules, accuracy rules,
   term tables, and the 1:1 audit method** (read this first)
-- `.github/instructions/docstrings.instructions.md` — audience, accuracy,
+- `.github/instructions/docstrings.instructions.md` - audience, accuracy,
   ground truth rules
-- `.github/instructions/python.instructions.md` — Python coding standards
-- `.github/instructions/salesforce.instructions.md` — Salesforce safety rules
-- `.github/instructions/security.instructions.md` — secrets and PII rules
+- `.github/instructions/python.instructions.md` - Python coding standards
+- `.github/instructions/salesforce.instructions.md` - Salesforce safety rules
+- `.github/instructions/security.instructions.md` - secrets and PII rules
 
 ---
 
@@ -65,13 +65,13 @@ Read the implementation (establish ground truth)
 
 For every function you will document, read its implementation to confirm:
 
-1. **What parameters it accepts** — names, types, valid values, defaults.
-2. **What it returns** — the actual type and meaning of the return value.
-3. **What exceptions it raises** — trace the `raise` statements and unhandled
+1. **What parameters it accepts** - names, types, valid values, defaults.
+2. **What it returns** - the actual type and meaning of the return value.
+3. **What exceptions it raises** - trace the `raise` statements and unhandled
    propagations.
-4. **What side effects it performs** — file writes, API calls, database
+4. **What side effects it performs** - file writes, API calls, database
    mutations, logging.
-5. **Whether it is read-only or mutating** — does it change external state?
+5. **Whether it is read-only or mutating** - does it change external state?
 
 Treat the implementation as the ONLY source of truth. Never rely on:
 
@@ -81,7 +81,7 @@ Treat the implementation as the ONLY source of truth. Never rely on:
 
 Rules:
 
-- Never copy a docstring from a sibling function — similar functions often have
+- Never copy a docstring from a sibling function - similar functions often have
   legitimately different behavior.
 - Never infer behavior from the function name alone.
 - If the implementation is unclear, write a cautious docstring and flag the
@@ -124,9 +124,9 @@ inaccurate, or missing required sections.
 
 ### The Two Jobs (Keep Them Separate)
 
-1. **WHAT the code does** — parameters, returns, exceptions, side effects.
+1. **WHAT the code does** - parameters, returns, exceptions, side effects.
    Extract from the implementation (Step 0). This is fact, not prose.
-2. **HOW to explain it** — beginner-friendly language, examples, domain context.
+2. **HOW to explain it** - beginner-friendly language, examples, domain context.
    Apply ONLY to facts confirmed in job 1.
 
 Never let job 2 (prose) invent facts that belong to job 1 (code reality).
@@ -135,12 +135,12 @@ Never let job 2 (prose) invent facts that belong to job 1 (code reality).
 
 For each function:
 
-- [ ] Summary line — one sentence explaining what it does.
-- [ ] "How it works" paragraph — for non-trivial algorithms.
-- [ ] `Args` section — every parameter with type, purpose, valid values.
-- [ ] `Returns` section — type and meaning (or describe side effect if `None`).
-- [ ] `Raises` section — every exception the function raises.
-- [ ] `Example` section — for any non-obvious function.
+- [ ] Summary line - one sentence explaining what it does.
+- [ ] "How it works" paragraph - for non-trivial algorithms.
+- [ ] `Args` section - every parameter with type, purpose, valid values.
+- [ ] `Returns` section - type and meaning (or describe side effect if `None`).
+- [ ] `Raises` section - every exception the function raises.
+- [ ] `Example` section - for any non-obvious function.
 - [ ] Domain terms explained on first use (see term tables in the skill).
 - [ ] Read-only vs mutating stated where relevant.
 - [ ] PII/security implications mentioned where relevant.
@@ -148,7 +148,7 @@ For each function:
 ### Style Rules
 
 - Use Google-style docstrings.
-- Plain English — write as if explaining to someone who has never coded.
+- Plain English - write as if explaining to someone who has never coded.
 - Short sentences. One idea per sentence.
 - Active voice: "Returns a list of..." not "A list is returned by..."
 - Expand every acronym on first use within each docstring.
@@ -167,7 +167,7 @@ For each docstring you wrote, perform a mechanical comparison:
 - The `Raises` section lists only exceptions the code actually raises.
 - Side effects described match the actual side effects.
 
-If anything fails this audit, fix the docstring — re-derive from the
+If anything fails this audit, fix the docstring - re-derive from the
 implementation, not from what you "meant" to write.
 
 ---
@@ -220,7 +220,7 @@ Docstring Writing Summary
 Functions Documented:  | Function | File | Type (new/updated) |
 Ground Truth Method:   Implementation read for each function.
 1:1 Audit Result:      No inventions, no omissions.
-Quality Checks:        ruff / mypy / pytest — PASS or FAIL
+Quality Checks:        ruff / mypy / pytest - PASS or FAIL
 ```
 
 ---

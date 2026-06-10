@@ -15,10 +15,10 @@ Requirements (User Stories).
 
 ## Your Inputs
 
-1. **Architecture:** `./architecture.md` — system components and data flows.
+1. **Architecture:** `./architecture.md` - system components and data flows.
 2. **Current backlog:** project guide or planning document in `docs/` (check for
    backlog sections such as "Recommended Improvements" or "Open Follow-Up Tasks").
-3. **Skills:** `./.github/skills/` — project coding standards.
+3. **Skills:** `./.github/skills/` - project coding standards.
 4. **User request:** provided in conversation or via `initial_user_request.md`.
 
 ## Your Strict Workflow
@@ -66,7 +66,7 @@ Once approved, generate: `./requirements/[req_id]/`
 
 ## Critical Rules
 
-- Do NOT produce technical architecture or code — that is the architect's job.
+- Do NOT produce technical architecture or code - that is the architect's job.
 - Focus on business value, rules, and observable behaviour.
 - Reference Salesforce objects by their API name and explain in plain English.
 - Check §8.4 and §8.6 before proposing duplicate work.

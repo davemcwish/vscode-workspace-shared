@@ -22,9 +22,9 @@
 
 ## Functions
 
-- Small and focused — one responsibility per function.
+- Small and focused - one responsibility per function.
 - Docstrings (Google style) explaining what, parameters, returns, raises, example.
-- No `print()` in production code — use `logging` module.
+- No `print()` in production code - use `logging` module.
 
 ## Error Handling
 

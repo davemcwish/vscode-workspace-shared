@@ -1,7 +1,7 @@
 # Updating Dependencies
 
 <!--
-  SCAFFOLD TEMPLATE — fill in the sections marked [FILL IN].
+  SCAFFOLD TEMPLATE - fill in the sections marked [FILL IN].
   This file was copied from _copilot-shared\scaffold\UPDATING_DEPENDENCIES.md.
 
   The pattern described here uses pip-tools (pip-compile) for Python projects.
@@ -64,13 +64,13 @@ pip-compile requirements-dev.in
 
 Before adding any new dependency:
 
-1. Confirm the package is actively maintained (check its repository — when was
+1. Confirm the package is actively maintained (check its repository - when was
    the last commit? Does it have recent releases?).
 2. Check for known vulnerabilities using the approved internal security process.
    If `pip-audit` is available in your environment: `pip-audit`.
-3. Prefer packages that are already in use in other internal projects — they are
+3. Prefer packages that are already in use in other internal projects - they are
    more likely to have been reviewed.
-4. Minimise transitive dependencies — a package that pulls in 20 others
+4. Minimise transitive dependencies - a package that pulls in 20 others
    increases the attack surface significantly.
 
 Cycode SCA (Software Composition Analysis) scans every PR for vulnerable

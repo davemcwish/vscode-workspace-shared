@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This skill defines the writing standard for all project documentation — guides,
+This skill defines the writing standard for all project documentation - guides,
 README, CONTRIBUTING, Changelog, architecture docs, and any other Markdown files
 in the project. It is the single source of truth used by both `doc-writer.agent.md`
 and `doc-writer.chatmode.md`.
@@ -13,11 +13,11 @@ and `doc-writer.chatmode.md`.
 
 All documentation must be written for **complete beginners** simultaneously:
 
-- **Complete beginner coders** — can copy-paste a command but may not know what
+- **Complete beginner coders** - can copy-paste a command but may not know what
   it does without an explanation.
-- **Complete beginner Python developers** — knows Python basics but hasn't used
+- **Complete beginner Python developers** - knows Python basics but hasn't used
   virtual environments, type hints, or package management before.
-- **Complete beginner domain users** — uses the project's domain system
+- **Complete beginner domain users** - uses the project's domain system
   day-to-day but has never written a query, used the CLI, or dealt with API
   concepts.
 
@@ -30,13 +30,13 @@ domain APIs, and never worked in a software team understand this?" If not, rewri
 
 A beginner trusts the documentation completely and cannot spot an invented flag
 or a wrong default. So accuracy is enforced first, and beginner-friendly wording
-is applied on top of confirmed facts — never instead of them.
+is applied on top of confirmed facts - never instead of them.
 
 Two distinct jobs, never mixed:
 
-1. **WHAT exists** (flags, defaults, choices, behaviour) — a matter of fact,
+1. **WHAT exists** (flags, defaults, choices, behaviour) - a matter of fact,
    extracted deterministically from the code. Never guessed.
-2. **HOW to explain it** (prose, examples, troubleshooting) — where your
+2. **HOW to explain it** (prose, examples, troubleshooting) - where your
    language skill applies, but only to facts confirmed in job 1.
 
 ### CLI Accuracy (read before writing any argument table)
@@ -76,7 +76,7 @@ This rule exists because of a real defect: a guide documented flags that did not
 ### Explain every technical term on first use
 
 Every acronym, domain-specific object name, or unfamiliar concept must be
-explained **at the point it first appears** — not only in a Glossary at the end.
+explained **at the point it first appears** - not only in a Glossary at the end.
 
 ```markdown
 <!-- Bad -->
@@ -84,27 +84,27 @@ The script queries ContentDocumentLink records.
 
 <!-- Good -->
 The script queries **ContentDocumentLink** records (the Salesforce object that
-links an uploaded file to a record — think of it as a join table between
+links an uploaded file to a record - think of it as a join table between
 "files" and "records").
 
 ### Always include
-- Prerequisites — what the reader needs before starting (tools, accounts, files).
-- Step-by-step instructions — numbered steps for any procedure.
-- Command examples — full commands, not just flag names.
-- Expected output — what success looks like.
-- Troubleshooting — at least the two or three most common failure modes.
-- Glossary or key concepts — at the end of any guide longer than two sections.
+- Prerequisites - what the reader needs before starting (tools, accounts, files).
+- Step-by-step instructions - numbered steps for any procedure.
+- Command examples - full commands, not just flag names.
+- Expected output - what success looks like.
+- Troubleshooting - at least the two or three most common failure modes.
+- Glossary or key concepts - at the end of any guide longer than two sections.
 
 ### Security and PII
 - Mention security implications whenever a function, script, or step touches credentials, tokens, or personal data.
-- Explain what PII means in context ("names and email addresses — treat as confidential").
+- Explain what PII means in context ("names and email addresses - treat as confidential").
 - Never include real usernames, passwords, tokens, or personal directory paths in examples. Use <your-alias>, <username>, or <your-path>.
 
 ## Markdown Format Rules
 These rules match .github/instructions/markdown.instructions.md:
 
 - One H1 per document.
-- Use ATX headings (#, ##) — not underline style.
+- Use ATX headings (#, ##) - not underline style.
 - Fence code blocks with a language identifier: ```python, ```bash, ```text.
 - Surround every heading with one blank line above and below (MD022).
 - Surround every list with one blank line above and below (MD032).
@@ -121,26 +121,26 @@ MD022 and MD032 are the two most common lint failures. They are auto-fixed by ma
 All Changelog entries must follow **Keep a Changelog** format:
 
 ```markdown
-## [YYYY-MM-DD] — short description
+## [YYYY-MM-DD] - short description
 
 ### Added
-- **`path/to/file.py`** — one sentence explaining what was added and why.
+- **`path/to/file.py`** - one sentence explaining what was added and why.
 
 ### Changed
-- **`path/to/file.py`** — one sentence explaining what changed.
+- **`path/to/file.py`** - one sentence explaining what changed.
 
 ### Fixed
-- **`path/to/file.py`** — one sentence describing the bug and the fix.
+- **`path/to/file.py`** - one sentence describing the bug and the fix.
 
 ### Removed
-- **`path/to/file.py`** — one sentence explaining what was removed and why.
+- **`path/to/file.py`** - one sentence explaining what was removed and why.
 
 ### Rules:
 
 - Use today's date, not a version number.
 - Every entry must reference the exact file path(s) affected.
-- Plain English descriptions — no commit-message shorthand.
-- One entry per session/PR — not one entry per file.
+- Plain English descriptions - no commit-message shorthand.
+- One entry per session/PR - not one entry per file.
 
 ## What to Update for Each Change Type
 
@@ -159,7 +159,7 @@ All Changelog entries must follow **Keep a Changelog** format:
 ## New Script Guide Template
 
 When creating a guide for a new script, use this structure. The CLI Arguments
-table MUST be populated from `--help` (see CLI Accuracy above) — never from
+table MUST be populated from `--help` (see CLI Accuracy above) - never from
 memory or a sibling guide.
 
 ```text
@@ -190,20 +190,20 @@ Common error message: cause and fix.
 Whether the script reads or writes sensitive data. How to handle output safely.
 
 ## Critical Constraints
-- Never invent features or behavior — only document what --help and the code confirm.
-- Never copy CLI details from a sibling guide — they may be wrong.
+- Never invent features or behavior - only document what --help and the code confirm.
+- Never copy CLI details from a sibling guide - they may be wrong.
 - Never remove security warnings or PII handling notes.
 - Never update docs for changes that haven't been implemented yet.
 - Always run --help and audit 1:1 before finalising any CLI table.
 - Always check architecture.md is still accurate after structural changes.
 - Always update test counts in guides if tests were added or removed.
-- The Changelog is mandatory after every session — not optional.
+- The Changelog is mandatory after every session - not optional.
 
 ## Reference Files
 When writing documentation, load these before editing:
 
-- .github/instructions/docs.instructions.md — audience, tone, accuracy rules
-- .github/instructions/markdown.instructions.md — Markdown style rules
-- .github/instructions/security.instructions.md — secrets and PII rules
-- architecture.md — current module structure
-- Changelog.md — existing entries to match format
+- .github/instructions/docs.instructions.md - audience, tone, accuracy rules
+- .github/instructions/markdown.instructions.md - Markdown style rules
+- .github/instructions/security.instructions.md - secrets and PII rules
+- architecture.md - current module structure
+- Changelog.md - existing entries to match format

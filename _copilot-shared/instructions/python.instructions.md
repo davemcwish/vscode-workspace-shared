@@ -16,14 +16,14 @@ description: "Python coding standards for complete-beginner maintainability."
 - Prefer `collections.abc` (`Iterable`, `Mapping`) over `typing` aliases.
 - Run `mypy` on `src/`, `scripts/`, and `tests/`. Each folder has its own
   relaxation level configured in `pyproject.toml`:
-  - `src/` — strict mode (full type checking).
-  - `scripts/` — `disallow_untyped_defs = false` (relaxed for ad-hoc scripts).
-  - `tests/` — `disallow_untyped_defs = false` and `disallow_incomplete_defs = false`
+  - `src/` - strict mode (full type checking).
+  - `scripts/` - `disallow_untyped_defs = false` (relaxed for ad-hoc scripts).
+  - `tests/` - `disallow_untyped_defs = false` and `disallow_incomplete_defs = false`
     (fixtures and parametrize make strict typing impractical).
 
 ## Docstrings Are Mandatory
 
-Every Python source file must be understandable by a **complete beginner** —
+Every Python source file must be understandable by a **complete beginner**  - 
 someone who may never have written Python professionally, who has never touched
 Salesforce APIs, and who cannot ask a colleague what the code does.
 
@@ -47,11 +47,11 @@ Docstrings must explain:
 
 ## Docstrings (beginner-friendly, Google style)
 Every module, class, and function must have a docstring covering:
-- **Summary** — one sentence.
-- **Args** — each parameter with type and meaning.
-- **Returns** — value and meaning.
-- **Raises** — exceptions and the conditions that trigger them.
-- **Example** — minimal usage block when the function is non-obvious.
+- **Summary** - one sentence.
+- **Args** - each parameter with type and meaning.
+- **Returns** - value and meaning.
+- **Raises** - exceptions and the conditions that trigger them.
+- **Example** - minimal usage block when the function is non-obvious.
 
 ## Naming
 - `snake_case` for functions/variables, `PascalCase` for classes,
@@ -66,7 +66,7 @@ Every module, class, and function must have a docstring covering:
 - Avoid mutable default arguments.
 - Validate important inputs and provide useful error messages rather than
   assuming callers always pass correct data.
-- Do not duplicate logic — extract reusable helpers, but avoid
+- Do not duplicate logic - extract reusable helpers, but avoid
   over-engineering prematurely.
 
 ## Errors & Logging
@@ -112,9 +112,9 @@ or in WSL and commit the result.
 
 
   overly dynamic patterns, or "magic" unless clearly justified.
-- Optimize for **readability before cleverness** — a new developer should
+- Optimize for **readability before cleverness** - a new developer should
   understand the code without extra explanation.
-- Never accept AI-generated suggestions blindly — review every Copilot
+- Never accept AI-generated suggestions blindly - review every Copilot
   suggestion for correctness, style compliance, and security before committing.
 
 ## Comments
@@ -123,7 +123,7 @@ or in WSL and commit the result.
 - Wording must be suitable for a **complete beginner**: no assumed Python
   experience, no assumed Salesforce knowledge, no assumed familiarity with
   this codebase. If a comment would confuse someone on their first day, rewrite it.
-- **Explain standard-library and third-party API calls on first use** — if a
+- **Explain standard-library and third-party API calls on first use** - if a
   function uses `re.fullmatch`, `dataclass`, `csv.DictWriter`, or similar for
   the first time in the file, add a brief inline comment explaining what it
   does and why it is used here.
@@ -134,12 +134,12 @@ or in WSL and commit the result.
 
 Every Python module must begin with a module docstring that includes:
 
-1. **What this module does** — one-sentence purpose.
-2. **Who/what calls it** — is it a CLI script, a library imported by scripts,
+1. **What this module does** - one-sentence purpose.
+2. **Who/what calls it** - is it a CLI script, a library imported by scripts,
    a test file?
-3. **Key concepts** — list any Salesforce terms, design patterns, or external
+3. **Key concepts** - list any Salesforce terms, design patterns, or external
    APIs a beginner would need to know.
-4. **Usage example** — a short code snippet showing how to import and call the
+4. **Usage example** - a short code snippet showing how to import and call the
    main function(s).
 
 This mirrors the file-header requirements in `html-css-javascript.instructions.md`

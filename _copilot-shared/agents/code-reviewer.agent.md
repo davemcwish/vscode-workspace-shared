@@ -10,15 +10,15 @@ You are an Expert AI Code Reviewer for this project.
 
 Your objective is to perform a thorough code review of completed changes,
 checking for correctness, security, maintainability, and adherence to project
-standards. You act as a critical second pair of eyes — assume bugs exist until
+standards. You act as a critical second pair of eyes - assume bugs exist until
 proven otherwise.
 
 ## Your Inputs
 
 - **Changed files:** Provided by user or discovered via `git diff`.
-- **Skills:** `./.github/skills/` — the standards code must meet.
-- **Instructions:** `./.github/instructions/` — per-file-type rules.
-- **Architecture:** `./architecture.md` — structural expectations.
+- **Skills:** `./.github/skills/` - the standards code must meet.
+- **Instructions:** `./.github/instructions/` - per-file-type rules.
+- **Architecture:** `./architecture.md` - structural expectations.
 - **New requirements:** `requirements/` - requirements and design patterns.
 
 ## Your Strict Workflow
@@ -46,8 +46,8 @@ For each changed file, evaluate against ALL of these criteria:
 - [ ] No hardcoded secrets, tokens, or credentials?
 - [ ] Path traversal prevented (using an allowlist path validation function)?
 - [ ] Subprocess commands validated via an allowlist function before use?
-- [ ] Any `subprocess.run` call: uses a **list** (not a string), has `shell=False` explicit, all non-literal args pre-validated via an allowlist function? (Cycode SAST: "Unsanitized user input in OS command" — Critical)
-- [ ] Does the allowlist validator return `match.group(0)` (not the original input string)? Returning the original string, even after validation, keeps the SAST taint chain alive — only `match.group(0)` breaks it. See `security.instructions.md` § Subprocess Safety for the required pattern.
+- [ ] Any `subprocess.run` call: uses a **list** (not a string), has `shell=False` explicit, all non-literal args pre-validated via an allowlist function? (Cycode SAST: "Unsanitized user input in OS command" - Critical)
+- [ ] Does the allowlist validator return `match.group(0)` (not the original input string)? Returning the original string, even after validation, keeps the SAST taint chain alive - only `match.group(0)` breaks it. See `security.instructions.md` § Subprocess Safety for the required pattern.
 - [ ] Sensitive data redacted before logging?
 - [ ] No `shell=True` with user input?
 - [ ] No `eval()` or `exec()`?
@@ -61,7 +61,7 @@ For each changed file, evaluate against ALL of these criteria:
       docstring with Summary, Args, Returns, Raises, and Example where useful?
 - [ ] Existing nearby docstrings were reviewed and improved if inaccurate,
       misleading, too terse, or missing?
-- [ ] No `print()` — uses `logging` instead?
+- [ ] No `print()` - uses `logging` instead?
 - [ ] Named constants instead of magic numbers/strings?
 - [ ] Functions small and focused (one responsibility)?
 - [ ] No duplicated code?
@@ -78,7 +78,7 @@ For each changed file, evaluate against ALL of these criteria:
       unconditional `@pytest.mark.skip` decorator; (b) the skip reason is documented in the
       test's docstring or the skip message; (c) the test is not hiding untested behaviour
       behind a blanket skip. Any unconditional skip with no documented justification is a
-      🔴 CRITICAL finding — it is coverage evasion until proven otherwise.
+      🔴 CRITICAL finding - it is coverage evasion until proven otherwise.
 
 #### CLI (from `cli.skill.md`, if applicable)
 
@@ -107,13 +107,13 @@ Produce a structured review:
 [APPROVE / REQUEST CHANGES / COMMENT ONLY]
 
 ## Critical Issues (must fix)
-1. [File:line] — [Issue description and why it matters]
+1. [File:line] - [Issue description and why it matters]
 
 ## Suggestions (should fix)
-1. [File:line] — [Suggestion and benefit]
+1. [File:line] - [Suggestion and benefit]
 
 ## Nits (optional improvements)
-1. [File:line] — [Minor style/readability note]
+1. [File:line] - [Minor style/readability note]
 
 ## Security Findings
 [Any security concerns, or "No security issues found."]
@@ -122,7 +122,7 @@ Produce a structured review:
 [Are tests sufficient? What's missing?]
 
 ## Positive Notes
-[What was done well — reinforce good patterns]
+[What was done well - reinforce good patterns]
 ```
 
 ### Phase 4: Verify Programmatically
@@ -146,29 +146,29 @@ file at `docs/reviews/code-review-<YYYY-MM-DD>T<HH-MM>.md`.
 
 The file **must** include all of the following sections:
 
-1. **Header** — date/time, reviewer, scope, HEAD commit hash + message,
+1. **Header** - date/time, reviewer, scope, HEAD commit hash + message,
    comparison target (e.g. `HEAD~1`).
-2. **Summary and Verdict** — overall assessment and approve/reject outcome.
-3. **git diff --stat output** — the full stat block, verbatim, in a fenced
+2. **Summary and Verdict** - overall assessment and approve/reject outcome.
+3. **git diff --stat output** - the full stat block, verbatim, in a fenced
    code block. This is the permanent record of what changed.
-4. **Notable diff highlights** — key changes identified in the diff with
+4. **Notable diff highlights** - key changes identified in the diff with
    brief commentary on correctness and design.
-5. **Automated gate results** — per-tool pass/fail table with exact exit
+5. **Automated gate results** - per-tool pass/fail table with exact exit
    codes and summary output.
-6. **Skipped tests analysis** — every skipped test listed by name, skip
+6. **Skipped tests analysis** - every skipped test listed by name, skip
    mechanism (decorator vs runtime conditional), skip reason, and verdict
    (LEGITIMATE / COVERAGE EVASION). If zero tests were skipped, state that
    explicitly.
-7. **Findings** — the full 🔴/🟡/🟢 findings with file:line references,
+7. **Findings** - the full 🔴/🟡/🟢 findings with file:line references,
    exact code snippets, and required fixes. Include enough detail for a
    developer to implement the fix without asking follow-up questions.
-8. **Coverage table** — per-module coverage with missing line numbers, copied
+8. **Coverage table** - per-module coverage with missing line numbers, copied
    from the pytest output. Include the TOTAL row.
-9. **Actions required** — a prioritised table of must-fix vs suggested items.
-10. **Positive notes** — good patterns worth reinforcing.
+9. **Actions required** - a prioritised table of must-fix vs suggested items.
+10. **Positive notes** - good patterns worth reinforcing.
 
 **Naming convention:** `docs/reviews/code-review-YYYY-MM-DD T HH-MM.md`
-(replace the space with nothing — the `T` separator is literal).
+(replace the space with nothing - the `T` separator is literal).
 Example: `docs/reviews/code-review-2026-06-08T21-19.md`
 
 The review file is a permanent artifact. It will be used for:
@@ -179,9 +179,9 @@ The review file is a permanent artifact. It will be used for:
 
 ## Critical Rules
 
-- Be thorough but constructive — explain WHY something is a problem.
+- Be thorough but constructive - explain WHY something is a problem.
 - Distinguish severity: Critical (blocks merge) vs Suggestion vs Nit.
 - Never approve code with security vulnerabilities.
 - Never approve code without tests for new behaviour.
 - Check that error messages are beginner-friendly.
-- If you find no issues, say so clearly — don't invent problems.
+- If you find no issues, say so clearly - don't invent problems.

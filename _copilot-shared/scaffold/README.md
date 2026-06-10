@@ -1,7 +1,7 @@
 # [Project Name]
 
 <!--
-  SCAFFOLD TEMPLATE — fill in the sections marked [FILL IN].
+  SCAFFOLD TEMPLATE - fill in the sections marked [FILL IN].
   Delete or collapse any section that doesn't apply to your project.
   This file was copied from _copilot-shared\scaffold\README.md.
 -->
@@ -28,7 +28,7 @@ project do? (2) Who is it for? (3) Why does it exist?]
 ## What This Project Contains
 
 [FILL IN: A table or list of the main scripts/modules/components and what each
-one does. Keep it high-level — detailed usage goes in docs/ or a separate guide.]
+one does. Keep it high-level - detailed usage goes in docs/ or a separate guide.]
 
 ---
 

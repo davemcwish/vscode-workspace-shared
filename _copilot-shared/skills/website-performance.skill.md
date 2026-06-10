@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This skill covers performance optimisation for **public websites** — ensuring
+This skill covers performance optimisation for **public websites** - ensuring
 pages load quickly for all visitors regardless of device, connection speed, or
 geographic location.
 
@@ -66,13 +66,13 @@ Google measures three key things about your page:
 
 ### How to Check Your Scores
 
-- **Google PageSpeed Insights** (pagespeed.web.dev) — enter your URL, get scores
+- **Google PageSpeed Insights** (pagespeed.web.dev) - enter your URL, get scores
   and specific recommendations.
-- **Lighthouse** — built into Chrome/Edge DevTools (F12 → Lighthouse tab). Run
+- **Lighthouse** - built into Chrome/Edge DevTools (F12 → Lighthouse tab). Run
   on mobile and desktop.
 - **Google Search Console** → Core Web Vitals report (shows scores for all pages
   as seen by real visitors).
-- **WebPageTest** (webpagetest.org) — advanced testing with different locations
+- **WebPageTest** (webpagetest.org) - advanced testing with different locations
   and connection speeds.
 
 ---
@@ -128,7 +128,7 @@ are the #1 cause of slow websites.
 
 | Rule | Why |
 | --- | --- |
-| Use modern formats (WebP or AVIF) | 30–50% smaller than JPEG/PNG at the same quality |
+| Use modern formats (WebP or AVIF) | 30 - 50% smaller than JPEG/PNG at the same quality |
 | Resize images to the size they display | A 4000px image displayed at 800px wastes bandwidth |
 | Compress images before upload | Tools: Squoosh (web), ShortPixel, TinyPNG |
 | Use responsive images (`srcset`) | Serve smaller images to mobile devices |
@@ -137,7 +137,7 @@ are the #1 cause of slow websites.
 
 ### What "Lazy Loading" Means
 
-By default, a browser loads ALL images on a page immediately — even ones at the
+By default, a browser loads ALL images on a page immediately - even ones at the
 bottom that the visitor can't see yet. Lazy loading tells the browser: "Only
 load this image when the visitor scrolls near it."
 
@@ -147,7 +147,7 @@ Add `loading="lazy"` to any image below the initial visible area:
 <img src="photo.webp" alt="Description" width="800" height="600" loading="lazy">
 ```
 
-Do NOT lazy-load the first visible image (above the fold) — it should load
+Do NOT lazy-load the first visible image (above the fold) - it should load
 immediately for good LCP.
 
 ### Image and Media Governance
@@ -216,8 +216,8 @@ easy.
 
 - Load CSS in the `<head>` (so the browser knows how to style the page before
   showing content).
-- Minimise CSS file size — remove unused rules (tools: PurgeCSS, UnCSS).
-- Avoid `@import` inside CSS files (causes sequential loading — slow).
+- Minimise CSS file size - remove unused rules (tools: PurgeCSS, UnCSS).
+- Avoid `@import` inside CSS files (causes sequential loading - slow).
 - For critical styles needed immediately, consider inlining them in the HTML.
 
 ### JavaScript
@@ -231,7 +231,7 @@ easy.
 ```
 
 - Add `async` only for scripts that don't depend on other scripts (e.g.
-  analytics — loads and runs as soon as ready, order not guaranteed).
+  analytics - loads and runs as soon as ready, order not guaranteed).
 - Remove JavaScript you don't use. Every library, plugin, and widget adds weight.
 - If you don't need JavaScript, don't include it. A simple brochure site may
   need zero JavaScript.
@@ -250,13 +250,13 @@ Set via HTTP headers:
 
 - `Cache-Control: public, max-age=31536000` for static assets with hashed
   filenames (CSS, JS, images that change filename when updated).
-- `Cache-Control: public, max-age=3600` for HTML pages (shorter — so visitors
+- `Cache-Control: public, max-age=3600` for HTML pages (shorter - so visitors
   see updates within an hour).
 
 ### CDN (Content Delivery Network)
 
 A CDN copies your website files to servers all around the world. When someone in
-Sydney visits your site, they get files from a server in Sydney — not London.
+Sydney visits your site, they get files from a server in Sydney - not London.
 
 **What it is:** A network of servers in many countries that serve your files from
 the closest location to each visitor.
@@ -271,7 +271,7 @@ the closest location to each visitor.
 Bunny CDN.
 
 **For static sites:** Platforms like Netlify, Cloudflare Pages, and Vercel
-include a CDN by default — no extra setup needed.
+include a CDN by default - no extra setup needed.
 
 ---
 
@@ -370,7 +370,7 @@ Where possible, test on:
 
 - Use a caching plugin (WP Super Cache, W3 Total Cache, or LiteSpeed Cache).
 - Use an image optimisation plugin (ShortPixel, Imagify, or Smush).
-- Minimise plugins — every plugin adds CSS and JavaScript.
+- Minimise plugins - every plugin adds CSS and JavaScript.
 - Choose a lightweight theme (avoid "multipurpose" themes that load everything).
 - Consider a CDN plugin or Cloudflare integration.
 
@@ -385,12 +385,12 @@ Where possible, test on:
 - Limited control over performance internals.
 - Focus on: optimising images before upload, limiting animations, removing
   unused sections, and avoiding excessive third-party integrations.
-- Accept that these platforms may never score 100 on Lighthouse — aim for
+- Accept that these platforms may never score 100 on Lighthouse - aim for
   "good enough" (green scores on Core Web Vitals).
 
 ### eCommerce (Shopify, WooCommerce, BigCommerce)
 
-- Product images are usually the biggest performance issue — optimise them.
+- Product images are usually the biggest performance issue - optimise them.
 - Limit apps/plugins (each adds scripts).
 - Use built-in lazy loading if available.
 - Test product listing pages (many images) and checkout flow separately.
@@ -471,13 +471,13 @@ Before going live:
 
 ## Interpreting a Lighthouse Report
 
-When you run Lighthouse, you get scores from 0–100:
+When you run Lighthouse, you get scores from 0 - 100:
 
 | Score Range | Meaning | Action |
 | --- | --- | --- |
-| 90–100 (green) | Good | Maintain — no urgent action |
-| 50–89 (orange) | Needs improvement | Review specific recommendations |
-| 0–49 (red) | Poor | Prioritise fixes — significant user impact |
+| 90 - 100 (green) | Good | Maintain - no urgent action |
+| 50 - 89 (orange) | Needs improvement | Review specific recommendations |
+| 0 - 49 (red) | Poor | Prioritise fixes - significant user impact |
 
 Lighthouse also provides **specific recommendations** ranked by estimated impact.
 Start with the highest-impact item and work down.

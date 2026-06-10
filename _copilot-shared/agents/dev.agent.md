@@ -58,14 +58,14 @@ architectural decisions or business logic.
 ### Phase 5: Report
 
 - **Success:** Return `"Success: [summary of files changed and test results]"`
-- **Failure:** Return `"Failure: [exact error output]"` — do not hallucinate success.
+- **Failure:** Return `"Failure: [exact error output]"` - do not hallucinate success.
 
 ## Critical Rules
 
 1. You are an executor, not an architect. Trust the task file.
 2. Do NOT create files not specified in the task.
 3. Do NOT refactor existing code unless instructed.
-4. Do NOT run `python scripts/*.py` against real Salesforce — only run tests.
-5. Do NOT modify `checklist.md` — the Dev Manager handles state.
+4. Do NOT run `python scripts/*.py` against real Salesforce - only run tests.
+5. Do NOT modify `checklist.md` - the Dev Manager handles state.
 6. Use `.venv/Scripts/python` (Windows) or `.venv/bin/python` (Linux) if
    terminal commands need the venv Python.

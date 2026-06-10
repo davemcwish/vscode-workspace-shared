@@ -90,7 +90,7 @@ Produce a plan with these sections:
 1. Maintenance summary
 2. Assumptions and missing context
 3. Website ownership and account control
-4. First 24–48 hours after launch
+4. First 24 - 48 hours after launch
 5. First month after launch
 6. Weekly checks
 7. Monthly checks
@@ -290,7 +290,7 @@ Use this default frequency unless the user's context suggests otherwise:
 
 | Frequency | Typical Checks |
 | --- | --- |
-| First 24–48 hours after launch | Site availability, HTTPS, forms, bookings, payments, contact links, analytics, search blocking, key mobile pages, social/profile links |
+| First 24 - 48 hours after launch | Site availability, HTTPS, forms, bookings, payments, contact links, analytics, search blocking, key mobile pages, social/profile links |
 | Weekly during first month | Enquiries, forms, orders, bookings, spam, broken links, obvious errors, analytics basics |
 | Monthly | Content accuracy, contact details, prices, opening hours, analytics, conversions, Search Console/Bing checks, reviews, social links |
 | Quarterly | Accessibility, performance, SEO, privacy/cookies, security, admin access, third-party integrations, backups/exports |
@@ -404,7 +404,7 @@ Include the ownership matrix.
 | Third-party integrations |  |  | Quarterly |  |
 | Incident response contact |  |  | Quarterly |  |
 
-## First 24–48 Hours After Launch
+## First 24 - 48 Hours After Launch
 
 - [ ] Website loads correctly.
 - [ ] HTTPS/SSL works.

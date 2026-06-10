@@ -8,7 +8,7 @@ description: "Documentation and code consistency checks to run before raising a 
 These checks catch documentation/code drift that automated linters miss.
 Run them mentally (or with Copilot) before raising a PR.
 
-## Documentation–Code Consistency
+## Documentation - Code Consistency
 
 - If you added or removed a sheet/column in a workbook, grep all docs and
   guides for the old count and update them.

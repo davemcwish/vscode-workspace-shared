@@ -2,16 +2,16 @@
 
 ## 1. Description
 
-**As a** [Persona — e.g., Salesforce admin, team lead, auditor]
-**I want to** [Action — e.g., export inactive user data as CSV]
-**So that** [Business value — e.g., I can report on licence usage quarterly]
+**As a** [Persona - e.g., Salesforce admin, team lead, auditor]
+**I want to** [Action - e.g., export inactive user data as CSV]
+**So that** [Business value - e.g., I can report on licence usage quarterly]
 
 ## 2. Context & Business Rules
 
-- **Trigger:** [What initiates this — e.g., user runs CLI command]
+- **Trigger:** [What initiates this - e.g., user runs CLI command]
 - **Salesforce objects:** [API names with plain-English explanation]
 - **Rules enforced:**
-  - [Rule 1 — e.g., "Only include users inactive > 90 days"]
+  - [Rule 1 - e.g., "Only include users inactive > 90 days"]
   - [Rule 2]
 
 ## 3. Non-Functional Requirements
@@ -56,16 +56,16 @@ Each requirement must be: **Testable**, **Unambiguous**, **Necessary**,
 **Scenario 1: [Happy path]**
 
 - **Given** [Precondition]
-- **When** [Action — e.g., user runs `python scripts/x.py --output-dir ./out`]
-- **Then** [Observable outcome — e.g., CSV file created with expected columns]
+- **When** [Action - e.g., user runs `python scripts/x.py --output-dir ./out`]
+- **Then** [Observable outcome - e.g., CSV file created with expected columns]
 
 **Scenario 2: [Edge case / error path]**
 
 - **Given** [Precondition]
 - **When** [Action]
-- **Then** [Observable outcome — e.g., clear error message, exit code 1]
+- **Then** [Observable outcome - e.g., clear error message, exit code 1]
 
 ## 6. Out of Scope
 
 - [Explicitly excluded items to keep this story small]
-- [e.g., "Does not include HTML report generation — separate story"]
+- [e.g., "Does not include HTML report generation - separate story"]

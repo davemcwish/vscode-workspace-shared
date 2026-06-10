@@ -3,13 +3,13 @@
 ## Purpose
 
 Generate local static HTML reports from existing CSV manifests and script
-outputs. These are read-only summary views — not web applications.
+outputs. These are read-only summary views - not web applications.
 
 ## Constraints
 
 - No JavaScript frameworks (React, Vue, Angular, etc.).
 - No build tools (webpack, vite, etc.).
-- No web server required for viewing — files open directly in a browser.
+- No web server required for viewing - files open directly in a browser.
 - Minimal or zero JavaScript; prefer CSS-only interactivity (details/summary,
   `:hover` states, print stylesheets).
 - Accessible: semantic HTML5, sufficient colour contrast, screen-reader friendly.

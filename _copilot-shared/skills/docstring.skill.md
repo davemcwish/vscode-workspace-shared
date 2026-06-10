@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Every Python file — and every batch, PowerShell, and shell script — in this
+Every Python file - and every batch, PowerShell, and shell script - in this
 project must be understandable to a beginner who has not worked on this
 repository before, including beginners who are new to Python, new to the
 project's domain, or both.
@@ -17,11 +17,11 @@ this project.
 
 All docstrings must be written for **complete beginners** simultaneously:
 
-- **Complete beginner coders** — can read Python but may not know what a
+- **Complete beginner coders** - can read Python but may not know what a
   decorator, context manager, or generator does without an explanation.
-- **Complete beginner Python developers** — knows basic syntax but hasn't used
+- **Complete beginner Python developers** - knows basic syntax but hasn't used
   type hints, virtual environments, or package management before.
-- **Complete beginner domain users** — uses the project's domain system
+- **Complete beginner domain users** - uses the project's domain system
   day-to-day but has never written a query, used the CLI, or dealt with API
   concepts.
 
@@ -35,14 +35,14 @@ this docstring without asking someone?" If not, rewrite.
 
 A beginner trusts docstrings completely and cannot spot an invented parameter
 or a wrong return type. So accuracy is enforced first, and beginner-friendly
-prose is applied on top of confirmed facts — never instead of them.
+prose is applied on top of confirmed facts - never instead of them.
 
 Two distinct jobs, never mixed:
 
 1. **WHAT the code does** (parameters accepted, values returned, exceptions
-   raised, side effects performed) — a matter of FACT, extracted
+   raised, side effects performed) - a matter of FACT, extracted
    deterministically from reading the implementation. Never guessed.
-2. **HOW to explain it** (plain-English prose, examples, domain context) —
+2. **HOW to explain it** (plain-English prose, examples, domain context)  - 
    where your language skill applies, but ONLY to facts confirmed in job 1.
 
 Most docstring bugs come from letting job 2 invent facts that belong to job 1.
@@ -53,11 +53,11 @@ Do not do this.
 Before writing or updating any docstring, read the function's implementation
 to confirm:
 
-1. What parameters it accepts — names, types, valid values, defaults.
-2. What it returns — the actual type and meaning of the return value.
-3. What exceptions it raises — trace the `raise` statements.
-4. What side effects it performs — file writes, API calls, mutations, logging.
-5. Whether it is read-only or mutating — does it change external state?
+1. What parameters it accepts - names, types, valid values, defaults.
+2. What it returns - the actual type and meaning of the return value.
+3. What exceptions it raises - trace the `raise` statements.
+4. What side effects it performs - file writes, API calls, mutations, logging.
+5. Whether it is read-only or mutating - does it change external state?
 
 Treat the implementation as the ONLY source of truth. Never rely on:
 
@@ -69,7 +69,7 @@ Treat the implementation as the ONLY source of truth. Never rely on:
 ### Never Invent to Fill a Gap
 
 If you are unsure whether a function raises a particular exception, returns a
-specific type, or has a certain side effect — do NOT write a plausible-sounding
+specific type, or has a certain side effect - do NOT write a plausible-sounding
 description. Either confirm it from the code, or leave it out and flag it for
 manual review. A missing note is recoverable; a confidently wrong note misleads
 a beginner who has no way to verify it.
@@ -90,7 +90,7 @@ implementation as the source of truth.
 
 ## The Doubt Rule
 
-**If you are ever unsure whether a docstring or comment block is needed —
+**If you are ever unsure whether a docstring or comment block is needed  - 
 always add it.**
 
 The cost of an unnecessary docstring is near-zero. The cost of a missing
@@ -105,13 +105,13 @@ scripts (`.bat`), PowerShell scripts (`.ps1`), and shell scripts (`.sh`).
 Every module, class, function, method, and complex pytest fixture must have a
 Google-style docstring that explains:
 
-- **What it does** — one clear summary sentence.
-- **Why it exists** — the business or technical reason (not obvious from the name alone).
-- **What each argument means** — type, purpose, valid values, and domain context where relevant.
-- **What it returns** — the type and meaning of the return value.
-- **What exceptions it may raise** — and under what conditions.
-- **Any domain or business assumptions** — system type, API limits, PII, production safety.
-- **A short usage example** — for any function that is non-obvious.
+- **What it does** - one clear summary sentence.
+- **Why it exists** - the business or technical reason (not obvious from the name alone).
+- **What each argument means** - type, purpose, valid values, and domain context where relevant.
+- **What it returns** - the type and meaning of the return value.
+- **What exceptions it may raise** - and under what conditions.
+- **Any domain or business assumptions** - system type, API limits, PII, production safety.
+- **A short usage example** - for any function that is non-obvious.
 
 Do **not** add empty sections. If a function returns `None`, describe its side
 effect instead.
@@ -120,7 +120,7 @@ effect instead.
 
 | Section | When to include |
 | --- | --- |
-| **Summary** | Always — one sentence on the first line. |
+| **Summary** | Always - one sentence on the first line. |
 | **How it works** | Any function whose algorithm is non-trivial. |
 | **Args** | Any function with parameters. |
 | **Returns** | Any function that returns a non-`None` value. |
@@ -198,7 +198,7 @@ class APISession:
 
     Authenticates using the project's configured credentials and wraps the
     resulting token in a ``requests.Session`` for downstream API calls.
-    Sessions are read-only by default — mutation requires explicit method
+    Sessions are read-only by default - mutation requires explicit method
     calls that confirm production safety.
 
     Args:
@@ -250,12 +250,12 @@ That means:
 - Write as if explaining to a smart colleague who has never coded before.
 - Prefer short sentences. One idea per sentence.
 - Use active voice: "Returns a list of..." not "A list is returned by...".
-- Explain domain terms on first use (e.g. "SOQL — Salesforce's version of SQL",
+- Explain domain terms on first use (e.g. "SOQL - Salesforce's version of SQL",
   or whatever domain-specific term applies to this project).
 - Explain why a safety check exists, not just that it exists.
 - Describe whether the function is **read-only or mutating**.
-- Mention if data may contain **PII** (Personally Identifiable Information —
-  names, email addresses, phone numbers — treat as confidential).
+- Mention if data may contain **PII** (Personally Identifiable Information  - 
+  names, email addresses, phone numbers - treat as confidential).
 - Explain expected file paths or directory structures.
 - Do not use unexplained abbreviations.
 
@@ -264,26 +264,26 @@ That means:
 | Term | Plain-English explanation to include |
 | --- | --- |
 | `__c` suffix | "(the `__c` suffix means this is a custom object, not a standard Salesforce one)" |
-| SOQL | "(Salesforce Object Query Language — Salesforce's version of SQL for querying its database)" |
-| Org | "(an 'org' is a single Salesforce environment — you typically have a Production org and one or more sandbox orgs for testing)" |
+| SOQL | "(Salesforce Object Query Language - Salesforce's version of SQL for querying its database)" |
+| Org | "(an 'org' is a single Salesforce environment - you typically have a Production org and one or more sandbox orgs for testing)" |
 | ContentDocumentLink | "(the Salesforce object that links an uploaded file to a record)" |
 | ContentVersion | "(represents one version of an uploaded file in Salesforce)" |
-| Visualforce | "(a Salesforce page-rendering technology — similar to a server-side HTML template)" |
-| Access token / session | "(a temporary password-like string that proves you are logged in — it expires and must be refreshed)" |
+| Visualforce | "(a Salesforce page-rendering technology - similar to a server-side HTML template)" |
+| Access token / session | "(a temporary password-like string that proves you are logged in - it expires and must be refreshed)" |
 | CLI alias | "(a short nickname you give to an org when you log in, so you don't have to type a long URL each time)" |
 
 ### Python Terms to Always Explain in Docstrings
 
 | Term | Plain-English explanation to include |
 | --- | --- |
-| Virtual environment | "(an isolated folder of Python packages — prevents conflicts between projects)" |
-| `pip install -e .` | "(installs the local package in editable mode — code changes take effect immediately without reinstalling)" |
-| Type hint | "(a label on a function parameter that tells the reader — and the type checker — what kind of value is expected)" |
-| Decorator | "(a function that wraps another function to add behaviour — e.g. timing, retry logic)" |
+| Virtual environment | "(an isolated folder of Python packages - prevents conflicts between projects)" |
+| `pip install -e .` | "(installs the local package in editable mode - code changes take effect immediately without reinstalling)" |
+| Type hint | "(a label on a function parameter that tells the reader - and the type checker - what kind of value is expected)" |
+| Decorator | "(a function that wraps another function to add behaviour - e.g. timing, retry logic)" |
 | monkeypatch | "(a pytest tool that temporarily replaces a real function with a fake one during testing)" |
-| Mocking | "(replacing a real dependency — like a network call — with a controlled fake during testing)" |
-| Generator | "(a function that yields values one at a time instead of returning them all at once — saves memory for large datasets)" |
-| Context manager | "(an object used with `with` statements that automatically handles setup and cleanup — e.g. opening and closing files)" |
+| Mocking | "(replacing a real dependency - like a network call - with a controlled fake during testing)" |
+| Generator | "(a function that yields values one at a time instead of returning them all at once - saves memory for large datasets)" |
+| Context manager | "(an object used with `with` statements that automatically handles setup and cleanup - e.g. opening and closing files)" |
 | `dataclass` | "(a Python class that automatically generates `__init__`, `__repr__`, and comparison methods from field declarations)" |
 
 These tables are not exhaustive. Any term that would confuse a beginner who has
@@ -306,18 +306,18 @@ Expand every acronym on first use within each docstring:
 
 ## Review Checklist (1:1 Audit)
 
-When reviewing or writing Python code, perform a 1:1 audit on every docstring —
+When reviewing or writing Python code, perform a 1:1 audit on every docstring  - 
 compare what the docstring claims against what the code does, treating it as set
 arithmetic:
 
-- **Invented** — docstring describes a parameter, return value, or exception
+- **Invented** - docstring describes a parameter, return value, or exception
   that does not exist in the code.
-- **Omitted** — code has a parameter, return path, or exception that the
+- **Omitted** - code has a parameter, return path, or exception that the
   docstring does not mention.
-- **Wrong type** — docstring states a type that disagrees with the type hint or
+- **Wrong type** - docstring states a type that disagrees with the type hint or
   implementation.
-- **Stale** — docstring describes behaviour the code no longer has.
-- **Too terse** — docstring exists but is useless to a beginner.
+- **Stale** - docstring describes behaviour the code no longer has.
+- **Too terse** - docstring exists but is useless to a beginner.
 
 Then check:
 
@@ -341,7 +341,7 @@ When reviewing or writing batch, PowerShell, or shell scripts, check for:
 - [ ] Each numbered step in a batch or shell script has a short explanatory
       `REM` or `#` comment.
 - [ ] Usage example is present in the header block.
-- [ ] When in doubt — add the comment. The Doubt Rule applies to all file types.
+- [ ] When in doubt - add the comment. The Doubt Rule applies to all file types.
 
 ---
 
@@ -372,9 +372,9 @@ There is no fully automated docstring enforcement tool in the standard pipeline.
 
 ## Critical Constraints
 
-- Never invent parameters, return values, or exceptions — only document what
+- Never invent parameters, return values, or exceptions - only document what
   the code confirms.
-- Never copy a docstring from a sibling function — they may be wrong or
+- Never copy a docstring from a sibling function - they may be wrong or
   different.
 - Never let beginner-friendly prose introduce inaccurate facts.
 - Never change runtime behaviour while improving a docstring.
@@ -383,5 +383,5 @@ There is no fully automated docstring enforcement tool in the standard pipeline.
 - Always perform the 1:1 audit (invented / omitted / wrong / stale / terse)
   before finalising any docstring.
 - Always explain domain terms on first use within each docstring.
-- If behaviour is unclear, write a cautious docstring and flag the ambiguity —
+- If behaviour is unclear, write a cautious docstring and flag the ambiguity  - 
   do not guess.

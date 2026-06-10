@@ -48,26 +48,26 @@ First understand:
 
 Use this sequence for beginners:
 
-1. **Clarify purpose** — what the website is for and what success looks like.
-2. **Clarify audience** — who needs the site and what they are trying to do.
-3. **Clarify geography** — country, region, service area, language, currency,
+1. **Clarify purpose** - what the website is for and what success looks like.
+2. **Clarify audience** - who needs the site and what they are trying to do.
+3. **Clarify geography** - country, region, service area, language, currency,
    tax, privacy, and support needs.
-4. **Clarify ownership** — who owns the domain, platform, content, analytics,
+4. **Clarify ownership** - who owns the domain, platform, content, analytics,
    social profiles, and maintenance.
-5. **Choose the simplest suitable platform** — do not over-engineer.
-6. **Plan content** — pages, copy, images, calls to action, trust signals, and
+5. **Choose the simplest suitable platform** - do not over-engineer.
+6. **Plan content** - pages, copy, images, calls to action, trust signals, and
    legal/policy content.
-7. **Plan findability** — SEO basics, local SEO if relevant, social previews,
+7. **Plan findability** - SEO basics, local SEO if relevant, social previews,
    business listings, and internal links.
-8. **Plan safety and compliance** — privacy, cookies, accessibility, security,
+8. **Plan safety and compliance** - privacy, cookies, accessibility, security,
    payments, claims, and regulated content.
-9. **Build and test** — test on mobile, desktop, slow connections, and real user
+9. **Build and test** - test on mobile, desktop, slow connections, and real user
    journeys.
-10. **Launch carefully** — check domains, SSL, redirects, forms, analytics,
+10. **Launch carefully** - check domains, SSL, redirects, forms, analytics,
     search tools, and backups.
-11. **Monitor after launch** — check errors, enquiries, analytics, search
+11. **Monitor after launch** - check errors, enquiries, analytics, search
     visibility, performance, and user feedback.
-12. **Maintain** — assign owners and review content, security, privacy,
+12. **Maintain** - assign owners and review content, security, privacy,
     performance, SEO, and social presence regularly.
 
 ---
@@ -102,8 +102,8 @@ If not provided, ask:
 
 There are two different kinds of HTML/CSS work in this project:
 
-1. **Static reports** — generated files for local or internal viewing.
-2. **Websites** — public or internal sites that may require platform choice,
+1. **Static reports** - generated files for local or internal viewing.
+2. **Websites** - public or internal sites that may require platform choice,
    hosting, domains, accessibility, privacy, social presence, maintenance, and
    launch planning.
 
@@ -469,7 +469,7 @@ For important sites, have a rollback plan:
 
 A website launch is not finished when the site appears online.
 
-During the first 24–48 hours, check:
+During the first 24 - 48 hours, check:
 
 - website loads correctly,
 - HTTPS works,

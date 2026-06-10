@@ -8,7 +8,7 @@ Improve docstrings in the selected Python file, folder, or changed files.
 ## Primary Goal
 
 Make the code easier for beginner developers and beginner Salesforce users to
-understand — while ensuring every claim is accurate.
+understand - while ensuring every claim is accurate.
 
 Do not change runtime behavior.
 
@@ -16,19 +16,19 @@ Do not change runtime behavior.
 
 Docstrings have two distinct jobs:
 
-1. **WHAT the code does** — parameters, returns, exceptions, side effects.
+1. **WHAT the code does** - parameters, returns, exceptions, side effects.
    A matter of FACT. Read the implementation to confirm.
-2. **HOW to explain it** — beginner prose, examples, domain context.
+2. **HOW to explain it** - beginner prose, examples, domain context.
    Applied ONLY to facts confirmed in job 1.
 
 **Before improving any docstring, read the function's implementation to
 establish ground truth.** Never improve wording while leaving inaccurate
-facts intact — fix facts first, then improve clarity.
+facts intact - fix facts first, then improve clarity.
 
 ### Never Invent to Fill a Gap
 
 If you are unsure whether a function raises a particular exception, returns a
-specific type, or has a certain side effect — do NOT write a plausible-sounding
+specific type, or has a certain side effect - do NOT write a plausible-sounding
 description. Either confirm it from the code, or leave it out and flag it for
 manual review.
 
@@ -81,14 +81,14 @@ standard.
 
 For each selected Python file:
 
-1. **Read the implementation first** — establish ground truth.
+1. **Read the implementation first** - establish ground truth.
 2. Then check the existing docstring using a 1:1 audit:
-   - **Invented** — claims something the code does not do → remove.
-   - **Omitted** — code does something undocumented → add.
-   - **Wrong type** — disagrees with implementation → correct.
-   - **Stale** — describes old behaviour → rewrite from implementation.
-   - **Too terse** — useless to a beginner → expand with plain English.
-   - **Missing** — no docstring → add.
+   - **Invented** - claims something the code does not do → remove.
+   - **Omitted** - code does something undocumented → add.
+   - **Wrong type** - disagrees with implementation → correct.
+   - **Stale** - describes old behaviour → rewrite from implementation.
+   - **Too terse** - useless to a beginner → expand with plain English.
+   - **Missing** - no docstring → add.
 
 Also check:
 

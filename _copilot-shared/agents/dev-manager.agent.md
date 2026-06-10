@@ -35,7 +35,7 @@ as completed.
 ### Phase 2: Delegation
 
 1. Construct full path (task file is in same directory as checklist).
-2. Call the **dev** agent with just the full path — no extra instructions.
+2. Call the **dev** agent with just the full path - no extra instructions.
 3. Wait for response.
 4. If response starts with `"Failure:"` → STOP and report error to user.
 
@@ -58,7 +58,7 @@ Return to Phase 1.
 
 - Only delegate ONE task at a time.
 - Never modify source code yourself.
-- Never skip a failed task — halt and report.
+- Never skip a failed task - halt and report.
 - The dev agent receives only the file path, nothing else.
 
 ---

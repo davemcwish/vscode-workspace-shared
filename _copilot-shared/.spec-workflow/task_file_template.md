@@ -1,6 +1,6 @@
 # Task [XXX]: [Task Name]
 
-> **Applied Skill:** `.github/skills/[name].skill.md` — [which rule is enforced]
+> **Applied Skill:** `.github/skills/[name].skill.md` - [which rule is enforced]
 
 ## 1. Plain-English Summary
 
@@ -63,11 +63,11 @@ def new_function(param: str) -> list[dict]:
 ## 5. Behaviour Changes
 
 - [What the user or developer will notice is different after this task.]
-- [Or: "None — internal refactor only."]
+- [Or: "None - internal refactor only."]
 
 ## 6. Behaviour Preserved
 
-- [What stays exactly the same — CLI interface, output format, exit codes, etc.]
+- [What stays exactly the same - CLI interface, output format, exit codes, etc.]
 
 ## 7. Gotchas
 
@@ -77,7 +77,7 @@ def new_function(param: str) -> list[dict]:
 
 ## 8. Validation Steps
 
-Run these commands — all must pass before this task is complete:
+Run these commands - all must pass before this task is complete:
 
 ```bash
 ruff check .

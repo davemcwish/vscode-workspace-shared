@@ -185,7 +185,7 @@ First ask or infer:
    - Accessibility checks
    - Performance checks
    - Rollback plan
-   - First 24–48 hour monitoring
+   - First 24 - 48 hour monitoring
    - First month review
    - Post-launch maintenance
 
@@ -345,7 +345,7 @@ HTTPS/SSL, testing, search submission where relevant, and launch recording.
 
 Explain what to do if launch fails or critical forms/pages stop working.
 
-## First 24–48 Hour Monitoring Plan
+## First 24 - 48 Hour Monitoring Plan
 
 List immediate checks after launch.
 

@@ -38,26 +38,26 @@ Any value that originates from user input, CLI arguments, environment variables,
 or Salesforce API responses is considered **tainted** by SAST tools (including
 Cycode). Before that value enters a `subprocess.run` / `subprocess.Popen` call:
 
-1. **Validate with an allowlist function** — call `validate_salesforce_alias()`
+1. **Validate with an allowlist function** - call `validate_salesforce_alias()`
    for org aliases, or write an equivalent validator that raises `ValueError` on
    unsafe characters. The validated value must be stored in a clearly named
    variable (e.g. `safe_alias`) and only that variable used in the command list.
-2. **The validator must return `match.group(0)`, not the original input** —
+2. **The validator must return `match.group(0)`, not the original input**  - 
    Cycode's taint-flow analysis traces the original tainted value through
    function return values. Returning `match.group(0)` from the regex fullmatch
    ensures the return value is derived from the match object itself, which SAST
    tools treat as sanitised output, breaking the taint chain completely.
-3. **Always use a list, never a string** — `subprocess.run(["sf", "org", safe_alias], ...)`
+3. **Always use a list, never a string** - `subprocess.run(["sf", "org", safe_alias], ...)`
    not `subprocess.run(f"sf org {alias}", ...)`.
-4. **Always pass `shell=False` explicitly** — it is the default, but making it
+4. **Always pass `shell=False` explicitly** - it is the default, but making it
    explicit documents intent and satisfies SAST tools.
-5. **All other elements must be string literals** — no f-strings, no
+5. **All other elements must be string literals** - no f-strings, no
    concatenation, no variables other than the pre-validated input.
 
 Example pattern (from `security.py` + `query_helpers.py`):
 
 ```python
-# In security.py — validator returns match.group(0) to break taint chain
+# In security.py - validator returns match.group(0) to break taint chain
 _SF_ALIAS_PATTERN = re.compile(r"[A-Za-z0-9_\-\.]{1,40}")
 
 def validate_salesforce_alias(alias: str) -> str:
@@ -67,7 +67,7 @@ def validate_salesforce_alias(alias: str) -> str:
         raise ValueError(f"Invalid Salesforce alias: {cleaned!r}")
     return match.group(0)  # ← derived from match object, not from `alias`
 
-# In query_helpers.py — caller stores result in clearly named variable
+# In query_helpers.py - caller stores result in clearly named variable
 safe_alias = validate_salesforce_alias(alias)   # raises ValueError if unsafe
 sf_command = str(shutil.which("sf"))            # resolved path, not user input
 command = [sf_command, "org", "display", "--target-org", safe_alias, "--json"]
@@ -80,7 +80,7 @@ This pattern satisfies Cycode's SAST rule at Critical severity.
 > Both values are identical at runtime. The difference is purely about SAST
 > taint-flow analysis. `cleaned` is derived from `alias` (tainted input), so
 > Cycode traces the taint forward through it. `match.group(0)` is derived from
-> the regex match object — an independent value — so the taint chain stops here.
+> the regex match object - an independent value - so the taint chain stops here.
 
 ### If Cycode Still Flags After Cross-Module Validation
 
@@ -93,10 +93,10 @@ calls `subprocess.run`, reassigning `safe_alias` to `_m.group(0)` from a local
 regex match:
 
 ```python
-# Step 1 — cross-module validator (defence-in-depth, raises on bad input)
+# Step 1 - cross-module validator (defence-in-depth, raises on bad input)
 safe_alias = validate_salesforce_alias(alias)
 
-# Step 2 — local inline re-verification so SAST sees match.group(0)
+# Step 2 - local inline re-verification so SAST sees match.group(0)
 # in this function's own scope (breaks the taint chain intra-procedurally)
 _m = re.fullmatch(r"[A-Za-z0-9_.@\-]{1,128}", safe_alias)
 if _m is None:
@@ -108,7 +108,7 @@ result = subprocess.run(command, capture_output=True, text=True, check=True, she
 ```
 
 After this reassignment, `safe_alias` is derived from a **locally-created**
-match object — Cycode's intra-procedural analysis can see the sanitisation
+match object - Cycode's intra-procedural analysis can see the sanitisation
 directly without needing cross-module tracing.
 
 ## File Path Safety (Cycode SAST Rule: "Unsanitized dynamic input in file path")
@@ -118,17 +118,17 @@ Salesforce API data (e.g. object names, record IDs) is considered **tainted**
 by Cycode. Before that path enters `open()`, `wb.save()`, `shutil.copy()`,
 or any other file I/O call:
 
-1. **Validate with `resolve_safe_path()`** — this ensures no path traversal
+1. **Validate with `resolve_safe_path()`** - this ensures no path traversal
    (`../`) or escape from the allowed base directory. Store the result in a
    variable named `safe_path`.
-2. **Add a local inline re-verification** — Cycode's intra-procedural analysis
+2. **Add a local inline re-verification** - Cycode's intra-procedural analysis
    cannot follow cross-module calls. Re-verify in the same function scope:
 
 ```python
-# Step 1 — cross-module validator (defence-in-depth, raises on bad path)
+# Step 1 - cross-module validator (defence-in-depth, raises on bad path)
 safe_path = resolve_safe_path(output_path)
 
-# Step 2 — local inline re-verification so SAST sees the taint chain
+# Step 2 - local inline re-verification so SAST sees the taint chain
 # broken within this function's own scope (Cycode intra-procedural rule).
 from pathlib import Path as _Path  # noqa: PLC0415
 
@@ -142,9 +142,9 @@ with open(safe_path, "w", ...) as fh:
     ...
 ```
 
-3. **The regex must be defined as a module-level constant** — use
+3. **The regex must be defined as a module-level constant** - use
    `_SAFE_PATH_PATTERN` to avoid recompilation on every call.
-4. **The `from pathlib import Path as _Path` must be inline** — because the
+4. **The `from pathlib import Path as _Path` must be inline** - because the
    top-level `Path` import is in `TYPE_CHECKING` (annotation-only). The local
    import provides a runtime reference for constructing the sanitised path.
 
@@ -163,7 +163,7 @@ with open(safe_path, "w", ...) as fh:
 - **Never** commit real usernames, personal directory paths, or
   workstation-specific paths in comments, docstrings, or example snippets.
 - Use `<you>`, `<username>`, or `<your-path>` as placeholders.
-- This includes Windows paths like `C:\Users\jsmith\...` — replace the username
+- This includes Windows paths like `C:\Users\jsmith\...` - replace the username
   portion with a generic placeholder.
 
 ## PRNG Usage (Cycode SAST Rule: "Usage of weak Pseudo-Random Number Generator")
@@ -182,7 +182,7 @@ etc.) and flags each one individually.
 | Context | Correct approach |
 | --- | --- |
 | **Security-sensitive** (tokens, session IDs, nonces, passwords) | Use `secrets.choice()`, `secrets.randbelow()`, `secrets.token_hex()`. Never suppress. |
-| **Non-security randomness where determinism is NOT required** (shuffling, sampling) | Use `random.SystemRandom()` — it uses `os.urandom()` internally and is Cycode-safe. |
+| **Non-security randomness where determinism is NOT required** (shuffling, sampling) | Use `random.SystemRandom()` - it uses `os.urandom()` internally and is Cycode-safe. |
 | **Non-security randomness where determinism IS required** (mock data, test fixtures, prototype generation) | **Eliminate the PRNG entirely.** Derive values from a counter or index using modular arithmetic. This is fully deterministic, Cycode cannot flag it, and it requires no suppression. |
 
 **Preferred pattern for deterministic mock data (no PRNG at all):**
@@ -190,7 +190,7 @@ etc.) and flags each one individually.
 ```python
 # Derive agency, agent, and date from the order counter.
 # Modular arithmetic gives realistic variety without any PRNG.
-# Every run produces identical results — no seed, no suppression needed.
+# Every run produces identical results - no seed, no suppression needed.
 for idx, _ in enumerate(range(count)):
     agency = _MOCK_AGENCIES[idx % len(_MOCK_AGENCIES)]
     agent  = agents[idx % len(agents)]
@@ -200,7 +200,7 @@ for idx, _ in enumerate(range(count)):
 **If `random.SystemRandom()` is used (non-deterministic, but Cycode-safe):**
 
 ```python
-rng = random.SystemRandom()  # Uses os.urandom() — Cycode-safe, no seed support
+rng = random.SystemRandom()  # Uses os.urandom() - Cycode-safe, no seed support
 value = rng.choice(options)
 ```
 
@@ -211,31 +211,31 @@ the test suite requires `test_is_deterministic_across_calls` to pass.
 
 The suppression comment `# nosec B311` on the instantiation line covers the
 local `bandit` scan. It has no effect on Cycode. Do not rely on it to clear
-Cycode SAST violations — use one of the code-level approaches above.
+Cycode SAST violations - use one of the code-level approaches above.
 
 ## Flask / Web Endpoint Security (OWASP)
 
 When building Flask REST API endpoints (e.g. the JOSHUA frontend), apply these
 rules in addition to the subprocess and file-path rules above.
 
-### Input Validation (OWASP A05 — Injection)
+### Input Validation (OWASP A05 - Injection)
 
-- **Validate ALL request data** — `request.get_json()`, `request.args`,
-  `request.form` — before use. Never trust client input.
+- **Validate ALL request data** - `request.get_json()`, `request.args`,
+  `request.form` - before use. Never trust client input.
 - **Use allowlists** over denylists. If a parameter should be one of 8 script
   names, check `if value not in ALLOWED_SCRIPTS`.
 - **Type-check** JSON fields: verify strings are strings, numbers are numbers.
-- **Limit lengths** — reject excessively long strings before further processing.
+- **Limit lengths** - reject excessively long strings before further processing.
 
 ### XSS Prevention (OWASP A05)
 
 - **Use `textContent`** (not `innerHTML`) when inserting dynamic text in the
   frontend JavaScript.
-- **Jinja2 auto-escapes by default** — never use `| safe` unless the content
+- **Jinja2 auto-escapes by default** - never use `| safe` unless the content
   is trusted and static.
 - **Never** construct HTML from user-submitted data in Python code. Use Jinja2
   templates with auto-escaping enabled.
-- **Content-Security-Policy header** — set it even for localhost to catch issues
+- **Content-Security-Policy header** - set it even for localhost to catch issues
   early:
 
 ```python
@@ -268,7 +268,7 @@ def _is_local_origin(request) -> bool:
 ### Authentication & Authorisation
 
 - For a single-user local app, authentication is not required.
-- **Bind to `127.0.0.1` only** — never `0.0.0.0`. This is the primary access
+- **Bind to `127.0.0.1` only** - never `0.0.0.0`. This is the primary access
   control mechanism.
 - If ever exposed beyond localhost, add authentication before deployment.
 
@@ -285,5 +285,5 @@ def _is_local_origin(request) -> bool:
   (1 MB).
 - **Limit subprocess runtime** with a timeout (see
   `flask-websocket-subprocess.instructions.md`).
-- **One job at a time** — reject concurrent launch requests.
+- **One job at a time** - reject concurrent launch requests.
 

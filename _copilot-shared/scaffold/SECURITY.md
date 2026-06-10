@@ -1,7 +1,7 @@
 # Security Policy
 
 <!--
-  SCAFFOLD TEMPLATE — fill in the sections marked [FILL IN].
+  SCAFFOLD TEMPLATE - fill in the sections marked [FILL IN].
   This file was copied from _copilot-shared\scaffold\SECURITY.md.
 -->
 
@@ -42,9 +42,9 @@ The project applies the following security controls:
 
 | Control | Tool / approach |
 | --- | --- |
-| Secrets scanning | `detect-secrets` — runs locally (sanity.bat) and in CI |
-| SAST | `bandit` — runs locally (sanity.bat) and in CI |
-| SAST (PR gate) | Cycode — runs on every pull request, blocks merge on findings |
+| Secrets scanning | `detect-secrets` - runs locally (sanity.bat) and in CI |
+| SAST | `bandit` - runs locally (sanity.bat) and in CI |
+| SAST (PR gate) | Cycode - runs on every pull request, blocks merge on findings |
 | SCA (dependencies) | [FILL IN: pip-audit if available; otherwise internal security review] |
 | Tainted input in subprocesses | Allowlist validation + `match.group(0)` taint-breaking (see `security.instructions.md`) |
 | Path traversal | `resolve_safe_path()` + local re-verification (see `security.instructions.md`) |

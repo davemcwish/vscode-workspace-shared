@@ -25,7 +25,7 @@ Allowed types: feat | fix | refactor | test | docs | chore
 
 ```markdown
 ## Summary
-<2–3 sentences: what this PR does and why>
+<2 - 3 sentences: what this PR does and why>
 
 ## Changes
 | File | What changed |

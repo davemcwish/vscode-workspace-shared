@@ -25,7 +25,7 @@ manifest first.
 | ðŸ”² To create | The artifact is recommended but does not exist yet |
 | ðŸ”² To verify | The artifact may exist but needs confirmation |
 | âšª Optional | Useful for some projects but not required for every website |
-| ðŸ”— External | Depends on tools, services, or documentation outside this workspace |
+| ðŸ” -  External | Depends on tools, services, or documentation outside this workspace |
 
 ---
 

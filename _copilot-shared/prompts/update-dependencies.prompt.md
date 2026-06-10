@@ -85,4 +85,4 @@ Explain what pip-compile does and why `.txt` files should not be hand-edited.
 
 Do not invent version numbers, security advisories, or validation results.
 
-Do not update `.txt` files directly — always use pip-compile.
+Do not update `.txt` files directly - always use pip-compile.

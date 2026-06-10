@@ -28,7 +28,7 @@ For the file currently in focus:
    - never hit a real org,
    - mock `subprocess.run` during module load (prevents CLI auth),
    - mock `requests.get` and `requests.Session` for all HTTP calls,
-   - do NOT use or mock `simple_salesforce` — this project uses `requests`
+   - do NOT use or mock `simple_salesforce` - this project uses `requests`
      directly via `sf_get()` / `build_client()`,
    - use `sf_env` for alias environment variables.
 

@@ -3,7 +3,7 @@
 ## Purpose
 
 This skill covers **privacy law, cookie consent, accessibility legislation, and
-legal requirements** for public websites — across all major jurisdictions
+legal requirements** for public websites - across all major jurisdictions
 worldwide.
 
 It is written for **complete beginners** who have no legal background and may not
@@ -63,10 +63,10 @@ Ask these questions:
 2. **Do you specifically target certain countries?** (e.g. pricing in their
    currency, advertising in their market, content in their language)
 3. **Do you collect any personal data?** (Names, emails, IP addresses, device
-   fingerprints, location data, browsing behaviour — all count.)
+   fingerprints, location data, browsing behaviour - all count.)
 4. **Do you use cookies or similar tracking technology?**
 5. **Does your site have special categories of visitors?** (Children, patients,
-   students — additional protections apply.)
+   students - additional protections apply.)
 
 If the answer to questions 3 or 4 is "yes" AND your visitors come from regulated
 jurisdictions, compliance is required.
@@ -102,11 +102,11 @@ confirms otherwise.
 
 ## Privacy Laws by Jurisdiction
 
-### EU / EEA — General Data Protection Regulation (GDPR)
+### EU / EEA - General Data Protection Regulation (GDPR)
 
 | Aspect | Detail |
 | --- | --- |
-| **Who it applies to** | Any website that processes personal data of people in the EU/EEA — regardless of where the website owner is located |
+| **Who it applies to** | Any website that processes personal data of people in the EU/EEA - regardless of where the website owner is located |
 | **What counts as personal data** | Name, email, IP address, device ID, location data, cookies, any information that can identify a person directly or indirectly |
 | **Consent requirement** | Explicit, informed, freely given consent BEFORE collecting non-essential data |
 | **Cookie rules** | Only essential cookies (those needed for the site to function) may be set without consent. All others require explicit opt-in |
@@ -116,29 +116,29 @@ confirms otherwise.
 | **Penalties** | Up to €20 million or 4% of global annual turnover (whichever is higher) |
 | **Key practical actions** | Cookie consent banner (opt-in), privacy policy, data processing records, DPA with processors |
 
-### United Kingdom — UK GDPR + PECR
+### United Kingdom - UK GDPR + PECR
 
 | Aspect | Detail |
 | --- | --- |
 | **Who it applies to** | Any website processing personal data of UK residents |
 | **Differences from EU GDPR** | Nearly identical in practice; enforced by the ICO (Information Commissioner's Office); UK has its own adequacy decisions |
-| **Cookie rules (PECR)** | Same as EU — explicit consent before non-essential cookies |
+| **Cookie rules (PECR)** | Same as EU - explicit consent before non-essential cookies |
 | **Privacy policy** | Same requirements as EU GDPR |
 | **Penalties** | Up to £17.5 million or 4% of global turnover |
-| **Key practical actions** | Same as EU GDPR — treat as equivalent |
+| **Key practical actions** | Same as EU GDPR - treat as equivalent |
 
-### California, USA — CPRA (California Privacy Rights Act)
+### California, USA - CPRA (California Privacy Rights Act)
 
 | Aspect | Detail |
 | --- | --- |
 | **Who it applies to** | Businesses that collect personal information of California residents and meet applicable revenue, data-volume, or data-sharing thresholds. Thresholds can change or be adjusted, so verify current California Privacy Protection Agency guidance before deciding whether CPRA applies. |
-| **Consent model** | Opt-OUT (not opt-in) — you can collect data but must allow users to say "don't sell/share my data" |
+| **Consent model** | Opt-OUT (not opt-in) - you can collect data but must allow users to say "don't sell/share my data" |
 | **Required disclosures** | "Do Not Sell or Share My Personal Information" link; privacy policy listing categories of data collected and purposes |
 | **Cookie rules** | No specific cookie consent requirement, but sale/sharing of data (including through cookies) requires opt-out mechanism |
 | **Penalties** | $2,500 per unintentional violation, $7,500 per intentional violation |
 | **Key practical actions** | Privacy policy, notice at collection where required, mechanism for opt-out of sale/sharing where applicable, honour applicable consumer rights requests, and verify current response deadlines and threshold rules. |
 
-### United States — Other State Privacy Laws
+### United States - Other State Privacy Laws
 
 California is not the only U.S. state with privacy obligations.
 
@@ -163,7 +163,7 @@ Recommended documentation:
 | --- | --- | --- | --- | --- |
 | [State / law] | [Yes / No / Unsure] | [Reason] | [Actions] | [Date] |
 
-### Brazil — LGPD (Lei Geral de Proteção de Dados)
+### Brazil - LGPD (Lei Geral de Proteção de Dados)
 
 | Aspect | Detail |
 | --- | --- |
@@ -174,7 +174,7 @@ Recommended documentation:
 | **Penalties** | Up to 2% of revenue in Brazil (capped at R$50 million per violation) |
 | **Key practical actions** | Cookie consent, privacy policy in Portuguese (if targeting Brazil), DPO appointment in some cases |
 
-### Australia — Privacy Act 1988 + Australian Privacy Principles (APPs)
+### Australia - Privacy Act 1988 + Australian Privacy Principles (APPs)
 
 | Aspect | Detail |
 | --- | --- |
@@ -185,7 +185,7 @@ Recommended documentation:
 | **Penalties** | Up to A$50 million for serious/repeated breaches (post-2022 amendments) |
 | **Key practical actions** | Privacy policy (even if no cookie banner is legally required, transparency is expected), data breach notification scheme |
 
-### South Africa — POPIA (Protection of Personal Information Act)
+### South Africa - POPIA (Protection of Personal Information Act)
 
 | Aspect | Detail |
 | --- | --- |
@@ -196,7 +196,7 @@ Recommended documentation:
 | **Penalties** | Fines up to R10 million and/or imprisonment up to 10 years for serious offences |
 | **Key practical actions** | Cookie consent, privacy policy, information officer registration |
 
-### Singapore — PDPA (Personal Data Protection Act)
+### Singapore - PDPA (Personal Data Protection Act)
 
 | Aspect | Detail |
 | --- | --- |
@@ -206,7 +206,7 @@ Recommended documentation:
 | **Penalties** | Up to S$1 million or 10% of annual turnover |
 | **Key practical actions** | Consent mechanism, privacy policy, DPO appointment, data breach notification within 3 days |
 
-### Canada — PIPEDA (Personal Information Protection and Electronic Documents Act)
+### Canada - PIPEDA (Personal Information Protection and Electronic Documents Act)
 
 | Aspect | Detail |
 | --- | --- |
@@ -282,7 +282,7 @@ If unsure, verify before launch and document the decision.
    "Accept." No hidden settings, tiny text, or guilt-tripping.
 4. **Revocable:** Users must be able to change their choice later.
 5. **Documented:** Keep records of what consent was given and when.
-6. **Renewed:** Consent expires — ask again after 6–12 months.
+6. **Renewed:** Consent expires - ask again after 6 - 12 months.
 
 ### Cookie Consent Tools
 
@@ -291,7 +291,7 @@ If unsure, verify before launch and document the decision.
 | Cookiebot | From €9/month | High | Auto-scans cookies; good compliance |
 | CookieYes | From $10/month | High | User-friendly; good free tier |
 | Osano | From $0 (limited) | Medium | Privacy platform; more features |
-| Complianz (WordPress) | Free–€45/year | High | WordPress plugin |
+| Complianz (WordPress) | Free - €45/year | High | WordPress plugin |
 | Built-in (Squarespace, Wix) | Included | High | Limited customisation |
 
 ---
@@ -320,22 +320,22 @@ If the table changes, update the privacy policy.
 Every website that collects ANY personal data needs a privacy policy. It must
 be written in plain language (not legalese) and cover:
 
-1. **Who you are** — business name, contact details, data protection officer
+1. **Who you are** - business name, contact details, data protection officer
    (if applicable).
-2. **What data you collect** — list every type (names, emails, IP addresses,
+2. **What data you collect** - list every type (names, emails, IP addresses,
    cookies, device info, location).
-3. **How you collect it** — forms, cookies, analytics, third-party services.
-4. **Why you collect it** — the legal basis (consent, contract, legitimate
+3. **How you collect it** - forms, cookies, analytics, third-party services.
+4. **Why you collect it** - the legal basis (consent, contract, legitimate
    interest).
-5. **Who you share it with** — third parties, sub-processors (Google Analytics,
+5. **Who you share it with** - third parties, sub-processors (Google Analytics,
    email marketing tool, hosting provider).
-6. **Where data is stored** — which country/region (matters for international
+6. **Where data is stored** - which country/region (matters for international
    transfers).
-7. **How long you keep it** — retention periods for each data type.
-8. **Security measures** — how you protect the data.
-9. **User rights** — what rights visitors have and how to exercise them.
-10. **How to contact you** — email or form for data requests.
-11. **How to complain** — link to the relevant supervisory authority.
+7. **How long you keep it** - retention periods for each data type.
+8. **Security measures** - how you protect the data.
+9. **User rights** - what rights visitors have and how to exercise them.
+10. **How to contact you** - email or form for data requests.
+11. **How to complain** - link to the relevant supervisory authority.
 12. **When the policy was last updated.**
 
 ### Common Mistakes
@@ -350,7 +350,7 @@ be written in plain language (not legalese) and cover:
 
 ## Accessibility Legislation
 
-Accessibility law requires websites to be usable by people with disabilities —
+Accessibility law requires websites to be usable by people with disabilities  - 
 including those using screen readers, keyboard navigation, voice control, or
 other assistive technologies.
 
@@ -378,17 +378,17 @@ applies.
 
 Key requirements at a beginner level include:
 
-- **Text alternatives** — every image has descriptive alt text.
-- **Keyboard navigation** — everything can be reached without a mouse.
-- **Colour contrast** — text has sufficient contrast against its background
+- **Text alternatives** - every image has descriptive alt text.
+- **Keyboard navigation** - everything can be reached without a mouse.
+- **Colour contrast** - text has sufficient contrast against its background
   (4.5:1 minimum for normal text).
-- **Resizable text** — content remains usable at 200% zoom.
-- **Headings and structure** — content uses proper heading hierarchy.
-- **Form labels** — every form field has a visible, associated label.
-- **Error identification** — form errors are clearly described in text.
-- **Focus visible** — keyboard users can see which element is currently focused.
-- **Captions** — videos have captions for deaf/hard-of-hearing users.
-- **No time limits** — or the ability to extend them.
+- **Resizable text** - content remains usable at 200% zoom.
+- **Headings and structure** - content uses proper heading hierarchy.
+- **Form labels** - every form field has a visible, associated label.
+- **Error identification** - form errors are clearly described in text.
+- **Focus visible** - keyboard users can see which element is currently focused.
+- **Captions** - videos have captions for deaf/hard-of-hearing users.
+- **No time limits** - or the ability to extend them.
 
 See `accessibility.skill.md` for comprehensive implementation guidance.
 
@@ -402,7 +402,7 @@ See `accessibility.skill.md` for comprehensive implementation guidance.
 | Pa11y (command line) | Free | Automated testing for CI/CD |
 | Manual testing | Free | Keyboard navigation, screen reader testing |
 
-Automated tools catch approximately 30–40% of accessibility issues. Manual
+Automated tools catch approximately 30 - 40% of accessibility issues. Manual
 testing (especially with a screen reader) is essential for full coverage.
 
 ### Recommended Accessibility Build Target
@@ -438,7 +438,7 @@ You should have Terms and Conditions covering:
 - Dispute resolution.
 - Governing law (which country's law applies).
 
-For simple brochure sites with a contact form only, Terms may not be necessary —
+For simple brochure sites with a contact form only, Terms may not be necessary  - 
 a Privacy Policy is usually sufficient.
 
 ---
@@ -561,8 +561,8 @@ Before going live:
 | Monthly | Check if new third-party scripts were added (each needs privacy policy mention) |
 | Quarterly | Review cookie scan (new cookies from plugin updates?) |
 | Biannually | Accessibility retest (especially after design changes) |
-| Annually | Full compliance audit — have laws changed? New jurisdictions to consider? |
-| On every change | If adding a new form, embed, analytics tool, or third-party service — update privacy policy |
+| Annually | Full compliance audit - have laws changed? New jurisdictions to consider? |
+| On every change | If adding a new form, embed, analytics tool, or third-party service - update privacy policy |
 | On legal changes | Monitor for law updates in applicable jurisdictions |
 
 ---
@@ -602,20 +602,20 @@ Also get legal advice when:
   confirm whether thresholds or sector-specific rules apply.
 - Never rely on stale legal, pricing, platform, cookie, advertising, or
   accessibility information; verify current sources before final decisions.
-- Never assume privacy law doesn't apply because you're "too small" — many laws
+- Never assume privacy law doesn't apply because you're "too small" - many laws
   have no revenue threshold.
 - Never use a privacy policy template without verifying it matches your actual
   data practices.
 - Never load tracking cookies before consent in EU/UK jurisdictions.
 - Never hide the "Reject" option in cookie banners.
-- Never assume a country has no privacy law — check first.
-- Never copy another site's privacy policy — yours must reflect YOUR practices.
+- Never assume a country has no privacy law - check first.
+- Never copy another site's privacy policy - yours must reflect YOUR practices.
 - Never store more personal data than you need, or keep it longer than necessary.
 - Always disclose ALL third-party services that receive visitor data.
 - Always provide a working mechanism for data subject rights requests.
 - Always test accessibility with keyboard navigation and, where practical, a
   screen reader; automated tools alone are not enough.
-- Always review compliance annually — laws change frequently.
+- Always review compliance annually - laws change frequently.
 - Always document your compliance decisions for future reference.
 - Always document legal and compliance decisions so future maintainers know
   what was checked, when, and why.

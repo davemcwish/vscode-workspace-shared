@@ -1,4 +1,4 @@
-﻿---
+---
 applyTo: "tests/**/*.py"
 description: "Pytest conventions and coverage expectations."
 ---
@@ -41,11 +41,11 @@ so a plain `pytest` run collects coverage for both folders automatically.
 When writing tests for a new feature, use a **vertical-slice** approach:
 
 ```text
-WRONG (horizontal — all tests first, then all implementation):
+WRONG (horizontal - all tests first, then all implementation):
   RED:   test1, test2, test3, test4, test5
   GREEN: impl1, impl2, impl3, impl4, impl5
 
-RIGHT (vertical — one test, one implementation, repeat):
+RIGHT (vertical - one test, one implementation, repeat):
   RED→GREEN: test1→impl1
   RED→GREEN: test2→impl2
   RED→GREEN: test3→impl3
@@ -59,7 +59,7 @@ RIGHT (vertical — one test, one implementation, repeat):
 - Tests should verify behaviour through **public interfaces**, not
   implementation details. If renaming an internal function breaks a test but
   behaviour hasn't changed, that test was testing implementation.
-- A good test reads like a specification — it describes what the system does,
+- A good test reads like a specification - it describes what the system does,
   not how it does it internally.
 
 ## Time Stability
@@ -138,7 +138,7 @@ def client(app):
     return app.test_client()
 ```
 
-Test endpoints by calling the client directly — no real HTTP server needed:
+Test endpoints by calling the client directly - no real HTTP server needed:
 
 ```python
 def test_get_config_returns_json(client) -> None:

@@ -9,10 +9,10 @@ description: "Flask 3.x REST API, Flask-SocketIO WebSocket, and subprocess.Popen
 
 These rules apply when building local web-based frontends using:
 
-- **Flask 3.x** — REST API endpoints
-- **Flask-SocketIO** — real-time WebSocket communication
-- **subprocess.Popen** — launching Python scripts as child processes
-- **threading** — capturing subprocess output without blocking Flask
+- **Flask 3.x** - REST API endpoints
+- **Flask-SocketIO** - real-time WebSocket communication
+- **subprocess.Popen** - launching Python scripts as child processes
+- **threading** - capturing subprocess output without blocking Flask
 
 This is NOT a public-facing web application. It runs on `localhost` for a
 single user. Security focus is on input validation and subprocess safety,
@@ -52,7 +52,7 @@ def create_app(config: dict | None = None) -> Flask:
 - Group routes into Blueprint modules when the route count exceeds ~10.
 - For small apps (< 10 routes), a single `register_routes(app)` function is
   acceptable.
-- Always return JSON from API endpoints — use `flask.jsonify()`.
+- Always return JSON from API endpoints - use `flask.jsonify()`.
 - Always set explicit HTTP status codes: `return jsonify(...), 200`.
 
 ### Error Handling
@@ -265,7 +265,7 @@ if elapsed > MAX_JOB_RUNTIME_SECONDS:
 ## Configuration
 
 - Store app configuration in a JSON file (e.g. `frontend/config.json`).
-- **Gitignore** the config file — it contains local paths.
+- **Gitignore** the config file - it contains local paths.
 - Provide a `config.example.json` with placeholder values.
 - Load config at startup; expose via REST for the frontend to read/update.
 
@@ -273,7 +273,7 @@ if elapsed > MAX_JOB_RUNTIME_SECONDS:
 
 ## Logging
 
-- Use Python's `logging` module — never `print()`.
+- Use Python's `logging` module - never `print()`.
 - Flask's built-in logger is accessible via `app.logger`.
 - Set log level via environment variable or config: `LOG_LEVEL=INFO`.
 - The Job Runner's subprocess output goes to WebSocket, not to Flask logs

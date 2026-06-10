@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Standards for building the JOSHUA terminal — a local web-based frontend for
+Standards for building the JOSHUA terminal - a local web-based frontend for
 running Salesforce admin scripts. Uses Flask 3.x for REST, Flask-SocketIO for
 real-time log streaming, and `subprocess.Popen` for launching scripts.
 
@@ -20,15 +20,15 @@ real-time log streaming, and `subprocess.Popen` for launching scripts.
 
 ## Architecture Rules
 
-- **Single-page application** — one `index.html` template served by Flask.
-- **No frontend build tools** — no npm, no webpack, no bundlers.
-- **REST for commands** — all user actions (launch job, save config) go through
+- **Single-page application** - one `index.html` template served by Flask.
+- **No frontend build tools** - no npm, no webpack, no bundlers.
+- **REST for commands** - all user actions (launch job, save config) go through
   REST endpoints returning JSON.
-- **WebSocket for events** — all server-initiated updates (log lines, job
+- **WebSocket for events** - all server-initiated updates (log lines, job
   status) go through SocketIO events.
-- **One job at a time** — no concurrent subprocess execution. Enforced by a
+- **One job at a time** - no concurrent subprocess execution. Enforced by a
   global lock.
-- **Scripts run in isolation** — launched via `subprocess.Popen`, not imported.
+- **Scripts run in isolation** - launched via `subprocess.Popen`, not imported.
   This matches existing project architecture where scripts are standalone.
 
 ## Flask Route Conventions
@@ -39,7 +39,7 @@ real-time log streaming, and `subprocess.Popen` for launching scripts.
 - Always validate request bodies before processing.
 - Always return JSON with an explicit status code.
 - Use Flask's `abort()` for standard HTTP errors.
-- Keep route handlers thin — delegate to service functions.
+- Keep route handlers thin - delegate to service functions.
 
 ## WebSocket Conventions
 
@@ -90,7 +90,7 @@ subprocess.Popen
 
 - Use Flask's `TESTING=True` config.
 - Use the app factory pattern so each test gets a fresh app instance.
-- Mock `subprocess.Popen` — never actually launch real scripts in unit tests.
+- Mock `subprocess.Popen` - never actually launch real scripts in unit tests.
 - For integration tests, use a known safe script (e.g. `echo "hello"`).
 
 ## File Structure
@@ -144,7 +144,7 @@ tests/
 
 - **Line buffering** (`bufsize=1`) on subprocess output ensures real-time
   streaming without waiting for buffer flush.
-- **Daemon threads** exit automatically when the main process exits — no
+- **Daemon threads** exit automatically when the main process exits - no
   zombie threads.
 - **Throttle rapid log emissions** if a script produces more than ~50 lines/sec
   to avoid flooding the browser WebSocket buffer.
@@ -162,6 +162,6 @@ if __name__ == "__main__":
     socketio.run(app, host="127.0.0.1", port=5000, debug=False)
 ```
 
-- Bind to `127.0.0.1` (not `0.0.0.0`) — localhost only.
+- Bind to `127.0.0.1` (not `0.0.0.0`) - localhost only.
 - Open browser automatically on launch.
 - `debug=False` in production use; `debug=True` only during development.

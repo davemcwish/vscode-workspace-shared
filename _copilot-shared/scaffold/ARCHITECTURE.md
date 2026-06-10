@@ -1,7 +1,7 @@
 # Architecture: [Project Name]
 
 <!--
-  SCAFFOLD TEMPLATE — fill in the sections marked [FILL IN].
+  SCAFFOLD TEMPLATE - fill in the sections marked [FILL IN].
   This file was copied from _copilot-shared\scaffold\ARCHITECTURE.md.
 
   PLATFORM NOTE: The CI pipeline and Cycode security scanner both run on
@@ -21,7 +21,7 @@ high level? Who uses it and how?]
 
 [FILL IN: Show how the major parts of the system relate to each other.
  ASCII box diagrams work well and are readable in any text editor.
- Example shape — replace every block with your actual components:]
+ Example shape - replace every block with your actual components:]
 
 ```text
 ┌──────────────────────────────────────────────────┐
@@ -45,7 +45,7 @@ high level? Who uses it and how?]
 ## Data Flows
 
 [FILL IN: For each major workflow, show the data path from input to output.
- One numbered list or short diagram per workflow. Keep it to 3–5 steps.]
+ One numbered list or short diagram per workflow. Keep it to 3 - 5 steps.]
 
 ### [Workflow 1 Name]
 
@@ -73,8 +73,8 @@ decision, note what was decided, why, and what was rejected.
 | --- | --- |
 | Language / runtime | [FILL IN: e.g. Python 3.12] |
 | OS (local dev) | [FILL IN: e.g. Windows 11] |
-| CI/CD platform | GitHub Actions — `ubuntu-latest` (Linux) |
-| Security scanner | Cycode — runs on Linux, scans SAST + secrets + SCA on every PR |
+| CI/CD platform | GitHub Actions - `ubuntu-latest` (Linux) |
+| Security scanner | Cycode - runs on Linux, scans SAST + secrets + SCA on every PR |
 | [FILL IN: other tools] | [FILL IN] |
 
 **Cross-platform requirement:** Code must behave identically on Windows (local

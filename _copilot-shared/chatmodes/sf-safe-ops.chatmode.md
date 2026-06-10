@@ -1,5 +1,5 @@
 ---
-description: "Read-only Salesforce reasoning mode — no write code generated."
+description: "Read-only Salesforce reasoning mode - no write code generated."
 tools: ['search']
 ---
 

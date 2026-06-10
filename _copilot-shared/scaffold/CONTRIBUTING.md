@@ -1,7 +1,7 @@
 # Contributing Guide
 
 <!--
-  SCAFFOLD TEMPLATE — fill in the sections marked [FILL IN].
+  SCAFFOLD TEMPLATE - fill in the sections marked [FILL IN].
   This file was copied from _copilot-shared\scaffold\CONTRIBUTING.md.
 -->
 
@@ -28,7 +28,7 @@ points:
 - Formatter / linter: [FILL IN: e.g. ruff]
 - Type checking: [FILL IN: e.g. mypy]
 - Testing: [FILL IN: e.g. pytest with ≥90% coverage]
-- Docstrings: written for complete beginners — explain every parameter, return
+- Docstrings: written for complete beginners - explain every parameter, return
   value, and exception in plain English
 - Secrets: never commit credentials, tokens, or real usernames
 - Cross-platform: code must run on both Windows (local dev) and Linux
@@ -61,7 +61,7 @@ sanity_v.bat
 
 1. Create a branch from `main` with a descriptive name.
 2. Make your changes, add or update tests, and update documentation.
-3. Run `sanity.bat` — all checks must pass locally before opening a PR.
+3. Run `sanity.bat` - all checks must pass locally before opening a PR.
 4. Open a pull request with a clear description of what changed and why.
 5. Address any review comments.
 6. A maintainer will merge once all checks pass and the review is approved.

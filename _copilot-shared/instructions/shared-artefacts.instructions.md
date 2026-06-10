@@ -1,6 +1,6 @@
 ---
 applyTo: ".github/agents/**,.github/chatmodes/**,.github/instructions/**,.github/prompts/**,.github/skills/**,.github/workflows/**,.github/copilot-instructions.md,tests/test_agent_chatmode_sync.py,tests/diff_pairs.py,sanity.bat,sanity_v.bat"
-description: "Shared artefact ownership rules — never edit project-local copies directly."
+description: "Shared artefact ownership rules - never edit project-local copies directly."
 ---
 
 # Shared Artefact Rules
@@ -9,7 +9,7 @@ description: "Shared artefact ownership rules — never edit project-local copie
 
 Files in the paths matched by this instruction are **read-only copies** synced
 from `_copilot-shared/` by `sync-shared-copilot.ps1`. They are not
-project-owned — the single source of truth lives in the workspace-level
+project-owned - the single source of truth lives in the workspace-level
 `_copilot-shared/` directory.
 
 ## The Rule
@@ -25,7 +25,7 @@ When a change is needed to any shared artefact:
 1. **Edit the master** in `_copilot-shared/<subfolder>/` (e.g.
    `_copilot-shared/agents/`, `_copilot-shared/instructions/`,
    `_copilot-shared/tests/`, `_copilot-shared/scaffold/`).
-2. **Run shared validation** — execute the contract tests against the master:
+2. **Run shared validation** - execute the contract tests against the master:
 
    ```powershell
    cd "<workspace-root>"
@@ -39,9 +39,9 @@ When a change is needed to any shared artefact:
    .\sync-shared-copilot.ps1
    ```
 
-4. **Inspect downstream diffs** — review what changed in each project's
+4. **Inspect downstream diffs** - review what changed in each project's
    `.github/`, `tests/`, `sanity.bat`, etc. to confirm correctness.
-5. **Commit in both repos** — workspace-level (`_copilot-shared/` +
+5. **Commit in both repos** - workspace-level (`_copilot-shared/` +
    `sync-shared-copilot.ps1`) and the affected project(s).
 
 ## What Lives Where

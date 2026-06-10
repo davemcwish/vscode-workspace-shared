@@ -18,18 +18,18 @@ files need to change.
 
 Use these terms consistently in all design documents:
 
-- **Module** — anything with an interface and an implementation (function,
+- **Module** - anything with an interface and an implementation (function,
   class, package). Not "component" or "service."
-- **Interface** — everything a caller must know: types, invariants, error
+- **Interface** - everything a caller must know: types, invariants, error
   modes, ordering, config. Not just the type signature.
-- **Implementation** — the code inside the module.
-- **Depth** — a deep module provides significant behaviour behind a small
+- **Implementation** - the code inside the module.
+- **Depth** - a deep module provides significant behaviour behind a small
   interface. A shallow module's interface is nearly as complex as its
   implementation. Prefer deep modules.
-- **Seam** — where an interface lives; a point where behaviour can be changed
+- **Seam** - where an interface lives; a point where behaviour can be changed
   without editing in place. Useful for testing and extension.
-- **Leverage** — what callers gain from a deep module's simple interface.
-- **Locality** — what maintainers gain: change, bugs, and knowledge
+- **Leverage** - what callers gain from a deep module's simple interface.
+- **Locality** - what maintainers gain: change, bugs, and knowledge
   concentrated in one place.
 
 **Deletion test:** Imagine deleting a module. If complexity vanishes, it was a
@@ -41,8 +41,8 @@ pass-throughs. Each module should do substantial work behind a simple interface.
 
 ## Your Inputs
 
-1. **Architecture:** `./architecture.md` — components and data flows.
-2. **Skills:** `./.github/skills/` — coding standards (read before designing).
+1. **Architecture:** `./architecture.md` - components and data flows.
+2. **Skills:** `./.github/skills/` - coding standards (read before designing).
 3. **Requirements:** `./requirements/[req_id]/[fr_index]/fr.md`.
 4. **Existing code:** `scripts/`, `src/sf_admin_utils/`, `tests/`.
 
@@ -58,7 +58,7 @@ pass-throughs. Each module should do substantial work behind a simple interface.
 
 For each FR in `./requirements/[req_id]/`:
 
-1. Read `fr.md` — understand business rules and acceptance criteria.
+1. Read `fr.md` - understand business rules and acceptance criteria.
 2. Identify which existing modules/scripts are impacted.
 3. Determine if new modules are needed in `src/sf_admin_utils/`.
 
@@ -66,11 +66,11 @@ For each FR in `./requirements/[req_id]/`:
 
 For each FR, produce a design covering:
 
-1. **Module Impact** — which files change and what new functions/classes are added.
-2. **Data Flow** — how data moves (Salesforce → Python → output files).
-3. **Interface Changes** — new CLI arguments, new library functions, new config.
-4. **Test Strategy** — which test files need new tests, what to mock.
-5. **Security Considerations** — new network calls, file writes, PII handling.
+1. **Module Impact** - which files change and what new functions/classes are added.
+2. **Data Flow** - how data moves (Salesforce → Python → output files).
+3. **Interface Changes** - new CLI arguments, new library functions, new config.
+4. **Test Strategy** - which test files need new tests, what to mock.
+5. **Security Considerations** - new network calls, file writes, PII handling.
 
 ### Phase 4: Output
 
@@ -90,7 +90,7 @@ Save each design as `./requirements/[req_id]/[fr_index]/design.md`.
 - `tests/test_[name].py`: [New tests needed]
 
 ## 3. New Functions / Classes
-- `function_name(params) -> return_type` — [Purpose]
+- `function_name(params) -> return_type` - [Purpose]
 
 ## 4. Data Flow
 [Step-by-step: input → processing → output]
@@ -114,6 +114,6 @@ Save each design as `./requirements/[req_id]/[fr_index]/design.md`.
 ## Critical Rules
 
 - Stay within the project technology: Python 3.12, pytest, argparse, requests.
-- Reference `.github/skills/` for coding standards — cite which skill applies.
-- Do NOT write implementation code — that is the team-lead's job.
+- Reference `.github/skills/` for coding standards - cite which skill applies.
+- Do NOT write implementation code - that is the team-lead's job.
 - Every design must include a test strategy.

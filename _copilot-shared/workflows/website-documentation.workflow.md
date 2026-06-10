@@ -5,7 +5,7 @@
 This workflow ensures that **every website discussion produces well-structured,
 linked, beginner-friendly markdown documents** that serve as an offline reference.
 
-These documents are not throwaway chat logs — they are the project's permanent
+These documents are not throwaway chat logs - they are the project's permanent
 record. A complete beginner should be able to read them months later and
 understand every decision made, why it was made, and what to do next.
 
@@ -20,7 +20,7 @@ Use this workflow whenever:
 - A planning session, review, or audit is completed.
 - The user explicitly requests documentation of discussions.
 
-**Rule:** If the discussion produced a decision, recommendation, or action plan —
+**Rule:** If the discussion produced a decision, recommendation, or action plan  - 
 it must be documented.
 
 ---
@@ -65,13 +65,13 @@ Documents can be created in any order as decisions are made.
 ## Project Summary
 - **Website name/business:** [Name]
 - **Website purpose:** [What the site exists to achieve]
-- **Target audience:** [Who will visit — be specific]
+- **Target audience:** [Who will visit - be specific]
 - **Primary geography:** [Where the audience is located]
-- **Launch target date:** [When — even approximate]
+- **Launch target date:** [When - even approximate]
 
 ## Goals
-What does "success" look like? List 1–3 measurable goals.
-1. [Goal 1 — e.g. "10 enquiries per month from the contact form"]
+What does "success" look like? List 1 - 3 measurable goals.
+1. [Goal 1 - e.g. "10 enquiries per month from the contact form"]
 2. [Goal 2]
 3. [Goal 3]
 
@@ -85,7 +85,7 @@ What does "success" look like? List 1–3 measurable goals.
 ## Constraints
 - **Budget:** [Total budget for website creation]
 - **Ongoing budget:** [Monthly budget for hosting, maintenance, marketing]
-- **Technical skill:** [Owner's comfort with technology — beginner/intermediate/advanced]
+- **Technical skill:** [Owner's comfort with technology - beginner/intermediate/advanced]
 - **Maintenance owner:** [Who will update the site after launch?]
 - **Domain:** [Already owned? If so, what is it?]
 
@@ -129,7 +129,7 @@ What does "success" look like? List 1–3 measurable goals.
 [Same structure]
 
 ## Why [Chosen Platform] Was Selected
-[Explain the reasoning — budget, skill level, features, scalability, etc.]
+[Explain the reasoning - budget, skill level, features, scalability, etc.]
 
 ## What This Decision Means Going Forward
 - [Implications for design flexibility]
@@ -173,7 +173,7 @@ Based on target audience geography:
 - [ ] Published at [URL]
 
 ## Cookie Consent
-- [ ] Required? [Yes/No — based on tools used and audience geography]
+- [ ] Required? [Yes/No - based on tools used and audience geography]
 - [ ] Tool chosen: [Cookiebot / CookieYes / None needed / etc.]
 - [ ] Implemented and tested
 
@@ -186,7 +186,7 @@ Based on target audience geography:
 - [ ] [Action items that still need completing]
 
 ## Review Schedule
-- [ ] Next legal compliance review: [Date — at least annually]
+- [ ] Next legal compliance review: [Date - at least annually]
 ```
 
 ---
@@ -215,7 +215,7 @@ Based on target audience geography:
    useful. "We chose WordPress" alone is not.
 4. **Include alternatives considered.** Future readers need to know what was
    evaluated and why it was rejected.
-5. **Keep it current.** When a decision changes, update the document — don't
+5. **Keep it current.** When a decision changes, update the document - don't
    just add a note at the bottom.
 
 ### Format Rules
@@ -315,10 +315,10 @@ When using Copilot prompts, agents, or workflows for website work:
 - Never leave a significant decision undocumented.
 - Never use technical jargon without explanation.
 - Never create documentation without a "Last Updated" date.
-- Never assume the reader has context — write as if they're reading this for
+- Never assume the reader has context - write as if they're reading this for
   the first time, months from now.
 - Always record WHY a decision was made, not just WHAT was decided.
 - Always link related documents to each other.
-- Always keep documentation current — outdated docs are worse than no docs
+- Always keep documentation current - outdated docs are worse than no docs
   (they mislead).
 - Always store documentation alongside the project, not in a separate system.

@@ -104,14 +104,14 @@ and when.
 If you've never used Copilot before:
 
 1. **Open VS Code** (the application you're reading this in).
-2. **Open the Chat panel** â€” click the chat icon in the left sidebar, or press
+2. **Open the Chat panel** - click the chat icon in the left sidebar, or press
    `Ctrl+Shift+I` (Windows) / `Cmd+Shift+I` (Mac).
-3. **Choose a chat mode** â€” at the top of the Chat panel there's a dropdown.
+3. **Choose a chat mode** - at the top of the Chat panel there's a dropdown.
    Pick the specialist you need (e.g. "Website Launch Planner").
-4. **Type your question** â€” in plain English. No code needed.
-5. **Use `/` for prompts** â€” type `/` followed by the prompt name to run a
+4. **Type your question** - in plain English. No code needed.
+5. **Use `/` for prompts** - type `/` followed by the prompt name to run a
    specific recipe (e.g. `/seo-review`).
-6. **Use `@` for agents** â€” type `@` followed by the agent name to summon a
+6. **Use `@` for agents** - type `@` followed by the agent name to summon a
    specialist (e.g. `@critical-thinking`).
 
 That's it. The AI reads the instruction files automatically and knows how to
@@ -125,16 +125,16 @@ Every website project follows this path. The artifacts in this workspace cover
 every stage:
 
 ```text
-1. THINK     â€” What is this website for? Who is it for? What country/region?
-2. CHALLENGE â€” Are my assumptions sound? (Critical thinking)
-3. PLAN      â€” Platform, content, design, legal, security, social presence
-4. BUILD     â€” Create pages, write copy, add images, configure platform
-5. SECURE    â€” Harden the site, check privacy/legal compliance
-6. TEST      â€” Accessibility, performance, mobile, forms, links, browsers
-7. LAUNCH    â€” Domain, SSL, DNS, go live, verify
-8. PROMOTE   â€” SEO, social media, advertising, email, offline promotion
-9. MEASURE   â€” Analytics, conversions, search visibility
-10. MAINTAIN â€” Monthly reviews, updates, security patches, content freshness
+1. THINK     - What is this website for? Who is it for? What country/region?
+2. CHALLENGE - Are my assumptions sound? (Critical thinking)
+3. PLAN      - Platform, content, design, legal, security, social presence
+4. BUILD     - Create pages, write copy, add images, configure platform
+5. SECURE    - Harden the site, check privacy/legal compliance
+6. TEST      - Accessibility, performance, mobile, forms, links, browsers
+7. LAUNCH    - Domain, SSL, DNS, go live, verify
+8. PROMOTE   - SEO, social media, advertising, email, offline promotion
+9. MEASURE   - Analytics, conversions, search visibility
+10. MAINTAIN - Monthly reviews, updates, security patches, content freshness
 ```
 
 ---
@@ -147,7 +147,7 @@ Some artifacts listed below may be installed already. Others may be planned but
 not yet created. If an artifact is missing, use the related skill file or create
 the missing prompt/workflow before relying on it.
 
-### Stage 1: THINK â€” Define Your Website
+### Stage 1: THINK - Define Your Website
 
 **Start here. Do not write any code yet.**
 
@@ -169,7 +169,7 @@ The planner will ask you about:
 **You do not need to know the answers in advance.** The planner explains each
 question and helps you decide.
 
-### Stage 2: CHALLENGE â€” Test Your Assumptions
+### Stage 2: CHALLENGE - Test Your Assumptions
 
 **Use this before committing to any major decision.**
 
@@ -182,11 +182,11 @@ The critical thinking partner will ask probing questions like:
 - "Is this really the simplest platform that meets your needs?"
 - "Can the person maintaining this site actually use this technology?"
 - "Have you considered what privacy law requires in your target country?"
-- "What happens if your hosting provider goes down â€” is there a backup plan?"
+- "What happens if your hosting provider goes down - is there a backup plan?"
 
-It never tells you what to do â€” it helps you think clearly.
+It never tells you what to do - it helps you think clearly.
 
-### Stage 3: PLAN â€” Design, Content, Legal, Security
+### Stage 3: PLAN - Design, Content, Legal, Security
 
 | Action | How |
 | --- | --- |
@@ -196,15 +196,15 @@ It never tells you what to do â€” it helps you think clearly.
 | Security planning | Read: `skills/website-security.skill.md` |
 | Performance planning | Read: `skills/website-performance.skill.md` |
 
-### Stage 4: BUILD â€” Create the Website
+### Stage 4: BUILD - Create the Website
 
 | Action | How |
 | --- | --- |
-| HTML/CSS/JS standards | Automatic â€” Copilot reads `html-css-javascript.instructions.md` when you edit web files |
+| HTML/CSS/JS standards | Automatic - Copilot reads `html-css-javascript.instructions.md` when you edit web files |
 | Accessibility standards | Read: `skills/accessibility.skill.md` |
 | Review your HTML/CSS | Type `/html-css-review` in Chat |
 
-### Stage 5: SECURE â€” Harden and Comply
+### Stage 5: SECURE - Harden and Comply
 
 | Action | How |
 | --- | --- |
@@ -212,7 +212,7 @@ It never tells you what to do â€” it helps you think clearly.
 | Privacy and legal compliance | Read: `skills/website-privacy-legal.skill.md` |
 | Challenge security assumptions | Type `@critical-thinking` and ask about security |
 
-### Stage 6: TEST â€” Verify Everything Works
+### Stage 6: TEST - Verify Everything Works
 
 | Action | How |
 | --- | --- |
@@ -221,14 +221,14 @@ It never tells you what to do â€” it helps you think clearly.
 | Performance check | Read: `skills/website-performance.skill.md` |
 | Conversion path check | Type `/conversion-review` |
 
-### Stage 7: LAUNCH â€” Go Live
+### Stage 7: LAUNCH - Go Live
 
 | Action | How |
 | --- | --- |
 | Full launch workflow | Read: `workflows/website-live-launch.workflow.md` |
 | Pre-launch checklist | In the Website Launch Planner chat mode, Phase 8 |
 
-### Stage 8: PROMOTE â€” Get Found
+### Stage 8: PROMOTE - Get Found
 
 | Action | How |
 | --- | --- |
@@ -237,14 +237,14 @@ It never tells you what to do â€” it helps you think clearly.
 | Promotion strategy | Read: `skills/website-promotion.skill.md` |
 | Conversion review | Type `/conversion-review` |
 
-### Stage 9: MEASURE â€” Track Results
+### Stage 9: MEASURE - Track Results
 
 | Action | How |
 | --- | --- |
 | Analytics guidance | Read: `skills/website-analytics.skill.md` |
 | Monthly review | Type `/monthly-website-review` |
 
-### Stage 10: MAINTAIN â€” Keep It Healthy
+### Stage 10: MAINTAIN - Keep It Healthy
 
 | Action | How |
 | --- | --- |
@@ -299,7 +299,7 @@ If you're starting a brand new website project right now:
 
 ## Reference: All Website Artifacts
 
-### Skills (Training Manuals â€” Read Before Building)
+### Skills (Training Manuals - Read Before Building)
 
 | File | What It Covers |
 | --- | --- |
@@ -358,22 +358,204 @@ If you're starting a brand new website project right now:
 
 ---
 
+## Before You Start
+
+Make sure the following are true:
+
+- VS Code is open in the project workspace.
+- Copilot Chat is open (click the chat icon in the sidebar, or press
+  `Ctrl+Shift+I`).
+- The custom chat modes are visible in the chat mode selector dropdown.
+- The custom prompts are visible when you type `/` in the chat input.
+- The `.github/` Markdown files are committed or saved in the workspace.
+
+If the chat modes or prompts are not visible, try:
+
+1. Save all `.github/` files.
+2. Reload VS Code: open the Command Palette (`Ctrl+Shift+P`) and run
+   `Developer: Reload Window`.
+3. Reopen Copilot Chat.
+4. Check the chat mode dropdown and prompt list again.
+
+---
+
+## What Not To Do
+
+Do not start with:
+
+```text
+Write me an HTML file.
+```
+
+unless the website has already been planned.
+
+Avoid jumping straight to:
+
+- HTML, CSS, JavaScript, React,
+- hosting setup, domain setup,
+- CMS plugins, custom web applications,
+- a specific global platform, hosting provider, or payment provider.
+
+First confirm:
+
+- purpose, audience, country or region, legal business location, visitor
+  location,
+- language, currency, tax or payment needs, privacy and cookie expectations,
+- accessibility expectations, platform, content, maintenance, hosting, launch
+  needs,
+- social media and online presence, existing social profiles, reviews,
+  testimonials, social sharing previews, and the social media maintenance owner.
+
+---
+
+## Example Full Copilot Conversation
+
+Copy and paste this into Copilot Chat after selecting `website-launch-planner`
+mode:
+
+```text
+I want to plan a website from idea to live launch.
+
+Please use the website launch workflow and guide me step by step.
+
+Here is what I know so far:
+- Business type:
+- Main goal:
+- Target audience:
+- Country or region the website is mainly for:
+- Where the business is legally based:
+- Where most visitors are expected to be:
+- Languages:
+- Currency:
+- Tax requirements, if known:
+- Whether local payment methods are needed:
+- Whether local customer support matters:
+- Whether regional data hosting matters:
+- Privacy, cookie, accessibility, or legal-page requirements, if known:
+- Existing social media profiles:
+- Which social platforms bring enquiries, bookings, sales, traffic, or trust:
+- Whether the website should link to social profiles:
+- Whether social profiles should link back to the website:
+- Whether reviews, testimonials, or social proof are needed:
+- Whether a "link in bio" page is needed:
+- Whether social advertising or tracking pixels are planned:
+- Who will maintain social media and respond to messages:
+- Who will maintain the website:
+- Whether payments are needed:
+- Whether forms are needed:
+- Whether users need accounts:
+- Preferred launch date:
+- Budget or constraints:
+
+Please ask me any missing questions before recommending a platform. When you
+recommend a platform, compare globally popular options with relevant local or
+regional alternatives if country-specific needs matter.
+```
+
+If you do not know the answers, write:
+
+```text
+I do not know yet. Please explain the options in beginner-friendly language.
+```
+
+---
+
+## Manual Pre-Launch Checklist
+
+Before launch, confirm:
+
+- [ ] Website objective is clear.
+- [ ] Target audience is clear.
+- [ ] Geographic scope is clear.
+- [ ] Business legal location is documented.
+- [ ] Main visitor country or region is documented.
+- [ ] Local language needs are confirmed.
+- [ ] Local currency needs are confirmed.
+- [ ] Tax, VAT, GST, or sales-tax needs are considered.
+- [ ] Local payment methods are considered if payments are needed.
+- [ ] Local privacy and cookie expectations are checked.
+- [ ] Local accessibility expectations are checked.
+- [ ] Local legal-page expectations are checked.
+- [ ] Hosting or data-storage region needs are considered.
+- [ ] Local customer support needs are considered.
+- [ ] Platform choice is documented, including why it fits the country or region.
+- [ ] Site map is approved.
+- [ ] All required pages exist.
+- [ ] All text content is final or approved.
+- [ ] Images are approved and compressed.
+- [ ] Images have alt text.
+- [ ] Navigation works.
+- [ ] Contact forms work.
+- [ ] Links work.
+- [ ] Mobile layout works.
+- [ ] Tablet layout works.
+- [ ] Desktop layout works.
+- [ ] Keyboard navigation works.
+- [ ] Focus indicators are visible.
+- [ ] Color contrast is acceptable.
+- [ ] Privacy policy exists if needed.
+- [ ] Cookie notice exists if needed.
+- [ ] Page titles are set.
+- [ ] Meta descriptions are set if needed.
+- [ ] Analytics are configured if needed.
+- [ ] Domain is connected.
+- [ ] SSL certificate is active.
+- [ ] Backup or rollback plan exists.
+- [ ] Site owner knows how to maintain the site.
+- [ ] Approved social media profiles are documented.
+- [ ] Website links to approved social media profiles.
+- [ ] Social media profiles link back to the website.
+- [ ] Business name, logo, contact details, and opening hours are consistent
+  across website and social profiles.
+- [ ] Social sharing preview title, description, and image are checked.
+- [ ] Reviews, testimonials, or social proof are approved for use.
+- [ ] Embedded social feeds are avoided unless there is a clear reason.
+- [ ] Any tracking pixels, social ads, or campaign links are approved and
+  documented.
+- [ ] Someone owns social media updates and message responses after launch.
+
+---
+
+## Beginner-Friendly Platform Guidance
+
+Use this table when explaining options to non-technical users. Treat provider
+names as examples, not as the only valid choices.
+
+| Option | Examples | Best For | Beginner Warning |
+| --- | --- | --- | --- |
+| No-code website builder | Wix, Squarespace, or trusted local equivalents | Simple brochure websites maintained by non-technical users | May be less flexible for complex custom features |
+| Content management system | WordPress or regionally popular CMS platforms | Content-heavy sites, blogs, and growing websites | Needs updates, backups, plugins, and maintenance |
+| Managed WordPress hosting | Local or regional WordPress hosting providers | Users who want WordPress but need easier hosting and support | Quality varies; check support, backups, SSL, and security |
+| eCommerce platform | Shopify, WooCommerce, or local eCommerce platforms | Online stores, product catalogues, payments, tax, and shipping | Must support local currency, tax, payment methods, and shipping needs |
+| Local hosting provider | Country-specific hosting companies | Sites needing local support, local billing, or regional data hosting | Check reliability, backups, SSL, support quality, and security |
+| Static HTML/CSS | GitHub Pages, Netlify, Cloudflare Pages, local hosting | Fast simple sites maintained by a developer | Harder for non-technical users to update |
+| Generated static report | Python-generated HTML/CSS report files | Read-only internal reporting | Not a full website and usually not intended for public launch |
+| Local web app | Flask, FastAPI, or similar internal application | Internal workflows or tools that need interaction | Not ideal for a simple public marketing website |
+| Custom web app | Custom application hosted on a cloud, internal, or regional provider | Accounts, dashboards, workflows, integrations, or complex business logic | Highest cost and maintenance burden |
+
+The recommended platform should normally be the simplest sustainable option that
+meets the user's objective, the target audience's needs, the maintainer's
+technical skill level, the country or region requirements, and the budget and
+timeline.
+
+---
+
 ## Key Concepts for Complete Beginners
 
 | Term | What It Means |
 | --- | --- |
 | Website | A collection of pages on the internet that people visit using a browser (Chrome, Safari, Firefox, Edge) |
-| Domain | The address people type to find your site (e.g. `example.com`) â€” you rent it annually |
-| Hosting | Where your website files live â€” a computer (server) connected to the internet 24/7 |
-| SSL / HTTPS | Security that encrypts the connection between visitors and your site â€” the padlock icon in the browser |
-| CMS | Content Management System â€” software that lets you edit website pages without writing code (e.g. WordPress) |
-| SEO | Search Engine Optimisation â€” making your site easier for Google/Bing to find and show to searchers |
+| Domain | The address people type to find your site (e.g. `example.com`) - you rent it annually |
+| Hosting | Where your website files live - a computer (server) connected to the internet 24/7 |
+| SSL / HTTPS | Security that encrypts the connection between visitors and your site - the padlock icon in the browser |
+| CMS | Content Management System - software that lets you edit website pages without writing code (e.g. WordPress) |
+| SEO | Search Engine Optimisation - making your site easier for Google/Bing to find and show to searchers |
 | Analytics | Tools that tell you how many people visit, what they look at, and what they do |
 | Accessibility | Making your site usable by people with disabilities (screen readers, keyboard navigation, colour contrast) |
 | Privacy law | Rules about how you collect and use visitor data (different in every country) |
-| CTA | Call To Action â€” the thing you want visitors to do (call, buy, book, subscribe, download) |
+| CTA | Call To Action - the thing you want visitors to do (call, buy, book, subscribe, download) |
 | Responsive | A design that works well on phones, tablets, and desktop computers |
-| DNS | Domain Name System â€” the internet's address book that connects your domain name to your hosting server |
+| DNS | Domain Name System - the internet's address book that connects your domain name to your hosting server |
 
 ---
 
@@ -404,9 +586,9 @@ Record the date checked in the relevant project document.
 After reading this document, your next step is:
 
 1. **Open Copilot Chat** and select the **Website Launch Planner** chat mode.
-2. **Tell it what you want** â€” in plain English, no jargon needed.
-3. **Follow the conversation** â€” it will guide you through every decision.
-4. **Document everything** â€” follow `workflows/website-documentation.workflow.md`
+2. **Tell it what you want** - in plain English, no jargon needed.
+3. **Follow the conversation** - it will guide you through every decision.
+4. **Document everything** - follow `workflows/website-documentation.workflow.md`
    to keep a permanent record.
 
 You can return to this document at any time as a reference map.
@@ -437,7 +619,7 @@ Use these prompts based on the kind of website work you are doing.
 - `prompts/website-experimentation-review.prompt.md`
 - `prompts/website-online-presence-review.prompt.md`
 - `prompts/website-seo-review.prompt.md`
-- `prompts/website-review.prompt.md` â€” General website review prompt for broad site quality checks.
+- `prompts/website-review.prompt.md` - General website review prompt for broad site quality checks.
 - `prompts/website-local-seo-check.prompt.md`
 
 ### Accessibility, Localization, Performance, and Sustainability
