@@ -49,15 +49,77 @@ For the top hypothesis:
 
 Return:
 
-1. What command failed.
-2. What the error means in plain English.
-3. The root cause (confirmed, not guessed).
-4. The exact fix applied.
-5. How to verify the fix works.
-6. What to try next if it still fails.
-7. Whether this suggests a code change, config change, environment issue, or
-   user action.
-8. Whether a regression test should be added to prevent recurrence.
+```markdown
+# Error Diagnosis
 
-If the error includes secrets, tokens, passwords, or session IDs, warn the user
-to rotate them and avoid repeating them in chat.
+## Verdict
+
+RESOLVED / PARTIALLY RESOLVED / UNRESOLVED
+
+## Summary
+
+Short plain-English summary of what went wrong and what was done.
+
+## Error Identity
+
+| Field | Value |
+| --- | --- |
+| Command that failed | [Exact command] |
+| Error message | [Key error text] |
+| Error type | [Code change / Config change / Environment issue / User action] |
+
+## What the Error Means
+
+[Plain-English explanation a beginner can understand.]
+
+## Root Cause
+
+| Hypothesis | Tested? | Result |
+| --- | --- | --- |
+
+**Confirmed root cause:** [One sentence.]
+
+## Fix Applied
+
+| What Changed | Why |
+| --- | --- |
+
+## Verification
+
+| Check | Status | Notes |
+| --- | --- | --- |
+| Error no longer occurs | Yes/No |  |
+| Tests pass | Yes/No/N/A |  |
+| No regressions introduced | Yes/No |  |
+
+## If It Still Fails
+
+1. [Next diagnostic step]
+2. [Alternative approach]
+
+## Prevention
+
+| Action | Status |
+| --- | --- |
+| Regression test added | Yes/No/Recommended |
+| Documentation updated | Yes/No/Recommended |
+| Root cause documented | Yes/No |
+
+## Security Warning
+
+[If the error output contained secrets, tokens, or session IDs: warn user to
+rotate them. Otherwise: "No sensitive data observed in error output."]
+```
+
+## Output style rules
+
+Use beginner-friendly language.
+
+Explain error messages, stack traces, and technical terms in plain English.
+
+Do not guess the root cause — confirm through instrumentation.
+
+Do not invent error messages, stack traces, or diagnostic results.
+
+If secrets, tokens, passwords, or session IDs appear in error output, warn the
+user to rotate them immediately.

@@ -241,7 +241,7 @@ Write-Host ""
 # propagate anything if the agent/chatmode pairing contract is broken.
 
 Write-Host "  -> Validating agent/chatmode pairs..." -ForegroundColor Green
-& python -m pytest (Join-Path $Shared "tests\test_agent_chatmode_sync.py") -q --no-cov
+& py -3.12 -m pytest (Join-Path $Shared "tests\test_agent_chatmode_sync.py") -q --no-cov
 if ($LASTEXITCODE -ne 0) {
     throw "Agent/chatmode pairing validation FAILED. Fix the masters in _copilot-shared\ before syncing."
 }

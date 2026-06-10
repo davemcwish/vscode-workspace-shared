@@ -1,13 +1,13 @@
 # save as scripts/diff_pairs.py, run: python scripts/diff_pairs.py
 import difflib
-import sys
 import pathlib
+import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 
 from tests.test_agent_chatmode_sync import (
-    SHARED_ROOT,
     PAIRS,
+    SHARED_ROOT,
     _normalise_body,
     _read_utf8,
 )

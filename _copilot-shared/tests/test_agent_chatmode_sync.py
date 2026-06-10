@@ -24,16 +24,37 @@ from pathlib import Path
 import pytest
 
 # ---------------------------------------------------------------------------
-# Locate _copilot-shared. The test lives in Salesforce/tests/, and the shared
-# masters live at <repo_root>/_copilot-shared/. Walk upward until we find it so
-# the test works regardless of the current working directory.
+# Locate _copilot-shared. The test lives in _copilot-shared/tests/ (master)
+# but is synced into project tests/ folders (e.g. Salesforce/tests/).
+# The discovery logic handles both locations.
 # ---------------------------------------------------------------------------
 
 
-# The test now lives INSIDE the master tree at _copilot-shared\tests\,
-# so the shared root is simply the parent of this tests\ directory.
-# No upward search needed -- the path is deterministic by location.
-SHARED_ROOT = Path(__file__).resolve().parent.parent
+def _find_shared_root() -> Path:
+    """Locate _copilot-shared by walking upward from the test file.
+
+    Works in two contexts:
+      - Master copy: _copilot-shared/tests/ -> parent.parent has the sync doc.
+      - Synced copy: Salesforce/tests/ -> walk up to workspace root, find
+        _copilot-shared/ as a sibling directory.
+    """
+    here = Path(__file__).resolve().parent
+    # Case 1: we ARE inside _copilot-shared/tests/ (the master copy)
+    candidate = here.parent
+    if (candidate / "AGENT-CHATMODE-SYNC.md").is_file():
+        return candidate
+    # Case 2: synced into a project's tests/ folder — walk up to find the
+    # _copilot-shared directory as a sibling of the project.
+    for ancestor in here.parents:
+        candidate = ancestor / "_copilot-shared"
+        if (candidate / "AGENT-CHATMODE-SYNC.md").is_file():
+            return candidate
+    raise FileNotFoundError(
+        f"Cannot locate _copilot-shared/AGENT-CHATMODE-SYNC.md. Searched upward from {here}"
+    )
+
+
+SHARED_ROOT = _find_shared_root()
 SYNC_DOC = SHARED_ROOT / "AGENT-CHATMODE-SYNC.md"
 
 
@@ -160,9 +181,7 @@ def test_at_least_one_identical_pair_is_enforced():
     )
 
 
-@pytest.mark.parametrize(
-    "agent_rel,chat_rel", IDENTICAL_PAIRS, ids=[a for a, _ in IDENTICAL_PAIRS]
-)
+@pytest.mark.parametrize("agent_rel,chat_rel", IDENTICAL_PAIRS, ids=[a for a, _ in IDENTICAL_PAIRS])
 def test_bodies_are_identical(agent_rel: str, chat_rel: str):
     """Strict guard: byte-identical bodies for pairs that claim that contract."""
     agent = SHARED_ROOT / agent_rel
@@ -178,7 +197,7 @@ def test_bodies_are_identical(agent_rel: str, chat_rel: str):
         # the whole file.
         a_lines = agent_body.split("\n")
         c_lines = chat_body.split("\n")
-        for i, (al, cl) in enumerate(zip(a_lines, c_lines)):
+        for i, (al, cl) in enumerate(zip(a_lines, c_lines, strict=False)):
             if al != cl:
                 pytest.fail(
                     f"Pair drift in {agent_rel} vs {chat_rel} at body line "

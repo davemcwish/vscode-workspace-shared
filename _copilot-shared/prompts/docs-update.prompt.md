@@ -39,3 +39,64 @@ After editing, summarize:
 - Files changed.
 - What changed.
 - Any docs intentionally not updated.
+
+## Output format
+
+Return:
+
+```markdown
+# Documentation Update Summary
+
+## Verdict
+
+COMPLETE / PARTIAL / BLOCKED
+
+## Summary
+
+Short plain-English summary of what documentation was updated and why.
+
+## Trigger
+
+[What code or workflow change prompted this documentation update.]
+
+## Files Updated
+
+| File | Section Changed | What Changed | Why |
+| --- | --- | --- | --- |
+
+## Files Reviewed But Not Changed
+
+| File | Reason |
+| --- | --- |
+
+## Docstrings Improved
+
+| File | Function/Class | Change |
+| --- | --- | --- |
+
+## Terms Explained
+
+| Term | Where Explained | Plain-English Meaning |
+| --- | --- | --- |
+
+## Remaining Documentation Gaps
+
+| File | Gap | Recommended Action |
+| --- | --- | --- |
+
+## Behaviour Change
+
+None. This was a documentation-only update.
+```
+
+## Output style rules
+
+Use beginner-friendly language.
+
+Explain technical terms on first use.
+
+Do not change runtime behaviour while updating documentation.
+
+Do not invent file paths, command outputs, or configuration values.
+
+Clearly separate facts derived from code from explanatory prose.

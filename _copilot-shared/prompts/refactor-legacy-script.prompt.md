@@ -53,3 +53,73 @@ At the end, summarize:
 - Behavior changed.
 - Tests added.
 - Risks remaining.
+
+## Output format
+
+Return:
+
+```markdown
+# Refactoring Summary
+
+## Verdict
+
+COMPLETE / PARTIAL / BLOCKED
+
+## Summary
+
+Short plain-English summary of what was refactored and the outcome.
+
+## Script Identity
+
+| Field | Value |
+| --- | --- |
+| Original path | `scripts/<old_name>.py` |
+| New path | `scripts/<new_name>.py` or same |
+| Read-only or mutating | [Read-only / Mutating] |
+| Salesforce objects | [Objects involved] |
+| Production safety | [Safe / Requires --apply] |
+
+## Behaviour Comparison
+
+| Behaviour | Preserved | Changed | Notes |
+| --- | --- | --- | --- |
+
+## Reused Helpers
+
+| Helper | From Module | What It Replaced |
+| --- | --- | --- |
+
+## Tests Added or Updated
+
+| Test File | Key Cases | Coverage |
+| --- | --- | --- |
+
+## Validation Results
+
+| Check | Status |
+| --- | --- |
+| ruff format | PASS/FAIL |
+| ruff check | PASS/FAIL |
+| pytest | PASS/FAIL |
+| mypy | PASS/FAIL |
+
+## Risks Remaining
+
+| Risk | Impact | Mitigation |
+| --- | --- | --- |
+
+## Documentation Updated
+
+| File | Change |
+| --- | --- |
+```
+
+## Output style rules
+
+Use beginner-friendly language.
+
+Clearly separate preserved behaviour from changed behaviour.
+
+Do not claim behaviour is preserved without evidence from tests.
+
+Do not invent validation results.

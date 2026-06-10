@@ -45,3 +45,75 @@ The documentation must include:
 4. CSV columns.
 5. Troubleshooting.
 6. PII handling notes.
+
+## Output format
+
+After completing the script, return:
+
+```markdown
+# Salesforce Report Script Summary
+
+## Script Created
+
+| Field | Value |
+| --- | --- |
+| Script path | `scripts/<name>.py` |
+| Purpose | [One sentence] |
+| Salesforce objects | [Objects queried] |
+| Read-only | Yes |
+| CSV output | [Columns produced] |
+| PII handling | [How PII is handled] |
+
+## SOQL Query
+
+[The query used, with explanation of what it retrieves.]
+
+## Implementation Decisions
+
+| Decision | Reasoning |
+| --- | --- |
+
+## Reused Modules
+
+| Module | What Was Reused |
+| --- | --- |
+
+## Tests Created
+
+| Test File | Key Cases | Coverage |
+| --- | --- | --- |
+
+## Documentation Created
+
+| File | What It Covers |
+| --- | --- |
+
+## Validation Results
+
+| Check | Status |
+| --- | --- |
+| ruff format | PASS/FAIL |
+| ruff check | PASS/FAIL |
+| pytest | PASS/FAIL |
+| mypy | PASS/FAIL |
+
+## Risks or Limitations
+
+| Risk | Mitigation |
+| --- | --- |
+
+## Next Steps
+
+1. [Any follow-up actions needed]
+```
+
+## Output style rules
+
+Use beginner-friendly language.
+
+Explain Salesforce objects, SOQL syntax, and API behaviour in plain English.
+
+Do not invent test results, SOQL responses, or validation outcomes.
+
+Do not claim the script is Production-safe without evidence from the
+implementation and tests.

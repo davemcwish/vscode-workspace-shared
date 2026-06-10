@@ -72,3 +72,65 @@ Then add a Fixed or Changed entry to Changelog.md referencing the exact guide pa
 ## Output
 Summarise: guides audited, findings by category, fixes applied, validation result (contract test + markdownlint), and the Changelog entry added.
 
+## Output format
+
+Return:
+
+```markdown
+# Documentation Audit
+
+## Verdict
+
+PASS / NEEDS FIXES / HIGH DRIFT
+
+## Summary
+
+Short plain-English summary of accuracy and completeness across the guides
+reviewed.
+
+## Ground Truth Sources
+
+| Source | Command or File | Captured? |
+| --- | --- | --- |
+
+## Findings
+
+| Guide | Category | Detail | Suggested Fix |
+| --- | --- | --- | --- |
+
+## Fixes Applied
+
+| Guide | Line/Section | Change Made | Derived From |
+| --- | --- | --- | --- |
+
+## Validation Results
+
+| Check | Status | Notes |
+| --- | --- | --- |
+| Contract test (test_docs_cli_contract.py) | PASS/FAIL/SKIPPED |  |
+| markdownlint | PASS/FAIL |  |
+
+## Changelog Entry
+
+[Entry added to Changelog.md, or explanation if not added.]
+
+## Remaining Issues
+
+| Guide | Issue | Why Not Fixed | Recommended Next Step |
+| --- | --- | --- | --- |
+```
+
+## Output style rules
+
+Use beginner-friendly language.
+
+Explain what "drift" means: the documentation says something different from what
+the code actually does.
+
+Do not invent ground-truth output, test results, or CLI flags.
+
+Do not change runtime behaviour while fixing documentation.
+
+Clearly separate accuracy fixes (facts wrong) from clarity improvements (prose
+weak).
+

@@ -52,3 +52,73 @@ ruff check src tests scripts
 pytest
 mypy src tests scripts
 ```
+
+## Output format
+
+Return:
+
+```markdown
+# Test Coverage Summary
+
+## Verdict
+
+PASS / NEEDS MORE COVERAGE / BLOCKED
+
+## Summary
+
+Short plain-English summary of what was tested and the coverage outcome.
+
+## File Under Test
+
+| Field | Value |
+| --- | --- |
+| File | [path] |
+| Type | [Library / Script / Helper] |
+| Previous coverage | [X% or Unknown] |
+| New coverage | [X%] |
+
+## Tests Added
+
+| Test File | Test Name | What It Covers |
+| --- | --- | --- |
+
+## Paths Covered
+
+| Path Type | Covered? | Notes |
+| --- | --- | --- |
+| Success paths | Yes/Partial/No |  |
+| Empty inputs | Yes/Partial/No/N/A |  |
+| Invalid inputs | Yes/Partial/No/N/A |  |
+| Exception paths | Yes/Partial/No |  |
+| Logging behaviour | Yes/Partial/No/N/A |  |
+| Production-safety | Yes/Partial/No/N/A |  |
+| Salesforce edge cases | Yes/Partial/No/N/A |  |
+
+## Mocks Used
+
+| Mock Target | Why Mocked |
+| --- | --- |
+
+## Validation Results
+
+| Check | Status |
+| --- | --- |
+| ruff check | PASS/FAIL |
+| pytest | PASS/FAIL |
+| mypy | PASS/FAIL |
+
+## Remaining Gaps
+
+| Gap | Why Not Covered | Recommended Action |
+| --- | --- | --- |
+```
+
+## Output style rules
+
+Use beginner-friendly language.
+
+Explain what each mock does and why it exists in plain English.
+
+Do not invent coverage numbers or test results.
+
+Do not claim full coverage without evidence from the test run.

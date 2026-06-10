@@ -97,9 +97,14 @@ echo.
 echo ============================================================================
 echo  [7/7] markdownlint (autofix then verify)
 echo ============================================================================
-call npx markdownlint-cli2 --fix "docs/**/*.md" "*.md"
-call npx markdownlint-cli2 "docs/**/*.md" "*.md"
-if errorlevel 1 set /a FAIL_COUNT+=1
+where npx >nul 2>&1
+if errorlevel 1 (
+    echo  SKIPPED: npx not found in PATH. Install Node.js to enable markdownlint.
+) else (
+    call npx markdownlint-cli2 --fix "docs/**/*.md" "*.md"
+    call npx markdownlint-cli2 "docs/**/*.md" "*.md"
+    if errorlevel 1 set /a FAIL_COUNT+=1
+)
 
 echo.
 echo ============================================================================

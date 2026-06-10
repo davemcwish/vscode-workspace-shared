@@ -63,3 +63,69 @@ ruff format src tests scripts
 pytest
 mypy src tests scripts
 ```
+
+## Output format
+
+After completing the script, return:
+
+```markdown
+# New Script Summary
+
+## Script Created
+
+| Field | Value |
+| --- | --- |
+| Script path | `scripts/<name>.py` |
+| Purpose | [One sentence] |
+| Read-only or mutating | [Read-only / Mutating (dry-run by default)] |
+| Salesforce objects | [Objects queried or modified] |
+| Production safety | [Safe / Requires --apply / Not applicable] |
+
+## Implementation Decisions
+
+| Decision | Reasoning |
+| --- | --- |
+
+## Reused Modules
+
+| Module | What Was Reused |
+| --- | --- |
+
+## Tests Created
+
+| Test File | Coverage | Key Cases |
+| --- | --- | --- |
+
+## Documentation Created or Updated
+
+| File | Change |
+| --- | --- |
+
+## Validation Results
+
+| Check | Status |
+| --- | --- |
+| ruff format | PASS/FAIL |
+| ruff check | PASS/FAIL |
+| pytest | PASS/FAIL |
+| mypy | PASS/FAIL |
+
+## Risks or Limitations
+
+| Risk | Mitigation |
+| --- | --- |
+
+## Next Steps
+
+1. [Any follow-up actions needed]
+```
+
+## Output style rules
+
+Use beginner-friendly language.
+
+Explain Salesforce objects, API behaviour, and Python patterns in plain English.
+
+Do not invent test results or validation outcomes.
+
+Do not claim Production safety without evidence from the implementation.
