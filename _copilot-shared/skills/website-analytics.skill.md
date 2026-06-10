@@ -9,6 +9,12 @@ goals.
 It covers privacy-respecting analytics tools, consent requirements by geography,
 and how to interpret data without a statistics background.
 
+**Currentness warning:** Analytics tools, pricing, privacy features, consent
+requirements, browser tracking restrictions, advertising integrations, and
+platform policies change over time. Before choosing or configuring analytics,
+verify current information from the tool provider and relevant legal/privacy
+sources, then record the date checked in the project documentation.
+
 ---
 
 ## Audience
@@ -16,6 +22,25 @@ and how to interpret data without a statistics background.
 - Complete beginners who have never used an analytics tool.
 - Small business owners who need to know if their website is working.
 - Anyone who wants to measure website performance without violating privacy law.
+
+---
+
+## Types of Website Measurement
+
+Beginners often use the word "analytics" for everything, but website
+measurement has several parts.
+
+| Measurement Type | What It Answers | Example Tools |
+| --- | --- | --- |
+| Website analytics | What do visitors do after arriving? | Plausible, Fathom, Matomo, Google Analytics |
+| Search visibility | How does the site appear in search engines? | Google Search Console, Bing Webmaster Tools |
+| Conversion tracking | Did visitors complete the goal action? | Analytics goals, ad platform conversion tags, form tracking |
+| Advertising measurement | Did paid campaigns produce useful results? | Google Ads, Meta Ads, LinkedIn Ads |
+| Technical monitoring | Is the site fast, available, and error-free? | Uptime tools, PageSpeed Insights, Search Console |
+
+A complete measurement setup usually needs more than one tool. For example,
+analytics can show that visitors arrived from Google, but Google Search
+Console can show which search queries and pages generated impressions.
 
 ---
 
@@ -61,14 +86,73 @@ achieve:
 Define YOUR conversion before setting up analytics. Without this, you're
 collecting data with no purpose.
 
+### Conversion Quality
+
+Not all conversions are equally valuable.
+
+For example:
+
+- A spam form submission is not a real lead.
+- A newsletter signup from the wrong audience may not help.
+- A purchase that is refunded may not be profitable.
+- A phone call from outside the service area may not be useful.
+
+Where possible, review both quantity and quality of conversions.
+
+---
+
+## Search Visibility Tools
+
+Analytics tools tell you what visitors do after they arrive. Search
+visibility tools tell you how search engines see your site.
+
+### Google Search Console
+
+Google Search Console is a free tool from Google. It helps you understand:
+
+- which pages are indexed by Google,
+- which search queries show your site,
+- how often pages appear in search results,
+- how often people click from search results,
+- whether Google found mobile usability, indexing, or Core Web Vitals issues,
+- whether your sitemap was submitted and processed.
+
+Every public website that cares about Google search visibility should use
+Google Search Console.
+
+### Bing Webmaster Tools
+
+Bing Webmaster Tools is a free tool from Microsoft. It provides similar
+search visibility information for Bing and related search experiences.
+
+It is worth setting up because it is free, quick, and can reveal indexing or
+SEO issues that analytics alone will not show.
+
+### Beginner Setup Checklist
+
+- [ ] Create Google Search Console property.
+- [ ] Verify domain or URL ownership.
+- [ ] Submit sitemap.
+- [ ] Check indexing status.
+- [ ] Create Bing Webmaster Tools account.
+- [ ] Import or verify the site.
+- [ ] Submit sitemap to Bing.
+- [ ] Record setup date and account owner.
+
 ---
 
 ## Analytics Tools
 
 ### Privacy-Respecting Alternatives
 
-These tools are designed to respect visitor privacy and often do not require
-cookie consent banners (because they don't use cookies for tracking):
+These tools are designed to reduce privacy risk. Many are cookie-free or
+privacy-preserving, which may reduce or remove the need for analytics cookie
+consent in some jurisdictions.
+
+However, do not assume "privacy-friendly" automatically means "no consent or
+disclosure needed." Check whether the tool uses cookies, local storage, IP
+addresses, device identifiers, cross-site tracking, or third-party data
+sharing. Always disclose analytics use in the privacy policy.
 
 | Tool | Cost | Cookie-Free | Hosted By | Notes |
 | --- | --- | --- | --- | --- |
@@ -115,9 +199,17 @@ and where your visitors are located.
 
 ### The Simple Rule
 
-- If your analytics tool uses cookies or collects personal data → you need consent.
-- If your analytics tool is cookie-free and collects only anonymous aggregate
-  data → consent is usually not required (but check your specific jurisdiction).
+- If analytics uses cookies, local storage, device identifiers, advertising
+  identifiers, pixels, remarketing, profiling, or cross-site tracking, expect
+  consent and disclosure requirements in many jurisdictions.
+- If analytics collects personal data, such as full IP addresses or unique
+  identifiers, assess privacy-law obligations before launch.
+- If analytics is genuinely cookie-free, aggregate-only, and
+  privacy-preserving, consent may not be required in some jurisdictions, but
+  disclosure in the privacy policy is still recommended.
+- If advertising tools are connected, such as Google Ads, Meta Pixel, TikTok
+  Pixel, or LinkedIn Insight Tag, treat the setup as higher-risk and verify
+  consent requirements carefully.
 
 ### By Region
 
@@ -146,6 +238,66 @@ See `website-privacy-legal.skill.md` for comprehensive privacy law details.
 
 ---
 
+## Analytics Consent Decision Tree
+
+Use this decision tree before installing analytics.
+
+1. Does the tool set cookies, local storage, pixels, device IDs, or other
+   identifiers?
+   - If yes, consent may be required in EU/UK-style jurisdictions and
+     disclosure is required in many others.
+2. Does the tool collect IP addresses, user IDs, device information, or
+   browsing behaviour?
+   - If yes, treat it as personal data risk until confirmed otherwise.
+3. Is the tool connected to advertising, remarketing, audience building, or
+   cross-site tracking?
+   - If yes, expect stronger consent, disclosure, and opt-out requirements.
+4. Does the site use Google Ads, Meta Pixel, LinkedIn Insight Tag, TikTok
+   Pixel, or similar marketing tags?
+   - If yes, check current platform consent requirements before launch.
+5. Is the analytics tool genuinely cookie-free and aggregate-only?
+   - If yes, consent may not be required in some jurisdictions, but still
+     document the decision and disclose the tool in the privacy policy.
+6. Are visitors expected from multiple countries or regions?
+   - If yes, apply the strictest sensible baseline or get legal advice.
+
+---
+
+## UTM Tracking
+
+UTM tracking means adding small labels to links so analytics tools can show
+which campaign, channel, or source sent the visitor.
+
+UTM tracking is useful for:
+
+- email newsletters,
+- social media posts,
+- paid ads,
+- partner links,
+- QR codes,
+- printed flyers,
+- launch announcements.
+
+Example use cases:
+
+| Situation | What UTM Tracking Helps Answer |
+| --- | --- |
+| Email newsletter | Which newsletter sent traffic or conversions? |
+| Social post | Which platform or post worked best? |
+| Paid ad | Which campaign produced enquiries or sales? |
+| QR code on flyer | Did offline promotion send visitors to the site? |
+| Partner link | Which partner referred useful traffic? |
+
+Beginner rules:
+
+- Use consistent names.
+- Do not put personal data in UTM parameters.
+- Record naming conventions in the analytics setup document.
+- Test campaign links before publishing them.
+- Use UTMs for campaign links, not for every internal website link.
+
+---
+
 ## Setting Up Analytics
 
 ### Step-by-Step (Generic)
@@ -158,6 +310,25 @@ See `website-privacy-legal.skill.md` for comprehensive privacy law details.
 5. **Set up goals/conversions** — define what "success" means (form submission,
    purchase, signup).
 6. **Wait** — you need at least 2–4 weeks of data before drawing conclusions.
+
+### Internal Traffic
+
+Internal traffic means visits from the website owner, staff, developers,
+agencies, or regular testers.
+
+Internal traffic can distort analytics, especially on small websites. If the
+owner visits the site ten times per day, the dashboard may look healthier
+than reality.
+
+Where the analytics tool supports it:
+
+- filter internal IP addresses,
+- exclude known team devices,
+- label test traffic,
+- avoid counting staging or preview sites,
+- document what was excluded and when.
+
+If filtering is not available, interpret low-volume analytics cautiously.
 
 ### Where to Put the Tracking Code
 
@@ -191,6 +362,30 @@ If your analytics tool requires cookies and you have visitors from the EU/UK:
 | Traffic spike one day | "My strategy is working!" | May be a bot, a single share, or an anomaly — wait for trends |
 | Zero conversions | "Nobody wants what I offer" | Your conversion action may be unclear or broken |
 
+### Bots, Crawlers, and Spam Traffic
+
+Not every visit is a real potential customer or reader.
+
+Traffic spikes can come from:
+
+- search engine crawlers,
+- uptime monitors,
+- spam bots,
+- security scanners,
+- broken referral spam,
+- internal testing,
+- accidental repeated refreshes.
+
+Before treating a traffic spike as success, check:
+
+- where the traffic came from,
+- which pages were visited,
+- how long visits lasted,
+- whether conversions increased,
+- whether the traffic source looks legitimate.
+
+Do not make major decisions based on a single unexplained spike.
+
 ### Rules for Data Interpretation
 
 1. **Look at trends, not single days.** One bad day means nothing. A declining
@@ -203,6 +398,15 @@ If your analytics tool requires cookies and you have visitors from the EU/UK:
    Wait for meaningful volume (at least 100+ for basic patterns).
 5. **Context matters.** A seasonal business will naturally have peaks and
    troughs. A news site will spike on events.
+6. **Separate traffic from outcomes.** More visitors is not automatically
+   better. A smaller number of visitors who enquire, buy, book, or subscribe
+   may be more valuable than a large number who leave immediately.
+7. **Watch for tracking changes.** If analytics suddenly changes after a site
+   update, plugin change, cookie banner change, or platform migration, the
+   tracking setup may have changed — not visitor behaviour.
+8. **Do not compare incompatible data.** Data from one analytics tool may not
+   match another because tools count visitors, sessions, bots, consented
+   traffic, and blocked traffic differently.
 
 ### Monthly Review Process
 
@@ -254,11 +458,22 @@ See `monthly-website-review.prompt.md` for a complete structured review.
 Before going live:
 
 - [ ] Analytics tool chosen and installed.
+- [ ] Search visibility tools set up, including Google Search Console and
+      Bing Webmaster Tools where appropriate.
 - [ ] Tracking code is loading correctly (verified with at least one test visit).
+- [ ] Tracking tested on key pages and key conversion paths.
+- [ ] Staging, preview, or test environments excluded where possible.
 - [ ] Conversions/goals are defined and configured.
+- [ ] Conversion quality review process defined.
+- [ ] UTM naming convention documented for campaigns.
 - [ ] Cookie consent mechanism is in place (if tool uses cookies).
+- [ ] Analytics scripts are blocked before consent where required.
+- [ ] Advertising pixels or remarketing tags are blocked before consent where
+      required.
 - [ ] Privacy policy describes analytics data collection.
 - [ ] Data retention period is set.
+- [ ] Internal traffic filtering configured where supported.
+- [ ] Bot/spam traffic limitations understood and documented.
 - [ ] Someone is named as the analytics review owner.
 - [ ] Monthly review calendar reminder is set.
 
@@ -268,11 +483,16 @@ Before going live:
 
 | Frequency | Action |
 | --- | --- |
-| Monthly | Review key metrics, identify one action to take |
-| Quarterly | Audit: Is the analytics tool still appropriate? Are goals still relevant? |
-| On every new page/feature | Verify tracking works on new content |
-| Annually | Review privacy compliance, update privacy policy if collection changed |
-| On legal changes | Check if consent requirements have changed for your audience geography |
+| Weekly during first month after launch | Check that analytics, forms, conversions, and search visibility tools are still working |
+| Monthly | Review key metrics, traffic sources, conversions, conversion quality, and one action to take |
+| Monthly | Check Google Search Console and Bing Webmaster Tools for indexing, sitemap, search query, and technical issues |
+| Quarterly | Audit whether the analytics tool is still appropriate and whether goals still reflect the website purpose |
+| Quarterly | Review UTM naming, campaign tracking, internal traffic filtering, and bot/spam anomalies |
+| Quarterly | Check whether new third-party scripts, pixels, embeds, or marketing tools were added |
+| On every new page/feature | Verify tracking works on new content and conversion paths |
+| On every cookie/consent change | Verify analytics and advertising scripts respect consent choices |
+| Annually | Review privacy compliance, data retention, analytics ownership, and privacy policy wording |
+| On legal or platform changes | Re-check consent requirements, provider terms, and data processing details |
 
 ---
 
@@ -287,5 +507,15 @@ Before going live:
   collect it.
 - Never make major decisions based on one day or one week of data.
 - Always define what "success" means before collecting data.
+- Always define what a high-quality conversion means, not just a conversion
+  count.
 - Always choose the simplest tool that answers your actual questions.
 - Always comply with the strictest privacy law applicable to your visitors.
+- Never assume privacy-friendly analytics means no privacy obligations.
+- Never install advertising pixels, remarketing tags, heatmaps, or session
+  replay tools without checking consent and privacy requirements.
+- Never put personal data in UTM parameters.
+- Never judge success from traffic alone; measure meaningful conversions.
+- Never assume analytics data is exact; treat it as directional evidence.
+- Always document analytics setup, consent decisions, data retention,
+  conversion definitions, UTM conventions, and account ownership.
