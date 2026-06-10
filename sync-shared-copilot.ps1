@@ -11,6 +11,11 @@
     Run this script after editing anything in _copilot-shared\ to propagate
     the changes to every project listed in $Projects.
 
+    ROOT-LEVEL FOLDER SYNC: Folders listed in $RootFolders are synced into
+    each project ROOT (not .github\).  Use this for content that belongs
+    at the top level of every project, such as shared test fixtures or
+    default config directories.  Edit them in _copilot-shared\<folder>\.
+
     SCAFFOLD SYNC: Certain scaffold files (listed in $ScaffoldSyncFiles) are
     always synced into the project ROOT on every run.  These are shared-owned
     files (sanity.bat, sanity_v.bat, .markdownlint.json) that must stay
@@ -78,6 +83,13 @@ $Folders = @(
     "prompts",
     "skills",
     "workflows"
+)
+
+# Subfolders inside _copilot-shared\ to mirror into each project's ROOT
+# (not .github\).  Use this for content that belongs at the project top-level,
+# e.g. shared test scaffolds, default pytest fixtures, or config folders.
+$RootFolders = @(
+    "tests"
 )
 
 # Files in _copilot-shared\scaffold\ that are ALWAYS synced into the project
@@ -303,6 +315,13 @@ foreach ($project in $Projects) {
         Sync-File `
             -Source      (Join-Path $scaffoldDir $scaffoldFile) `
             -Destination (Join-Path $projectPath $scaffoldFile)
+    }
+
+    # Sync root-level folders (e.g. tests\) into the PROJECT ROOT (not .github\)
+    foreach ($rootFolder in $RootFolders) {
+        Sync-Folder `
+            -Source      (Join-Path $Shared $rootFolder) `
+            -Destination (Join-Path $projectPath $rootFolder)
     }
 
     Write-Host "    Done." -ForegroundColor DarkGreen
