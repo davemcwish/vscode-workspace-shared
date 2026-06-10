@@ -2,11 +2,11 @@
 
 ## Purpose
 
-This skill helps **complete beginners** understand how to promote a website —
+This skill helps **complete beginners** understand how to promote a website â€”
 attract visitors, build awareness, and grow their audience over time.
 
 It covers both free (organic) and paid methods, with honest assessment of costs,
-time investment, and what to expect. The user makes all decisions — this skill
+time investment, and what to expect. The user makes all decisions â€” this skill
 presents options with trade-offs so they can choose what fits their situation.
 
 **Currentness warning:** Advertising costs, platform rules, social media
@@ -31,7 +31,7 @@ documentation.
 
 **A website without promotion is a billboard in a locked room.**
 
-No matter how good your content, products, or services are — if nobody knows
+No matter how good your content, products, or services are â€” if nobody knows
 your website exists, it cannot serve its purpose. Promotion is not optional.
 
 However, "promotion" does not always mean "spending money on ads." There are
@@ -43,16 +43,16 @@ many approaches at different price points and time investments.
 
 | Channel | Cost | Time to See Results | Ongoing Effort | Best For |
 | --- | --- | --- | --- | --- |
-| SEO (organic search) | Free–Low | 3–12 months | Medium | Long-term sustainable traffic |
-| Content marketing (blog, guides) | Free–Low | 3–6 months | High | Expertise demonstration, SEO |
-| Social media (organic) | Free | 1–6 months | High (consistent posting) | Community building, brand awareness |
-| Email marketing | Low (£10–50/month) | 1–3 months | Medium | Customer retention, repeat visits |
-| Google Ads (search) | Medium–High (£5–50+/day) | Immediate | Medium (ongoing optimisation) | Immediate traffic, testing demand |
-| Social media ads (Facebook, Instagram, LinkedIn) | Medium (£3–30+/day) | 1–2 weeks | Medium | Brand awareness, targeted demographics |
-| Local SEO (Google Business Profile) | Free | 1–3 months | Low | Local businesses with physical locations |
-| Partnerships and guest posts | Free | 1–3 months | Low–Medium | Niche authority, backlinks |
+| SEO (organic search) | Freeâ€“Low | 3â€“12 months | Medium | Long-term sustainable traffic |
+| Content marketing (blog, guides) | Freeâ€“Low | 3â€“6 months | High | Expertise demonstration, SEO |
+| Social media (organic) | Free | 1â€“6 months | High (consistent posting) | Community building, brand awareness |
+| Email marketing | Low (Â£10â€“50/month) | 1â€“3 months | Medium | Customer retention, repeat visits |
+| Google Ads (search) | Mediumâ€“High (Â£5â€“50+/day) | Immediate | Medium (ongoing optimisation) | Immediate traffic, testing demand |
+| Social media ads (Facebook, Instagram, LinkedIn) | Medium (Â£3â€“30+/day) | 1â€“2 weeks | Medium | Brand awareness, targeted demographics |
+| Local SEO (Google Business Profile) | Free | 1â€“3 months | Low | Local businesses with physical locations |
+| Partnerships and guest posts | Free | 1â€“3 months | Lowâ€“Medium | Niche authority, backlinks |
 | Offline (print, QR codes, events) | Varies | Immediate | Low | Local businesses, events |
-| PR and media outreach | Free–High | Variable | Low–Medium | Major launches, newsworthy events |
+| PR and media outreach | Freeâ€“High | Variable | Lowâ€“Medium | Major launches, newsworthy events |
 
 **Note:** Costs are indicative. They vary by country, currency, industry,
 competition, season, audience, and platform. Use the ranges in this document
@@ -101,25 +101,25 @@ to find, understand, and recommend to people searching for what you offer.
 ### SEO Cost
 
 - **Free** if you do it yourself (time investment instead).
-- **£500–5,000+/month** if you hire an agency or specialist.
+- **Â£500â€“5,000+/month** if you hire an agency or specialist.
 
 ### SEO Timeline
 
-- Results take 3–12 months. SEO is a long-term strategy, not instant traffic.
-- Once ranking, traffic is "free" — no per-click cost.
+- Results take 3â€“12 months. SEO is a long-term strategy, not instant traffic.
+- Once ranking, traffic is "free" â€” no per-click cost.
 - Requires ongoing maintenance (content updates, technical health).
 
 ### SEO Core Actions
 
-1. **Keyword research** — find what words people type when searching for what
+1. **Keyword research** â€” find what words people type when searching for what
    you offer.
-2. **On-page optimisation** — use those words in your page titles, headings,
+2. **On-page optimisation** â€” use those words in your page titles, headings,
    and content naturally (not stuffed artificially).
-3. **Technical SEO** — fast loading, mobile-friendly, secure (HTTPS), clean
+3. **Technical SEO** â€” fast loading, mobile-friendly, secure (HTTPS), clean
    URLs, sitemap submitted to Google.
-4. **Content creation** — publish genuinely useful content that answers
+4. **Content creation** â€” publish genuinely useful content that answers
    questions your audience asks.
-5. **Backlinks** — other reputable websites linking to yours (earned through
+5. **Backlinks** â€” other reputable websites linking to yours (earned through
    quality content, not purchased).
 
 ### SEO Pros and Cons
@@ -133,7 +133,7 @@ to find, understand, and recommend to people searching for what you offer.
 
 ### SEO Cross-References
 
-See `seo-review.prompt.md` and `local-seo-check.prompt.md` for detailed
+See `website-seo-review.prompt.md` and `website-local-seo-check.prompt.md` for detailed
 SEO audits.
 
 ---
@@ -186,14 +186,14 @@ attracts visitors searching for answers related to your field.
 ### Content Marketing Cost
 
 - **Free** if you write it yourself.
-- **£50–500+ per article** if you hire a writer.
-- Time investment: 2–8 hours per quality article.
+- **Â£50â€“500+ per article** if you hire a writer.
+- Time investment: 2â€“8 hours per quality article.
 
 ### Content Marketing Timeline
 
 - Each piece of content is a permanent asset that can attract traffic for years.
-- Takes 3–6 months of consistent publishing to build momentum.
-- Quality matters far more than quantity — one excellent article outperforms ten
+- Takes 3â€“6 months of consistent publishing to build momentum.
+- Quality matters far more than quantity â€” one excellent article outperforms ten
   mediocre ones.
 
 ### Content Marketing Pros and Cons
@@ -202,7 +202,7 @@ attracts visitors searching for answers related to your field.
 | --- | --- |
 | Demonstrates expertise | Time-intensive to produce quality content |
 | Supports SEO (content = pages for Google to rank) | Results are slow initially |
-| Can be repurposed (blog → social post → email → video) | Requires consistent schedule |
+| Can be repurposed (blog â†’ social post â†’ email â†’ video) | Requires consistent schedule |
 | Builds trust before someone becomes a customer | Competitive topics are harder to rank for |
 
 ---
@@ -216,23 +216,23 @@ useful content, updates, or offers.
 
 | List Size | Typical Monthly Cost | Examples |
 | --- | --- | --- |
-| 0–500 subscribers | Free–£10 | Mailchimp Free, MailerLite Free |
-| 500–2,000 | £10–30 | Mailchimp, MailerLite, Brevo |
-| 2,000–10,000 | £30–80 | Same platforms, paid tiers |
-| 10,000+ | £80–300+ | ConvertKit, ActiveCampaign |
+| 0â€“500 subscribers | Freeâ€“Â£10 | Mailchimp Free, MailerLite Free |
+| 500â€“2,000 | Â£10â€“30 | Mailchimp, MailerLite, Brevo |
+| 2,000â€“10,000 | Â£30â€“80 | Same platforms, paid tiers |
+| 10,000+ | Â£80â€“300+ | ConvertKit, ActiveCampaign |
 
 ### Email Marketing Timeline
 
 - Email typically has the highest return on investment of any digital channel.
 - You own your list (unlike social media followers, which a platform can remove).
-- Results come faster than SEO — you're contacting people who already know you.
+- Results come faster than SEO â€” you're contacting people who already know you.
 
 ### Email Marketing Pros and Cons
 
 | Pros | Cons |
 | --- | --- |
 | Highest ROI of digital channels | Must build the list first (takes time) |
-| Direct relationship — no algorithm | Requires consistent sending to maintain engagement |
+| Direct relationship â€” no algorithm | Requires consistent sending to maintain engagement |
 | You own the audience | Must comply with email laws (GDPR, CAN-SPAM, CASL) |
 | Highly measurable (open rates, clicks) | Inbox competition is fierce |
 
@@ -274,10 +274,10 @@ immediately.
 
 ### Google Ads Cost
 
-- Budget: £5–50+/day minimum to get meaningful data.
-- Cost per click: £0.50–£30+ depending on industry (legal and finance are most
+- Budget: Â£5â€“50+/day minimum to get meaningful data.
+- Cost per click: Â£0.50â€“Â£30+ depending on industry (legal and finance are most
   expensive; local services are cheapest).
-- Management: free if you do it yourself, £300–2,000+/month if you hire someone.
+- Management: free if you do it yourself, Â£300â€“2,000+/month if you hire someone.
 
 ### Google Ads Timeline
 
@@ -303,8 +303,8 @@ interests, behaviour, and location.
 
 ### Social Ads Cost
 
-- Budget: £3–30+/day minimum.
-- Cost per click: £0.20–£5+ depending on platform and audience.
+- Budget: Â£3â€“30+/day minimum.
+- Cost per click: Â£0.20â€“Â£5+ depending on platform and audience.
 - LinkedIn is most expensive (B2B audience). Facebook/Instagram are cheaper.
 
 ### Social Ads Timeline
@@ -351,7 +351,7 @@ search results and Google Maps when people search for services near them.
 
 ### Local SEO Cross-Reference
 
-See `local-seo-check.prompt.md` for a detailed local SEO audit.
+See `website-local-seo-check.prompt.md` for a detailed local SEO audit.
 
 ---
 
@@ -363,14 +363,14 @@ YouTube) to build awareness and community without paying for ads.
 ### Organic Social Cost
 
 - **Free** (time investment only).
-- Time: 3–10 hours/week for consistent presence on 1–2 platforms.
-- Optional tools (scheduling): £10–50/month (Buffer, Hootsuite).
+- Time: 3â€“10 hours/week for consistent presence on 1â€“2 platforms.
+- Optional tools (scheduling): Â£10â€“50/month (Buffer, Hootsuite).
 
 ### Organic Social Timeline
 
 - Results depend heavily on consistency and content quality.
 - You are at the mercy of each platform's algorithm.
-- Organic reach has declined significantly on most platforms — don't expect
+- Organic reach has declined significantly on most platforms â€” don't expect
   every follower to see every post.
 - Best used to build community and trust, then direct people to your website.
 
@@ -390,14 +390,14 @@ Choose based on where your audience already spends time:
 | Platform | Best For | Audience |
 | --- | --- | --- |
 | LinkedIn | B2B, professional services, recruiting | Professionals, decision-makers |
-| Instagram | Visual businesses, lifestyle, food, fashion | 18–44, visual learners |
-| Facebook | Local businesses, community groups, events | 30–65+, community-oriented |
-| TikTok | Entertainment, education, younger audiences | 16–34, short-form video |
+| Instagram | Visual businesses, lifestyle, food, fashion | 18â€“44, visual learners |
+| Facebook | Local businesses, community groups, events | 30â€“65+, community-oriented |
+| TikTok | Entertainment, education, younger audiences | 16â€“34, short-form video |
 | YouTube | Educational content, tutorials, demonstrations | All ages, long-form searchers |
 | X (Twitter) | News, commentary, tech, politics | Varies widely |
 | Pinterest | Home, fashion, food, DIY, planning | Predominantly women, planners |
 
-**Do not try to be on every platform.** Pick 1–2 where your audience is, and do
+**Do not try to be on every platform.** Pick 1â€“2 where your audience is, and do
 them well.
 
 ---
@@ -430,7 +430,7 @@ QR codes, vehicle wraps, trade shows, local advertising, word of mouth.
 
 ### When Offline Makes Sense
 
-- Local businesses (café, salon, tradesperson, shop).
+- Local businesses (cafÃ©, salon, tradesperson, shop).
 - Events (conferences, markets, pop-ups).
 - Industries where the audience isn't primarily online.
 
@@ -438,12 +438,12 @@ QR codes, vehicle wraps, trade shows, local advertising, word of mouth.
 
 | Method | Typical Cost | Notes |
 | --- | --- | --- |
-| Business cards with URL/QR code | £20–50 for 500 | Essential for any business |
-| Flyers/leaflets | £50–200 for 1,000 | Local distribution |
-| QR code on packaging/receipts | Free–minimal | Drives existing customers to website |
-| Local newspaper/magazine ad | £50–500+ | Declining but still relevant for some audiences |
-| Vehicle signage | £200–1,000 | Long-lasting, high visibility for service businesses |
-| Trade show/market stall | £100–2,000+ | Direct contact with potential customers |
+| Business cards with URL/QR code | Â£20â€“50 for 500 | Essential for any business |
+| Flyers/leaflets | Â£50â€“200 for 1,000 | Local distribution |
+| QR code on packaging/receipts | Freeâ€“minimal | Drives existing customers to website |
+| Local newspaper/magazine ad | Â£50â€“500+ | Declining but still relevant for some audiences |
+| Vehicle signage | Â£200â€“1,000 | Long-lasting, high visibility for service businesses |
+| Trade show/market stall | Â£100â€“2,000+ | Direct contact with potential customers |
 
 ---
 
@@ -487,26 +487,26 @@ Beginner rules:
 Answer these questions to narrow your options:
 
 1. **What is your budget?**
-   - No budget → SEO, content, social media, local SEO, partnerships.
-   - Small budget (£50–300/month) → Add email marketing or small ad campaigns.
-   - Medium budget (£300–2,000/month) → Add Google Ads or social ads with
+   - No budget â†’ SEO, content, social media, local SEO, partnerships.
+   - Small budget (Â£50â€“300/month) â†’ Add email marketing or small ad campaigns.
+   - Medium budget (Â£300â€“2,000/month) â†’ Add Google Ads or social ads with
      professional management.
 
 2. **How quickly do you need results?**
-   - Immediately → Paid ads (Google or social).
-   - 1–3 months → Email marketing, local SEO, social media.
-   - 3–12 months → SEO, content marketing.
+   - Immediately â†’ Paid ads (Google or social).
+   - 1â€“3 months â†’ Email marketing, local SEO, social media.
+   - 3â€“12 months â†’ SEO, content marketing.
 
 3. **What type of business?**
-   - Local/physical → Local SEO + Google Business Profile + offline.
-   - Online/national → SEO + content + email + ads.
-   - B2B → LinkedIn + content + SEO + email.
-   - eCommerce → Google Shopping + social ads + email + SEO.
+   - Local/physical â†’ Local SEO + Google Business Profile + offline.
+   - Online/national â†’ SEO + content + email + ads.
+   - B2B â†’ LinkedIn + content + SEO + email.
+   - eCommerce â†’ Google Shopping + social ads + email + SEO.
 
 4. **How much time can you invest?**
-   - Minimal (1–2 hours/week) → Local SEO + email (automated sequences).
-   - Moderate (5–10 hours/week) → Add content marketing or social media.
-   - Significant (10+ hours/week) → Full multichannel strategy.
+   - Minimal (1â€“2 hours/week) â†’ Local SEO + email (automated sequences).
+   - Moderate (5â€“10 hours/week) â†’ Add content marketing or social media.
+   - Significant (10+ hours/week) â†’ Full multichannel strategy.
 
 ### Start Small
 
@@ -534,7 +534,7 @@ type, audience, geography, budget, and legal constraints.
 - Set up analytics and search visibility tools.
 - Create UTM naming conventions for campaign links.
 - Prepare launch announcement copy.
-- Prepare 3–5 social posts for the most relevant platform.
+- Prepare 3â€“5 social posts for the most relevant platform.
 - Prepare an email announcement if you have a lawful mailing list.
 - Claim or update Google Business Profile if local.
 - Prepare review request process if appropriate.
@@ -634,7 +634,7 @@ Before or during launch:
 
 ## Common Mistakes
 
-- **Trying to do everything at once.** Pick 1–2 channels, do them well, then add.
+- **Trying to do everything at once.** Pick 1â€“2 channels, do them well, then add.
 - **Expecting instant results from SEO.** It takes months. Be patient.
 - **Paying for ads without tracking conversions.** You'll waste money without
   knowing what works.
@@ -661,9 +661,9 @@ Before or during launch:
 - Never send marketing emails to people who did not clearly agree unless
   qualified advice confirms another lawful basis applies.
 - Never guarantee specific results (no one can promise "page 1 of Google").
-- Never buy backlinks, fake reviews, or followers — these risk permanent penalties.
+- Never buy backlinks, fake reviews, or followers â€” these risk permanent penalties.
 - Never spam people who haven't given consent (see privacy/legal skill).
-- Never copy competitors' content — create original material.
+- Never copy competitors' content â€” create original material.
 - Always disclose paid partnerships and sponsored content (legal requirement in
   most countries).
 - Always track what you spend vs. what you get back.

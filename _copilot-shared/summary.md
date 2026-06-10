@@ -3,7 +3,7 @@
 ## What Is This?
 
 This directory (`_copilot-shared/`) contains **GitHub Copilot configuration
-files** — a set of rules, templates, and personas that customise how Copilot
+files** â€” a set of rules, templates, and personas that customise how Copilot
 (the AI coding assistant built into VS Code) behaves across all projects in
 this workspace.
 
@@ -38,7 +38,7 @@ The configuration is organised into eight groups:
 | `copilot-instructions.md` | Global behaviour rules for all interactions | Copilot reads it automatically |
 
 **"Activates automatically"** means Copilot reads the file without you doing
-anything — it pattern-matches against the file you're editing.
+anything â€” it pattern-matches against the file you're editing.
 
 **"You select" / "You type"** means you must explicitly choose or trigger it
 (from a dropdown, or by typing `/` or `@` in Chat).
@@ -58,16 +58,16 @@ anything — it pattern-matches against the file you're editing.
 
 Think of it like a team at work:
 
-- **Instructions** are the office rules everyone follows automatically — Copilot
+- **Instructions** are the office rules everyone follows automatically â€” Copilot
   reads them whenever you edit files that match their filename pattern.
-- **Prompts** are forms you fill out to request a specific task — type
+- **Prompts** are forms you fill out to request a specific task â€” type
   `/prompt-name` in Copilot Chat to run a repeatable recipe.
-- **Chat modes** are like choosing which department to talk to — select one at
+- **Chat modes** are like choosing which department to talk to â€” select one at
   the start of a conversation to set the mindset for the whole session.
-- **Agents** are specialist staff who do the work — each has a defined workflow,
+- **Agents** are specialist staff who do the work â€” each has a defined workflow,
   required inputs, and output format. Summon one by typing `@name` in Copilot
   Chat.
-- **Skills** are the training manuals agents read before starting — detailed
+- **Skills** are the training manuals agents read before starting â€” detailed
   standards for code, tests, security, etc.
 - **Spec workflow templates** are the scaffolding agents use to produce
   consistent task and checklist files.
@@ -80,7 +80,7 @@ Templates used by the `team-lead` agent when decomposing designs into tasks.
 
 | File | Purpose |
 | --- | --- |
-| `task_file_template.md` | Template for individual implementation tasks — includes docstring requirements, validation steps, and rollback instructions. |
+| `task_file_template.md` | Template for individual implementation tasks â€” includes docstring requirements, validation steps, and rollback instructions. |
 | `checklist_file_template.md` | Template for FR-level checklists. |
 | `fr_template.md` | Template for functional requirement documents. |
 
@@ -99,7 +99,7 @@ You don't need to open any special menu to use a pre-built agent. Just:
 2. In the chat input box, type **`@`** followed by the agent's name.
 3. Carry on typing your request as usual, then press **Enter**.
 
-As you type `@`, Copilot shows a list of available agents — you can click one
+As you type `@`, Copilot shows a list of available agents â€” you can click one
 instead of typing the full name. You can invoke an agent **at any time**, even
 in the middle of an ongoing conversation.
 
@@ -116,7 +116,7 @@ in the middle of an ongoing conversation.
 
 | File | Purpose |
 | --- | --- |
-| `Explore.agent.md` | Read-only codebase exploration agent — locates code, traces call sites and dependencies, and confirms what already exists. Delegated to by architect, business-analyst, and team-lead. Never edits files or runs code. |
+| `Explore.agent.md` | Read-only codebase exploration agent â€” locates code, traces call sites and dependencies, and confirms what already exists. Delegated to by architect, business-analyst, and team-lead. Never edits files or runs code. |
 | `scope-change.agent.md` | Captures and validates a new scope change request before it enters the backlog. |
 | `business-analyst.agent.md` | Translates a scope change into structured functional requirements. |
 | `architect.agent.md` | Produces a module-level technical design for approved requirements. |
@@ -127,11 +127,11 @@ in the middle of an ongoing conversation.
 | `doc-writer.agent.md` | Writes and updates beginner-friendly project documentation. |
 | `pre-commit-check.agent.md` | Runs the full quality gate and summarises results before a PR is raised. |
 | `docstring-auditor.agent.md` | Audits and improves beginner-friendly Python docstrings without changing runtime behaviour. |
-| `critical-thinking.agent.md` | Challenges assumptions via open Socratic questioning — asks questions only, never writes code (one carve-out: may flag a data-loss/security/Production risk). Ends with a neutral recap of assumptions tested. Mirrored with the chatmode version. |
-| `debug.agent.md` | Systematic 4-phase bug diagnosis: assess → investigate → resolve → verify. |
+| `critical-thinking.agent.md` | Challenges assumptions via open Socratic questioning â€” asks questions only, never writes code (one carve-out: may flag a data-loss/security/Production risk). Ends with a neutral recap of assumptions tested. Mirrored with the chatmode version. |
+| `debug.agent.md` | Systematic 4-phase bug diagnosis: assess â†’ investigate â†’ resolve â†’ verify. |
 
 **Recommended agent chain** (the order you'd use them for a full feature). You
-won't always need every agent — this just shows the typical order for building
+won't always need every agent â€” this just shows the typical order for building
 a full feature from scratch:
 
 ```text
@@ -169,7 +169,7 @@ persona and ruleset that persist for the entire conversation.
 | `pr-merge.chatmode.md` | Write the git commit message and PR description, then push. |
 | `pre-commit-check.chatmode.md` | Run the full quality gate and summarise results before raising a PR. |
 | `release-pr-planner.chatmode.md` | Split approved capabilities into safe, reviewable pull requests. |
-| `sf-safe-ops.chatmode.md` | Read-only Salesforce reasoning mode — no write code generated. |
+| `sf-safe-ops.chatmode.md` | Read-only Salesforce reasoning mode â€” no write code generated. |
 | `test-engineer.chatmode.md` | Design and improve pytest coverage without real Salesforce calls. |
 | `transcript-extractor.chatmode.md` | Convert long transcripts into comprehensive beginner-friendly Markdown guides. |
 | `website-launch-planner.chatmode.md` | Guide a beginner from website idea to platform choice, social presence, design, build, and live launch. |
@@ -216,23 +216,23 @@ to do.
 | File | Purpose |
 | --- | --- |
 | `add-tests.prompt.md` | Add or improve pytest coverage for a selected module. |
-| `component-overview.prompt.md` | Generate a machine-readable, component-level overview (`overview.md`) for consumption by other AI agents — explicit labelled fields, no prose. |
-| `conversion-review.prompt.md` | Review a website for conversion, lead generation, trust, calls to action, and customer journey friction. |
+| `component-overview.prompt.md` | Generate a machine-readable, component-level overview (`overview.md`) for consumption by other AI agents â€” explicit labelled fields, no prose. |
+| `website-conversion-review.prompt.md` | Review a website for conversion, lead generation, trust, calls to action, and customer journey friction. |
 | `docs-update.prompt.md` | Update project documentation after a code or workflow change. |
 | `docstring-audit.prompt.md` | Audit Python docstrings and produce a beginner-friendly remediation plan. |
 | `extract-transcript.prompt.md` | Extract a comprehensive beginner-friendly guide from a chat transcript. |
-| `html-css-review.prompt.md` | Review HTML and CSS for accessibility, responsiveness, maintainability, and beginner readability. |
+| `website-html-css-review.prompt.md` | Review HTML and CSS for accessibility, responsiveness, maintainability, and beginner readability. |
 | `improve-docstrings.prompt.md` | Improve Python docstrings across a file or module without changing runtime behaviour. |
-| `local-seo-check.prompt.md` | Review local SEO readiness for a small business or local organisation website. |
-| `monthly-website-review.prompt.md` | Run a monthly website improvement review covering maintenance, analytics, SEO, conversion, and accessibility. |
+| `website-local-seo-check.prompt.md` | Review local SEO readiness for a small business or local organisation website. |
+| `website-monthly-review.prompt.md` | Run a monthly website improvement review covering maintenance, analytics, SEO, conversion, and accessibility. |
 | `new-script.prompt.md` | Scaffold a new Salesforce admin utility script. |
-| `platform-decision.prompt.md` | Help choose the simplest sustainable platform for a website, report, dashboard, or tool. |
+| `website-platform-decision.prompt.md` | Help choose the simplest sustainable platform for a website, report, dashboard, or tool. |
 | `pre-commit-check.prompt.md` | Run and interpret the full project sanity checks before a commit. |
 | `project-architecture.prompt.md` | Summarise the current project architecture. |
 | `refactor-legacy-script.prompt.md` | Refactor an older standalone script into the current project architecture. |
-| `review.prompt.md` | Beginner-friendly code review of staged changes. |
+| `website-review.prompt.md` | General website review prompt for broad site quality checks. |
 | `salesforce-report.prompt.md` | Create a read-only Salesforce reporting script with CSV output. |
-| `seo-review.prompt.md` | Review a website for SEO, findability, and content clarity. |
+| `website-seo-review.prompt.md` | Review a website for SEO, findability, and content clarity. |
 | `troubleshoot-error.prompt.md` | Diagnose a command error and produce a beginner-friendly fix plan. |
 | `update-dependencies.prompt.md` | Safely update dependencies using pip-tools. |
 | `website-from-idea-to-launch.prompt.md` | Plan a beginner-friendly website from idea to live launch. |
@@ -330,7 +330,7 @@ and review quality** over speed or cost.
 | PR (Pull Request) | A request to merge your changes into the main codebase, where they can be reviewed before being accepted. |
 | CI/CD | Continuous Integration / Continuous Deployment -- automated checks and release steps that run when code is pushed. |
 | JOSHUA | The name of this project's Flask-based web frontend (referenced by the Flask/WebSocket skill and instruction files). |
-| `sanity.bat` | The local quality-gate runner (Windows). Runs ruff, mypy, bandit, detect-secrets, and pytest+coverage in one command — the local mirror of `ci.yml`. Run it before every commit. |
+| `sanity.bat` | The local quality-gate runner (Windows). Runs ruff, mypy, bandit, detect-secrets, and pytest+coverage in one command â€” the local mirror of `ci.yml`. Run it before every commit. |
 
 <!-- WEBSITE-PROMPT-COVERAGE-INDEX:START -->
 ## Website Prompt Coverage Summary
@@ -377,12 +377,12 @@ The website prompt suite provides reusable review, planning, governance, operati
 
 ### Discovery, SEO, content, conversion, and experience
 
-- `prompts/seo-review.prompt.md` - Reviews technical SEO, on-page SEO, indexability, metadata, content quality, crawlability, and search visibility risks.
-- `prompts/local-seo-check.prompt.md` - Reviews local SEO signals, local listings, service areas, location pages, reviews, local schema, and local search visibility.
-- `prompts/online-presence-review.prompt.md` - Reviews broader online presence across listings, profiles, reputation, consistency, channels, trust signals, and discoverability.
+- `prompts/website-seo-review.prompt.md` - Reviews technical SEO, on-page SEO, indexability, metadata, content quality, crawlability, and search visibility risks.
+- `prompts/website-local-seo-check.prompt.md` - Reviews local SEO signals, local listings, service areas, location pages, reviews, local schema, and local search visibility.
+- `prompts/website-online-presence-review.prompt.md` - Reviews broader online presence across listings, profiles, reputation, consistency, channels, trust signals, and discoverability.
 - `prompts/website-search-review.prompt.md` - Reviews website search, internal search UX, search results quality, filters, indexing, no-results handling, accessibility, analytics, and AI-assisted search risks.
 - `prompts/website-copy-review.prompt.md` - Reviews website copy for clarity, trust, claims, audience fit, conversion, accessibility, localization, brand, and risk.
-- `prompts/conversion-review.prompt.md` - Reviews conversion paths, calls to action, landing pages, forms, trust signals, analytics, and funnel friction.
+- `prompts/website-conversion-review.prompt.md` - Reviews conversion paths, calls to action, landing pages, forms, trust signals, analytics, and funnel friction.
 - `prompts/website-experimentation-review.prompt.md` - Reviews website experiments, A/B tests, measurement plans, consent, fairness, analytics, guardrails, rollout, and decision quality.
 
 ### Analytics, performance, QA, and functionality
@@ -396,7 +396,7 @@ The website prompt suite provides reusable review, planning, governance, operati
 
 ### Accessibility, localization, privacy, security, and user trust
 
-- `prompts/security-privacy-review.prompt.md` - Reviews security and privacy risks, data handling, access, consent, secrets, third-party services, and practical remediation needs.
+- `prompts/website-security-privacy-review.prompt.md` - Reviews security and privacy risks, data handling, access, consent, secrets, third-party services, and practical remediation needs.
 - `prompts/website-accessibility-remediation-review.prompt.md` - Reviews accessibility remediation plans, WCAG-oriented risks, assistive technology support, prioritization, ownership, testing, and evidence needs.
 - `prompts/website-localization-review.prompt.md` - Reviews localization, translation quality, locale fit, regional UX, accessibility, SEO, legal/privacy considerations, ownership, and testing.
 - `prompts/website-access-permissions-review.prompt.md` - Reviews website access, roles, permissions, least privilege, account lifecycle, admin access, vendor access, auditability, and access-control risks.
@@ -416,3 +416,7 @@ The website prompt suite provides reusable review, planning, governance, operati
 - `prompts/website-incident-response-review.prompt.md` - Reviews incident response planning for outages, security/privacy issues, broken critical journeys, communications, escalation, evidence, and recovery.
 - `prompts/website-backup-restore-review.prompt.md` - Reviews backups, restore testing, recovery objectives, hosting/platform dependencies, data coverage, ownership, and recovery evidence.
 - `prompts/website-monitoring-review.prompt.md` - Reviews uptime, error, performance, form, analytics, security, certificate, domain, and critical-journey monitoring.
+
+## Website-adjacent sustainability prompt
+
+- `prompts/website-digital-sustainability-review.prompt.md` - Reviews website sustainability considerations, including page weight, asset efficiency, hosting and infrastructure considerations, performance-related waste, measurement needs, governance, and practical tradeoffs. Use current platform, analytics, hosting, and sustainability evidence when making recommendations.

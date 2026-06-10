@@ -32,17 +32,17 @@ but you should still run the relevant Markdown checks and review the final diff.
 
 ```text
 Idea
-  → Backlog check
-  → Scope and approval
-  → PR planning
-  → Requirements
-  → Architecture
-  → Implementation tasks
-  → Code/test/docstring changes
-  → Documentation updates
-  → Quality gate
-  → Code review
-  → Pull request
+  â†’ Backlog check
+  â†’ Scope and approval
+  â†’ PR planning
+  â†’ Requirements
+  â†’ Architecture
+  â†’ Implementation tasks
+  â†’ Code/test/docstring changes
+  â†’ Documentation updates
+  â†’ Quality gate
+  â†’ Code review
+  â†’ Pull request
 ```
 
 ---
@@ -391,10 +391,10 @@ at or above 90%.
 **Use:**
 
 - `code-reviewer.agent.md`
-- `review.prompt.md`
+- `website-review.prompt.md`
 
-Classify findings using the priority levels (🔴 CRITICAL, 🟡 IMPORTANT,
-🟢 SUGGESTION). All 🔴 issues block merge.
+Classify findings using the priority levels (ðŸ”´ CRITICAL, ðŸŸ¡ IMPORTANT,
+ðŸŸ¢ SUGGESTION). All ðŸ”´ issues block merge.
 
 **Success looks like:** No outstanding CRITICAL issues; IMPORTANT issues are
 resolved or explicitly accepted.
@@ -420,6 +420,6 @@ gitignored. Then write the commit message + PR description and push after approv
 - [ ] Requirements/design/tasks produced where needed.
 - [ ] Code, tests, and docstrings updated.
 - [ ] Documentation updated.
-- [ ] Quality gate passed (coverage ≥ 90%).
+- [ ] Quality gate passed (coverage â‰¥ 90%).
 - [ ] Code review complete with no open CRITICAL issues.
 - [ ] PR raised with clear commit message and description.

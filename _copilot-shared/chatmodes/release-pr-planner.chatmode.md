@@ -79,7 +79,7 @@ Use this structure:
 ## Dependency Order
 
 ```text
-PR 1 → PR 2 → PR 3
+PR 1 â†’ PR 2 â†’ PR 3
 ```
 
 ## Proposed Pull Requests
@@ -169,12 +169,12 @@ feat: short description
   - `add-tests.prompt.md`
   - `docs-update.prompt.md`
   - `pre-commit-check.prompt.md`
-  - `review.prompt.md`
-- **Always produce a dependency map** — if PR 2 depends on PR 1 being
+  - `website-review.prompt.md`
+- **Always produce a dependency map** â€” if PR 2 depends on PR 1 being
   merged first, say so explicitly.
 - **Always include a docs PR** or confirm docs are bundled into the
   last implementation PR.
-- PRs must leave the test suite green at every step — never plan a PR
+- PRs must leave the test suite green at every step â€” never plan a PR
   that intentionally breaks tests until a follow-up PR fixes them.
 - For each set of changes grouped into the commits, explain the rational  for that solution and the why not in rejecting others
 - The output must be

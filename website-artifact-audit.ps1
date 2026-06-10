@@ -48,6 +48,7 @@ foreach ($doc in $docs) {
   }
 }
 
+
 $prompts = Get-ChildItem -Path $promptDir -Filter "*.prompt.md" | Sort-Object Name
 
 $report = foreach ($p in $prompts) {
@@ -58,6 +59,7 @@ $report = foreach ($p in $prompts) {
     InManifest = $docText[$manifestPath] -like "*$($p.Name)*"
     InStartHere = $docText[$startHerePath] -like "*$($p.Name)*"
     InSummary = $docText[$summaryPath] -like "*$($p.Name)*"
+    WebsiteRequired = $p.Name -like "website-*"
   }
 }
 
@@ -72,13 +74,15 @@ Write-Host "=== Missing from at least one documentation file ==="
 Write-Host ""
 
 $missing = $report | Where-Object {
-  -not $_.InManifest -or -not $_.InStartHere -or -not $_.InSummary
+  $_.WebsiteRequired -and (
+    -not $_.InManifest -or -not $_.InStartHere -or -not $_.InSummary
+  )
 }
 
 if ($missing) {
   $missing | Format-Table -AutoSize
 } else {
-  Write-Host "No missing prompt references found across manifest, START-HERE, and summary."
+  Write-Host "No missing website-required prompt references found across manifest, START-HERE, and summary."
 }
 
 Write-Host ""
