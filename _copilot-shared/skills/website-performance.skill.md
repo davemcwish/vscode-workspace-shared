@@ -9,6 +9,12 @@ geographic location.
 It is written for **complete beginners** who may not know what a CDN is, why
 images need optimisation, or how to interpret a Lighthouse report.
 
+**Currentness warning:** Browser behaviour, Core Web Vitals metrics,
+Lighthouse scoring, device capabilities, network conditions, hosting
+features, CDN behaviour, image formats, and performance best practices change
+over time. Before making final performance decisions, verify current guidance
+from authoritative sources and test the actual website.
+
 ---
 
 ## Why Performance Matters
@@ -23,7 +29,32 @@ images need optimisation, or how to interpret a Lighthouse report.
 
 ---
 
+## Field Data vs Lab Data
+
+Performance tools do not all measure the same thing.
+
+| Data Type | What It Means | Examples | Use It For |
+| --- | --- | --- | --- |
+| Lab data | A controlled test run using simulated or fixed conditions | Lighthouse, local browser tests, PageSpeed Insights lab section | Debugging and comparing changes |
+| Field data | Real visitor experience collected from actual users | Chrome UX Report, real user monitoring, PageSpeed Insights field section | Understanding real-world performance |
+| Synthetic monitoring | Repeated scheduled tests from chosen locations/devices | Uptime/performance monitoring tools | Detecting regressions over time |
+
+Beginner rule:
+
+Use lab data to diagnose problems, but use field data where available to
+understand what real visitors experience.
+
+---
+
 ## Core Web Vitals (Google's Speed Metrics)
+
+Core Web Vitals are Google-defined user-experience metrics that focus on
+loading speed, responsiveness, and visual stability. The exact metrics,
+thresholds, reporting details, and tooling can change over time, so verify
+current guidance before treating a number as final.
+
+At a beginner level, the key idea is simple: the site should load quickly,
+respond promptly, and avoid unexpected layout movement.
 
 Google measures three key things about your page:
 
@@ -43,6 +74,48 @@ Google measures three key things about your page:
   as seen by real visitors).
 - **WebPageTest** (webpagetest.org) — advanced testing with different locations
   and connection speeds.
+
+---
+
+## Performance Budget
+
+A performance budget is a limit you set before the site becomes slow.
+
+It can include limits for:
+
+- page weight,
+- image weight,
+- JavaScript size,
+- CSS size,
+- font files,
+- third-party scripts,
+- number of requests,
+- target load time,
+- Core Web Vitals targets.
+
+Beginner example:
+
+| Metric | Suggested Budget |
+| --- | --- |
+| Homepage total page weight | Under 2 MB where practical |
+| Content page total page weight | Under 1.5 MB where practical |
+| Largest hero image | Under 300 KB where practical |
+| Number of HTTP requests | Under 50 where practical |
+| JavaScript total | Under 300 KB compressed where practical |
+| Largest Contentful Paint | Under 2.5 seconds |
+| Interaction to Next Paint | Under 200 milliseconds |
+| Cumulative Layout Shift | Under 0.1 |
+| Third-party scripts | Only those with a clear business purpose |
+| Fonts | Use system fonts or one font family unless there is a clear reason |
+| Mobile test | Must remain usable on a mid-range phone over a slow connection |
+
+The exact numbers depend on the website type, audience, media needs, and
+business goals. The important part is to set limits before adding more images,
+scripts, plugins, apps, fonts, or embeds.
+
+Write the budget down. Check it monthly. If a new feature pushes the page over
+budget, either optimise something else, remove unnecessary weight, or document
+why the exception is acceptable.
 
 ---
 
@@ -77,6 +150,27 @@ Add `loading="lazy"` to any image below the initial visible area:
 Do NOT lazy-load the first visible image (above the fold) — it should load
 immediately for good LCP.
 
+### Image and Media Governance
+
+Images are one of the easiest ways for a website to become slow over time.
+
+Document simple rules for future content editors:
+
+- maximum image dimensions,
+- preferred file formats,
+- target file sizes,
+- where original high-resolution images are stored,
+- who is allowed to upload large media,
+- when to use video instead of images,
+- when not to use autoplaying media,
+- how to add alt text,
+- how to test the page after adding media.
+
+Beginner rule:
+
+Do not upload full-size camera images directly to normal website pages unless
+the platform automatically resizes and optimises them.
+
 ---
 
 ## Font Loading
@@ -97,6 +191,22 @@ if not handled carefully.
 ```html
 <link rel="preload" href="/fonts/main.woff2" as="font" type="font/woff2" crossorigin>
 ```
+
+Fonts can improve branding, but they can also slow down rendering and cause
+layout shifts.
+
+Additional beginner rules:
+
+- Use system fonts if branding does not require custom fonts.
+- If using web fonts, use as few font families, weights, and styles as
+  practical.
+- Avoid loading fonts from unnecessary third-party services.
+- Preload only critical fonts when you understand the impact.
+- Test whether text is readable while fonts load.
+- Check for layout shifts caused by font swapping.
+
+Do not add multiple font families just because a theme or template makes it
+easy.
 
 ---
 
@@ -180,6 +290,36 @@ waiting). Fewer requests = faster page.
   social embed, and tracking pixel adds requests).
 - Use a single font family with limited weights rather than multiple font families.
 
+## Third-Party Scripts
+
+Third-party scripts include analytics, advertising pixels, chat widgets, maps,
+social media embeds, review widgets, booking tools, A/B testing tools, heatmaps,
+session replay tools, payment widgets, and embedded videos.
+
+Each third-party script can affect:
+
+- loading speed,
+- responsiveness,
+- privacy and consent,
+- security risk,
+- reliability,
+- mobile data usage,
+- visitor trust.
+
+Before adding a third-party script, ask:
+
+- What business purpose does it serve?
+- Is there a lighter alternative?
+- Does it need to load on every page?
+- Can it load after consent or after interaction?
+- What happens if the third-party service is slow or unavailable?
+- Who owns the script after launch?
+
+Beginner rule:
+
+Every third-party script should have a named owner, a documented reason, and a
+review date.
+
 ---
 
 ## Mobile Performance
@@ -197,23 +337,30 @@ Mobile devices have:
 - Aim for total page weight under 1.5 MB for content pages.
 - Critical content should be visible within 3 seconds on a 4G connection.
 
----
+### Mobile and Network Reality Check
 
-## Performance Budget
+A website that feels fast on a developer's laptop and office broadband may feel
+slow on a mid-range phone, weak Wi-Fi, or mobile data connection.
 
-A performance budget is a rule your team sets: "Our pages will never exceed
-these limits."
+Test at least:
 
-| Metric | Budget (suggested) |
-| --- | --- |
-| Total page weight | Under 1.5 MB |
-| Number of HTTP requests | Under 50 |
-| Largest Contentful Paint | Under 2.5 seconds |
-| Time to Interactive | Under 5 seconds on 4G |
-| JavaScript total | Under 300 KB (compressed) |
+- homepage,
+- most important landing page,
+- most important conversion page,
+- largest content page,
+- checkout or booking flow if applicable,
+- page with the most third-party embeds if applicable.
 
-Write your budget down. Check it monthly. If a new feature pushes you over
-budget, something else must be optimised or removed.
+Where possible, test on:
+
+- desktop,
+- mobile,
+- slower network conditions,
+- logged-out visitor state,
+- consent accepted,
+- consent rejected,
+- first visit,
+- repeat visit.
 
 ---
 
@@ -248,22 +395,60 @@ budget, something else must be optimised or removed.
 - Use built-in lazy loading if available.
 - Test product listing pages (many images) and checkout flow separately.
 
+## Performance Regressions
+
+Performance can get worse after launch because of:
+
+- new images,
+- new plugins,
+- new apps,
+- theme changes,
+- tracking pixels,
+- chat widgets,
+- review widgets,
+- embedded videos,
+- added fonts,
+- advertising tags,
+- CMS updates,
+- hosting changes.
+
+Treat performance as an ongoing maintenance task, not a one-time launch task.
+
+When performance changes suddenly after a website update, plugin change, cookie
+banner change, hosting migration, or platform migration, check whether the
+measurement setup or page weight changed before assuming visitor behaviour
+changed.
+
 ---
 
 ## Performance Checklist for Launch
 
 Before going live:
 
-- [ ] Run Lighthouse on mobile — all Core Web Vitals are green.
-- [ ] All images are optimised (modern format, correct size, compressed).
+- [ ] Performance budget documented.
+- [ ] Run Lighthouse on mobile and desktop.
+- [ ] Core Web Vitals are green where practical, or exceptions are documented.
+- [ ] All images are optimised using modern format, correct size, and
+      compression.
+- [ ] Image and media upload rules documented for future editors.
 - [ ] Images below the fold use lazy loading.
-- [ ] Fonts use `font-display: swap` and WOFF2 format.
-- [ ] JavaScript uses `defer` or `async`.
+- [ ] The first visible image is not lazy-loaded if it affects LCP.
+- [ ] Fonts use WOFF2 format where practical.
+- [ ] Font families, weights, and loading behaviour reviewed.
+- [ ] JavaScript uses `defer` or `async` where appropriate.
 - [ ] Unused CSS and JavaScript is removed.
+- [ ] Third-party scripts reviewed for necessity, page scope, owner, and
+      performance impact.
 - [ ] Caching headers are configured.
-- [ ] Page weight is under 1.5 MB.
-- [ ] Test on a real mobile device (or simulated slow connection).
-- [ ] Someone is named as the performance maintenance owner.
+- [ ] CDN configured where appropriate.
+- [ ] Page weight is within the documented performance budget or exceptions are
+      documented.
+- [ ] Key pages tested on mobile and slower network conditions.
+- [ ] Performance tested with consent accepted and consent rejected where a
+      consent banner is used.
+- [ ] Baseline performance results recorded for future comparison.
+- [ ] Performance owner named.
+- [ ] First post-launch performance review scheduled.
 
 ---
 
@@ -271,11 +456,16 @@ Before going live:
 
 | Frequency | Action |
 | --- | --- |
-| Monthly | Run Lighthouse, review scores, check page weight |
-| Quarterly | Audit third-party scripts (are they all still needed?) |
-| On every deployment | Verify no performance regression (LCP still green) |
-| On every new feature | Check: does this add weight? Is it within budget? |
-| Annually | Review performance budget — update targets if needed |
+| Weekly during first month after launch | Check key pages for obvious speed, layout, and interaction issues |
+| Monthly | Review analytics, search console, and page speed signals for performance or usability problems |
+| Monthly | Check whether new content added unusually large images, videos, embeds, or downloads |
+| Quarterly | Re-test key pages with lab tools and compare against baseline |
+| Quarterly | Review third-party scripts, apps, plugins, embeds, fonts, and tracking tags |
+| Quarterly | Check Core Web Vitals or equivalent real-user performance data where available |
+| On every major content update | Check image sizes, page weight, layout stability, and mobile usability |
+| On every theme/platform/plugin/app change | Re-test key pages before and after the change |
+| On every new marketing tag or embed | Review performance, consent, privacy, and security impact |
+| Annually | Re-check performance budget, hosting fit, CDN configuration, and media rules |
 
 ---
 
@@ -292,6 +482,10 @@ When you run Lighthouse, you get scores from 0–100:
 Lighthouse also provides **specific recommendations** ranked by estimated impact.
 Start with the highest-impact item and work down.
 
+Lighthouse is useful, but it is still lab data. Do not treat a single Lighthouse
+score as the whole truth. Compare it with field data where available, especially
+for pages with real traffic.
+
 **Common recommendations and what they mean:**
 
 - "Serve images in next-gen formats" → Convert to WebP/AVIF.
@@ -304,9 +498,22 @@ Start with the highest-impact item and work down.
 
 ## Critical Constraints
 
-- Never sacrifice usability for performance (don't remove content people need).
-- Never ignore mobile performance (most web traffic is mobile).
-- Never add features without considering their performance cost.
-- Always measure before and after changes (don't guess — test).
+- Never sacrifice usability for performance; do not remove content people need.
+- Never ignore mobile performance; many visitors use phones and slower networks.
+- Never judge performance from a developer machine alone; test realistic devices
+  and networks.
+- Never treat Lighthouse or lab scores as the only truth; compare with field data
+  where available.
+- Never add features, third-party scripts, apps, plugins, embeds, fonts, or media
+  assets without considering performance cost.
+- Never upload large original images directly to normal pages without
+  optimisation.
+- Never let performance ownership be unclear after launch.
+- Always measure before and after changes; do not guess - test.
 - Always have a performance budget, even informal.
-- Always optimise images — there is no excuse for unoptimised images in 2025+.
+- Always optimise images before upload unless the platform reliably performs
+  resizing, compression, and modern-format delivery automatically.
+- Always record baseline performance results at launch.
+- Always re-test after major content, theme, plugin, app, script, hosting, or
+  platform changes.
+- Always document the reason, owner, and review date for third-party scripts.
