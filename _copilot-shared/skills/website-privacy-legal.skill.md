@@ -13,6 +13,12 @@ know that their website is subject to laws in countries they've never visited.
 It is NOT legal advice. For complex situations, consult a qualified lawyer in
 the relevant jurisdiction(s).
 
+**Currentness warning:** Privacy law, accessibility law, cookie rules,
+advertising rules, regulator guidance, enforcement priorities, and legal
+thresholds change over time. Before making final decisions, verify current
+requirements from authoritative sources and record the source and date
+checked in the project documentation.
+
 ---
 
 ## Audience
@@ -26,13 +32,25 @@ the relevant jurisdiction(s).
 
 ## The Fundamental Principle
 
-**If your website is accessible to people in a country, that country's privacy
-and accessibility laws may apply to you — regardless of where YOU are located.**
+Privacy and accessibility obligations are usually driven by a combination of:
 
-A small business in Brisbane with a website that EU residents can visit must
-comply with GDPR. A sole trader in London whose site is used by Californians
-must comply with CPRA. Geography is about where your VISITORS are, not where
-your server is.
+- where the website owner is established,
+- where visitors are located,
+- whether the website targets people in a jurisdiction,
+- whether goods or services are offered there,
+- whether visitor behaviour is monitored there,
+- what personal data is collected,
+- what third-party services are used,
+- whether legal thresholds apply,
+- whether children or sensitive data are involved.
+
+A website being technically accessible from a country does not always mean
+that country's laws fully apply. However, visitor geography is still a major
+compliance risk signal.
+
+For safety, treat every expected visitor location as something to assess,
+then confirm which laws actually apply based on targeting, monitoring, data
+collection, business model, sector, and legal thresholds.
 
 ---
 
@@ -52,6 +70,34 @@ Ask these questions:
 
 If the answer to questions 3 or 4 is "yes" AND your visitors come from regulated
 jurisdictions, compliance is required.
+
+## Jurisdiction Risk Test
+
+Use this practical test before deciding which laws apply:
+
+1. Are we established, registered, trading, or physically operating in that
+   jurisdiction?
+2. Are we intentionally targeting people there through language, currency,
+   advertising, shipping, local contact details, local testimonials, or local
+   SEO pages?
+3. Are we offering goods, services, memberships, downloads, bookings, or
+   accounts to people there?
+4. Are we monitoring behaviour there using analytics, cookies, pixels,
+   advertising tags, heatmaps, session replay, profiling, or remarketing?
+5. Are we collecting personal data from people there?
+6. Do revenue, data-volume, employee-count, sector, or business-size
+   thresholds apply?
+7. Are children, health data, financial data, biometric data, precise
+   location data, or other sensitive categories involved?
+8. Are third-party processors transferring data across borders?
+9. Would non-compliance materially harm the business through fines, lawsuits,
+   lost trust, payment provider suspension, app store issues, or advertising
+   platform restrictions?
+
+If several answers are "yes" or uncertain, treat the jurisdiction as
+compliance-relevant until qualified legal advice or authoritative guidance
+confirms otherwise.
+
 
 ---
 
@@ -86,12 +132,37 @@ jurisdictions, compliance is required.
 
 | Aspect | Detail |
 | --- | --- |
-| **Who it applies to** | Businesses that: collect personal information of California residents AND meet revenue/data thresholds (>$25M revenue, or buy/sell data of 100,000+ consumers, or derive 50%+ revenue from selling data) |
+| **Who it applies to** | Businesses that collect personal information of California residents and meet applicable revenue, data-volume, or data-sharing thresholds. Thresholds can change or be adjusted, so verify current California Privacy Protection Agency guidance before deciding whether CPRA applies. |
 | **Consent model** | Opt-OUT (not opt-in) — you can collect data but must allow users to say "don't sell/share my data" |
 | **Required disclosures** | "Do Not Sell or Share My Personal Information" link; privacy policy listing categories of data collected and purposes |
 | **Cookie rules** | No specific cookie consent requirement, but sale/sharing of data (including through cookies) requires opt-out mechanism |
 | **Penalties** | $2,500 per unintentional violation, $7,500 per intentional violation |
-| **Key practical actions** | "Do Not Sell" link, privacy policy, honour opt-out requests within 15 business days |
+| **Key practical actions** | Privacy policy, notice at collection where required, mechanism for opt-out of sale/sharing where applicable, honour applicable consumer rights requests, and verify current response deadlines and threshold rules. |
+
+### United States — Other State Privacy Laws
+
+California is not the only U.S. state with privacy obligations.
+
+Depending on visitor geography, business size, data volume, targeted
+advertising, profiling, sale or sharing of personal information, and
+sensitive data processing, other U.S. state privacy laws may apply.
+
+Practical beginner guidance:
+
+- Do not assume U.S. privacy compliance means "California only."
+- Check whether the website targets or collects data from residents of states
+  with comprehensive privacy laws.
+- Pay special attention to targeted advertising, analytics pixels,
+  remarketing, sale or sharing of data, sensitive data, and children's data.
+- If using advertising platforms or data brokers, get legal advice before
+  launch.
+- Record which U.S. states were assessed, when, and by whom.
+
+Recommended documentation:
+
+| State / Law Checked | Applies? | Why / Why Not | Actions Required | Date Checked |
+| --- | --- | --- | --- | --- |
+| [State / law] | [Yes / No / Unsure] | [Reason] | [Actions] | [Date] |
 
 ### Brazil — LGPD (Lei Geral de Proteção de Dados)
 
@@ -162,6 +233,23 @@ jurisdictions, compliance is required.
 
 ## Cookie Consent: Practical Implementation
 
+Cookie rules vary by jurisdiction and regulator guidance. For beginners, the
+safest practical approach is to use the strictest sensible baseline for the
+audience you expect.
+
+A strict baseline usually means:
+
+- essential cookies only before consent,
+- clear Accept and Reject options,
+- no dark patterns,
+- category-level choices where appropriate,
+- an easy way to change consent later,
+- privacy policy and cookie policy kept up to date,
+- records of major consent implementation decisions.
+
+This does not replace legal advice. It is a practical default for reducing
+risk when multiple jurisdictions may be relevant.
+
 ### When You Need a Cookie Consent Banner
 
 You NEED one if:
@@ -171,11 +259,19 @@ You NEED one if:
 - You have visitors from the EU, UK, Brazil, or other consent-required
   jurisdictions.
 
-You probably DON'T need one if:
+You may not need one for analytics if:
 
-- Your site uses only essential cookies (session, security, basic functionality) AND
-- You use a cookie-free analytics tool (Plausible, Fathom, etc.) AND
-- You don't embed third-party tracking scripts.
+- your site uses only essential cookies needed for basic functionality,
+- your analytics tool is genuinely cookie-free,
+- analytics data is aggregate-only or strongly privacy-preserving,
+- no personal data is used for advertising, profiling, remarketing, or
+  cross-site tracking,
+- you do not embed third-party tracking scripts, pixels, maps, videos, live
+  social feeds, or chat widgets that set cookies before consent,
+- your privacy policy still discloses the analytics tool and data practices,
+- the applicable jurisdiction allows this approach.
+
+If unsure, verify before launch and document the decision.
 
 ### Cookie Consent Requirements (EU/UK)
 
@@ -200,6 +296,25 @@ You probably DON'T need one if:
 | Built-in (Squarespace, Wix) | Included | High | Limited customisation |
 
 ---
+
+## Data Processing Record Lite
+
+Before writing the privacy policy, create a simple record of what data the
+website collects and where it goes.
+
+This does not need to be complicated. For a small website, a single table is
+enough.
+
+| Data Collected | Collected From | Purpose | Legal Basis / Reason | Stored Where | Shared With | Retention Period | Owner |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Name | Contact form | Reply to enquiry | User request / legitimate business need | Email inbox / CRM | Email provider / CRM | [e.g. 12 months] | [Name] |
+| Email address | Newsletter signup | Send newsletter | Consent | Email marketing platform | Email provider | Until unsubscribe | [Name] |
+| Analytics event | Page visit | Understand site usage | Consent or legitimate interest depending on jurisdiction/tool | Analytics tool | Analytics provider | [e.g. 14 months] | [Name] |
+
+Use this table to ensure the privacy policy matches the website's real
+behaviour.
+
+If the table changes, update the privacy policy.
 
 ## Privacy Policy: What to Include
 
@@ -252,12 +367,17 @@ other assistive technologies.
 | **DDA** (Disability Discrimination Act) | Australia | Service providers | WCAG 2.0 AA (via case law) | Already applicable |
 | **AODA** (Accessibility for Ontarians with Disabilities Act) | Ontario, Canada | Organisations with 50+ employees | WCAG 2.0 AA | Already applicable |
 
-### What WCAG 2.1 AA Requires (Simplified)
+### What WCAG 2.1 / 2.2 AA Requires (Simplified)
 
 WCAG (Web Content Accessibility Guidelines) is the international standard for
 web accessibility. Level AA is the most commonly required level.
 
-Key requirements at a beginner level:
+Some laws and contracts still reference WCAG 2.0 AA or WCAG 2.1 AA. For new
+website work, the recommended practical build target is WCAG 2.2 AA where
+possible, while documenting any jurisdiction-specific legal standard that
+applies.
+
+Key requirements at a beginner level include:
 
 - **Text alternatives** — every image has descriptive alt text.
 - **Keyboard navigation** — everything can be reached without a mouse.
@@ -286,6 +406,19 @@ See `accessibility.skill.md` for comprehensive implementation guidance.
 Automated tools catch approximately 30–40% of accessibility issues. Manual
 testing (especially with a screen reader) is essential for full coverage.
 
+### Recommended Accessibility Build Target
+
+For new website projects, use this practical approach:
+
+- Build to WCAG 2.2 AA where possible.
+- If a specific law, contract, procurement rule, or client requirement names
+  WCAG 2.0 AA or WCAG 2.1 AA, document that requirement.
+- Do automated testing and manual testing.
+- Test with keyboard navigation.
+- Test with at least one screen reader where practical.
+- Document known issues, owners, and remediation dates.
+- Re-test after major design, platform, theme, plugin, or content changes.
+
 ---
 
 ## Terms and Conditions / Terms of Service
@@ -310,6 +443,27 @@ For simple brochure sites with a contact form only, Terms may not be necessary �
 a Privacy Policy is usually sufficient.
 
 ---
+
+## Email Marketing Consent
+
+Best practice worldwide is to send marketing emails only to people who have
+clearly agreed to receive them.
+
+Some jurisdictions allow limited opt-out models or implied consent in certain
+business contexts, but consent is the safest beginner default.
+
+For beginner website projects:
+
+- Do not add people to a marketing list just because they used a contact
+  form.
+- Keep newsletter signup separate from general contact forms unless the
+  marketing consent choice is clear and optional.
+- Do not use pre-ticked consent boxes.
+- Include an unsubscribe link in every marketing email.
+- Record when, where, and how the person subscribed.
+- Respect unsubscribe requests promptly.
+- Check local email marketing laws before launch.
+
 
 ## Data Collection Points to Audit
 
@@ -361,6 +515,15 @@ Requirements:
 - For EU→US transfers, the EU-US Data Privacy Framework currently provides a
   mechanism (verify current status as this changes).
 
+Practical beginner actions:
+
+- List every third-party service that receives visitor or customer data.
+- Identify where each service stores or processes data.
+- Check whether the provider offers data processing terms.
+- Check whether international transfer safeguards are available.
+- Record the decision in the legal compliance document.
+- Re-check if the provider changes subprocessors, regions, or terms.
+
 ---
 
 ## Compliance Checklist for Launch
@@ -368,18 +531,28 @@ Requirements:
 Before going live:
 
 - [ ] Identified which privacy laws apply based on visitor geography.
+- [ ] Jurisdiction risk test completed and documented.
+- [ ] Current legal sources checked and dates recorded.
+- [ ] U.S. state privacy law applicability checked if U.S. visitors are
+      targeted or expected.
 - [ ] Privacy policy written, published, and linked from every page.
 - [ ] Cookie consent mechanism implemented (if required by applicable law).
 - [ ] All data collection points identified and documented.
+- [ ] Data Processing Record Lite completed.
 - [ ] Third-party services listed in privacy policy.
 - [ ] Data processing agreements in place with third-party processors.
 - [ ] Accessibility tested (automated + manual) against WCAG 2.1 AA.
+- [ ] Accessibility tested using the documented target standard, preferably
+      WCAG 2.2 AA for new work where practical, with automated and manual
+      testing.
 - [ ] Cookie consent blocks non-essential cookies until explicit consent.
 - [ ] "Do Not Sell" link added (if CPRA applies).
 - [ ] Contact mechanism for data subject rights requests.
 - [ ] Data retention periods defined.
 - [ ] Someone is named as the compliance maintenance owner.
 - [ ] Review date scheduled (at least annually).
+- [ ] Review triggers documented for legal, privacy, accessibility, cookie,
+      analytics, advertising, and third-party service changes.
 
 ---
 
@@ -408,10 +581,29 @@ Consult a lawyer when:
 - You are unsure whether a specific practice is lawful.
 - Penalties for non-compliance would materially harm your business.
 
+Also get legal advice when:
+
+- the website targets multiple countries and you are unsure which laws apply,
+- the business relies on targeted advertising, remarketing, profiling, or data
+  sharing,
+- cookie consent decisions affect major marketing or analytics tools,
+- you are unsure whether a privacy law threshold applies,
+- accessibility non-compliance could expose the organisation to complaints,
+  procurement failure, lawsuits, or regulator action,
+- the website terms affect payments, refunds, subscriptions, user accounts,
+  user-generated content, or liability.
+
 ---
 
 ## Critical Constraints
 
+- Never assume a law applies only because a website is technically accessible
+  from a country; assess targeting, monitoring, data collection, thresholds,
+  and business model.
+- Never assume a law does not apply just because the business is small;
+  confirm whether thresholds or sector-specific rules apply.
+- Never rely on stale legal, pricing, platform, cookie, advertising, or
+  accessibility information; verify current sources before final decisions.
 - Never assume privacy law doesn't apply because you're "too small" — many laws
   have no revenue threshold.
 - Never use a privacy policy template without verifying it matches your actual
@@ -423,6 +615,9 @@ Consult a lawyer when:
 - Never store more personal data than you need, or keep it longer than necessary.
 - Always disclose ALL third-party services that receive visitor data.
 - Always provide a working mechanism for data subject rights requests.
-- Always test accessibility with keyboard navigation and a screen reader.
+- Always test accessibility with keyboard navigation and, where practical, a
+  screen reader; automated tools alone are not enough.
 - Always review compliance annually — laws change frequently.
 - Always document your compliance decisions for future reference.
+- Always document legal and compliance decisions so future maintainers know
+  what was checked, when, and why.
