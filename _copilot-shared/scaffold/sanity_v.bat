@@ -1,10 +1,10 @@
 @echo off
 REM ============================================================================
-REM  sanity_v.bat — verbose quality gate mirror of sanity.bat
+REM  sanity_v.bat - verbose quality gate mirror of sanity.bat
 REM  Usage:  sanity_v.bat
 REM
 REM  THIS FILE IS A SHARED SCAFFOLD (owned by _copilot-shared\scaffold\).
-REM  It is synced to every project on each sync run — do NOT edit per-project.
+REM  It is synced to every project on each sync run - do NOT edit per-project.
 REM  To change this file, edit _copilot-shared\scaffold\sanity_v.bat and re-sync.
 REM
 REM  ADAPTIVE BEHAVIOUR:
@@ -19,13 +19,13 @@ REM    the verbose flags listed in the VERBOSE ADDITIONS section below.
 REM ============================================================================
 REM
 REM  GATE STEPS (identical to sanity.bat and ci.yml):
-REM    1. Ruff format    — code formatting (check-only, no changes)
-REM    2. Ruff lint      — linting + import sorting + security rules
-REM    3. Mypy           — static type checking
-REM    4. Bandit         — security linter (Python-specific)
-REM    5. detect-secrets — scans for accidentally committed secrets
-REM    6. Pytest         — test suite with coverage (parallel)
-REM    7. markdownlint   — checks Markdown files for style issues
+REM    1. Ruff format    - code formatting (check-only, no changes)
+REM    2. Ruff lint      - linting + import sorting + security rules
+REM    3. Mypy           - static type checking
+REM    4. Bandit         - security linter (Python-specific)
+REM    5. detect-secrets - scans for accidentally committed secrets
+REM    6. Pytest         - test suite with coverage (parallel)
+REM    7. markdownlint   - checks Markdown files for style issues
 REM
 REM  COVERAGE NOTE:
 REM    --cov flags are NOT passed here. They are defined once in
@@ -46,6 +46,9 @@ set FAIL_COUNT=0
 REM Prefer the Python Launcher on Windows so the script works even when
 REM `python` is not on PATH. Adjust -3.12 if the repo upgrades Python.
 set PY_CMD=py -3.12
+
+REM -- Clean stale .coverage files that cause pytest-cov/xdist errors --------
+del /q .coverage* 2>nul
 
 REM -- Detect which Python source directories exist (must contain *.py) ------
 set PY_TARGETS=
@@ -89,11 +92,11 @@ echo ===========================================================================
 echo  [3/7] Mypy (verbose)
 echo ============================================================================
 if %HAS_PYPROJECT% EQU 1 (
-    REM pyproject.toml exists — mypy reads [tool.mypy] config from it.
+    REM pyproject.toml exists - mypy reads [tool.mypy] config from it.
     %PY_CMD% -m mypy --verbose
     if errorlevel 1 set /a FAIL_COUNT+=1
 ) else if defined PY_TARGETS (
-    REM No pyproject.toml — pass targets directly with relaxed settings.
+    REM No pyproject.toml - pass targets directly with relaxed settings.
     %PY_CMD% -m mypy %PY_TARGETS% --ignore-missing-imports --verbose
     if errorlevel 1 set /a FAIL_COUNT+=1
 ) else (
@@ -102,7 +105,7 @@ if %HAS_PYPROJECT% EQU 1 (
 
 echo.
 echo ============================================================================
-echo  [4/7] Bandit (verbose — shows every file scanned)
+echo  [4/7] Bandit (verbose - shows every file scanned)
 echo ============================================================================
 if %HAS_PYPROJECT% EQU 0 (
     echo  SKIPPED: No pyproject.toml found ^(bandit requires -c pyproject.toml^).
@@ -137,6 +140,10 @@ echo  [6/7] Pytest (verbose + parallel, coverage flags from addopts)
 echo ============================================================================
 if not exist tests (
     echo  SKIPPED: No tests directory found.
+) else if defined SANITY_NO_COV (
+    echo  (coverage disabled via SANITY_NO_COV)
+    %PY_CMD% -m pytest -n auto -v --tb=short --no-cov --override-ini="addopts="
+    if errorlevel 1 set /a FAIL_COUNT+=1
 ) else (
     REM Coverage flags come from [tool.pytest.ini_options] addopts in pyproject.toml.
     REM -v gives one PASSED/FAILED line per test; --tb=short keeps tracebacks brief.

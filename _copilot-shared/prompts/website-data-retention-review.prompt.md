@@ -61,7 +61,7 @@ or a qualified reviewer.
 If not provided, ask concise questions about:
 
 - What website, domain, platform, CMS, app, or digital property is being reviewed?
-- What is the website’s main purpose?
+- What is the website's main purpose?
 - What data does the website collect from users?
 - Are there contact forms, quote forms, newsletter forms, account forms, booking
   forms, donation forms, checkout forms, support forms, surveys, comments,
@@ -422,7 +422,7 @@ Review:
 - restore limitations,
 - deletion limitations.
 
-Downloaded exports are often outside the original system’s retention controls.
+Downloaded exports are often outside the original system's retention controls.
 
 ## Personal data in content, PDFs, media, and URLs guidance
 

@@ -70,7 +70,7 @@ qualified reviewer.
 If not provided, ask concise questions about:
 
 - What website, domain, platform, CMS, app, or digital property is being reviewed?
-- What is the website’s main business purpose?
+- What is the website's main business purpose?
 - What are the most important user journeys?
 - What website functions must be restored first during an outage?
 - Who owns business continuity decisions for the website?

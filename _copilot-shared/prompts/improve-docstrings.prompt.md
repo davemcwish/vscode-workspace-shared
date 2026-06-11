@@ -83,12 +83,12 @@ For each selected Python file:
 
 1. **Read the implementation first** - establish ground truth.
 2. Then check the existing docstring using a 1:1 audit:
-   - **Invented** - claims something the code does not do → remove.
-   - **Omitted** - code does something undocumented → add.
-   - **Wrong type** - disagrees with implementation → correct.
-   - **Stale** - describes old behaviour → rewrite from implementation.
-   - **Too terse** - useless to a beginner → expand with plain English.
-   - **Missing** - no docstring → add.
+   - **Invented** - claims something the code does not do -> remove.
+   - **Omitted** - code does something undocumented -> add.
+   - **Wrong type** - disagrees with implementation -> correct.
+   - **Stale** - describes old behaviour -> rewrite from implementation.
+   - **Too terse** - useless to a beginner -> expand with plain English.
+   - **Missing** - no docstring -> add.
 
 Also check:
 

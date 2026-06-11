@@ -204,7 +204,7 @@ From the parent folder, run:
 
 ```powershell
 cd "C:\Users\<username>\Documents\Visual Studio Code"
-.\sync-shared-copilot.ps1
+.\powershell\sync-shared-copilot.ps1
 ```
 
 Expected output:
@@ -234,7 +234,7 @@ This copies all agents, chat modes, instructions, prompts, skills, workflows,
 To sync only one project (faster when testing):
 
 ```powershell
-.\sync-shared-copilot.ps1 -Projects "My-New-Project"
+.\powershell\sync-shared-copilot.ps1 -Projects "My-New-Project"
 ```
 
 ---
@@ -263,7 +263,7 @@ From the parent folder, run:
 
 ```powershell
 cd "C:\Users\<username>\Documents\Visual Studio Code"
-.\sync-shared-copilot.ps1 -Scaffold -ScaffoldTarget "My-New-Project"
+.\powershell\sync-shared-copilot.ps1 -Scaffold -ScaffoldTarget "My-New-Project"
 ```
 
 This copies the following files into `My-New-Project\` (existing files are
@@ -271,15 +271,15 @@ never overwritten):
 
 | File | What it does |
 | --- | --- |
-| `sanity.bat` | Local quality gate — run before every commit |
-| `sanity_v.bat` | Verbose version of `sanity.bat` — use when debugging a failure |
+| `sanity.bat` | Local quality gate - run before every commit |
+| `sanity_v.bat` | Verbose version of `sanity.bat` - use when debugging a failure |
 | `requirements.in` | Starter list of runtime dependencies (Python template) |
 | `requirements-dev.in` | Starter list of dev/test dependencies (Python template) |
-| `README.md` | Project overview template — fill in what it does and how to use it |
-| `ARCHITECTURE.md` | System design template — components, data flows, security model |
+| `README.md` | Project overview template - fill in what it does and how to use it |
+| `ARCHITECTURE.md` | System design template - components, data flows, security model |
 | `CHANGELOG.md` | Version history template (Keep a Changelog format) |
-| `CONTRIBUTING.md` | Developer guide template — setup, standards, PR process |
-| `SECURITY.md` | Security policy template — vulnerability reporting, controls |
+| `CONTRIBUTING.md` | Developer guide template - setup, standards, PR process |
+| `SECURITY.md` | Security policy template - vulnerability reporting, controls |
 | `UPDATING_DEPENDENCIES.md` | Dependency management guide template |
 | `scaffold-README.md` | Explains what to customise in each file |
 
@@ -297,7 +297,7 @@ Once you have customised the scaffold files, commit them:
 ```powershell
 git add sanity.bat sanity_v.bat requirements.in requirements-dev.in
 git add README.md ARCHITECTURE.md CHANGELOG.md CONTRIBUTING.md SECURITY.md UPDATING_DEPENDENCIES.md scaffold-README.md
-git commit -m "chore: add scaffold files — quality gate, dependencies, and project docs"
+git commit -m "chore: add scaffold files - quality gate, dependencies, and project docs"
 git push
 ```
 
@@ -331,10 +331,10 @@ It also copies two root-level files:
 
 | Task | Command |
 | --- | --- |
-| Sync all projects | `.\sync-shared-copilot.ps1` |
-| Sync one project only | `.\sync-shared-copilot.ps1 -Projects "My-New-Project"` |
-| Copy scaffold files into a new project | `.\sync-shared-copilot.ps1 -Scaffold -ScaffoldTarget "My-New-Project"` |
-| See script help | `Get-Help .\sync-shared-copilot.ps1` |
+| Sync all projects | `.\powershell\sync-shared-copilot.ps1` |
+| Sync one project only | `.\powershell\sync-shared-copilot.ps1 -Projects "My-New-Project"` |
+| Copy scaffold files into a new project | `.\powershell\sync-shared-copilot.ps1 -Scaffold -ScaffoldTarget "My-New-Project"` |
+| See script help | `Get-Help .\powershell\sync-shared-copilot.ps1` |
 
 ---
 

@@ -113,7 +113,7 @@ confirms otherwise.
 | **Privacy policy** | Must be clear, in plain language, and explain: what data is collected, why, how long it's kept, who has access, data subject rights |
 | **Data subject rights** | Access, rectification, erasure ("right to be forgotten"), portability, objection, restriction |
 | **Data breach notification** | Must notify supervisory authority within 72 hours of becoming aware |
-| **Penalties** | Up to €20 million or 4% of global annual turnover (whichever is higher) |
+| **Penalties** | Up to EUR20 million or 4% of global annual turnover (whichever is higher) |
 | **Key practical actions** | Cookie consent banner (opt-in), privacy policy, data processing records, DPA with processors |
 
 ### United Kingdom - UK GDPR + PECR
@@ -163,7 +163,7 @@ Recommended documentation:
 | --- | --- | --- | --- | --- |
 | [State / law] | [Yes / No / Unsure] | [Reason] | [Actions] | [Date] |
 
-### Brazil - LGPD (Lei Geral de Proteção de Dados)
+### Brazil - LGPD (Lei Geral de Proteço de Dados)
 
 | Aspect | Detail |
 | --- | --- |
@@ -288,10 +288,10 @@ If unsure, verify before launch and document the decision.
 
 | Tool | Cost | Ease of Use | Notes |
 | --- | --- | --- | --- |
-| Cookiebot | From €9/month | High | Auto-scans cookies; good compliance |
+| Cookiebot | From EUR9/month | High | Auto-scans cookies; good compliance |
 | CookieYes | From $10/month | High | User-friendly; good free tier |
 | Osano | From $0 (limited) | Medium | Privacy platform; more features |
-| Complianz (WordPress) | Free - €45/year | High | WordPress plugin |
+| Complianz (WordPress) | Free - EUR45/year | High | WordPress plugin |
 | Built-in (Squarespace, Wix) | Included | High | Limited customisation |
 
 ---
@@ -510,7 +510,7 @@ Requirements:
 - Disclose the transfer in your privacy policy.
 - Ensure adequate safeguards (Standard Contractual Clauses, adequacy decision,
   or equivalent).
-- For EU→US transfers, the EU-US Data Privacy Framework currently provides a
+- For EU->US transfers, the EU-US Data Privacy Framework currently provides a
   mechanism (verify current status as this changes).
 
 Practical beginner actions:

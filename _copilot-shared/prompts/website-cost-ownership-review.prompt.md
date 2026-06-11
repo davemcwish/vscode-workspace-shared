@@ -39,7 +39,7 @@ renewal notices, procurement records, or a qualified reviewer.
 - Every critical website service should have a named owner and backup owner.
 - Every renewal should have a responsible person and reminder.
 - Domains, hosting, DNS, certificates, payment tools, forms, booking tools, and
-  other critical services should not depend on one person’s personal account or
+  other critical services should not depend on one person's personal account or
   personal payment card.
 - A low-cost plan is not always cheaper if it creates outage, support, backup,
   security, performance, or recovery risk.
@@ -60,7 +60,7 @@ renewal notices, procurement records, or a qualified reviewer.
 If not provided, ask concise questions about:
 
 - What website, domain, platform, CMS, app, or digital property is being reviewed?
-- What is the website’s main purpose?
+- What is the website's main purpose?
 - What services does the website depend on?
 - Who owns the domain registration?
 - Who owns DNS?
@@ -758,7 +758,7 @@ immediately, who accepted the risk, the mitigation, and the review date.
 ## What Not To Do
 
 List risky cost and ownership practices, such as letting a domain renew from a
-former employee’s card, sending renewal notices to an unmonitored inbox, cancelling
+former employee's card, sending renewal notices to an unmonitored inbox, cancelling
 a tool before exporting needed data, choosing the cheapest plan without checking
 restore/support limits, ignoring overage warnings, keeping duplicate tools
 forever, or leaving critical billing with a vendor after offboarding.

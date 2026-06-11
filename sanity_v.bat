@@ -1,6 +1,6 @@
 @echo off
 REM ============================================================================
-REM  sanity_v.bat — Run all code quality checks VERBOSE (workspace root repo)
+REM  sanity_v.bat - Run all code quality checks VERBOSE (workspace root repo)
 REM  Usage:  sanity_v.bat
 REM
 REM  Same steps as sanity.bat but with verbose/detailed output enabled on
@@ -17,13 +17,13 @@ REM  Python checks target _copilot-shared\tests only.
 REM ============================================================================
 REM
 REM  GATE STEPS:
-REM    1. Ruff format    — code formatting (check-only, no changes)
-REM    2. Ruff lint      — linting + import sorting + security rules
-REM    3. Mypy           — static type checking
-REM    4. Bandit         — security linter (Python-specific)
-REM    5. detect-secrets — scans for accidentally committed secrets
-REM    6. Pytest         — test suite
-REM    7. markdownlint   — checks Markdown files for style issues
+REM    1. Ruff format    - code formatting (check-only, no changes)
+REM    2. Ruff lint      - linting + import sorting + security rules
+REM    3. Mypy           - static type checking
+REM    4. Bandit         - security linter (Python-specific)
+REM    5. detect-secrets - scans for accidentally committed secrets
+REM    6. Pytest         - test suite
+REM    7. markdownlint   - checks Markdown files for style issues
 REM ============================================================================
 
 setlocal enabledelayedexpansion
@@ -38,31 +38,31 @@ set PY_TARGETS=_copilot-shared\tests
 
 echo.
 echo ============================================================================
-echo  [1/7] Ruff format check (verbose — shows diff for each file)
+echo  [1/7] Ruff format check (verbose - shows diff for each file)
 echo ============================================================================
 %PY_CMD% -m ruff format --check --diff %PY_TARGETS%
 if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [2/7] Ruff lint (verbose — shows statistics and fix suggestions)
+echo  [2/7] Ruff lint (verbose - shows statistics and fix suggestions)
 echo ============================================================================
 %PY_CMD% -m ruff check --output-format=full --statistics %PY_TARGETS%
 if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [3/7] Mypy (static type checking — verbose)
+echo  [3/7] Mypy (static type checking - verbose)
 echo ============================================================================
-REM No pyproject.toml in this repo — pass target directory directly.
+REM No pyproject.toml in this repo - pass target directory directly.
 %PY_CMD% -m mypy %PY_TARGETS% --ignore-missing-imports --pretty --show-error-context
 if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [4/7] Bandit (security linter — verbose)
+echo  [4/7] Bandit (security linter - verbose)
 echo ============================================================================
-REM No pyproject.toml — run bandit without -c flag, target tests dir.
+REM No pyproject.toml - run bandit without -c flag, target tests dir.
 REM --skip B101: assert is standard pytest practice and is the only Python
 REM code in this repo. No production code exists to scan.
 %PY_CMD% -m bandit -r %PY_TARGETS% --skip B101 -ll
@@ -70,7 +70,7 @@ if errorlevel 1 set /a FAIL_COUNT+=1
 
 echo.
 echo ============================================================================
-echo  [5/7] detect-secrets (secret scanning — verbose)
+echo  [5/7] detect-secrets (secret scanning - verbose)
 echo ============================================================================
 REM Scans tracked files against the baseline. Create baseline first with:
 REM   py -3.12 -m detect_secrets scan > .secrets.baseline
@@ -85,7 +85,7 @@ if exist .secrets.baseline (
 
 echo.
 echo ============================================================================
-echo  [6/7] Pytest (verbose — shows each test name and duration)
+echo  [6/7] Pytest (verbose - shows each test name and duration)
 echo ============================================================================
 %PY_CMD% -m pytest %PY_TARGETS% -v --tb=short --durations=10
 if errorlevel 1 set /a FAIL_COUNT+=1

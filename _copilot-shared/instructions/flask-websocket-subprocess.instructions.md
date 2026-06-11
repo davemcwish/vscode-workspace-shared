@@ -112,11 +112,11 @@ Use lowercase snake_case for all event names:
 
 | Direction | Event | Purpose |
 | --- | --- | --- |
-| Server → Client | `log` | Real-time log line from subprocess |
-| Server → Client | `job_started` | Job has begun executing |
-| Server → Client | `job_complete` | Job finished (includes exit code, elapsed) |
-| Server → Client | `job_error` | Job failed with error |
-| Client → Server | `confirm` | User confirmed a warning prompt |
+| Server -> Client | `log` | Real-time log line from subprocess |
+| Server -> Client | `job_started` | Job has begun executing |
+| Server -> Client | `job_complete` | Job finished (includes exit code, elapsed) |
+| Server -> Client | `job_error` | Job failed with error |
+| Client -> Server | `confirm` | User confirmed a warning prompt |
 
 ### Emitting Events
 

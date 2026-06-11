@@ -35,11 +35,12 @@ own independent git repos - they are excluded from this repo's tracking via
 | `_copilot-shared/workflows/` | Step-by-step workflow guides |
 | `_copilot-shared/tests/` | Contract tests validating artefact consistency |
 | `_copilot-shared/scaffold/` | Template files copied into new projects |
-| `sync-shared-copilot.ps1` | The sync script - copies `_copilot-shared/` into each project's `.github/` folder |
+| `powershell/sync-shared-copilot.ps1` | The sync script - copies `_copilot-shared/` into each project's `.github/` folder |
+| `powershell/build-manifest.ps1` | Generates `_copilot-shared/MANIFEST.md` automatically |
+| `powershell/` | All PowerShell maintenance and utility scripts |
 | `Visual Studio Code.code-workspace` | VS Code multi-root workspace definition |
 | `Changelog.md` | History of changes to shared artefacts |
 | `sanity.bat` / `sanity_v.bat` | Workspace-level quality gate scripts |
-| `*.ps1` (other scripts) | Maintenance and repair utilities |
 
 ---
 
@@ -48,7 +49,7 @@ own independent git repos - they are excluded from this repo's tracking via
 ```text
 _copilot-shared/          (you edit here - the single source of truth)
        |
-       | sync-shared-copilot.ps1
+       | powershell/sync-shared-copilot.ps1
        |
        v
 +-----------------+    +-----------------+    +---------------------+
@@ -112,7 +113,7 @@ git clone git@github.com:davemcwish/Trails-and-Tails.git "Trails and Tails"
 ### Step 3 - Run the sync script
 
 ```powershell
-.\sync-shared-copilot.ps1
+.\powershell\sync-shared-copilot.ps1
 ```
 
 This populates each project's `.github/` folder with the shared Copilot
@@ -134,10 +135,10 @@ code "Visual Studio Code.code-workspace"
 ```powershell
 # 1. Edit the file in _copilot-shared/ (e.g. agents/doc-writer.agent.md)
 # 2. Run sync
-.\sync-shared-copilot.ps1
+.\powershell\sync-shared-copilot.ps1
 
 # 3. (Optional) Validate all projects pass their quality gates
-.\sync-shared-copilot.ps1 -Validate
+.\powershell\sync-shared-copilot.ps1 -Validate
 
 # 4. Commit in this repo (workspace-level)
 git add .
@@ -161,11 +162,11 @@ git init -b main
 
 # 2. Copy scaffold starter files (README, CONTRIBUTING, requirements.in, etc.)
 cd ..
-.\sync-shared-copilot.ps1 -Scaffold -ScaffoldTarget "My-New-Project"
+.\powershell\sync-shared-copilot.ps1 -Scaffold -ScaffoldTarget "My-New-Project"
 
-# 3. Add the project name to $DefaultProjects in sync-shared-copilot.ps1
+# 3. Add the project name to $DefaultProjects in powershell/sync-shared-copilot.ps1
 # 4. Run the normal sync
-.\sync-shared-copilot.ps1
+.\powershell\sync-shared-copilot.ps1
 ```
 
 ### Checking for stale files

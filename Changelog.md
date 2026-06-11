@@ -1,4 +1,4 @@
-# Changelog — Shared Copilot Workspace
+# Changelog - Shared Copilot Workspace
 
 <!-- markdownlint-disable MD024 -->
 All notable changes to the shared Copilot tooling (`_copilot-shared/`) and
@@ -38,7 +38,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- **New "How to Invoke an Agent" subsection** (Section 2) — step-by-step
+- **New "How to Invoke an Agent" subsection** (Section 2) - step-by-step
   instructions for typing `@name` in a regular Copilot Chat, with an example
   and a tip on deriving the agent name from the filename.
 - **New "How You Start Each Group" quick-reference table** (after the Overview)
@@ -46,21 +46,21 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **New `/` vs `@` callout** near the top of the document, explaining that `/`
   runs a prompt and `@` calls an agent.
 - **Three new Key Concepts entries:** PR (Pull Request), CI/CD, and JOSHUA.
-- **Clarifying note on the agent chain** — tells beginners they don't need to
+- **Clarifying note on the agent chain** - tells beginners they don't need to
   memorise it or use every agent.
 
 ### Changed
 
-- **Overview table** — `agents` row "How it activates" changed from
+- **Overview table** - `agents` row "How it activates" changed from
   "You select one in Chat" to "Type `@name` in Chat" (now consistent with the
   Prompts row).
-- **Section 2 intro** — reworded to the canonical phrase: "Type `@agent-name`
+- **Section 2 intro** - reworded to the canonical phrase: "Type `@agent-name`
   in Copilot Chat (or pick it from the agent dropdown)."
-- **"How the Groups Work Together"** — Agents bullet now states how to summon
+- **"How the Groups Work Together"** - Agents bullet now states how to summon
   an agent (`@name`), matching the Prompts and Chat modes bullets.
-- **Key Concepts → Agent row** — now includes the `@name` invocation method,
+- **Key Concepts -> Agent row** - now includes the `@name` invocation method,
   mirroring how the Prompt row explains `/name`.
-- **Activation legend** — "You select" note expanded to "You select / You type"
+- **Activation legend** - "You select" note expanded to "You select / You type"
   to cover both dropdown and `/` `@` triggers.
 
 ### Notes

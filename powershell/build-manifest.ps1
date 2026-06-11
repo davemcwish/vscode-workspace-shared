@@ -21,7 +21,8 @@ param()
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-$Root = Join-Path $PSScriptRoot "_copilot-shared"
+# Script lives in powershell\ subfolder; _copilot-shared is in the workspace root.
+$Root = Join-Path (Split-Path $PSScriptRoot -Parent) "_copilot-shared"
 $OutFile = Join-Path $Root "MANIFEST.md"
 
 # -- Helpers -----------------------------------------------------------------

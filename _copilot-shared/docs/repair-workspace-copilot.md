@@ -1,7 +1,7 @@
 # Repairing VS Code Copilot Workspace State
 
 This guide explains what to do when custom chat modes, agents, or prompts
-disappear from the VS Code Copilot dropdown — or when duplicates appear.
+disappear from the VS Code Copilot dropdown - or when duplicates appear.
 
 ---
 
@@ -24,17 +24,17 @@ VS Code discovers Copilot chat modes, agents, and prompts by scanning
 file. In a multi-root workspace, every folder entry gets scanned independently.
 
 ```text
-Visual Studio Code\                        ← workspace root folder
-  .github\                                 ← ⚠️ MUST EXIST for root-level discovery
-    chatmodes\                             ← chat modes appear from here
-    agents\                                ← agents appear from here
-    prompts\                               ← prompts appear from here
+Visual Studio Code\                        <- workspace root folder
+  .github\                                 <- ⚠️ MUST EXIST for root-level discovery
+    chatmodes\                             <- chat modes appear from here
+    agents\                                <- agents appear from here
+    prompts\                               <- prompts appear from here
     ...
-  _copilot-shared\                         ← single source of truth (master copies)
+  _copilot-shared\                         <- single source of truth (master copies)
   Salesforce\
-    .github\                               ← project-level copy
+    .github\                               <- project-level copy
   Trails and Tails\
-    .github\                               ← project-level copy
+    .github\                               <- project-level copy
   ...
 ```
 
@@ -103,7 +103,7 @@ Copy-Item "$shared\summary.md" "$github\summary.md" -Force
 
 ### Step 5: Reload VS Code
 
-Press `Ctrl+Shift+P` → **Developer: Reload Window**
+Press `Ctrl+Shift+P` -> **Developer: Reload Window**
 
 Chat modes should now appear in the dropdown.
 
@@ -128,7 +128,7 @@ Or with verbose output:
 ## Preventing the Issue
 
 1. **Never delete** the root `.github\` folder manually.
-2. After any workspace reset, run `.\sync-shared-copilot.ps1` — this now syncs
+2. After any workspace reset, run `.\powershell\sync-shared-copilot.ps1` - this now syncs
    into the root workspace `.github\` as well as each sub-project.
 3. The `_copilot-shared\` folder is the **single source of truth**. Always edit
    files there, then run the sync script.
@@ -166,7 +166,7 @@ foreach ($project in $projects) {
 
 ## Workspace Settings That Must Be Present
 
-In `Visual Studio Code.code-workspace` → `settings`:
+In `Visual Studio Code.code-workspace` -> `settings`:
 
 ```jsonc
 {
@@ -189,7 +189,7 @@ files at all.
 | Chatmodes exist? | `Get-ChildItem .\.github\chatmodes\*.chatmode.md` |
 | Agents exist? | `Get-ChildItem .\.github\agents\*.agent.md` |
 | Workspace settings correct? | Open `.code-workspace` and verify settings |
-| VS Code reloaded? | `Ctrl+Shift+P` → "Developer: Reload Window" |
+| VS Code reloaded? | `Ctrl+Shift+P` -> "Developer: Reload Window" |
 | Extension up to date? | Check GitHub Copilot extension version |
 
 ---
@@ -199,7 +199,7 @@ files at all.
 | File | Purpose |
 | ---- | ------- |
 | `_copilot-shared\` | Single source of truth for all Copilot config |
-| `sync-shared-copilot.ps1` | Propagates shared config → root + all projects |
+| `sync-shared-copilot.ps1` | Propagates shared config -> root + all projects |
 | `repair-workspace-copilot.ps1` | Emergency repair script |
 | `Visual Studio Code.code-workspace` | Multi-root workspace definition |
 | `adding-a-new-subworkspace.md` | Guide for adding new project folders |

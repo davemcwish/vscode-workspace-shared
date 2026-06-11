@@ -44,7 +44,7 @@ qualified reviewer.
 
 ## Search and findability principles
 
-- Users should be able to find important content without knowing the team’s
+- Users should be able to find important content without knowing the team's
   internal terminology.
 - Search should support real user language, common misspellings, synonyms,
   abbreviations, product names, service names, locations, and support topics.
@@ -471,7 +471,7 @@ Where relevant, review:
 - regional availability,
 - local legal or policy content.
 
-Do not assume one language’s search settings work well for another language.
+Do not assume one language's search settings work well for another language.
 
 ## Mobile search guidance
 

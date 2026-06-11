@@ -167,7 +167,7 @@ Before giving a positive verdict, check:
   escalated where needed.
 - Vendor incident and support escalation routes are documented.
 - Vendor offboarding process exists.
-- Vendor governance is realistic for the team’s size and capacity.
+- Vendor governance is realistic for the team's size and capacity.
 
 ## Vendor inventory guidance
 

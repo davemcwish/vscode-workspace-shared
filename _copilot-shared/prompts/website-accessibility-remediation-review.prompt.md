@@ -15,7 +15,7 @@ Accessibility issue management means keeping track of known accessibility issues
 assigning owners, deciding priority based on user impact, planning fixes,
 validating those fixes, preventing regressions, and documenting accepted risks.
 
-The goal is to help a small team move from “we found accessibility issues” to a
+The goal is to help a small team move from "we found accessibility issues" to a
 practical, owned, prioritized, testable remediation plan.
 
 This review should be practical for a small team, beginner, or non-technical
@@ -275,7 +275,7 @@ Review whether the team has owners for:
 - validation owner,
 - risk acceptance owner.
 
-Accessibility issues often stall when they are assigned to “the website team”
+Accessibility issues often stall when they are assigned to "the website team"
 instead of a specific owner.
 
 ## Backlog workflow guidance
@@ -384,7 +384,7 @@ Review whether content fixes include:
 - accessible tables,
 - avoiding text in images where possible,
 - avoiding color-only instructions,
-- avoiding vague labels such as “click here”,
+- avoiding vague labels such as "click here",
 - updating outdated content,
 - consistent terminology.
 
@@ -601,7 +601,7 @@ For each vendor issue, identify owner, support route, escalation path,
 workaround, replacement option, user impact, contract/procurement relevance, and
 review date.
 
-Do not assume third-party responsibility removes the organization’s need to
+Do not assume third-party responsibility removes the organization's need to
 manage user impact.
 
 ## Testing approach guidance

@@ -83,11 +83,11 @@ Use this improvement cycle:
 
 ```text
 Launch
-  → Measure
-  → Learn
-  → Improve
-  → Maintain
-  → Repeat
+  -> Measure
+  -> Learn
+  -> Improve
+  -> Maintain
+  -> Repeat
 ```
 
 Do not skip the "Measure" and "Learn" steps. If there is not enough data, say

@@ -93,7 +93,7 @@ For the **two most important use-cases** in the system (e.g., "Place Order", "Ad
 Each step must follow this format:
 
 ```
-STEP <n>: <CallingComponent> → <CalledComponent>
+STEP <n>: <CallingComponent> -> <CalledComponent>
   OPERATION: <method or event name>
   PURPOSE: <why this call occurs>
   SOURCE: <relative file path>
@@ -194,17 +194,17 @@ CALLED_BY:
 
 ### Use-Case: Place Order
 
-STEP 1: OrdersApi → OrderService
+STEP 1: OrdersApi -> OrderService
   OPERATION: create_order(order_request)
   PURPOSE: Delegates validated HTTP request to the domain service for business rule execution
   SOURCE: `src/ordering/api/orders_api.py`
 
-STEP 2: OrderService → OrderRepository
+STEP 2: OrderService -> OrderRepository
   OPERATION: save(order)
   PURPOSE: Persists the new order to the database
   SOURCE: `src/ordering/services/order_service.py`
 
-STEP 3: OrderService → EventProducer
+STEP 3: OrderService -> EventProducer
   OPERATION: publish(OrderPlacedEvent)
   PURPOSE: Notifies downstream services (e.g., Notifications, Inventory) that an order was placed
   SOURCE: `src/ordering/services/order_service.py`

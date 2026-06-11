@@ -143,7 +143,7 @@ Before giving a positive verdict, check:
 - Vendors and agencies follow the change process.
 - Changes are documented in a searchable place.
 - Incidents are reviewed against recent changes.
-- The process is realistic for the team’s size and capacity.
+- The process is realistic for the team's size and capacity.
 
 ## Change type and risk guidance
 

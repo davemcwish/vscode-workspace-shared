@@ -25,7 +25,7 @@
     files (README.md, CONTRIBUTING.md, requirements.in, etc.) from
     _copilot-shared\scaffold\ into the new project root.  These one-time
     scaffold files are copied once and are not overwritten on subsequent
-    syncs — the project owns them after the initial copy.
+    syncs - the project owns them after the initial copy.
 
 .PARAMETER Projects
     Optional. One or more project subfolder names to sync into.
@@ -74,12 +74,12 @@ $ErrorActionPreference = "Stop"
 
 # -- Configuration -----------------------------------------------------------
 
-$Root   = $PSScriptRoot
+# Script lives in powershell\ subfolder; workspace root is one level up.
+$Root   = Split-Path $PSScriptRoot -Parent
 $Shared = Join-Path $Root "_copilot-shared"
 
 # Add new project folder names here as you create them.
 $DefaultProjects = @(
-    "asus-router-decoder",
     "Salesforce",
     "Trails and Tails"
 )
@@ -99,6 +99,7 @@ $Folders = @(
 # (not .github\).  Use this for content that belongs at the project top-level,
 # e.g. shared test scaffolds, default pytest fixtures, or config folders.
 $RootFolders = @(
+    "docs",
     "tests"
 )
 
@@ -349,7 +350,7 @@ Write-Host ""
 # frontmatter. Regenerating on every sync ensures it never drifts.
 
 Write-Host "  -> Regenerating MANIFEST.md..." -ForegroundColor Green
-& powershell.exe -ExecutionPolicy Bypass -File (Join-Path $Root "build-manifest.ps1")
+& powershell.exe -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "build-manifest.ps1")
 Write-Host ""
 
 # -- Sync into root workspace .github\ ----------------------------------------
@@ -501,7 +502,14 @@ if ($Validate) {
             $prevPref = $ErrorActionPreference
             $ErrorActionPreference = "Continue"
             try {
-                $null = & cmd.exe /c sanity.bat 2>&1
+                # Disable coverage during -Validate. Coverage collection via
+                # pytest-xdist is flaky under nested PowerShell -> cmd.exe
+                # process chains (race condition merging .coverage.* files).
+                # Lint, format, mypy, bandit, and detect-secrets still run in
+                # full. Coverage correctness is enforced by CI (ci.yml).
+                $env:SANITY_NO_COV = "1"
+                $output = & cmd.exe /c sanity.bat 2>&1
+                Remove-Item Env:\SANITY_NO_COV -ErrorAction SilentlyContinue
             } finally {
                 $ErrorActionPreference = $prevPref
             }
@@ -510,7 +518,13 @@ if ($Validate) {
                 $script:SyncReport.ValidationResults[$project] = "PASSED"
             } else {
                 Write-Host "  [$project] FAILED (exit code $LASTEXITCODE)" -ForegroundColor Red
-                Write-Host "    Run sanity.bat manually in '$project' for details." -ForegroundColor DarkRed
+                # Show the last 30 lines of output to help diagnose.
+                $lines = ($output | Out-String) -split "`n" |
+                         Where-Object { $_.Trim() -ne "" } |
+                         Select-Object -Last 30
+                foreach ($line in $lines) {
+                    Write-Host "    $line" -ForegroundColor DarkGray
+                }
                 $script:SyncReport.ValidationResults[$project] = "FAILED"
             }
         } finally {

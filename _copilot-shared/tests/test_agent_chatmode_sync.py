@@ -46,7 +46,7 @@ def _find_shared_root() -> Path | None:
     candidate = here.parent
     if (candidate / "AGENT-CHATMODE-SYNC.md").is_file():
         return candidate
-    # Case 2: synced into a project's tests/ folder — walk up to find the
+    # Case 2: synced into a project's tests/ folder - walk up to find the
     # _copilot-shared directory as a sibling of the project.
     for ancestor in here.parents:
         candidate = ancestor / "_copilot-shared"

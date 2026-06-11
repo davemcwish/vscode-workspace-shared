@@ -24,7 +24,7 @@
 | `ContentDocumentLink` | Junction linking files to records |
 | `ContentVersion` | One version of an uploaded file; `VersionData` for binary |
 | `Order` | Standard object; related to Account |
-| `Quote` | Standard object; related to Opportunity → Account |
+| `Quote` | Standard object; related to Opportunity -> Account |
 
 ## Download Patterns
 

@@ -143,7 +143,7 @@ Before giving a positive verdict, check:
 - Restore approver and restore executor are assigned.
 - Backup coverage is documented.
 - Backup gaps are documented.
-- Backup frequency matches the website’s update and transaction risk.
+- Backup frequency matches the website's update and transaction risk.
 - Backup retention is understood.
 - Backups are stored somewhere appropriate and protected.
 - Access to backups is controlled.
@@ -203,7 +203,7 @@ Do not assume one backup tool covers all of these.
 
 ## Backup frequency guidance
 
-Review whether backup frequency fits the site’s risk:
+Review whether backup frequency fits the site's risk:
 
 - Static brochure site with rare updates may need less frequent backups.
 - Active blog, news, or content site may need backups around publishing changes.

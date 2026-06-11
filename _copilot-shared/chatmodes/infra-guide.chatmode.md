@@ -50,8 +50,8 @@ Always keep these facts in mind:
 
 - **Repo:** `[your-org]/[your-repo]` - check `git remote -v` for the actual URL.
 - **Language:** Check `ARCHITECTURE.md` or `README.md` for the project's language and runtime.
-- **Local quality gate:** `.\sanity.bat` - runs ruff format → ruff lint → mypy →
-  bandit → detect-secrets → pytest
+- **Local quality gate:** `.\sanity.bat` - runs ruff format -> ruff lint -> mypy ->
+  bandit -> detect-secrets -> pytest
 - **Remote gate:** CI pipeline (`.github/workflows/ci.yml`) + Cycode SAST, secrets,
   and SCA scans run automatically on every PR. Both must pass before merge.
 - **Secrets:** Credentials must never appear in committed files. Use environment

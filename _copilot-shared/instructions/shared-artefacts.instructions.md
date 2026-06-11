@@ -36,7 +36,7 @@ When a change is needed to any shared artefact:
 
    ```powershell
    cd "<workspace-root>"
-   .\sync-shared-copilot.ps1
+   .\powershell\sync-shared-copilot.ps1
    ```
 
 4. **Inspect downstream diffs** - review what changed in each project's

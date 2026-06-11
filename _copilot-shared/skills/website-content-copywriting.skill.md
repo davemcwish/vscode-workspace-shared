@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This skill helps **complete beginners** write effective website content â€”
+This skill helps **complete beginners** write effective website content -
 from headlines and service descriptions to about pages and calls to action.
 
 It is for people who have never written website copy before and need practical,
@@ -32,9 +32,9 @@ updates.
 
 Research consistently shows that web visitors:
 
-- Read approximately 20â€“28% of the words on a page.
+- Read approximately 20-28% of the words on a page.
 - Scan in an F-shaped pattern (top, then partway across, then down the left side).
-- Decide within 3â€“5 seconds whether to stay or leave.
+- Decide within 3-5 seconds whether to stay or leave.
 - Are looking for specific information, not browsing for pleasure.
 
 Every sentence on your website must earn its place. If it doesn't help the
@@ -129,18 +129,18 @@ they're in the right place and guide them to the next step.**
 
 ### Homepage Structure
 
-1. **Headline** â€” What you do, for whom, in one sentence.
-2. **Subheadline** â€” The key benefit or what makes you different.
-3. **Primary call to action** (CTA) â€” The one thing you most want visitors to do.
-4. **Brief overview** â€” 2â€“3 short sections covering key offerings or benefits.
-5. **Trust signals** â€” Reviews, testimonials, certifications, client logos,
+1. **Headline** - What you do, for whom, in one sentence.
+2. **Subheadline** - The key benefit or what makes you different.
+3. **Primary call to action** (CTA) - The one thing you most want visitors to do.
+4. **Brief overview** - 2-3 short sections covering key offerings or benefits.
+5. **Trust signals** - Reviews, testimonials, certifications, client logos,
    examples, guarantees, policies, or evidence that supports your claims.
-6. **Secondary CTA** â€” Repeat the action or offer an alternative (learn more,
+6. **Secondary CTA** - Repeat the action or offer an alternative (learn more,
    browse services).
 
 ### Homepage Mistakes to Avoid
 
-- "Welcome to our website" â€” tells the visitor nothing useful.
+- "Welcome to our website" - tells the visitor nothing useful.
 - Talking about yourself before explaining how you help them.
 - Multiple competing CTAs with equal visual weight.
 - Large blocks of unbroken text.
@@ -155,13 +155,13 @@ decide: **"Can I trust these people?"**
 
 ### About Page Structure
 
-1. **Who you are** â€” Name, role, brief background (relevant to your service).
-2. **Why you do this** â€” Your motivation or story (keep it concise).
-3. **Who you help** â€” Describe your ideal client/customer.
-4. **What makes you different** â€” Qualifications, experience, approach.
-5. **Photo** â€” A real photo of you or your team (builds trust significantly more
+1. **Who you are** - Name, role, brief background (relevant to your service).
+2. **Why you do this** - Your motivation or story (keep it concise).
+3. **Who you help** - Describe your ideal client/customer.
+4. **What makes you different** - Qualifications, experience, approach.
+5. **Photo** - A real photo of you or your team (builds trust significantly more
    than stock images).
-6. **CTA** â€” How to get in touch or work with you.
+6. **CTA** - How to get in touch or work with you.
 
 ### About Page Mistakes to Avoid
 
@@ -179,13 +179,13 @@ what happens next?"**
 
 ### Structure for Service Pages
 
-1. **What the service is** â€” Plain English, one sentence.
-2. **Who it's for** â€” "This is ideal if you..."
-3. **What's included** â€” Bullet points of what they get.
-4. **How it works** â€” Simple 3â€“5 step process.
-5. **Pricing** (if possible) â€” Even a range helps ("from Â£99").
-6. **FAQ** â€” Address common objections.
-7. **CTA** â€” How to book, buy, or enquire.
+1. **What the service is** - Plain English, one sentence.
+2. **Who it's for** - "This is ideal if you..."
+3. **What's included** - Bullet points of what they get.
+4. **How it works** - Simple 3-5 step process.
+5. **Pricing** (if possible) - Even a range helps ("from GBP99").
+6. **FAQ** - Address common objections.
+7. **CTA** - How to book, buy, or enquire.
 
 ### Tips for Service Descriptions
 
@@ -233,14 +233,14 @@ Check carefully before publishing claims about:
 ## Headlines and Headings
 
 Headlines are the most-read element on any page. Many visitors read the headline
-and nothing else â€” then decide whether to stay.
+and nothing else - then decide whether to stay.
 
 ### Rules for Headlines
 
 1. **Be specific.** "Plumbing Services in Bristol" beats "Welcome to Our Services."
 2. **Lead with the benefit.** "Get Hot Water Back Today" beats "Emergency Plumber."
 3. **Use plain language.** Write as you'd speak to a customer face-to-face.
-4. **Keep it short.** 6â€“12 words maximum for main headlines.
+4. **Keep it short.** 6-12 words maximum for main headlines.
 5. **Include who it's for** when possible. "Wedding Photography for Relaxed
    Couples" is clearer than "Photography Services."
 
@@ -248,9 +248,9 @@ and nothing else â€” then decide whether to stay.
 
 Use headings (H1, H2, H3) to create a scannable structure:
 
-- **H1** â€” One per page, the main topic. What the page is about.
-- **H2** â€” Major sections within the page.
-- **H3** â€” Sub-topics within each section.
+- **H1** - One per page, the main topic. What the page is about.
+- **H2** - Major sections within the page.
+- **H3** - Sub-topics within each section.
 
 A visitor should be able to understand what the page covers by reading
 only the headings.
@@ -266,7 +266,7 @@ needs at least one.
 
 1. **Be specific.** "Book a Free Consultation" beats "Submit."
 2. **Use action verbs.** "Get," "Book," "Download," "Start," "Join."
-3. **Create urgency gently.** "Book this week" or "Limited availability" â€” but
+3. **Create urgency gently.** "Book this week" or "Limited availability" - but
    never fake urgency.
 4. **Make it visible.** A CTA should stand out visually (button, contrasting
    colour, clear placement).
@@ -279,8 +279,8 @@ needs at least one.
 | Plumber | "Contact Us" | "Get a Free Quote Today" |
 | Restaurant | "Click Here" | "Book a Table for Tonight" |
 | Coach | "Submit" | "Book Your Free Discovery Call" |
-| eCommerce | "Buy" | "Add to Basket â€” Free Delivery Over Â£50" |
-| Newsletter | "Subscribe" | "Get Weekly Tips â€” Join 2,000+ Readers" |
+| eCommerce | "Buy" | "Add to Basket - Free Delivery Over GBP50" |
+| Newsletter | "Subscribe" | "Get Weekly Tips - Join 2,000+ Readers" |
 
 ### CTA Friction Check
 
@@ -303,11 +303,11 @@ A CTA should guide the visitor, not trick them.
 
 ### For Most Small Business Websites
 
-- **Conversational** â€” write as you'd speak to a customer across a table.
-- **Clear** â€” short sentences, common words, no jargon.
-- **Confident** â€” state what you do without hedging ("We fix boilers" not "We
+- **Conversational** - write as you'd speak to a customer across a table.
+- **Clear** - short sentences, common words, no jargon.
+- **Confident** - state what you do without hedging ("We fix boilers" not "We
   may be able to potentially assist with boiler-related issues").
-- **Warm but professional** â€” friendly without being overly casual.
+- **Warm but professional** - friendly without being overly casual.
 
 ### Adjust for Your Audience
 
@@ -328,11 +328,11 @@ homepage, casual on the blog) confuses visitors about who you are.
 
 | Page Type | Recommended Length | Why |
 | --- | --- | --- |
-| Homepage | 300â€“800 words | Quick orientation, not detailed reading |
-| About page | 300â€“600 words | Enough to build trust, not a memoir |
-| Service page | 400â€“1,000 words | Answer all questions, address objections |
-| Blog post | 800â€“2,000 words | Detailed enough to be useful for SEO |
-| Contact page | 50â€“150 words | Just tell them how to reach you |
+| Homepage | 300-800 words | Quick orientation, not detailed reading |
+| About page | 300-600 words | Enough to build trust, not a memoir |
+| Service page | 400-1,000 words | Answer all questions, address objections |
+| Blog post | 800-2,000 words | Detailed enough to be useful for SEO |
+| Contact page | 50-150 words | Just tell them how to reach you |
 | FAQ page | As needed | Answer real questions your customers ask |
 
 These are guidelines, not rules. A complex service may need 2,000 words. A
@@ -375,13 +375,13 @@ devices, translation tools, or assistive technology.
 
 ### Rules for Readable Web Content
 
-1. **Short paragraphs** â€” 2â€“4 sentences maximum. One idea per paragraph.
-2. **Subheadings every 2â€“3 paragraphs** â€” break content into scannable chunks.
+1. **Short paragraphs** - 2-4 sentences maximum. One idea per paragraph.
+2. **Subheadings every 2-3 paragraphs** - break content into scannable chunks.
 3. **Bullet points** for lists, features, or steps.
-4. **Bold key phrases** â€” helps scanners find what they need.
-5. **White space** â€” don't crowd text. Let it breathe.
-6. **One idea per sentence** â€” simple sentences are easier to scan.
-7. **Front-load important information** â€” put the conclusion first, then explain.
+4. **Bold key phrases** - helps scanners find what they need.
+5. **White space** - don't crowd text. Let it breathe.
+6. **One idea per sentence** - simple sentences are easier to scan.
+7. **Front-load important information** - put the conclusion first, then explain.
 
 ### What to Avoid
 
@@ -415,7 +415,7 @@ copy awkward for humans.
 5. **Answer the important questions directly.** Include price, location,
    timescale, process, eligibility, or next steps where relevant.
 6. **Write useful meta descriptions.** Summarise the page clearly in around
-   150â€“160 characters where possible.
+   150-160 characters where possible.
 7. **Use internal links.** Link to related services, FAQs, contact pages, case
    studies, or guides where helpful.
 8. **Keep content current.** Outdated prices, offers, dates, and services can
@@ -466,11 +466,11 @@ claims, legal wording, or brand voice.
 
 Even without a professional copywriter, you can write:
 
-- **FAQ answers** â€” you know what customers ask you every day.
-- **Service descriptions** â€” you know what you do and what's included.
-- **About page** â€” you know your own story.
-- **Blog posts about your expertise** â€” write what you'd tell a customer.
-- **Testimonial requests** â€” ask customers specific questions rather than
+- **FAQ answers** - you know what customers ask you every day.
+- **Service descriptions** - you know what you do and what's included.
+- **About page** - you know your own story.
+- **Blog posts about your expertise** - write what you'd tell a customer.
+- **Testimonial requests** - ask customers specific questions rather than
   "please leave a review."
 
 ### When to Hire a Copywriter
@@ -485,7 +485,7 @@ Consider professional help if:
 
 Typical costs vary heavily by country, currency, industry, complexity, and the
 writer's experience. Before budgeting, check current local rates and define
-whether the work includes research, SEO, interviews, revisions, and strategy â€”
+whether the work includes research, SEO, interviews, revisions, and strategy -
 not just writing.
 
 ---

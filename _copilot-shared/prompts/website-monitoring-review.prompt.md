@@ -59,7 +59,7 @@ tell the user what to verify from official sources or a qualified reviewer.
 If not provided, ask concise questions about:
 
 - What website, domain, app, environment, or digital property should be reviewed?
-- What is the website’s main purpose?
+- What is the website's main purpose?
 - What are the most important pages and journeys?
 - Are forms, payments, bookings, donations, checkout, subscriptions, account
   login, file uploads, search, filters, maps, chat, or third-party widgets

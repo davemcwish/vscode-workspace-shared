@@ -502,7 +502,7 @@ Review account flows for:
 - language attributes,
 - right-to-left layout where relevant.
 
-Account access should not depend on a user’s ability to use a mouse, read tiny
+Account access should not depend on a user's ability to use a mouse, read tiny
 text, hear audio, or solve inaccessible challenges.
 
 ## Localization and regional guidance
@@ -527,7 +527,7 @@ Where relevant, review:
 - local identity provider behavior,
 - local support availability.
 
-Do not assume one region’s account journey works for another region.
+Do not assume one region's account journey works for another region.
 
 ## Mobile, browser, and autofill guidance
 

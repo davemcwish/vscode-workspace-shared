@@ -108,7 +108,7 @@ match the actual services your website uses.
 - **Nginx server:** `nginx.conf` or site configuration.
 - **WordPress:** Security plugin (e.g. Really Simple Security) or `.htaccess`.
 - **No-code builders:** Usually handled by the platform - verify in browser
-  DevTools → Network → Response Headers.
+  DevTools -> Network -> Response Headers.
 
 ---
 

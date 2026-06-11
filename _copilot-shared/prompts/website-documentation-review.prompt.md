@@ -42,7 +42,7 @@ policies, or a qualified reviewer.
 ## Documentation principles
 
 - Useful documentation is better than perfect documentation.
-- Critical knowledge should not live only in one person’s head.
+- Critical knowledge should not live only in one person's head.
 - Every critical system should have an owner and backup owner documented.
 - Documentation should explain what the website is, how it works, who owns it,
   how to change it safely, and how to recover it.
@@ -65,7 +65,7 @@ policies, or a qualified reviewer.
 If not provided, ask concise questions about:
 
 - What website, domain, platform, CMS, app, or digital property is being reviewed?
-- What is the website’s main purpose?
+- What is the website's main purpose?
 - Who owns the website overall?
 - Who maintains the website day to day?
 - Who is the backup owner?

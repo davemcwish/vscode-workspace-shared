@@ -277,7 +277,7 @@ or maintain them.
 - **Monthly Review**: Use monthly reviews to check analytics, conversions, SEO,
   content freshness, accessibility, performance, privacy, security, social
   presence, reviews, and local listings.
-- **Improvement Loop**: Launch → Measure → Learn → Improve → Maintain → Repeat.
+- **Improvement Loop**: Launch -> Measure -> Learn -> Improve -> Maintain -> Repeat.
 
 ---
 

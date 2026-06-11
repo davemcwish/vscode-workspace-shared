@@ -174,7 +174,7 @@ Report PASS or FAIL with a reminder of what is missing.
 For every script added or significantly changed, verify that corresponding
 documentation exists. Report any scripts that have no matching guide or doc.
 
-### 2h - Secrets baseline path separators (Windows → POSIX)
+### 2h - Secrets baseline path separators (Windows -> POSIX)
 
 ```powershell
 Select-String -Path ".secrets.baseline" -Pattern '\\\\'
@@ -365,7 +365,7 @@ If no entry exists, this is a ❌ HARD FAIL - do not proceed to commit.
 For every script added or significantly changed, verify that a corresponding
 guide exists under `docs/`. Report any scripts that have no matching guide.
 
-### 2h - Secrets baseline path separators (Windows → POSIX)
+### 2h - Secrets baseline path separators (Windows -> POSIX)
 
 ```powershell
 Select-String -Path ".secrets.baseline" -Pattern '\\\\'

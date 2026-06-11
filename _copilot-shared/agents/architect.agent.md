@@ -67,7 +67,7 @@ For each FR in `./requirements/[req_id]/`:
 For each FR, produce a design covering:
 
 1. **Module Impact** - which files change and what new functions/classes are added.
-2. **Data Flow** - how data moves (Salesforce → Python → output files).
+2. **Data Flow** - how data moves (Salesforce -> Python -> output files).
 3. **Interface Changes** - new CLI arguments, new library functions, new config.
 4. **Test Strategy** - which test files need new tests, what to mock.
 5. **Security Considerations** - new network calls, file writes, PII handling.
@@ -93,7 +93,7 @@ Save each design as `./requirements/[req_id]/[fr_index]/design.md`.
 - `function_name(params) -> return_type` - [Purpose]
 
 ## 4. Data Flow
-[Step-by-step: input → processing → output]
+[Step-by-step: input -> processing -> output]
 
 ## 5. CLI Changes
 | Argument | Type | Default | Purpose |

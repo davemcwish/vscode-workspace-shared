@@ -10,7 +10,7 @@
 
 - PEP 8 enforced by `ruff check` and `ruff format`.
 - Type hints on all function parameters and return types.
-- Imports ordered: standard library → third-party → local application modules.
+- Imports ordered: standard library -> third-party -> local application modules.
 
 ## Naming
 

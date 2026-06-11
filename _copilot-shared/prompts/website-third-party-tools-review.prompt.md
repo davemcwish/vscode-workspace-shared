@@ -64,7 +64,7 @@ If not provided, ask concise questions about:
 - What third-party tools are currently known?
 - Are there plugins, apps, widgets, scripts, embedded tools, APIs, webhooks, SaaS
   tools, or vendor-managed services?
-- What is the website’s main purpose?
+- What is the website's main purpose?
 - What are the most important user journeys?
 - Are forms, CRM, email marketing, payments, bookings, donations, checkout,
   subscriptions, accounts, memberships, search, chat, maps, reviews, social
@@ -229,7 +229,7 @@ For each tool, ask:
 - Is it duplicated by another tool?
 - Is the value worth the privacy, security, accessibility, performance, cost, and
   maintenance burden?
-- Is the tool appropriate for the website’s size, risk, and team capacity?
+- Is the tool appropriate for the website's size, risk, and team capacity?
 
 Recommend removing or disabling tools only after checking impact, ownership,
 data retention, privacy, contracts, and rollback needs.

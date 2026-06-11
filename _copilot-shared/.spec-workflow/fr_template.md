@@ -38,7 +38,7 @@ Each requirement must be: **Testable**, **Unambiguous**, **Necessary**,
 
 **Examples:**
 
-- WHEN the user clicks [▶ LAUNCH MISSION], THE SYSTEM SHALL validate all
+- WHEN the user clicks [> LAUNCH MISSION], THE SYSTEM SHALL validate all
   parameters and POST to `/api/jobs`.
 - WHILE a job is running, THE SYSTEM SHALL stream log output to the terminal
   panel via WebSocket.

@@ -68,9 +68,9 @@ Google measures three key things about your page:
 
 - **Google PageSpeed Insights** (pagespeed.web.dev) - enter your URL, get scores
   and specific recommendations.
-- **Lighthouse** - built into Chrome/Edge DevTools (F12 → Lighthouse tab). Run
+- **Lighthouse** - built into Chrome/Edge DevTools (F12 -> Lighthouse tab). Run
   on mobile and desktop.
-- **Google Search Console** → Core Web Vitals report (shows scores for all pages
+- **Google Search Console** -> Core Web Vitals report (shows scores for all pages
   as seen by real visitors).
 - **WebPageTest** (webpagetest.org) - advanced testing with different locations
   and connection speeds.
@@ -488,11 +488,11 @@ for pages with real traffic.
 
 **Common recommendations and what they mean:**
 
-- "Serve images in next-gen formats" → Convert to WebP/AVIF.
-- "Eliminate render-blocking resources" → Defer JavaScript, inline critical CSS.
-- "Reduce unused CSS/JavaScript" → Remove libraries or features you don't use.
-- "Properly size images" → Resize to display dimensions.
-- "Enable text compression" → Configure gzip/Brotli on your server.
+- "Serve images in next-gen formats" -> Convert to WebP/AVIF.
+- "Eliminate render-blocking resources" -> Defer JavaScript, inline critical CSS.
+- "Reduce unused CSS/JavaScript" -> Remove libraries or features you don't use.
+- "Properly size images" -> Resize to display dimensions.
+- "Enable text compression" -> Configure gzip/Brotli on your server.
 
 ---
 

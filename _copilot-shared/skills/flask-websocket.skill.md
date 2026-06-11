@@ -63,18 +63,18 @@ real-time log streaming, and `subprocess.Popen` for launching scripts.
 
 ```text
 subprocess.Popen
-      │
-      ▼
+      |
+      v
   daemon thread reads stdout line-by-line
-      │
-      ▼
+      |
+      v
   parse log level (INFO/WARNING/ERROR)
-      │
-      ▼
+      |
+      v
   filter: emit only INFO and above to WebSocket
-      │
-      ▼
-  socketio.emit("log", {...}) → browser terminal
+      |
+      v
+  socketio.emit("log", {...}) -> browser terminal
 ```
 
 ## Testing Strategy
@@ -97,28 +97,28 @@ subprocess.Popen
 
 ```text
 frontend/
-├── app.py                     ← Flask entry point (python app.py)
-├── config.example.json        ← Template configuration (committed)
-├── config.json                ← Local config (gitignored)
-├── requirements-frontend.txt  ← Flask + SocketIO + eventlet
-├── static/
-│   ├── css/
-│   │   └── joshua.css         ← WOPR theme styles
-│   ├── js/
-│   │   ├── joshua.js          ← Main app logic
-│   │   ├── terminal.js        ← Terminal log component
-│   │   ├── lcd.js             ← LCD clock + timer
-│   │   └── modal.js           ← WOPR-themed modals
-│   └── fonts/
-│       └── woprcrt-terminal/  ← Font assets
-├── templates/
-│   └── index.html             ← Single page (Jinja2)
++-- app.py                     <- Flask entry point (python app.py)
++-- config.example.json        <- Template configuration (committed)
++-- config.json                <- Local config (gitignored)
++-- requirements-frontend.txt  <- Flask + SocketIO + eventlet
++-- static/
+|   +-- css/
+|   |   +-- joshua.css         <- WOPR theme styles
+|   +-- js/
+|   |   +-- joshua.js          <- Main app logic
+|   |   +-- terminal.js        <- Terminal log component
+|   |   +-- lcd.js             <- LCD clock + timer
+|   |   +-- modal.js           <- WOPR-themed modals
+|   +-- fonts/
+|       +-- woprcrt-terminal/  <- Font assets
++-- templates/
+|   +-- index.html             <- Single page (Jinja2)
 src/
-└── sf_admin_utils/
-    └── job_runner.py           ← Subprocess management + log capture
++-- sf_admin_utils/
+    +-- job_runner.py           <- Subprocess management + log capture
 tests/
-├── test_job_runner.py          ← Unit tests for job_runner
-└── test_app.py                 ← Flask + SocketIO tests
++-- test_job_runner.py          <- Unit tests for job_runner
++-- test_app.py                 <- Flask + SocketIO tests
 ```
 
 ## Configuration Schema

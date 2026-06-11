@@ -24,20 +24,20 @@ high level? Who uses it and how?]
  Example shape - replace every block with your actual components:]
 
 ```text
-┌──────────────────────────────────────────────────┐
-│              Entry Point / CLI Layer             │
-│  e.g. scripts/, main.py, REST endpoints          │
-└────────────────────────┬─────────────────────────┘
-                         │ calls
-┌────────────────────────▼─────────────────────────┐
-│           Core / Shared Library Layer            │
-│  e.g. src/, lib/, common utilities               │
-└────────────────────────┬─────────────────────────┘
-                         │ calls
-┌────────────────────────▼─────────────────────────┐
-│              External Systems / I/O              │
-│  e.g. APIs, databases, filesystem, email         │
-└──────────────────────────────────────────────────┘
++--------------------------------------------------+
+|              Entry Point / CLI Layer             |
+|  e.g. scripts/, main.py, REST endpoints          |
++------------------------+-------------------------+
+                         | calls
++------------------------v-------------------------+
+|           Core / Shared Library Layer            |
+|  e.g. src/, lib/, common utilities               |
++------------------------+-------------------------+
+                         | calls
++------------------------v-------------------------+
+|              External Systems / I/O              |
+|  e.g. APIs, databases, filesystem, email         |
++--------------------------------------------------+
 ```
 
 ---
@@ -50,7 +50,7 @@ high level? Who uses it and how?]
 ### [Workflow 1 Name]
 
 ```text
-[Input source] → [processing step] → [output destination]
+[Input source] -> [processing step] -> [output destination]
 ```
 
 ---

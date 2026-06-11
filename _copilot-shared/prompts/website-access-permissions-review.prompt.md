@@ -54,7 +54,7 @@ documentation, contracts, internal policies, or a qualified reviewer.
 - Billing access and technical access are both important.
 - Access should be documented without exposing passwords, API keys, tokens,
   recovery codes, or secrets.
-- Permissions should match the person’s role and current responsibility.
+- Permissions should match the person's role and current responsibility.
 - Access reviews should be lightweight enough to actually happen.
 
 ## Ask for missing context first
@@ -451,7 +451,7 @@ include the actual secret values.
 
 ## Least privilege guidance
 
-Review whether each person’s access matches their actual job.
+Review whether each person's access matches their actual job.
 
 Examples:
 

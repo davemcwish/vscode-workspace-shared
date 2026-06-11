@@ -3,7 +3,7 @@
 ## Purpose
 
 This skill helps **complete beginners** understand how to measure what happens on
-their website â€” who visits, what they do, and whether the site is achieving its
+their website - who visits, what they do, and whether the site is achieving its
 goals.
 
 It covers privacy-respecting analytics tools, consent requirements by geography,
@@ -54,7 +54,7 @@ Without analytics, you are guessing:
 - You don't know if your promotion efforts are working.
 - You don't know if your site is achieving its purpose (sales, enquiries, signups).
 
-**The goal of analytics is not to collect data â€” it is to make better decisions.**
+**The goal of analytics is not to collect data - it is to make better decisions.**
 
 ---
 
@@ -156,19 +156,19 @@ sharing. Always disclose analytics use in the privacy policy.
 
 | Tool | Cost | Cookie-Free | Hosted By | Notes |
 | --- | --- | --- | --- | --- |
-| **Plausible** | From â‚¬9/month | Yes | EU (or self-host) | Simple, lightweight, GDPR-friendly |
+| **Plausible** | From EUR9/month | Yes | EU (or self-host) | Simple, lightweight, GDPR-friendly |
 | **Fathom** | From $14/month | Yes | Canada/EU | Privacy-first, simple dashboard |
 | **Umami** | Free (self-hosted) or from $9/month | Yes | Your server or cloud | Open source |
-| **Simple Analytics** | From â‚¬9/month | Yes | Netherlands | Minimal data collection |
-| **GoatCounter** | Free (small sites) or â‚¬5/month | Yes | EU | Lightweight, open source |
-| **Matomo** | Free (self-hosted) or from â‚¬19/month | Optional | Your server or EU cloud | Full-featured GA alternative |
+| **Simple Analytics** | From EUR9/month | Yes | Netherlands | Minimal data collection |
+| **GoatCounter** | Free (small sites) or EUR5/month | Yes | EU | Lightweight, open source |
+| **Matomo** | Free (self-hosted) or from EUR19/month | Optional | Your server or EU cloud | Full-featured GA alternative |
 
 ### Google Analytics (GA4)
 
 | Aspect | Detail |
 | --- | --- |
 | Cost | Free |
-| Privacy | Uses cookies â€” requires consent in EU/UK/many jurisdictions |
+| Privacy | Uses cookies - requires consent in EU/UK/many jurisdictions |
 | Data sharing | Google uses data for its own purposes |
 | Complexity | Powerful but overwhelming for beginners |
 | Cookie banner | Required in most countries |
@@ -216,7 +216,7 @@ and where your visitors are located.
 | Region | Requirement | Applies To |
 | --- | --- | --- |
 | **EU/EEA** (GDPR + ePrivacy) | Explicit consent before setting non-essential cookies | Any site with EU visitors |
-| **UK** (UK GDPR + PECR) | Same as EU â€” explicit consent for cookies | Any site with UK visitors |
+| **UK** (UK GDPR + PECR) | Same as EU - explicit consent for cookies | Any site with UK visitors |
 | **California** (CPRA) | Must disclose data collection; opt-out right; no consent needed for analytics | Sites with California visitors |
 | **Canada** (PIPEDA) | Implied consent acceptable for basic analytics | Sites with Canadian visitors |
 | **Australia** (Privacy Act) | No specific cookie law, but must disclose collection in privacy policy | Sites with Australian visitors |
@@ -226,11 +226,11 @@ and where your visitors are located.
 
 ### Practical Advice
 
-- If you use a **cookie-free analytics tool** (Plausible, Fathom, etc.) â†’ you
+- If you use a **cookie-free analytics tool** (Plausible, Fathom, etc.) -> you
   likely don't need a cookie consent banner for analytics.
-- If you use **Google Analytics** â†’ you need a cookie consent banner for EU/UK
+- If you use **Google Analytics** -> you need a cookie consent banner for EU/UK
   visitors (at minimum).
-- If your site targets multiple countries â†’ comply with the strictest applicable
+- If your site targets multiple countries -> comply with the strictest applicable
   law.
 - When in doubt, get legal advice specific to your situation.
 
@@ -305,11 +305,11 @@ Beginner rules:
 1. **Choose your tool** based on privacy needs, budget, and complexity tolerance.
 2. **Create an account** on your chosen platform.
 3. **Add the tracking code** to your website (usually a small script in the `<head>`).
-4. **Verify it's working** â€” visit your site and check if the visit appears in
+4. **Verify it's working** - visit your site and check if the visit appears in
    the dashboard.
-5. **Set up goals/conversions** â€” define what "success" means (form submission,
+5. **Set up goals/conversions** - define what "success" means (form submission,
    purchase, signup).
-6. **Wait** â€” you need at least 2â€“4 weeks of data before drawing conclusions.
+6. **Wait** - you need at least 2-4 weeks of data before drawing conclusions.
 
 ### Internal Traffic
 
@@ -357,9 +357,9 @@ If your analytics tool requires cookies and you have visitors from the EU/UK:
 
 | What You See | What Beginners Think | What It Usually Means |
 | --- | --- | --- |
-| Low visitor count in week 1 | "My site is failing" | Normal â€” traffic takes time to build |
-| High bounce rate on blog posts | "People hate my content" | Often normal â€” they found their answer and left |
-| Traffic spike one day | "My strategy is working!" | May be a bot, a single share, or an anomaly â€” wait for trends |
+| Low visitor count in week 1 | "My site is failing" | Normal - traffic takes time to build |
+| High bounce rate on blog posts | "People hate my content" | Often normal - they found their answer and left |
+| Traffic spike one day | "My strategy is working!" | May be a bot, a single share, or an anomaly - wait for trends |
 | Zero conversions | "Nobody wants what I offer" | Your conversion action may be unclear or broken |
 
 ### Bots, Crawlers, and Spam Traffic
@@ -391,7 +391,7 @@ Do not make major decisions based on a single unexplained spike.
 1. **Look at trends, not single days.** One bad day means nothing. A declining
    month means something.
 2. **Compare like with like.** Compare this month to last month, or this
-   Tuesday to last Tuesday â€” not Tuesday to Saturday.
+   Tuesday to last Tuesday - not Tuesday to Saturday.
 3. **Ask "so what?"** Every metric should lead to a decision. If you can't act
    on the number, stop looking at it.
 4. **Small sample sizes lie.** 10 visitors is not enough to draw conclusions.
@@ -403,7 +403,7 @@ Do not make major decisions based on a single unexplained spike.
    may be more valuable than a large number who leave immediately.
 7. **Watch for tracking changes.** If analytics suddenly changes after a site
    update, plugin change, cookie banner change, or platform migration, the
-   tracking setup may have changed â€” not visitor behaviour.
+   tracking setup may have changed - not visitor behaviour.
 8. **Do not compare incompatible data.** Data from one analytics tool may not
    match another because tools count visitors, sessions, bots, consented
    traffic, and blocked traffic differently.
@@ -503,7 +503,7 @@ Before going live:
   require it.
 - Never use analytics data to identify or profile individual visitors (unless
   they're logged-in customers who consented to this).
-- Never ignore data â€” if you're not going to look at analytics monthly, don't
+- Never ignore data - if you're not going to look at analytics monthly, don't
   collect it.
 - Never make major decisions based on one day or one week of data.
 - Always define what "success" means before collecting data.

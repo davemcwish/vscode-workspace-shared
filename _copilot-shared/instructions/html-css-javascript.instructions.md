@@ -1,6 +1,6 @@
 ---
 applyTo: "**/*.html,**/*.css,**/*.js,frontend/**"
-description: "Authoring standards for HTML, CSS, and JavaScript â€” beginner-friendly, accessible, maintainable."
+description: "Authoring standards for HTML, CSS, and JavaScript - beginner-friendly, accessible, maintainable."
 ---
 
 # HTML, CSS & JavaScript Authoring Standards
@@ -14,7 +14,7 @@ with **no prior web development experience** can:
 - modify a colour, label, or layout without breaking anything,
 - learn foundational web concepts directly from the comments in the file.
 
-This mirrors the Python docstring philosophy in `docstrings.instructions.md` â€”
+This mirrors the Python docstring philosophy in `docstrings.instructions.md` -
 comments teach, not just document.
 
 ---
@@ -41,7 +41,7 @@ comments teach, not just document.
 
 - Use **lowercase kebab-case** for all web filenames:
   `joshua-terminal.html`, `report-styles.css`, `timer-logic.js`.
-- No spaces in filenames â€” spaces break URLs and many CLI tools.
+- No spaces in filenames - spaces break URLs and many CLI tools.
 - Prototype or test-rig files should include the word `prototype` or `test-rig`
   in the filename so they are clearly distinguished from production files.
 
@@ -71,12 +71,12 @@ Explain in a comment block at the top:
 
 - What the page does.
 - Who it is for.
-- Any prerequisites (e.g. "open directly in a browser â€” no server needed").
+- Any prerequisites (e.g. "open directly in a browser - no server needed").
 
 ### Heading Hierarchy
 
 - One `<h1>` per page.
-- Headings in logical order (`<h1>` â†’ `<h2>` â†’ `<h3>`). Never skip levels.
+- Headings in logical order (`<h1>` -> `<h2>` -> `<h3>`). Never skip levels.
 
 ### Accessibility Baseline
 
@@ -90,10 +90,10 @@ Explain in a comment block at the top:
 ### No Inline Event Handlers
 
 ```html
-<!-- Bad â€” mixing HTML and JavaScript logic -->
+<!-- Bad - mixing HTML and JavaScript logic -->
 <button onclick="start()">Start</button>
 
-<!-- Good â€” separation of concerns -->
+<!-- Good - separation of concerns -->
 <button id="btnStart">Start</button>
 ```
 
@@ -108,14 +108,14 @@ Attach event listeners in `<script>` blocks or `.js` files using
 
 Structure CSS in this order within each file or `<style>` block:
 
-1. **Reset / box-sizing** â€” normalise browser defaults.
-2. **Custom properties (variables)** â€” colours, spacing, font stacks.
-3. **Typography** â€” base font, headings, links.
-4. **Layout** â€” page-level structure (grid, flex containers).
-5. **Components** â€” individual UI pieces (buttons, cards, panels).
-6. **Utilities** â€” small helper classes (visually-hidden, etc.).
-7. **Animations / transitions** â€” keyframes, motion.
-8. **Print styles** â€” `@media print` rules (required for reports).
+1. **Reset / box-sizing** - normalise browser defaults.
+2. **Custom properties (variables)** - colours, spacing, font stacks.
+3. **Typography** - base font, headings, links.
+4. **Layout** - page-level structure (grid, flex containers).
+5. **Components** - individual UI pieces (buttons, cards, panels).
+6. **Utilities** - small helper classes (visually-hidden, etc.).
+7. **Animations / transitions** - keyframes, motion.
+8. **Print styles** - `@media print` rules (required for reports).
 
 ### Custom Properties
 
@@ -136,7 +136,7 @@ Name them with the pattern `--category-name` (e.g. `--colour-primary`,
 ### Naming
 
 - Use **descriptive class names** that explain purpose, not appearance:
-  `.status-bar`, `.log-entry`, `.timer-display` â€” not `.red-text`, `.big-box`.
+  `.status-bar`, `.log-entry`, `.timer-display` - not `.red-text`, `.big-box`.
 - Use **BEM-lite** for component variants if needed:
   `.btn`, `.btn--primary`, `.btn--danger`.
 - Avoid IDs for styling. IDs are for JavaScript hooks only.
@@ -144,8 +144,8 @@ Name them with the pattern `--category-name` (e.g. `--colour-primary`,
 ### Responsive Design
 
 - Use relative units (`rem`, `em`, `%`, `vw/vh`) over fixed `px` where practical.
-- Use Flexbox or Grid for layout â€” never floats.
-- Include at least one `@media` breakpoint for narrow screens (â‰¤ 600px) if the
+- Use Flexbox or Grid for layout - never floats.
+- Include at least one `@media` breakpoint for narrow screens (<= 600px) if the
   content could be viewed on a phone or tablet.
 - Test that horizontal scroll does not appear at common viewport widths.
 
@@ -173,11 +173,11 @@ otherwise confuse beginners.
 
 - Use `const` by default.
 - Use `let` only when reassignment is genuinely needed.
-- **Never** use `var` â€” it has confusing scoping rules that trip up beginners.
+- **Never** use `var` - it has confusing scoping rules that trip up beginners.
 
 ### Functions
 
-- Prefer **named functions** over anonymous arrow functions for top-level logic â€”
+- Prefer **named functions** over anonymous arrow functions for top-level logic -
   named functions appear in stack traces and are easier to search for.
 - Arrow functions are fine for short callbacks (event handlers, array methods).
 - Add a **JSDoc comment** above every function:
@@ -204,14 +204,14 @@ function placeOrbitSquare(square, container, progress) {
 
 ### DOM Access
 
-- Cache DOM lookups â€” call `getElementById` or `querySelector` once and store
+- Cache DOM lookups - call `getElementById` or `querySelector` once and store
   the result in a variable. Repeated lookups are slow and harder to read.
 - Use `getElementById` for unique elements (faster, clearer intent).
 - Use `querySelector` / `querySelectorAll` for class-based or complex selectors.
 
 ### Event Handling
 
-- Always use `addEventListener` â€” never inline `onclick` attributes.
+- Always use `addEventListener` - never inline `onclick` attributes.
 - Remove event listeners when elements are destroyed (relevant for SPAs or
   dynamic content).
 
@@ -222,7 +222,7 @@ When using Web Components (`class extends HTMLElement`):
 - Define the component class **before** calling `customElements.define(...)`.
 - Use Shadow DOM (`this.attachShadow({ mode: "open" })`) to encapsulate styles
   so they do not leak into or from the host page.
-- Explain in a block comment what Shadow DOM is and why it is used â€” assume the
+- Explain in a block comment what Shadow DOM is and why it is used - assume the
   reader has never heard of it.
 - Keep the component self-contained: all HTML, CSS, and JS for that component
   live inside its class definition.
@@ -231,7 +231,7 @@ When using Web Components (`class extends HTMLElement`):
 
 ### Animation
 
-- Use `requestAnimationFrame` for visual animations â€” never `setInterval` or
+- Use `requestAnimationFrame` for visual animations - never `setInterval` or
   `setTimeout` for frame-based rendering.
 - Explain in a comment that `requestAnimationFrame` synchronises with the
   browser's screen refresh rate (~60 fps) and pauses when the tab is hidden.
@@ -242,7 +242,7 @@ When using Web Components (`class extends HTMLElement`):
 
 - Wrap page-level scripts in an IIFE or use `{ }` block scope if not using
   modules.
-- Web Component logic lives inside the class â€” no globals needed.
+- Web Component logic lives inside the class - no globals needed.
 - The only acceptable globals are the Custom Element registration
   (`customElements.define(...)`) and minimal page-wiring code.
 
@@ -287,12 +287,12 @@ When connecting to a Flask-SocketIO backend:
 Every HTML file must begin (immediately after `<!DOCTYPE html>`) with a block
 comment that includes ALL of the following:
 
-1. **What this file is** â€” one-sentence purpose.
-2. **Who it is for** â€” audience and skill level.
-3. **How to use it** â€” "open in browser" or server setup steps.
-4. **Key web concepts used** â€” bulleted list of technologies (HTML, CSS, JS,
+1. **What this file is** - one-sentence purpose.
+2. **Who it is for** - audience and skill level.
+3. **How to use it** - "open in browser" or server setup steps.
+4. **Key web concepts used** - bulleted list of technologies (HTML, CSS, JS,
    Web Components, Canvas, etc.) so the reader knows what to expect.
-5. **Architecture diagram** â€” ASCII box diagram showing the component
+5. **Architecture diagram** - ASCII box diagram showing the component
    structure and data flow (see `joshua-terminal-test-rig.html` for the
    reference example).
 
@@ -302,7 +302,7 @@ Example:
 <!DOCTYPE html>
 <!--
   ============================================================================
-  My Component â€” Purpose Statement
+  My Component - Purpose Statement
   ============================================================================
 
   What this file is:
@@ -315,19 +315,19 @@ Example:
     Open this file directly in any modern browser. No server needed.
 
   Key web concepts used:
-    - HTML          â†’ structure
-    - CSS           â†’ styling
-    - JavaScript    â†’ interactivity
-    - Web Component â†’ reusable custom element
+    - HTML          -> structure
+    - CSS           -> styling
+    - JavaScript    -> interactivity
+    - Web Component -> reusable custom element
 
   Architecture:
-    â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-    â”‚  Host Page                      â”‚
-    â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”‚
-    â”‚  â”‚  <my-component>           â”‚  â”‚
-    â”‚  â”‚  (Shadow DOM)             â”‚  â”‚
-    â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â”‚
-    â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+    +-----------------------------------+
+    |  Host Page                        |
+    |  +-----------------------------+  |
+    |  |  <my-component>             |  |
+    |  |  (Shadow DOM)               |  |
+    |  +-----------------------------+  |
+    +-----------------------------------+
   ============================================================================
 -->
 ```
@@ -353,7 +353,7 @@ Each section header must name the section and briefly state its purpose:
 ```
 
 This visual structure lets a reader scan the file's outline without reading
-every line â€” like chapters in a book.
+every line - like chapters in a book.
 
 ### Block Comment at the Top of Every Section
 
@@ -396,7 +396,7 @@ this project go beyond the normal "explain why" rule:
   }
   ```
 
-- **Explain every CSS property on first use** â€” not just unusual ones. If a
+- **Explain every CSS property on first use** - not just unusual ones. If a
   property appears for the first time in the file, add a short inline comment
   explaining what it does, even for common properties like `display: flex` or
   `position: relative`. Assume the reader has never written CSS before.
@@ -425,7 +425,7 @@ paragraph explaining the algorithm or technique in plain English:
 
 ### Comment Density Guideline
 
-For this project, aim for approximately **one comment per 3â€“5 lines of code** in
+For this project, aim for approximately **one comment per 3-5 lines of code** in
 CSS and JavaScript sections. This is intentionally higher than production norms
 because the goal is education.
 
@@ -433,24 +433,24 @@ because the goal is education.
 
 | Term | Explanation to include in comment |
 | --- | --- |
-| DOM | "(the Document Object Model â€” the browser's in-memory tree of HTML elements)" |
-| Shadow DOM | "(an isolated mini-document inside a Web Component â€” styles and IDs inside cannot clash with the main page)" |
+| DOM | "(the Document Object Model - the browser's in-memory tree of HTML elements)" |
+| Shadow DOM | "(an isolated mini-document inside a Web Component - styles and IDs inside cannot clash with the main page)" |
 | Custom Element | "(a reusable HTML tag you define yourself, like `<joshua-terminal>`, using a JavaScript class)" |
-| `requestAnimationFrame` | "(asks the browser to run this function before the next screen repaint â€” about 60 times per second)" |
+| `requestAnimationFrame` | "(asks the browser to run this function before the next screen repaint - about 60 times per second)" |
 | CSS custom property | "(a variable defined with `--name` that you can reuse throughout your CSS)" |
 | Flexbox | "(a CSS layout mode that arranges children in a row or column with flexible sizing)" |
 | Grid | "(a CSS layout mode that arranges children in rows and columns, like a spreadsheet)" |
-| `::before` / `::after` | "(pseudo-elements â€” invisible extra elements CSS creates before/after an element's content, useful for decorations)" |
-| `box-shadow` | "(adds a shadow effect around an element â€” like the shadow a card casts on a desk)" |
+| `::before` / `::after` | "(pseudo-elements - invisible extra elements CSS creates before/after an element's content, useful for decorations)" |
+| `box-shadow` | "(adds a shadow effect around an element - like the shadow a card casts on a desk)" |
 | `radial-gradient` | "(a colour transition that radiates outward from a centre point, like a spotlight)" |
 | `linear-gradient` | "(a colour transition in a straight line from one side to another)" |
 | `transition` | "(tells the browser to animate smoothly between old and new CSS values when they change)" |
 | `transform` | "(moves, rotates, scales, or skews an element without affecting surrounding layout)" |
-| `z-index` | "(controls which element appears in front when elements overlap â€” higher numbers are on top)" |
-| `will-change` | "(a hint telling the browser to prepare for an upcoming animation on this property â€” improves performance)" |
-| Canvas / `<canvas>` | "(an HTML element that provides a blank drawing surface â€” JavaScript draws pixels onto it)" |
-| `getContext('2d')` | "(gets the 2D drawing API for a canvas â€” lets you draw shapes, text, and images)" |
-| Event bubbling | "(when an event on a child element travels up through its parents â€” lets a parent listen for events from any descendant)" |
+| `z-index` | "(controls which element appears in front when elements overlap - higher numbers are on top)" |
+| `will-change` | "(a hint telling the browser to prepare for an upcoming animation on this property - improves performance)" |
+| Canvas / `<canvas>` | "(an HTML element that provides a blank drawing surface - JavaScript draws pixels onto it)" |
+| `getContext('2d')` | "(gets the 2D drawing API for a canvas - lets you draw shapes, text, and images)" |
+| Event bubbling | "(when an event on a child element travels up through its parents - lets a parent listen for events from any descendant)" |
 | `composed: true` | "(allows a Custom Event to escape the Shadow DOM boundary so the host page can hear it)" |
 
 ---
@@ -459,7 +459,7 @@ because the goal is education.
 
 - **Never** include API keys, tokens, passwords, or secrets in HTML/JS files.
 - If the page fetches data from an API, the API key must come from a server-side
-  proxy or environment variable â€” never embedded in client-side code.
+  proxy or environment variable - never embedded in client-side code.
 - Avoid `eval()`, `innerHTML` with user-supplied data, and `document.write()`.
 - Use `textContent` instead of `innerHTML` when inserting plain text.
 - If accepting user input, sanitise it before rendering.
@@ -468,12 +468,12 @@ because the goal is education.
 
 ## Performance
 
-- Minimise DOM queries â€” cache element references.
+- Minimise DOM queries - cache element references.
 - Avoid layout thrashing (reading layout properties then immediately writing
   style changes in a loop).
 - Use `will-change` sparingly and only on elements that actually animate.
 - For `<canvas>` animations, clear only the regions that changed when practical.
-- Limit `setInterval` / `setTimeout` usage â€” prefer `requestAnimationFrame` for
+- Limit `setInterval` / `setTimeout` usage - prefer `requestAnimationFrame` for
   visual updates.
 
 ---
@@ -497,18 +497,18 @@ For the Salesforce project:
 
 ```text
 frontend/
-â”œâ”€â”€ joshua-terminal.html       â† main dashboard (self-contained prototype)
-â”œâ”€â”€ components/                 â† reusable Web Components (when split out)
-â”œâ”€â”€ styles/                     â† shared CSS (when split out)
-â””â”€â”€ assets/                     â† images, icons, fonts
++-- joshua-terminal.html       <- main dashboard (self-contained prototype)
++-- components/                 <- reusable Web Components (when split out)
++-- styles/                     <- shared CSS (when split out)
++-- assets/                     <- images, icons, fonts
 ```
 
 For generated static reports (produced by Python scripts):
 
 ```text
 reports/
-â”œâ”€â”€ templates/                  â† Jinja2 or string-template HTML
-â””â”€â”€ output/                     â† generated .html files (gitignored)
++-- templates/                  <- Jinja2 or string-template HTML
++-- output/                     <- generated .html files (gitignored)
 ```
 
 ---
@@ -536,4 +536,4 @@ its level of detail. Key patterns demonstrated there:
 - JSDoc with "How it works" paragraph on every function.
 - All terms from the glossary table explained inline on first occurrence.
 - Design rationale comments on non-obvious visual choices.
-- `~1 comment per 3â€“5 lines` density maintained throughout.
+- `~1 comment per 3-5 lines` density maintained throughout.

@@ -201,10 +201,10 @@ The practical journey may be:
 
 ```text
 Social media post
-  → Profile bio/link
-  → Website landing page
-  → Contact form / booking / purchase
-  → Follow-up by email, phone, CRM, or social message
+  -> Profile bio/link
+  -> Website landing page
+  -> Contact form / booking / purchase
+  -> Follow-up by email, phone, CRM, or social message
 ```
 
 Ask whether the business already uses or needs:

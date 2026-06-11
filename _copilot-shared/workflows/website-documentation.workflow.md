@@ -32,19 +32,19 @@ Suggest a structure like:
 
 ```text
 my-website-project/
-├── docs/
-│   ├── 01-website-brief.md
-│   ├── 02-platform-decision.md
-│   ├── 03-legal-compliance.md
-│   ├── 04-content-plan.md
-│   ├── 05-design-decisions.md
-│   ├── 06-launch-checklist.md
-│   ├── 07-promotion-plan.md
-│   ├── 08-maintenance-plan.md
-│   └── 09-analytics-setup.md
-├── assets/
-│   └── (images, logos, brand files)
-└── README.md
++-- docs/
+|   +-- 01-website-brief.md
+|   +-- 02-platform-decision.md
+|   +-- 03-legal-compliance.md
+|   +-- 04-content-plan.md
+|   +-- 05-design-decisions.md
+|   +-- 06-launch-checklist.md
+|   +-- 07-promotion-plan.md
+|   +-- 08-maintenance-plan.md
+|   +-- 09-analytics-setup.md
++-- assets/
+|   +-- (images, logos, brand files)
++-- README.md
 ```
 
 The numbering reflects the recommended order of creation but is not rigid.

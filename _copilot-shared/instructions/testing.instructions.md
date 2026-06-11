@@ -46,15 +46,15 @@ WRONG (horizontal - all tests first, then all implementation):
   GREEN: impl1, impl2, impl3, impl4, impl5
 
 RIGHT (vertical - one test, one implementation, repeat):
-  RED→GREEN: test1→impl1
-  RED→GREEN: test2→impl2
-  RED→GREEN: test3→impl3
+  RED->GREEN: test1->impl1
+  RED->GREEN: test2->impl2
+  RED->GREEN: test3->impl3
 ```
 
 - **Never write all tests first, then all implementation.** Tests written in
   bulk test imagined behaviour, not actual behaviour. They become insensitive
   to real changes.
-- **One test → one implementation → repeat.** Each test responds to what you
+- **One test -> one implementation -> repeat.** Each test responds to what you
   learned from the previous cycle.
 - Tests should verify behaviour through **public interfaces**, not
   implementation details. If renaming an internal function breaks a test but

@@ -74,13 +74,13 @@ If not provided, ask concise questions about:
 - What website, domain, page, platform, CMS, form builder, CRM, marketing tool,
   or app is being reviewed?
 - What forms are in scope?
-- What is each form’s purpose?
+- What is each form's purpose?
 - Who is the user or audience?
 - What fields does each form collect?
 - Which fields are required and optional?
 - Does the form collect personal data, sensitive data, files, payment-related
   information, health information, employment information, financial
-  information, government IDs, children’s data, or regulated information?
+  information, government IDs, children's data, or regulated information?
 - Where do submissions go after the user submits?
 - Are submissions emailed, stored in a CMS, sent to a CRM, sent to a marketing
   platform, sent to a ticketing system, sent to a spreadsheet, or sent to a
@@ -366,7 +366,7 @@ Where relevant, review:
 - text expansion,
 - local support routing.
 
-Do not assume one region’s form works for another region.
+Do not assume one region's form works for another region.
 
 ## Mobile, browser, and autofill guidance
 

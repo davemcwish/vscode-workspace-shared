@@ -4,18 +4,17 @@
 # Explicitly include workspace-level shared files
 !.gitignore
 !.gitattributes
+!.vscode/
+!.vscode/**
 !README.md
 !_copilot-shared/
 !_copilot-shared/**
-!sync-shared-copilot.ps1
-!build-chatmode-from-agent.ps1
-!repair-git-state.ps1
-!repair-workspace-copilot.ps1
+!powershell/
+!powershell/**
 !adding-a-new-subworkspace.md
 !repair-workspace-copilot.md
 !Visual Studio Code.code-workspace
 !Changelog.md
-!directory-listing.txt
 !sanity.bat
 !sanity_v.bat
 !*.ps1

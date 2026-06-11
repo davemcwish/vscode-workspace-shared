@@ -1,6 +1,6 @@
 @echo off
 REM ============================================================================
-REM  sanity.bat — Run all code quality checks (workspace root repo)
+REM  sanity.bat - Run all code quality checks (workspace root repo)
 REM  Usage:  sanity.bat
 REM
 REM  CUSTOMISED for the workspace root git repo which tracks:
@@ -13,13 +13,13 @@ REM  Python checks target _copilot-shared\tests only.
 REM ============================================================================
 REM
 REM  GATE STEPS:
-REM    1. Ruff format    — code formatting (check-only, no changes)
-REM    2. Ruff lint      — linting + import sorting + security rules
-REM    3. Mypy           — static type checking
-REM    4. Bandit         — security linter (Python-specific)
-REM    5. detect-secrets — scans for accidentally committed secrets
-REM    6. Pytest         — test suite
-REM    7. markdownlint   — checks Markdown files for style issues
+REM    1. Ruff format    - code formatting (check-only, no changes)
+REM    2. Ruff lint      - linting + import sorting + security rules
+REM    3. Mypy           - static type checking
+REM    4. Bandit         - security linter (Python-specific)
+REM    5. detect-secrets - scans for accidentally committed secrets
+REM    6. Pytest         - test suite
+REM    7. markdownlint   - checks Markdown files for style issues
 REM ============================================================================
 
 setlocal enabledelayedexpansion
@@ -50,7 +50,7 @@ echo.
 echo ============================================================================
 echo  [3/7] Mypy (static type checking)
 echo ============================================================================
-REM No pyproject.toml in this repo — pass target directory directly.
+REM No pyproject.toml in this repo - pass target directory directly.
 %PY_CMD% -m mypy %PY_TARGETS% --ignore-missing-imports
 if errorlevel 1 set /a FAIL_COUNT+=1
 
@@ -58,7 +58,7 @@ echo.
 echo ============================================================================
 echo  [4/7] Bandit (security linter)
 echo ============================================================================
-REM No pyproject.toml — run bandit without -c flag, target tests dir.
+REM No pyproject.toml - run bandit without -c flag, target tests dir.
 REM --skip B101: assert is standard pytest practice and is the only Python
 REM code in this repo. No production code exists to scan.
 %PY_CMD% -m bandit -r %PY_TARGETS% --skip B101 --quiet

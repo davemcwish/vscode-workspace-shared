@@ -30,14 +30,14 @@ as completed.
 
 1. Read `checklist.md`.
 2. Find `**Next Task:** [filename]`.
-3. If "DONE" or all boxes checked → output completion message and STOP.
+3. If "DONE" or all boxes checked -> output completion message and STOP.
 
 ### Phase 2: Delegation
 
 1. Construct full path (task file is in same directory as checklist).
 2. Call the **dev** agent with just the full path - no extra instructions.
 3. Wait for response.
-4. If response starts with `"Failure:"` → STOP and report error to user.
+4. If response starts with `"Failure:"` -> STOP and report error to user.
 
 ### Phase 3: State Update
 

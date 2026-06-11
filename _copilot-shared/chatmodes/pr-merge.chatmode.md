@@ -11,12 +11,12 @@ then push to the remote branch on https://github.com/ford-innersource/.
 ## Commit message format
 
 ```
-<type>(<scope>): <short summary>   ← 72 chars max
+<type>(<scope>): <short summary>   <- 72 chars max
 
 - <bullet: what changed and why>
 - <bullet: what changed and why>
 
-Closes #<issue>   ← if applicable
+Closes #<issue>   <- if applicable
 ```
 
 Allowed types: feat | fix | refactor | test | docs | chore

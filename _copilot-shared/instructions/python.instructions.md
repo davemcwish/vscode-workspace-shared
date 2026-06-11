@@ -8,7 +8,7 @@ description: "Python coding standards for complete-beginner maintainability."
 ## Style & Formatting
 - Follow PEP 8. Format with `ruff format`; lint with `ruff check`.
 - Line length: 100 characters.
-- Group imports: stdlib → third-party → local, separated by blank lines.
+- Group imports: stdlib -> third-party -> local, separated by blank lines.
 
 ## Typing
 - Add type hints to **all** function/method signatures and public attributes.

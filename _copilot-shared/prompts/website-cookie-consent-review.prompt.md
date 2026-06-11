@@ -524,7 +524,7 @@ Where relevant, review:
 - text expansion,
 - local legal/privacy review needs.
 
-Do not assume one region’s consent configuration works for another region.
+Do not assume one region's consent configuration works for another region.
 
 ## Mobile, browser, and device guidance
 

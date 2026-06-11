@@ -65,7 +65,7 @@ def validate_salesforce_alias(alias: str) -> str:
     match = _SF_ALIAS_PATTERN.fullmatch(cleaned)
     if match is None:
         raise ValueError(f"Invalid Salesforce alias: {cleaned!r}")
-    return match.group(0)  # ← derived from match object, not from `alias`
+    return match.group(0)  # <- derived from match object, not from `alias`
 
 # In query_helpers.py - caller stores result in clearly named variable
 safe_alias = validate_salesforce_alias(alias)   # raises ValueError if unsafe
@@ -101,7 +101,7 @@ safe_alias = validate_salesforce_alias(alias)
 _m = re.fullmatch(r"[A-Za-z0-9_.@\-]{1,128}", safe_alias)
 if _m is None:
     raise ValueError(f"Alias failed local re-verification: {safe_alias!r}")
-safe_alias = _m.group(0)  # ← SAST sees a local match object, not tainted input
+safe_alias = _m.group(0)  # <- SAST sees a local match object, not tainted input
 
 command = [sf_command, "org", "display", "--target-org", safe_alias, "--json"]
 result = subprocess.run(command, capture_output=True, text=True, check=True, shell=False)
@@ -136,7 +136,7 @@ _SAFE_PATH_PATTERN = re.compile(r"[A-Za-z0-9_\-./\\ :()]{1,500}")
 _m = _SAFE_PATH_PATTERN.fullmatch(str(safe_path))
 if _m is None:
     raise ValueError(f"Path failed local re-verification: {safe_path!r}")
-safe_path = _Path(_m.group(0))  # ← derived from match object, taint chain broken
+safe_path = _Path(_m.group(0))  # <- derived from match object, taint chain broken
 
 with open(safe_path, "w", ...) as fh:
     ...

@@ -8,19 +8,19 @@ description: "PowerShell scripting standards for Windows compatibility."
 ## Character Encoding (CRITICAL)
 
 - **Use only ASCII-safe characters** (code points 0x00-0x7F) in all `.ps1` files.
-- Never use Unicode arrows (`→`, `←`, `➜`), tick marks (`✓`, `✗`), em-dashes
+- Never use Unicode arrows (`->`, `<-`, `->`), tick marks (`[x]`, `[ ]`), em-dashes
   (` - `), or other non-ASCII symbols in strings, comments, or output.
 - Use ASCII alternatives instead:
 
 | Avoid (non-ASCII) | Use instead (ASCII) |
 | ------------------ | ------------------- |
-| `→` | `->` |
-| `←` | `<-` |
-| `➜` | `->` |
-| `✓` | `[OK]` |
-| `✗` | `[FAIL]` |
+| `->` | `->` |
+| `<-` | `<-` |
+| `->` | `->` |
+| `[x]` | `[OK]` |
+| `[ ]` | `[FAIL]` |
 | ` - ` (em-dash) | `--` |
-| `…` (ellipsis) | `...` |
+| `...` (ellipsis) | `...` |
 | `'` `'` (smart quotes) | `'` (straight) |
 | `"` `"` (smart quotes) | `"` (straight) |
 

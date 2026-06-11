@@ -65,7 +65,7 @@ qualified reviewer.
 If not provided, ask concise questions about:
 
 - What website, domain, platform, CMS, app, or digital property is being reviewed?
-- What is the website’s main purpose?
+- What is the website's main purpose?
 - What types of content are in scope: pages, posts, products, services, locations,
   events, campaigns, PDFs, downloads, videos, images, forms, policies, help
   content, support articles, landing pages, translations, or user-generated
@@ -160,7 +160,7 @@ Before giving a positive verdict, check:
   practical.
 - Stale, duplicate, orphaned, and low-value content cleanup has a process.
 - Content changes can be rolled back or restored where needed.
-- Content governance is practical for the team’s capacity.
+- Content governance is practical for the team's capacity.
 
 ## Content inventory guidance
 

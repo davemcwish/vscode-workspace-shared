@@ -384,3 +384,19 @@ cannot tell the difference between a correct docstring and a confidently wrong
 one - so never guess, never copy from a similar function, and never write what
 "probably" happens. Read the code, confirm the facts, then explain them in
 plain English.
+
+---
+
+## Character Encoding in Docstrings and Comments
+
+- **Never use em-dashes or en-dashes** in docstrings, comments, or string
+  literals. Use a plain hyphen (`-`) or double-hyphen (`--`) instead.
+- **Never use smart/curly quotes** (`\u2018`, `\u2019`, `\u201c`, `\u201d`).
+  Use straight ASCII quotes (`'`, `"`) only.
+- **Avoid all non-ASCII punctuation** in docstrings and comments: no Unicode
+  arrows, tick marks, bullet symbols, or typographic characters.
+
+These characters cause encoding corruption when files move between Windows
+(which may default to cp1252) and Linux (GitHub Actions, CI runners) where
+UTF-8 is assumed. A garbled `\u00e2\u0080\u0094` in a docstring confuses
+beginners and breaks string-matching tools.
