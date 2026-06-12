@@ -53,6 +53,8 @@ Every module, class, and function must have a docstring covering:
 - **Raises** - exceptions and the conditions that trigger them.
 - **Example** - minimal usage block when the function is non-obvious.
 
+**Character encoding:** See `docstrings.instructions.md` for rules on em-dashes, curly quotes, and Unicode characters in docstrings and comments. Never use fancy Unicode punctuation; always use plain ASCII.
+
 ## Naming
 - `snake_case` for functions/variables, `PascalCase` for classes,
   `UPPER_SNAKE_CASE` for constants.

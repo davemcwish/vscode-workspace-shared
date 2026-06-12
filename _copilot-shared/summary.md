@@ -202,6 +202,7 @@ files"). No manual action required.
 | `python.instructions.md` | `**/*.py` | Python coding standards for beginner-friendly maintainability. |
 | `salesforce.instructions.md` | `src/**/*.py, scripts/**/*.py` | Salesforce API usage and Production-safety rules. |
 | `security.instructions.md` | `**` | Secrets handling, sensitive data, OWASP web security for Flask endpoints. |
+| `shared-artefacts.instructions.md` | `**` | Governance rules for shared Copilot configuration files and sync workflows. |
 | `testing.instructions.md` | `tests/**/*.py` | Pytest conventions, coverage expectations, Flask/SocketIO test patterns. |
 | `transcript-extraction.instructions.md` | `docs/**/*.md, transcripts/**/*.md, **/*transcript*.md, **/*guide*.md` | Rules for extracting beginner-friendly task guides from transcripts. |
 
@@ -217,17 +218,17 @@ to do.
 | --- | --- |
 | `add-tests.prompt.md` | Add or improve pytest coverage for a selected module. |
 | `component-overview.prompt.md` | Generate a machine-readable, component-level overview (`overview.md`) for consumption by other AI agents - explicit labelled fields, no prose. |
-| `website-conversion-review.prompt.md` | Review a website for conversion, lead generation, trust, calls to action, and customer journey friction. |
-| `docs-update.prompt.md` | Update project documentation after a code or workflow change. |
 | `docstring-audit.prompt.md` | Audit Python docstrings and produce a beginner-friendly remediation plan. |
+| `docs-update.prompt.md` | Update project documentation after a code or workflow change. |
 | `extract-transcript.prompt.md` | Extract a comprehensive beginner-friendly guide from a chat transcript. |
-| `website-html-css-review.prompt.md` | Review HTML and CSS for accessibility, responsiveness, maintainability, and beginner readability. |
 | `improve-docstrings.prompt.md` | Improve Python docstrings across a file or module without changing runtime behaviour. |
+| `new-script.prompt.md` | Scaffold a new Salesforce admin utility script. |
+| `pre-commit-check.prompt.md` | Run and interpret the full project sanity checks before a commit. |
+| `website-conversion-review.prompt.md` | Review a website for conversion, lead generation, trust, calls to action, and customer journey friction. |
+| `website-html-css-review.prompt.md` | Review HTML and CSS for accessibility, responsiveness, maintainability, and beginner readability. |
 | `website-local-seo-check.prompt.md` | Review local SEO readiness for a small business or local organisation website. |
 | `website-monthly-review.prompt.md` | Run a monthly website improvement review covering maintenance, analytics, SEO, conversion, and accessibility. |
-| `new-script.prompt.md` | Scaffold a new Salesforce admin utility script. |
 | `website-platform-decision.prompt.md` | Help choose the simplest sustainable platform for a website, report, dashboard, or tool. |
-| `pre-commit-check.prompt.md` | Run and interpret the full project sanity checks before a commit. |
 | `project-architecture.prompt.md` | Summarise the current project architecture. |
 | `refactor-legacy-script.prompt.md` | Refactor an older standalone script into the current project architecture. |
 | `website-review.prompt.md` | General website review prompt for broad site quality checks. |

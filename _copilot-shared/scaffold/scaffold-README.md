@@ -13,6 +13,8 @@ dependencies.
 | --- | --- |
 | `sanity.bat` | Local quality gate - run this before every commit |
 | `sanity_v.bat` | Verbose version of `sanity.bat` - use when debugging a failure |
+| `update_packages.bat` | Safely upgrade all dependencies (Windows) |
+| `update_packages.py` | Core upgrade logic - handles pip-tools recompile and verification |
 | `requirements.in` | Loose-pinned list of runtime dependencies (Python template) |
 | `requirements-dev.in` | Loose-pinned list of dev/test dependencies (Python template) |
 | `README.md` | Project overview - what it does, who it is for, how to use it |
@@ -168,6 +170,63 @@ At a minimum, ensure that:
 A reviewer with no prior knowledge of the project should be able to read these
 five files and understand the project's purpose, structure, and security model
 without asking anyone.
+
+---
+
+## `update_packages.bat`, `update_packages.py`, and `update_packages.sh`
+
+These three files work together to safely upgrade Python dependencies.
+
+### Why this matters
+
+Python packages (dependencies) are maintained by the open-source community.
+Like all software, they occasionally have security bugs. Keeping them updated
+protects against exploits. However, newer versions may have bugs or introduce
+breaking changes. This script handles the upgrade safely:
+
+1. Compiles newer versions into `requirements.txt` and `requirements-dev.txt`.
+2. Shows you what changed (so you can review it).
+3. Asks for confirmation before installing.
+4. Installs the new versions.
+5. Runs the full test suite (`sanity.bat` / `sanity.sh`) to confirm nothing broke.
+
+### How to use it
+
+**Windows:**
+
+```powershell
+.venv\Scripts\Activate.ps1
+.\update_packages.bat
+```
+
+**Linux/macOS:**
+
+```bash
+source .venv/bin/activate
+bash update_packages.sh
+```
+
+Or run the Python script directly on any platform:
+
+```bash
+python scripts/update_packages.py
+```
+
+### What to customise
+
+These files require **no customisation** — they work as-is. The upgrade logic
+uses `pip-tools` to recompile `requirements.in` and `requirements-dev.in` into
+exact-version lock files.
+
+**Important:** Your project must have:
+
+- `requirements.in` and/or `requirements-dev.in` in the project root (loose
+  versions, e.g. `flask>=3.0`).
+- `scripts/` directory (for the update_packages.py script).
+- `sanity.bat` or `sanity.sh` (the gate scripts run after upgrade to verify).
+
+If you're using a different dependency system (Poetry, Pipenv, Conda), replace
+these files with the equivalent for your system.
 
 ---
 

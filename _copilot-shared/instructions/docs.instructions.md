@@ -126,6 +126,14 @@ These two rules cause the most frequent markdownlint failures, so apply them del
 - MD032 - surround every list with one blank line above and below.
 These are auto-fixed by markdownlint-cli2 --fix in the local quality gate, but writing them correctly avoids noisy diffs.
 
+### Character Encoding in Documentation
+
+- **Never use em-dashes, en-dashes or fancy long dashes** in markdown files. Use a plain hyphen (`-`) or double-hyphen (`--`) instead.
+- **Never use smart/curly quotes** (`\u2018`, `\u2019`, `\u201c`, `\u201d`). Use straight ASCII quotes (`'`, `"`) only.
+- **Avoid all non-ASCII punctuation** in markdown: no Unicode arrows, tick marks, bullet symbols, or typographic characters.
+
+These characters cause encoding corruption when files move between Windows (which may default to cp1252) and Linux (GitHub Actions, CI runners) where UTF-8 is assumed. Markdown editors often auto-convert `--` to em-dashes as a "nice" typography feature — disable this in your editor settings, or paste your text through a plain-text tool before committing.
+
 ### Transcript-Derived Guides
 When documentation is created from a transcript, support log, Copilot session, or LLM conversation:
 
