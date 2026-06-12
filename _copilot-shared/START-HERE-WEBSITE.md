@@ -79,16 +79,16 @@ Think of it like having access to a team of specialists:
 
 | Specialist | What they do | How you talk to them | Status |
 | --- | --- | --- | --- |
-| Website Launch Planner | Guides you from idea to live site | Select the chat mode if installed | To create or verify |
+| Website Launch Planner | Guides you from idea to live site | Select the chat mode | Installed |
 | Critical Thinking Partner | Challenges your assumptions before you commit | Type `@critical-thinking` or use the critical-thinking chat mode | Installed |
-| SEO Reviewer | Checks whether people can find your site | Type `/seo-review` if installed | To create |
-| Conversion Reviewer | Checks whether visitors take the action you want | Type `/conversion-review` if installed | To create |
-| Local SEO Checker | Checks whether local customers can find you | Type `/local-seo-check` if installed | To create or verify |
-| Accessibility Reviewer | Checks whether everyone can use your site | Select the accessibility review chat mode if installed | To create or verify |
-| HTML/CSS Reviewer | Reviews your code for quality and standards | Type `/html-css-review` if installed | To create or verify |
-| Platform Decision Helper | Helps choose the right technology | Type `/platform-decision` if installed | To create |
-| Monthly Website Reviewer | Runs a health check after launch | Type `/monthly-website-review` if installed | To create |
-| Maintenance Plan Creator | Creates a post-launch care plan | Type `/website-maintenance-plan` if installed | To create |
+| SEO Reviewer | Checks whether people can find your site | Type `/website-seo-review` | Installed |
+| Conversion Reviewer | Checks whether visitors take the action you want | Type `/website-conversion-review` | Installed |
+| Local SEO Checker | Checks whether local customers can find you | Type `/website-local-seo-check` | Installed |
+| Accessibility Reviewer | Checks whether everyone can use your site | Select the accessibility review chat mode | Installed |
+| HTML/CSS Reviewer | Reviews your code for quality and standards | Type `/website-html-css-review` | Installed |
+| Platform Decision Helper | Helps choose the right technology | Type `/website-platform-decision` | Installed |
+| Monthly Website Reviewer | Runs a health check after launch | Type `/website-monthly-review` | Installed |
+| Maintenance Plan Creator | Creates a post-launch care plan | Type `/website-maintenance-plan` | Installed |
 
 If a listed specialist is not installed, check `WEBSITE-ARTIFACT-MANIFEST.md`
 and either create the missing artifact or use the closest installed guidance
@@ -110,7 +110,7 @@ If you've never used Copilot before:
    Pick the specialist you need (e.g. "Website Launch Planner").
 4. **Type your question** - in plain English. No code needed.
 5. **Use `/` for prompts** - type `/` followed by the prompt name to run a
-   specific recipe (e.g. `/seo-review`).
+   specific recipe (e.g. `/website-seo-review`).
 6. **Use `@` for agents** - type `@` followed by the agent name to summon a
    specialist (e.g. `@critical-thinking`).
 
@@ -155,7 +155,7 @@ the missing prompt/workflow before relying on it.
 | --- | --- |
 | Define purpose, audience, geography, and goals | Select chat mode: **Website Launch Planner** |
 | Or run the one-shot planning prompt | Type `/website-from-idea-to-launch` |
-| Help choose the right platform/technology | Type `/platform-decision` |
+| Help choose the right platform/technology | Type `/website-platform-decision` |
 
 The planner will ask you about:
 
@@ -202,7 +202,7 @@ It never tells you what to do - it helps you think clearly.
 | --- | --- |
 | HTML/CSS/JS standards | Automatic - Copilot reads `html-css-javascript.instructions.md` when you edit web files |
 | Accessibility standards | Read: `skills/accessibility.skill.md` |
-| Review your HTML/CSS | Type `/html-css-review` in Chat |
+| Review your HTML/CSS | Type `/website-html-css-review` in Chat |
 
 ### Stage 5: SECURE - Harden and Comply
 
@@ -217,9 +217,9 @@ It never tells you what to do - it helps you think clearly.
 | Action | How |
 | --- | --- |
 | Accessibility review | Select chat mode: **accessibility-review** |
-| HTML/CSS quality review | Type `/html-css-review` |
+| HTML/CSS quality review | Type `/website-html-css-review` |
 | Performance check | Read: `skills/website-performance.skill.md` |
-| Conversion path check | Type `/conversion-review` |
+| Conversion path check | Type `/website-conversion-review` |
 
 ### Stage 7: LAUNCH - Go Live
 
@@ -232,24 +232,24 @@ It never tells you what to do - it helps you think clearly.
 
 | Action | How |
 | --- | --- |
-| SEO review | Type `/seo-review` |
-| Local SEO check | Type `/local-seo-check` |
+| SEO review | Type `/website-seo-review` |
+| Local SEO check | Type `/website-local-seo-check` |
 | Promotion strategy | Read: `skills/website-promotion.skill.md` |
-| Conversion review | Type `/conversion-review` |
+| Conversion review | Type `/website-conversion-review` |
 
 ### Stage 9: MEASURE - Track Results
 
 | Action | How |
 | --- | --- |
 | Analytics guidance | Read: `skills/website-analytics.skill.md` |
-| Monthly review | Type `/monthly-website-review` |
+| Monthly review | Type `/website-monthly-review` |
 
 ### Stage 10: MAINTAIN - Keep It Healthy
 
 | Action | How |
 | --- | --- |
 | Create a maintenance plan | Type `/website-maintenance-plan` |
-| Monthly health check | Type `/monthly-website-review` |
+| Monthly health check | Type `/website-monthly-review` |
 | Ongoing security | Read: `skills/website-security.skill.md` |
 
 ---
@@ -355,12 +355,12 @@ If you're starting a brand new website project right now:
 | File | When to Use |
 | --- | --- |
 | `/website-from-idea-to-launch` | Quick full-project planning |
-| `/platform-decision` | Choosing the right technology |
-| `/seo-review` | Checking search engine readiness |
-| `/local-seo-check` | Checking local search readiness |
-| `/conversion-review` | Checking whether visitors convert |
-| `/html-css-review` | Reviewing code quality |
-| `/monthly-website-review` | Monthly health check |
+| `/website-platform-decision` | Choosing the right technology |
+| `/website-seo-review` | Checking search engine readiness |
+| `/website-local-seo-check` | Checking local search readiness |
+| `/website-conversion-review` | Checking whether visitors convert |
+| `/website-html-css-review` | Reviewing code quality |
+| `/website-monthly-review` | Monthly health check |
 | `/website-maintenance-plan` | Creating a maintenance routine |
 
 ### Instructions (Auto-Applied Rules)
