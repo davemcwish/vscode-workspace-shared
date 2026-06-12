@@ -33,8 +33,8 @@ manifest first.
 
 | Artifact | Status | Purpose |
 | --- | --- | --- |
-| `START-HERE-WEBSITE.md` | oe... Installed | Beginner entry point for understanding how to use the website artifact system |
-| `WEBSITE-ARTIFACT-MANIFEST.md` | oe... Installed | Inventory of installed, missing, optional, and planned artifacts |
+| `START-HERE-WEBSITE.md` | Installed | Beginner entry point for understanding how to use the website artifact system |
+| `WEBSITE-ARTIFACT-MANIFEST.md` | Installed | Inventory of installed, missing, optional, and planned artifacts |
 
 ---
 
@@ -42,8 +42,8 @@ manifest first.
 
 | Artifact | Status | Purpose |
 | --- | --- | --- |
-| `critical-thinking.agent.md` | oe... Installed | Agent version of the critical-thinking partner |
-| `critical-thinking.chatmode.md` | oe... Installed | Chat mode version of the critical-thinking partner |
+| `critical-thinking.agent.md` | Installed | Agent version of the critical-thinking partner |
+| `critical-thinking.chatmode.md` | Installed | Chat mode version of the critical-thinking partner |
 
 > **Sync rule:** The agent and chat mode versions must remain behaviourally
 > identical. Any change to one must be applied to the other.
@@ -54,15 +54,15 @@ manifest first.
 
 | Artifact | Status | Purpose |
 | --- | --- | --- |
-| `website-analytics.skill.md` | oe... Installed | Analytics, measurement, conversion tracking, and privacy-aware data collection |
-| `website-promotion.skill.md` | oe... Installed | SEO, paid ads, email, social media, partnerships, and offline promotion |
-| `website-performance.skill.md` | oe... Installed | Website speed, Core Web Vitals, images, caching, JavaScript, fonts, and CDN guidance |
-| `website-security.skill.md` | oe... Installed | HTTPS, headers, forms, CMS security, hosting security, backups, and incident response |
-| `website-privacy-legal.skill.md` | oe... Installed | Privacy law, cookies, accessibility law, data collection, and legal compliance |
-| `website-content-copywriting.skill.md` | oe... Installed | Website copy, page structure, CTAs, tone, scanning behaviour, and content maintenance |
-| `accessibility.skill.md` | Y"² To verify | Detailed accessibility implementation and testing guidance |
-| `website-launch.skill.md` | Y"² To verify | General website launch planning guidance |
-| `website-growth.skill.md` | Y"² To verify | Ongoing growth, SEO, conversion, and improvement loops |
+| `website-analytics.skill.md` | Installed | Analytics, measurement, conversion tracking, and privacy-aware data collection |
+| `website-promotion.skill.md` | Installed | SEO, paid ads, email, social media, partnerships, and offline promotion |
+| `website-performance.skill.md` | Installed | Website speed, Core Web Vitals, images, caching, JavaScript, fonts, and CDN guidance |
+| `website-security.skill.md` | Installed | HTTPS, headers, forms, CMS security, hosting security, backups, and incident response |
+| `website-privacy-legal.skill.md` | Installed | Privacy law, cookies, accessibility law, data collection, and legal compliance |
+| `website-content-copywriting.skill.md` | Installed | Website copy, page structure, CTAs, tone, scanning behaviour, and content maintenance |
+| `accessibility.skill.md` | Installed | Detailed accessibility implementation and testing guidance |
+| `website-launch.skill.md` | Installed | General website launch planning guidance |
+| `website-growth.skill.md` | Installed | Ongoing growth, SEO, conversion, and improvement loops |
 
 ---
 
@@ -70,8 +70,8 @@ manifest first.
 
 | Artifact | Status | Purpose |
 | --- | --- | --- |
-| `website-documentation.workflow.md` | oe... Installed | Creates beginner-friendly offline Markdown documentation |
-| `website-live-launch.workflow.md` | Y"² To create | End-to-end go-live workflow covering domain, DNS, SSL, testing, launch, rollback, and post-launch checks |
+| `website-documentation.workflow.md` | Installed | Creates beginner-friendly offline Markdown documentation |
+| `website-live-launch.workflow.md` | Installed | End-to-end go-live workflow covering domain, DNS, SSL, testing, launch, rollback, and post-launch checks |
 
 ---
 
@@ -79,9 +79,9 @@ manifest first.
 
 | Artifact | Status | Purpose |
 | --- | --- | --- |
-| `website-launch-planner.chatmode.md` | Y"² To create | Main guided planning conversation from idea to launch |
-| `accessibility-review.chatmode.md` | Y"² To verify | Accessibility review conversation |
-| `critical-thinking.chatmode.md` | oe... Installed | Challenges assumptions before committing to decisions |
+| `website-launch-planner.chatmode.md` | Installed | Main guided planning conversation from idea to launch |
+| `accessibility-review.chatmode.md` | Installed | Accessibility review conversation |
+| `critical-thinking.chatmode.md` | Installed | Challenges assumptions before committing to decisions |
 
 ---
 
@@ -89,15 +89,14 @@ manifest first.
 
 | Artifact | Status | Purpose |
 | --- | --- | --- |
-| `website-from-idea-to-launch.prompt.md` | Y"² To create | One-shot planning prompt for a new website |
-| `website-platform-decision.prompt.md` | Y"² To create | Helps compare and choose website technology/platform |
-| `website-seo-review.prompt.md` | Y"² To create | Reviews search engine readiness |
-| `website-review.prompt.md` | oe... Exists | General website review prompt for broad site quality checks. |
-| `website-local-seo-check.prompt.md` | Y"² To verify | Reviews local search readiness |
-| `website-conversion-review.prompt.md` | Y"² To create | Reviews whether visitors are likely to take the desired action |
-| `website-html-css-review.prompt.md` | Y"² To verify | Reviews HTML/CSS/JS quality |
-| `website-monthly-review.prompt.md` | Y"² To create | Monthly website health check |
-| `website-maintenance-plan.prompt.md` | Y"² To create | Creates a long-term maintenance plan |
+| `website-from-idea-to-launch.prompt.md` | Installed | One-shot planning prompt for a new website |
+| `website-platform-decision.prompt.md` | Installed | Helps compare and choose website technology/platform |
+| `website-seo-review.prompt.md` | Installed | Reviews search engine readiness |
+| `website-local-seo-check.prompt.md` | Installed | Reviews local search readiness |
+| `website-conversion-review.prompt.md` | Installed | Reviews whether visitors are likely to take the desired action |
+| `website-html-css-review.prompt.md` | Installed | Reviews HTML/CSS/JS quality |
+| `website-monthly-review.prompt.md` | Installed | Monthly website health check |
+| `website-maintenance-plan.prompt.md` | Installed | Creates a long-term maintenance plan |
 
 ---
 
@@ -105,10 +104,10 @@ manifest first.
 
 | Artifact | Status | Purpose |
 | --- | --- | --- |
-| `website-cost-model.template.md` | Y"² To create | Records one-time, monthly, annual, and marketing costs |
-| `website-risk-register.template.md` | Y"² To create | Tracks risks, impact, likelihood, owners, and mitigations |
-| `website-decision-log.template.md` | Y"² To create | Records decisions, alternatives, reasoning, and revisit triggers |
-| `website-assumption-log.template.md` | Y"² To create | Records assumptions, validation method, and risk if wrong |
+| `website-cost-model.template.md` | To create | Records one-time, monthly, annual, and marketing costs |
+| `website-risk-register.template.md` | To create | Tracks risks, impact, likelihood, owners, and mitigations |
+| `website-decision-log.template.md` | To create | Records decisions, alternatives, reasoning, and revisit triggers |
+| `website-assumption-log.template.md` | To create | Records assumptions, validation method, and risk if wrong |
 
 ---
 
@@ -116,8 +115,8 @@ manifest first.
 
 | Artifact | Status | Purpose |
 | --- | --- | --- |
-| `html-css-javascript.instructions.md` | Y"² To verify | Auto-applied web coding standards for HTML, CSS, and JavaScript |
-| `security.instructions.md` | Y"² To verify | Project-specific secure coding rules |
+| `html-css-javascript.instructions.md` | Installed | Auto-applied web coding standards for HTML, CSS, and JavaScript |
+| `security.instructions.md` | Installed | Project-specific secure coding rules |
 
 > **Note:** Some Copilot environments apply instruction files automatically.
 > Others may not. If Copilot seems unaware of an artifact, open the relevant
