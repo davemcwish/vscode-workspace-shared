@@ -47,6 +47,7 @@ set PY_TARGETS=
 if exist src\*.py (set "PY_TARGETS=!PY_TARGETS! src")
 if exist tests\*.py (set "PY_TARGETS=!PY_TARGETS! tests")
 if exist scripts\*.py (set "PY_TARGETS=!PY_TARGETS! scripts")
+if exist frontend\*.py (set "PY_TARGETS=!PY_TARGETS! frontend")
 REM Strip leading space
 if defined PY_TARGETS (set "PY_TARGETS=!PY_TARGETS:~1!")
 
@@ -61,7 +62,7 @@ echo ===========================================================================
 echo  [1/7] Ruff format check
 echo ============================================================================
 if not defined PY_TARGETS (
-    echo  SKIPPED: No Python source directories found ^(src, tests, scripts^).
+    echo  SKIPPED: No Python source directories found ^(src, tests, scripts, frontend^).
 ) else (
     %PY_CMD% -m ruff format --check %PY_TARGETS%
     if errorlevel 1 set /a FAIL_COUNT+=1
@@ -102,10 +103,11 @@ echo ===========================================================================
 if %HAS_PYPROJECT% EQU 0 (
     echo  SKIPPED: No pyproject.toml found ^(bandit requires -c pyproject.toml^).
 ) else (
-    REM Build bandit target list: scan src and scripts, exclude tests.
+    REM Build bandit target list: scan src, scripts, and frontend; exclude tests.
     set BANDIT_TARGETS=
     if exist src (set "BANDIT_TARGETS=!BANDIT_TARGETS! src")
     if exist scripts (set "BANDIT_TARGETS=!BANDIT_TARGETS! scripts")
+    if exist frontend (set "BANDIT_TARGETS=!BANDIT_TARGETS! frontend")
     if defined BANDIT_TARGETS (
         set "BANDIT_TARGETS=!BANDIT_TARGETS:~1!"
         %PY_CMD% -m bandit -c pyproject.toml -r !BANDIT_TARGETS! --exclude tests --quiet

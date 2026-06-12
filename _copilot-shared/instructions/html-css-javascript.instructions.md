@@ -513,6 +513,16 @@ reports/
 
 ---
 
+## Character Encoding in Comments and Content
+
+- **Never use em-dashes, en-dashes or fancy long dashes** in HTML/CSS/JavaScript files. Use a plain hyphen (`-`) or double-hyphen (`--`) instead.
+- **Never use smart/curly quotes** (`\u2018`, `\u2019`, `\u201c`, `\u201d`). Use straight ASCII quotes (`'`, `"`) only.
+- **Avoid all non-ASCII punctuation** in comments: no Unicode arrows, tick marks, bullet symbols, or typographic characters.
+
+These characters cause encoding corruption when files move between Windows (which may default to cp1252) and Linux (GitHub Actions, CI runners) where UTF-8 is assumed. For example, an em-dash can become a garbled `\u00e2\u0080\u0094` in build logs or CI output.
+
+---
+
 ## Relationship to Other Instruction Files
 
 | File | Relationship |
