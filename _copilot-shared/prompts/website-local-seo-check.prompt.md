@@ -1,4 +1,4 @@
----
+﻿---
 description: Review local SEO readiness for a small business, local organisation, service-area business, or location-based website.
 ---
 
@@ -305,46 +305,3 @@ List ongoing checks, ownership, and review frequency.
 
 ---
 
-# Local SEO Check
-
-## Verdict
-
-PASS / NEEDS IMPROVEMENT / HIGH RISK / NOT APPLICABLE
-
-## Local Search Summary
-
-Short summary of how well the website supports local discovery.
-
-## Findings
-
-| Severity | Area | Issue | Why It Matters | Suggested Fix |
-| --- | --- | --- | --- | --- |
-
-## Local Listing Checklist
-
-- [ ] Business name is consistent.
-- [ ] Address or service area is consistent.
-- [ ] Phone number is consistent.
-- [ ] Opening hours are consistent.
-- [ ] Website URL is correct.
-- [ ] Main service categories are accurate.
-- [ ] Photos are current.
-- [ ] Reviews are monitored.
-- [ ] Someone owns listing updates.
-
-## Suggested Local Search Phrases
-
-| Search Phrase | Search Intent | Suggested Page or Listing |
-| --- | --- | --- |
-
-## Priority Actions
-
-1.
-2.
-3.
-Rules
-Do not recommend fake reviews.
-Do not recommend creating misleading locations.
-Do not recommend keyword-stuffed city pages.
-Prefer accurate, useful local information.
-If current local platform rules or features matter, tell the user to verify current details from official platform sources.

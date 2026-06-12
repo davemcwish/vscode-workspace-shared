@@ -1,0 +1,319 @@
+# ============================================================================
+#  [FILL IN] - Project Configuration
+#
+#  This file configures all Python tooling for the project:
+#    - ruff  (linting + formatting)
+#    - mypy  (static type checking)
+#    - pytest + coverage
+#    - bandit (security linter)
+#    - pip-tools (dependency pinning)
+#
+#  Sections marked with CUSTOMISE THIS must be edited before first use.
+#  All tool-config sections below that line are shared defaults - they are
+#  kept in sync with the other projects in this workspace via the scaffold.
+#  When you change a tool-config default (e.g. add a ruff ignore or a mypy
+#  override for a new untyped library), apply the same change in every other
+#  project that inherits this scaffold.  See scaffold-README.md for the full
+#  cross-project drift rule.
+# ============================================================================
+
+# ============================================================================
+#  CUSTOMISE THIS: project identity
+# ============================================================================
+
+[project]
+# The importable Python package name (use hyphens here, underscores in src/).
+name = "my-project"
+version = "0.1.0"
+description = "[FILL IN: one-sentence description of what this project does]"
+requires-python = ">=3.12"
+readme = "README.md"
+
+# Runtime dependencies are pinned in requirements.txt for reproducible installs.
+# This section exists so tools can discover the project; install deps via:
+#   pip install -r requirements.txt
+# or (for dev):
+#   pip install -r requirements-dev.txt
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+# CUSTOMISE THIS: change "src" to wherever your importable package(s) live.
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# ============================================================================
+#  pip-tools settings
+#  Docs: https://pip-tools.readthedocs.io/
+#  --strip-extras removes optional extras markers for cleaner lock files.
+#  allow-unsafe pins pip and setuptools explicitly (required by some mirrors).
+# ============================================================================
+[tool.pip-tools]
+strip-extras = true
+allow-unsafe = true
+
+
+# ============================================================================
+#  Ruff - linter and formatter (replaces black, isort, flake8, pyupgrade)
+#  Docs: https://docs.astral.sh/ruff/
+# ============================================================================
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+force-exclude = true
+extend-exclude = [
+    "scripts/archive",
+    ".venv",
+    "build",
+    "dist",
+    ".git",
+    "__pycache__",
+    "migrations",
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+skip-magic-trailing-comma = false
+
+[tool.ruff.lint]
+# Enabled rule families (https://docs.astral.sh/ruff/rules/):
+#   E,W  - pycodestyle errors/warnings
+#   F    - pyflakes (logical errors)
+#   I    - isort (import ordering)
+#   B    - flake8-bugbear (likely bugs)
+#   C4   - flake8-comprehensions
+#   UP   - pyupgrade (modern syntax)
+#   N    - pep8-naming
+#   D    - pydocstyle (docstring presence/format)
+#   S    - flake8-bandit (security)
+#   A    - flake8-builtins (shadowing)
+#   RET  - flake8-return
+#   SIM  - flake8-simplify
+#   ARG  - flake8-unused-arguments
+#   PTH  - flake8-use-pathlib
+#   ERA  - eradicate (commented-out code)
+#   PL   - pylint subset
+#   TRY  - tryceratops (exception anti-patterns)
+#   TCH  - flake8-type-checking
+#   RUF  - ruff-specific rules
+select = [
+    "E", "W", "F", "I", "B", "C4", "UP", "N", "D", "S",
+    "A", "RET", "SIM", "ARG", "PTH", "ERA", "PL", "TRY",
+    "TCH", "RUF",
+]
+
+ignore = [
+    # --- Docstring convention conflicts (must pick one of each pair) -------
+    "D203",   # conflicts with D211 (we use D211: no blank line before class docstring)
+    "D213",   # conflicts with D212 (we use D212: summary on first line)
+    "D107",   # __init__ documented in class docstring (Google convention)
+
+    # --- Style preferences (informed team choices) ------------------------
+    "SIM108", # ternary often less readable than if/else
+    "SIM117", # nested 'with' acceptable
+    "TRY003", # long exception messages are useful for debugging
+    "TRY300", # `else` block preference is subjective
+    "TRY301", # adding inner functions for `raise` adds indirection
+    "RET504", # named-variable-before-return is clearer for debugging
+    "ERA001", # we use commented examples as inline documentation
+
+    # --- Pylint thresholds we don't enforce ------------------------------
+    "PLR0913", # too many arguments - sometimes unavoidable for CLI/wrappers
+    "PLR2004", # magic value comparison - too noisy in app code
+    "PLR0911", # too many returns - readable as-is
+    "PLR0915", # too many statements - main() orchestrators legitimately long
+
+    # --- Modernization suggestions we're deferring ----------------------
+    "PTH123",  # builtin open() works fine; Path.open() rewrite is a future PR
+    "PTH118",  # os.path.join works fine; pathlib migration is a future PR
+    "PTH110",  # os.path.exists works fine
+    "PTH119",  # os.path.basename works fine
+    "TRY400",  # log.error vs log.exception -- minor difference in tracebacks
+    "TC001",   # imports outside TYPE_CHECKING block are fine for runtime safety
+    "PLW1510", # subprocess.run without check= is intentional in update_packages
+    "PLW2901", # 'line' reassignment in for-loop is conventional Python
+]
+
+# CUSTOMISE THIS: adjust per-file ignores to match your project's folder layout.
+[tool.ruff.lint.per-file-ignores]
+# Tests: relax docstrings, allow assert, allow hardcoded test data.
+"tests/**/*.py" = [
+    "D",       # docstrings not required in tests
+    "S101",    # use of assert is the point of pytest
+    "S105",    # hardcoded "tokens" in tests are obviously test data
+    "S106",    # same: test password args are not real secrets
+    "PLR2004", # magic numbers acceptable in test assertions
+    "ARG",     # unused fixture args are normal
+    "SLF001",  # private-member access acceptable for testing internals
+    "PLC0415", # lazy imports inside tests are a legitimate isolation pattern
+]
+
+# Scripts: module-level docstrings often summary-only.
+"scripts/*" = ["D205", "D415"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+# CUSTOMISE THIS: replace "sf_admin_utils" with your own package name(s).
+known-first-party = ["my_package"]
+combine-as-imports = true
+force-sort-within-sections = false
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 12
+
+
+# ============================================================================
+#  Mypy - static type checking
+#  Docs: https://mypy.readthedocs.io/
+#
+#  Note: tests/ is deliberately excluded from mypy's file list.
+#  Reasons:
+#    1. importlib-loaded modules are opaque to mypy - every attribute access
+#       becomes Any, generating noise rather than useful errors.
+#    2. pytest fixtures (monkeypatch, capsys, caplog) involve complex generics
+#       that produce false positives even with the relaxed override.
+#    3. The [[tool.mypy.overrides]] for tests.* already signals the intent.
+# ============================================================================
+[tool.mypy]
+python_version = "3.12"
+# CUSTOMISE THIS: list the source directories mypy should check.
+files = ["src", "scripts"]
+# Allow mypy to find your package when checking individual files
+# (e.g. VS Code extension runs mypy per-file, not across both src/ + scripts/).
+# CUSTOMISE THIS: set to your source root.
+mypy_path = ["src"]
+exclude = [
+    "scripts/archive/",
+    "\\.venv/",
+    "build/",
+    "dist/",
+]
+
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+no_implicit_optional = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+ignore_missing_imports = true
+show_error_codes = true
+show_column_numbers = true
+pretty = true
+
+# Tests can be looser - fixtures and parametrize make typing painful.
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+disallow_untyped_decorators = false
+warn_unused_ignores = false
+
+# Scripts: ad-hoc utilities - relax slightly but keep checks meaningful.
+[[tool.mypy.overrides]]
+module = "scripts.*"
+disallow_untyped_defs = false
+disallow_untyped_decorators = false
+warn_unused_ignores = false
+
+# ============================================================================
+#  CUSTOMISE THIS: third-party libs without type stubs.
+#
+#  Add an entry here for every library that causes mypy to report
+#  "Library stubs not installed" or "Cannot find implementation or library stub".
+#
+#  When you add a new library here, check whether the same library is used in
+#  any other project that inherits this scaffold and apply the same fix there.
+#  See scaffold-README.md "Cross-project drift" for the full rule.
+#
+#  Common libraries that need this treatment:
+#    flask_socketio, openpyxl, bs4, pypdf, win32com, responses
+# ============================================================================
+[[tool.mypy.overrides]]
+module = [
+    "requests.*",
+    "bs4.*",
+]
+ignore_missing_imports = true
+
+# ============================================================================
+#  CUSTOMISE THIS: per-module warn_unused_ignores suppressions.
+#
+#  When a module carries an inline  # type: ignore[import-untyped]  comment
+#  so the VS Code mypy extension stays silent, but the library is also listed
+#  in the ignore_missing_imports override above (so project-wide CLI runs
+#  never see the error), mypy will warn that the comment is "unused".
+#
+#  Fix: add a [[tool.mypy.overrides]] for that module with
+#  warn_unused_ignores = false.  The pattern below is the reference template.
+#
+#  Example (uncomment and fill in your module name):
+#  [[tool.mypy.overrides]]
+#  module = "mypackage.some_module"
+#  warn_unused_ignores = false
+# ============================================================================
+
+
+# ============================================================================
+#  Pytest + Coverage
+#  Docs: https://docs.pytest.org/  |  https://coverage.readthedocs.io/
+# ============================================================================
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+# CUSTOMISE THIS: add your source root(s) so pytest can import your package.
+pythonpath = ["src"]
+# Coverage flags live here - never pass --cov directly to pytest in
+# sanity.bat or ci.yml. Change --cov-fail-under to match your project's target.
+addopts = "--cov=src --cov=scripts --cov-report=term-missing --cov-fail-under=90 --strict-markers"
+
+[tool.coverage.run]
+# CUSTOMISE THIS: list the directories coverage should measure.
+source = ["src", "scripts"]
+branch = true
+parallel = true       # Required for pytest-xdist (-n auto) compatibility
+concurrency = ["multiprocessing", "thread"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.",
+    "if TYPE_CHECKING:",
+]
+
+
+# ============================================================================
+#  Bandit - Security Linter
+#  Docs: https://bandit.readthedocs.io/
+#
+#  NOTE: Bandit's `exclude_dirs` is unreliable on Windows due to path
+#  separator handling. We rely primarily on the CLI --exclude flag set in
+#  sanity.bat. The entries below are kept as defensive backup.
+# ============================================================================
+[tool.bandit]
+exclude_dirs = [
+    "tests",
+    "scripts/archive",
+    "scripts\\archive",
+    ".venv",
+    "build",
+    "dist",
+]
+# Skipped checks (with justification):
+#   B101 - assert_used:             fine in tests and defensive code
+#   B105 - hardcoded password:      empty string initialisers are not passwords
+#   B404 - import_subprocess:       informational; we need subprocess for CLI calls
+#   B603 - subprocess_without_shell: the SAFE pattern; not a real risk
+#   B608 - hardcoded SQL:           SOQL is not SQL; bind-variable patterns are safe
+skips = ["B101", "B105", "B404", "B603", "B608"]
