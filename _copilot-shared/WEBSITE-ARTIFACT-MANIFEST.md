@@ -104,10 +104,10 @@ manifest first.
 
 | Artifact | Status | Purpose |
 | --- | --- | --- |
-| `website-cost-model.template.md` | To create | Records one-time, monthly, annual, and marketing costs |
-| `website-risk-register.template.md` | To create | Tracks risks, impact, likelihood, owners, and mitigations |
-| `website-decision-log.template.md` | To create | Records decisions, alternatives, reasoning, and revisit triggers |
-| `website-assumption-log.template.md` | To create | Records assumptions, validation method, and risk if wrong |
+| `website-cost-model.template.md` | Installed | Records one-time, monthly, annual, and marketing costs |
+| `website-risk-register.template.md` | Installed | Tracks risks, impact, likelihood, owners, and mitigations |
+| `website-decision-log.template.md` | Installed | Records decisions, alternatives, reasoning, and revisit triggers |
+| `website-assumption-log.template.md` | Installed | Records assumptions, validation method, and risk if wrong |
 
 ---
 
