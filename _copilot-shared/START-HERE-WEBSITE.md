@@ -628,6 +628,32 @@ Use these prompts based on the kind of website work you are doing.
 - `prompts/website-change-management-review.prompt.md`
 - `prompts/website-qa-review.prompt.md`
 
+## Website Prompt Library Index
+
+Use this quick index when you know what kind of website help you need.
+
+| Need | Start with |
+| --- | --- |
+| Plan a new website | `/website-from-idea-to-launch` |
+| Choose a platform or stack | `/website-platform-decision` |
+| Improve search visibility | `/website-seo-review` |
+| Improve local search visibility | `/website-local-seo-check` |
+| Improve conversions or lead capture | `/website-conversion-review` |
+| Review copy and page messaging | `/website-copy-review` |
+| Review forms and submissions | `/website-forms-submissions-review` |
+| Review accessibility remediation | `/website-accessibility-remediation-review` |
+| Review performance and page speed | `/website-performance-review` |
+| Review privacy and security | `/website-security-privacy-review` |
+| Review cookies and consent | `/website-cookie-consent-review` |
+| Review analytics and measurement | `/website-analytics-review` |
+| Plan ongoing growth | `/website-growth-plan` |
+| Create a maintenance plan | `/website-maintenance-plan` |
+| Run a monthly health check | `/website-monthly-review` |
+| Review backups and recovery | `/website-backup-restore-review` |
+| Review monitoring and incidents | `/website-monitoring-review` and `/website-incident-response-review` |
+| Review vendors and third-party tools | `/website-vendor-management-review` and `/website-third-party-tools-review` |
+| Review AI chatbot behavior | `/website-ai-chatbot-review` |
+
 ### Content, Copy, Search, Growth, and Experimentation
 
 - `prompts/website-copy-review.prompt.md`
