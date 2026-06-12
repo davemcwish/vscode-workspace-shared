@@ -182,11 +182,11 @@ def main() -> int:
 
     if result == 0:
         print("\n" + "=" * 80)
-        print("  ✅ Upgrade complete. All tests passed.")
+        print("  [OK] Upgrade complete. All tests passed.")
         print("=" * 80)
     else:
         print("\n" + "=" * 80)
-        print("  ⚠️  Upgrade complete, but sanity checks failed.")
+        print("  [WARNING] Upgrade complete, but sanity checks failed.")
         print("  Review the output above and fix any issues.")
         print("=" * 80)
         return 1

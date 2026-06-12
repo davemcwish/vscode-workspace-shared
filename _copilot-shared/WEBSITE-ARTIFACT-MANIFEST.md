@@ -21,11 +21,11 @@ manifest first.
 
 | Status | Meaning |
 | --- | --- |
-| oe... Installed | The artifact exists in this workspace |
-| Y"² To create | The artifact is recommended but does not exist yet |
-| Y"² To verify | The artifact may exist but needs confirmation |
-| ša Optional | Useful for some projects but not required for every website |
-| Y" -  External | Depends on tools, services, or documentation outside this workspace |
+| Installed | The artifact exists in this workspace |
+| To create | The artifact is recommended but does not exist yet |
+| To verify | The artifact may exist but needs confirmation |
+| Optional | Useful for some projects but not required for every website |
+| External | Depends on tools, services, or documentation outside this workspace |
 
 ---
 

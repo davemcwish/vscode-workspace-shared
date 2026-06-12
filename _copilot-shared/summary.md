@@ -217,6 +217,7 @@ to do.
 | File | Purpose |
 | --- | --- |
 | `add-tests.prompt.md` | Add or improve pytest coverage for a selected module. |
+| `code-review-staged-diff.prompt.md` | General code review prompt for broad quality checks. |
 | `component-overview.prompt.md` | Generate a machine-readable, component-level overview (`overview.md`) for consumption by other AI agents - explicit labelled fields, no prose. |
 | `docstring-audit.prompt.md` | Audit Python docstrings and produce a beginner-friendly remediation plan. |
 | `docs-update.prompt.md` | Update project documentation after a code or workflow change. |
@@ -224,20 +225,19 @@ to do.
 | `improve-docstrings.prompt.md` | Improve Python docstrings across a file or module without changing runtime behaviour. |
 | `new-script.prompt.md` | Scaffold a new Salesforce admin utility script. |
 | `pre-commit-check.prompt.md` | Run and interpret the full project sanity checks before a commit. |
-| `website-conversion-review.prompt.md` | Review a website for conversion, lead generation, trust, calls to action, and customer journey friction. |
-| `website-html-css-review.prompt.md` | Review HTML and CSS for accessibility, responsiveness, maintainability, and beginner readability. |
-| `website-local-seo-check.prompt.md` | Review local SEO readiness for a small business or local organisation website. |
-| `website-monthly-review.prompt.md` | Run a monthly website improvement review covering maintenance, analytics, SEO, conversion, and accessibility. |
-| `website-platform-decision.prompt.md` | Help choose the simplest sustainable platform for a website, report, dashboard, or tool. |
 | `project-architecture.prompt.md` | Summarise the current project architecture. |
 | `refactor-legacy-script.prompt.md` | Refactor an older standalone script into the current project architecture. |
-| `website-review.prompt.md` | General website review prompt for broad site quality checks. |
 | `salesforce-report.prompt.md` | Create a read-only Salesforce reporting script with CSV output. |
-| `website-seo-review.prompt.md` | Review a website for SEO, findability, and content clarity. |
 | `troubleshoot-error.prompt.md` | Diagnose a command error and produce a beginner-friendly fix plan. |
 | `update-dependencies.prompt.md` | Safely update dependencies using pip-tools. |
+| `website-conversion-review.prompt.md` | Review a website for conversion, lead generation, trust, calls to action, and customer journey friction. |
 | `website-from-idea-to-launch.prompt.md` | Plan a beginner-friendly website from idea to live launch. |
+| `website-html-css-review.prompt.md` | Review HTML and CSS for accessibility, responsiveness, maintainability, and beginner readability. |
+| `website-local-seo-check.prompt.md` | Review local SEO readiness for a small business or local organisation website. |
 | `website-maintenance-plan.prompt.md` | Create a practical post-launch website maintenance plan. |
+| `website-monthly-review.prompt.md` | Run a monthly website improvement review covering maintenance, analytics, SEO, conversion, and accessibility. |
+| `website-platform-decision.prompt.md` | Help choose the simplest sustainable platform for a website, report, dashboard, or tool. |
+| `website-seo-review.prompt.md` | Review a website for SEO, findability, and content clarity. |
 
 ---
 
