@@ -278,6 +278,26 @@ The key documents you'll produce:
 
 ---
 
+## Planning Templates
+
+Use these templates when a website effort needs lightweight planning records before, during, or after launch:
+
+| Template | Use when | Output |
+| --- | --- | --- |
+| `templates/website-assumption-log.template.md` | You need to make implicit planning assumptions visible and testable | An assumption log with confidence, impact if wrong, validation method, owner, and status |
+| `templates/website-cost-model.template.md` | You need to estimate launch, operating, vendor, or marketing costs | A one-time, monthly, annual, and first-year cost model |
+| `templates/website-risk-register.template.md` | You need to track launch, security, privacy, accessibility, content, performance, or operational risks | A risk register with impact, likelihood, owner, mitigation, trigger, and status |
+| `templates/website-decision-log.template.md` | You need to record why important website decisions were made | A decision log with alternatives, rationale, consequences, and revisit triggers |
+
+### Suggested order
+
+1. Start with the assumption log to make unknowns explicit.
+2. Create the cost model for budget and vendor planning.
+3. Create the risk register for high-impact or low-confidence items.
+4. Use the decision log whenever a meaningful tradeoff is resolved.
+
+Keep these templates linked to `WEBSITE-ARTIFACT-MANIFEST.md` so users can tell which artifacts are installed, optional, or planned.
+
 ## Quick-Start: Your First Session
 
 If you're starting a brand new website project right now:
