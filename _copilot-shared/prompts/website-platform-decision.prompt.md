@@ -1,7 +1,9 @@
----
+﻿---
 description: "Help choose the simplest sustainable platform for a website, report, dashboard, or tool."
 mode: ask
 ---
+
+# Website Platform Decision Prompt
 
 Help choose the best platform or technical approach for the capability I
 describe.
@@ -168,7 +170,7 @@ advertising, tracking, embedded feeds, and maintenance responsibilities.]
 
 [Explain sensitive data risks and mitigations.]
 
-## Salesforce Considerations
+## CRM, Marketing, and Business-System Considerations
 
 [Explain read-only/mutating behavior, Production risk, and testing needs.]
 
@@ -214,3 +216,4 @@ advertising, tracking, embedded feeds, and maintenance responsibilities.]
   features, verify the latest information from official provider sources before
   making a final recommendation.
   
+

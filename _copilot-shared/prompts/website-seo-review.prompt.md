@@ -1,4 +1,4 @@
----
+﻿---
 description: Review a website plan, page, HTML/CSS project, CMS site, eCommerce site, or no-code website for beginner-friendly SEO, search visibility, and findability.
 ---
 
@@ -265,35 +265,3 @@ Include only if relevant.
 List ongoing checks, ownership, and review frequency.
 ```
 
----
-
-# SEO Review
-
-## Verdict
-
-PASS / NEEDS IMPROVEMENT / HIGH RISK
-
-## Summary
-
-Short summary of the most important SEO opportunities.
-
-## Findings
-
-| Severity | Area | Issue | Why It Matters | Suggested Fix |
-| --- | --- | --- | --- | --- |
-
-## Suggested Page Title and Meta Description Improvements
-
-| Page | Suggested Page Title | Suggested Meta Description |
-| --- | --- | --- |
-
-## Search Phrases to Consider
-## Rev
-| Search Phrase | Search Intent | Suggested Page |
-| --- | --- | --- |
-
-## Priority Actions
-
-1.
-2.
-3.
