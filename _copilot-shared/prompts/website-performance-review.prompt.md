@@ -1,452 +1,351 @@
 ---
-description: Create a beginner-friendly ethical website growth plan covering SEO, local SEO, conversion, content, social presence, analytics, retention, and monthly improvement.
+description: Review website performance, page speed, mobile experience, assets, scripts, caching, third-party tools, monitoring, and practical remediation.
 ---
 
-# Website Growth Plan Prompt
+# Website Performance Review Prompt
 
-You are helping create a beginner-friendly ethical website growth plan.
+You are helping review website performance in a beginner-friendly, practical,
+and ethical way.
 
-The goal is to help the website attract the right visitors, convert them into the
-right actions, retain customers or supporters, and improve over time.
+The goal is to identify performance issues that make the website slower, harder
+to use, more expensive to operate, less accessible, or less likely to support
+the user's goals.
 
-Use the **Attract, Convert, Retain, and Improve** framework:
+Focus on practical improvements that a small team, beginner, or non-technical
+website owner can understand and maintain. Prefer simple fixes before complex
+engineering work.
 
-1. **Attract**: Bring the right visitors through useful content, SEO, local SEO,
-   social presence, referrals, directories, partnerships, campaigns, and other
-   channels that fit the audience.
-2. **Convert**: Help visitors take the right action through clarity, trust,
-   accessible journeys, clear calls to action, working forms, booking/payment
-   flows, and good follow-up.
-3. **Retain**: Keep customers returning and recommending through service quality,
-   support, useful resources, email where appropriate, reviews, aftercare, and
-   consistent communication.
-4. **Improve**: Use evidence from analytics, search data, enquiries, bookings,
-   sales, customer questions, reviews, and user feedback to make small,
-   realistic improvements over time.
+Do not assume the user has Lighthouse reports, Core Web Vitals data, analytics,
+server logs, CDN logs, or monitoring tools. If evidence is missing, say what is
+missing and provide safe manual checks.
 
-This plan should be practical for a small team, beginner, or non-technical
-website owner. Prefer simple, maintainable actions over complex campaigns.
+**Currentness warning:** Performance tooling, browser behavior, hosting features,
+CDN features, image formats, framework defaults, analytics tools, and platform
+recommendations change over time. Where specific tools, thresholds, platform
+features, provider pricing, or browser behavior matter, tell the user to verify
+current details from official sources.
 
-Do not start by recommending ads, social media, blogs, newsletters, automation,
-tracking pixels, live chat, CRM tools, or new platforms. First understand the
-goal, audience, geography, conversion path, ownership, maintenance capacity, and
-available data.
+## Performance principles
 
-**Currentness warning:** Search engine behaviour, analytics tools, privacy and
-cookie expectations, advertising rules, social platform features,
-review-platform rules, local listing features, email marketing rules, AI/search
-features, and provider pricing change over time. Where current tools, platform
-features, legal/compliance requirements, provider pricing, advertising rules, or
-tracking options matter, tell the user what to verify from official sources.
-
-## Ethical growth rules
-
-- Do not recommend fake reviews, fake testimonials, fake locations, fake
-  scarcity, fake urgency, copied content, hidden text, keyword stuffing, spammy
-  outreach, bought links, misleading claims, or manipulative consent.
-- Do not promise rankings, traffic, leads, sales, bookings, donations, signups,
-  or conversion improvements.
-- Do not recommend collecting unnecessary personal data.
-- Do not recommend advertising, tracking pixels, email marketing, retargeting, or
-  automation without considering privacy, consent, audience fit, and maintenance
-  capacity.
-- Do not recommend creating new social media accounts unless the business has the
-  audience need, content capacity, and owner to maintain them.
-- Do not recommend paid traffic before the website's core conversion path works.
-- Do not prioritise growth tactics over accessibility, privacy, security,
-  content accuracy, trust, and user safety.
-- Always separate must-do foundations from optional growth experiments.
-- Always tie growth recommendations to the user's real goal, audience, region,
-  skill level, budget, and maintenance capacity.
+- Prioritize user experience over artificial scores.
+- Review mobile performance first unless the website is truly desktop-only.
+- Focus on priority journeys, not only the homepage.
+- Prefer reducing unnecessary work before adding complex tooling.
+- Do not recommend removing accessibility, privacy, consent, or security features
+  just to improve speed.
+- Do not recommend breaking analytics, forms, checkout, booking, login, or other
+  critical journeys without a tested replacement.
+- Separate must-fix performance risks from optional optimizations.
+- Explain tradeoffs in plain language.
+- Tie recommendations to likely user impact, maintenance effort, and business
+  value.
 
 ## Ask for missing context first
 
 If not provided, ask concise questions about:
 
 - What is the website for?
-- What is the main business or organisational goal?
-- Who is the target audience?
-- What problem, need, or intent brings visitors to the site?
-- What country, region, city, language, currency, or service area matters?
+- What pages or journeys matter most?
 - Is the website public, internal, local, national, international, eCommerce,
   service-based, booking-based, donation-based, membership-based, content-based,
-  static, no-code, CMS-based, generated static report, or a custom web
-  application?
-- What is the main action visitors should take?
-- What secondary actions matter?
-- Does the core conversion path work today?
-- Have forms, phone links, email links, bookings, payments, downloads, maps,
-  signups, and contact links been tested where relevant?
-- Who receives enquiries, orders, bookings, messages, or support requests?
-- How quickly does someone respond?
-- What analytics or conversion data is available?
-- Are Google Search Console, Bing Webmaster Tools, local profile insights, CRM
-  data, booking reports, payment reports, campaign reports, or review data
-  available?
-- What channels currently bring traffic, enquiries, bookings, sales, donations,
-  trust, or repeat visits?
-- Are social media profiles already active?
-- Which social or review platforms matter in the target country or region?
-- Who can maintain content, social profiles, reviews, local listings, analytics,
-  campaigns, and follow-up?
-- What budget, time, and skill level are realistic?
-- Are privacy, cookie, consent, accessibility, security, payment, legal, claims,
-  regulated-content, or advertising requirements relevant?
+  no-code, CMS-based, static, or a custom web application?
+- What platform or technology is used?
+- What hosting, CDN, CMS, theme, page builder, or framework is used?
+- What devices and connection speeds matter most?
+- Are there current performance reports, analytics, Core Web Vitals-style data,
+  Lighthouse reports, WebPageTest results, server logs, or user complaints?
+- Are there heavy images, video, maps, chat widgets, ads, analytics tags,
+  personalization tools, or third-party embeds?
+- Who can make content, design, hosting, or code changes?
+- Are there launch, campaign, seasonal, migration, or peak-traffic deadlines?
 
-If information is unavailable, mark it as missing and recommend a simple way to
-collect it.
+## Review areas
 
-## Growth readiness checks
+Check performance across:
 
-Before recommending growth campaigns, check:
+1. Priority pages and user journeys.
+2. Mobile experience.
+3. Page weight and number of requests.
+4. Images, graphics, icons, video, audio, and animation.
+5. HTML, CSS, JavaScript, fonts, and framework/page-builder overhead.
+6. Third-party scripts, tags, widgets, embeds, chat, maps, ads, and analytics.
+7. Caching, compression, CDN, hosting, and server response.
+8. Rendering behavior, layout shifts, and perceived speed.
+9. Accessibility and low-bandwidth usability.
+10. Privacy, consent, and tag-loading behavior.
+11. Monitoring, measurement, and ownership.
+12. Performance budgets and regression prevention.
+13. Practical remediation sequencing.
 
-- The main website goal is clear.
-- The target audience is clear.
-- The geographic scope is clear.
-- The primary conversion action is clear.
-- The offer is easy to understand.
-- Forms, calls, bookings, payments, downloads, maps, and contact links work.
-- Lead, order, booking, or message ownership is clear.
-- Response expectations are clear.
-- Analytics and conversion tracking exist where appropriate.
-- Privacy, cookie, consent, accessibility, security, payment, claims, and legal
-  needs are handled where relevant.
-- Social profiles and local listings are accurate where relevant.
-- There is a maintenance owner for content, analytics, reviews, campaigns, and
-  follow-up.
-- Budget and time are realistic.
+## Performance readiness checks
 
-## Plan areas
+Check whether:
 
-Cover:
+- Priority pages have been identified.
+- The website has been tested on mobile.
+- Performance has been tested on a realistic connection.
+- Images are compressed and appropriately sized.
+- Video and animation are necessary and optimized.
+- Unused scripts, plugins, widgets, or embeds are reviewed.
+- Fonts are limited and loaded sensibly.
+- Caching and compression are enabled where appropriate.
+- Critical journeys still work after optimization.
+- Someone owns ongoing performance review.
+- There is a way to detect performance regressions.
 
-1. Growth goal and success measures
-2. Audience, intent, and geography
-3. Current website readiness
-4. Conversion path readiness
-5. Analytics and measurement readiness
-6. SEO and findability
-7. Local SEO and business listings where relevant
-8. Content growth opportunities
-9. Social presence and channel fit
-10. Reviews, testimonials, trust, and reputation
-11. Referral, partnership, directory, or offline-to-online opportunities
-12. Email, CRM, retention, or aftercare where appropriate
-13. Paid campaign readiness where appropriate
-14. Privacy, consent, accessibility, security, and legal risk checks
-15. Growth experiments
-16. Monthly improvement routine
-17. Ownership and maintenance
-18. Priority actions
+## Evidence to collect
 
-## SEO and findability guidance
+Useful evidence may include:
 
-Recommend SEO actions that help real users.
+- URLs for the homepage and priority pages.
+- Lighthouse or PageSpeed Insights reports.
+- WebPageTest or browser DevTools screenshots.
+- Real-user monitoring or analytics data.
+- Core Web Vitals-style field data where available.
+- Hosting, CDN, CMS, plugin, or theme information.
+- Image and video sizes.
+- List of third-party scripts and tags.
+- User complaints or support tickets about slowness.
+- Recent changes, launches, campaigns, migrations, or incidents.
 
-Cover where relevant:
+If evidence is unavailable, provide a practical manual review plan.
 
-- search intent,
-- useful page titles,
-- meta descriptions,
-- headings,
-- internal links,
-- indexability,
-- sitemap/search tool setup,
-- content freshness,
-- service/product clarity,
-- FAQs based on real questions,
-- image compression and alt text,
-- mobile performance,
-- evidence for claims,
-- avoiding keyword stuffing, doorway pages, hidden text, duplicate thin pages,
-  and copied content.
+## Core Web Vitals-style guidance
 
-## Local SEO guidance
+Use Core Web Vitals-style thinking to discuss:
 
-Use local SEO only where local discovery matters.
-
-Cover where relevant:
-
-- name, address, phone, website, opening hours, and service-area consistency,
-- Google Business Profile, Apple Business Connect, Bing Places, Yelp, industry
-  directories, booking platforms, or regional/local equivalents,
-- local reviews,
-- local photos,
-- service-area clarity,
-- directions, parking, accessibility, and location details,
-- local landing pages only where genuinely useful,
-- avoiding fake locations or duplicate thin local pages,
-- review monitoring and response ownership.
-
-## Conversion guidance
-
-Before recommending more traffic, check whether visitors can take the right next
-step.
-
-Cover where relevant:
-
-- primary CTA,
-- secondary CTA,
-- offer clarity,
-- trust signals,
-- pricing or quote-process clarity,
-- contact details,
-- forms,
-- phone links,
-- email links,
-- booking journeys,
-- checkout/payment/donation journeys,
-- download/signup journeys,
-- confirmation messages,
-- lead routing,
-- response time,
-- spam protection,
+- loading speed,
+- responsiveness,
+- visual stability,
+- perceived speed,
 - mobile usability,
-- accessibility,
-- privacy wording near forms,
-- analytics/conversion tracking.
+- user frustration.
 
-## Social presence guidance
+Avoid overfitting to a single score. Explain that field data from real users is
+more useful than one synthetic lab run when available.
 
-Do not assume every business needs every social media platform.
+## Mobile performance guidance
 
-Recommend social platforms only when they match:
+Pay special attention to:
 
-- the audience,
-- country or region,
-- business goal,
-- content type,
-- content capacity,
-- moderation capacity,
-- message-response owner,
-- privacy or safeguarding needs,
-- maintenance owner.
+- slow mobile connections,
+- large images,
+- heavy JavaScript,
+- intrusive banners or popups,
+- chat widgets,
+- maps,
+- autoplay media,
+- font loading,
+- tap targets,
+- layout shifts,
+- long forms,
+- checkout, booking, account, or donation flows.
 
-Prefer simple profile links unless embedded feeds have a clear purpose.
+## Image and media guidance
 
-Flag embedded social feeds as potential privacy, cookie, performance,
-accessibility, reliability, distraction, and maintenance risks.
+Check whether:
 
-## Content growth guidance
+- images are larger than needed,
+- appropriate modern formats are used where supported,
+- thumbnails and responsive image sizes are available,
+- decorative images can be simplified or removed,
+- hero images are optimized,
+- lazy loading is used appropriately,
+- video is compressed, deferred, captioned, and not autoplayed unnecessarily,
+- animation respects accessibility and motion-sensitivity needs.
 
-Good content opportunities include:
+## CSS, JavaScript, and font guidance
 
-- answering real customer questions,
-- explaining services or products clearly,
-- clarifying pricing, quote process, timelines, eligibility, or next steps,
-- comparing options honestly,
-- publishing FAQs based on support enquiries,
-- creating local/service-area information where genuinely useful,
-- documenting case studies or outcomes with permission,
-- explaining policies, guarantees, returns, refunds, aftercare, or support,
-- providing resources that reduce repeated questions or support burden.
+Check whether:
 
-Avoid:
+- unused CSS or JavaScript is excessive,
+- page builders or frameworks add avoidable weight,
+- critical functionality depends on slow scripts,
+- scripts block rendering unnecessarily,
+- fonts are too numerous or heavy,
+- fallback fonts are acceptable,
+- layout shifts are caused by late-loading assets,
+- code splitting, bundling, minification, or deferral may help.
 
-- thin pages,
-- duplicate pages,
-- fake location pages,
-- copied competitor content,
-- keyword-stuffed articles,
-- unmaintainable blog schedules,
-- unsupported or exaggerated claims,
-- content that creates legal, safety, health, financial, or regulated risk
-  without qualified review.
+## Third-party script guidance
 
-## Analytics and measurement guidance
+Review:
 
-Use measurement to learn, not to create false certainty.
+- analytics tags,
+- tag managers,
+- advertising pixels,
+- heatmaps and session recording,
+- chat widgets,
+- maps,
+- booking widgets,
+- social embeds,
+- review widgets,
+- consent tools,
+- A/B testing tools,
+- personalization scripts,
+- CRM or marketing automation scripts.
 
-Cover where relevant:
+For each third party, ask whether it is necessary, owned, consent-aware,
+accessible, secure, monitored, and worth its performance cost.
 
-- primary success measure,
-- secondary measures,
-- form submissions,
-- calls,
-- bookings,
-- purchases,
-- donations,
-- downloads,
-- signups,
-- applications,
-- support requests,
-- repeat visits,
-- traffic quality,
-- search queries,
-- top pages,
-- local profile insights,
-- campaign links,
-- CRM or enquiry records,
-- review trends,
-- privacy and consent alignment.
+## Caching, CDN, and hosting guidance
 
-Do not invent analytics, ranking, traffic, revenue, conversion, or review data.
+Check whether:
 
-## Paid campaign readiness guidance
+- static assets are cached appropriately,
+- compression is enabled,
+- CDN delivery is appropriate,
+- server response is slow,
+- hosting is underpowered or misconfigured,
+- redirects add unnecessary delay,
+- SSL/TLS and certificate setup are healthy,
+- regional hosting or CDN choices fit the audience,
+- cache changes have a safe purge and rollback process.
 
-Before recommending paid ads or paid social campaigns, confirm:
+## Accessibility and user-experience guidance
 
-- the website's primary conversion path works,
-- calls to action are clear,
-- forms, bookings, payments, downloads, and contact links are tested,
-- landing pages match the ad promise,
-- analytics and conversion tracking are configured where appropriate,
-- privacy, cookie, consent, advertising, and platform requirements are
-  considered,
-- budget and expected review cadence are realistic,
-- someone can respond to leads quickly,
-- the offer, pricing, location, eligibility, limitations, and next steps are
-  clear.
+Performance recommendations must not reduce accessibility. Check whether slow
+loading affects:
 
-Do not recommend paid traffic to compensate for a broken website, unclear offer,
-untrusted business profile, or unowned follow-up process.
+- keyboard users,
+- screen reader users,
+- users with cognitive load concerns,
+- users on low-end devices,
+- users on low-bandwidth connections,
+- users who rely on captions, transcripts, or clear text alternatives.
 
-## Growth experiment guidance
+## Analytics and monitoring guidance
 
-Prefer small, measurable experiments.
+Recommend practical monitoring such as:
 
-Each experiment should state:
+- periodic performance checks for priority pages,
+- analytics review of slow pages or high-exit pages,
+- uptime and error monitoring where appropriate,
+- real-user monitoring if the site scale justifies it,
+- checks after releases, plugin updates, campaigns, migrations, or content-heavy
+  changes.
 
-- goal,
-- audience,
-- hypothesis,
-- change to test,
-- owner,
-- start date,
-- review date,
-- success measure,
-- risks or consent considerations,
-- what to do if it works,
-- what to do if it does not work.
+## Severity rules
 
-Do not recommend running many experiments at once if the business cannot measure
-or maintain them.
+Use these severities:
+
+- **Blocker**: A critical journey is unusable or extremely slow for a meaningful
+  group of users.
+- **Major**: A performance issue likely harms conversions, accessibility,
+  search visibility, user trust, or operational reliability.
+- **Minor**: A performance issue should be improved but does not appear to block
+  important journeys.
+- **Nit**: A small cleanup or polish issue.
+
+## Recommendation rules
+
+For each recommendation:
+
+- Explain the likely user impact.
+- State whether it is beginner-friendly or needs technical help.
+- Identify the owner where possible.
+- Avoid recommending expensive tools before simpler fixes.
+- Include a validation method.
+- Mention risks or tradeoffs.
+- Separate urgent fixes from optional improvements.
 
 ## Output format
 
 Return:
 
 ```markdown
-# Website Growth Plan
+# Website Performance Review
+
+## Verdict
+
+PASS / NEEDS IMPROVEMENT / HIGH RISK
 
 ## Beginner-Friendly Summary
 
-Briefly explain the recommended growth approach in plain language.
+Short plain-language summary of the most important performance issues and what
+to do first.
+
+## Important Note
+
+State that performance recommendations should be validated with current tools,
+real user evidence where available, and the website's actual priority journeys.
 
 ## Assumptions and Missing Data
 
-List assumptions made and information still needed.
+List assumptions made and evidence still needed.
 
-## Growth Goal and Success Measures
+## Review Scope
 
-State the main goal, primary conversion action, secondary actions, and how
-success should be measured.
+List the pages, journeys, platform, devices, and evidence reviewed.
 
-## Audience, Intent, and Geography
+## Current Evidence
 
-Describe who the plan is for, what they need, and what country, region, city,
-language, currency, or service-area factors matter.
+Summarize available performance reports, analytics, complaints, logs, or manual
+checks.
 
-## Current Website Readiness
+## Performance Health Check
 
-State whether the website is ready for growth, needs fixes first, or is high
-risk.
+| Area | Status | Notes |
+| --- | --- | --- |
+| Priority pages identified | Unknown / OK / Issue |  |
+| Mobile performance checked | Unknown / OK / Issue |  |
+| Page weight reviewed | Unknown / OK / Issue |  |
+| Images and media reviewed | Unknown / OK / Issue |  |
+| CSS, JavaScript, and fonts reviewed | Unknown / OK / Issue |  |
+| Third-party scripts reviewed | Unknown / OK / Issue |  |
+| Caching, CDN, and hosting reviewed | Unknown / OK / Issue |  |
+| Critical journeys tested | Unknown / OK / Issue |  |
+| Monitoring in place | Unknown / OK / Issue |  |
+| Performance owner assigned | Unknown / OK / Issue |  |
 
-## Conversion Readiness
+## Findings
 
-Review calls to action, forms, bookings, payments, downloads, contact links,
-trust signals, follow-up ownership, and response time.
-
-## Analytics and Measurement Readiness
-
-List what is currently measured, what is missing, and what should be measured
-next.
-
-## Attract Plan
-
-List recommended attract actions across SEO, local SEO, content, social,
-directories, referrals, partnerships, campaigns, or offline-to-online promotion
-where relevant.
-
-## Convert Plan
-
-List recommended conversion actions for clarity, CTAs, forms, trust, booking,
-payment, mobile, accessibility, privacy, and lead handling.
-
-## Retain Plan
-
-List retention actions such as aftercare, FAQs, support, email where appropriate,
-reviews, referrals, resources, customer updates, or repeat-visit reasons.
-
-## Improve Plan
-
-List how the website should be reviewed monthly using analytics, search data,
-conversions, user feedback, reviews, content freshness, accessibility,
-performance, privacy, security, and business goals.
-
-## SEO and Findability Recommendations
-
-List practical SEO actions.
-
-## Local SEO and Business Listing Recommendations
-
-Use this section where relevant. List local listing, review, location, service
-area, and local trust actions.
-
-## Content Growth Recommendations
-
-List useful, maintainable content ideas and what should not be created.
-
-## Social Presence Recommendations
-
-Recommend only suitable platforms or profile-link actions. State which platforms
-should not be used unless capacity changes.
-
-## Reviews, Testimonials, and Trust Recommendations
-
-List ethical ways to collect, display, approve, and respond to reviews,
-testimonials, case studies, logos, certifications, and social proof.
-
-## Paid Campaign Readiness
-
-State whether paid campaigns are ready, not ready, or optional later. List fixes
-needed before spending money.
-
-## Privacy, Consent, Accessibility, Security, and Legal Risks
-
-List risks and checks before growth activity.
-
-## Growth Experiments
-
-| Experiment | Hypothesis | Owner | Success Measure | Review Date | Risk/Note |
+| Severity | Area | Issue | Why It Matters | Suggested Fix | Owner |
 | --- | --- | --- | --- | --- | --- |
 
-## 30-Day Action Plan
+## Priority Page Review
 
-| Priority | Action | Owner | Due Date | Measure |
-| --- | --- | --- | --- | --- |
-| High |  |  |  |  |
-| Medium |  |  |  |  |
-| Low |  |  |  |  |
+Summarize performance concerns for the homepage and other priority pages.
 
-## 90-Day Roadmap
+## Mobile Performance Review
 
-List realistic actions for the next three months.
+Summarize mobile-specific risks and fixes.
 
-## Maintenance and Ownership
+## Image and Media Review
 
-List who owns content, SEO, analytics, social profiles, reviews, listings,
-campaigns, lead handling, and monthly review.
+Summarize image, video, audio, animation, and icon issues.
 
-## Risks and Mitigations
+## CSS, JavaScript, and Font Review
 
-| Risk | Impact | Mitigation | Owner |
+Summarize code, framework, page-builder, and font-loading issues.
+
+## Third-Party Script Review
+
+| Tool / Script | Purpose | Risk | Recommendation |
 | --- | --- | --- | --- |
+
+## Caching, CDN, and Hosting Review
+
+Summarize hosting, caching, compression, CDN, redirects, and server response
+issues.
+
+## Accessibility and User-Experience Impact
+
+Explain how performance issues may affect real users, especially users on mobile,
+low-bandwidth connections, assistive technology, or older devices.
+
+## Monitoring and Measurement Plan
+
+List practical checks, tools, owners, and review frequency.
+
+## Performance Budget Recommendation
+
+Suggest simple limits or rules for page weight, images, scripts, third parties,
+and release checks.
 
 ## What Not To Do
 
-List tactics that are inappropriate, too risky, unethical, unmaintainable, or
-not suitable for the audience/region.
+List risky shortcuts to avoid.
 
 ## Priority Actions
 
@@ -454,61 +353,28 @@ not suitable for the audience/region.
 2.
 3.
 
-## Open Questions
-```
+## 30-Day Performance Improvement Plan
 
-## Output style rules
-
-Use beginner-friendly language.
-
-Keep recommendations realistic for a small team, beginner, or non-technical
-owner.
-
-Clearly separate must-do foundations from optional growth experiments.
-
-Do not recommend unnecessary redesigns.
-
-Do not invent analytics, search, conversion, revenue, review, or customer data.
-
-Do not recommend fake reviews, fake locations, fake urgency, fake scarcity,
-misleading claims, hidden fees, hidden terms, copied content, keyword stuffing,
-spammy outreach, bought links, or manipulative consent.
-
-Do not promise rankings, traffic, leads, sales, bookings, donations, signups, or
-conversion improvements.
-
-If current legal, compliance, analytics, payment, privacy, advertising, social,
-search, platform, provider, or pricing details matter, tell the user what to
-verify from official sources.
-
-## Severity rules
-
-Use these severities for performance risks:
-
-- **Critical:** Issue blocks critical pages or user journeys, causes severe load failure, prevents checkout or lead capture, creates major accessibility/usability impact, or breaks launch readiness.
-- **High:** Issue significantly slows key pages, harms conversion, search visibility, user trust, mobile usability, or core business journeys.
-- **Medium:** Issue creates moderate page speed, asset, script, hosting, image, caching, rendering, or monitoring risk.
-- **Low:** Minor optimization, cleanup, documentation, dashboard, measurement, or non-critical improvement.
-
-## Recommendation rules
-
-For each performance recommendation, explain:
-
-- what performance risk exists,
-- why it matters,
-- severity,
-- affected page, template, asset, script, vendor, device, browser, region, or user journey,
-- recommended owner,
-- what to verify first,
-- what action to take,
-- how to test before and after,
-- whether developer, hosting, vendor, analytics, accessibility, SEO, design, or content review is needed,
-- whether it blocks launch.
-
-Prefer practical fixes such as image compression, script reduction, caching review, font cleanup, third-party tag review, lazy loading, template optimization, monitoring, and performance budgets.
+| Week | Action | Owner | Evidence of Completion |
+| --- | --- | --- | --- |
+| Week 1 |  |  |  |
+| Week 2 |  |  |  |
+| Week 3 |  |  |  |
+| Week 4 |  |  |  |
 
 ## Escalation Needed
 
-Escalate when performance issues affect critical journeys, checkout, forms, login, search visibility, paid campaigns, accessibility, mobile users, major launches, hosting limits, third-party vendors, complex JavaScript, CDN behavior, backend APIs, or platform architecture.
+State whether a developer, hosting provider, platform vendor, accessibility
+reviewer, analytics owner, privacy reviewer, or agency should be involved.
 
-Recommend review by the appropriate developer, platform owner, hosting provider, vendor owner, analytics owner, accessibility reviewer, SEO owner, design owner, content owner, or leadership decision-maker.
+## Open Questions
+
+List unanswered questions.
+
+## Output style rules
+
+- Be beginner-friendly.
+- Be specific and practical.
+- Avoid unsupported claims.
+- Do not promise performance scores, rankings, conversions, or revenue.
+- Separate urgent fixes from optional improvements.
