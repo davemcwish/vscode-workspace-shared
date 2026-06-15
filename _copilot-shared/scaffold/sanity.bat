@@ -12,7 +12,7 @@ REM    This script detects which directories and config files exist in the
 REM    current project and skips checks that have no targets. This allows one
 REM    template to work across projects at all stages of development.
 REM
-REM  Keep sanity_v.bat in sync with this file (same steps, verbose flags added).
+REM  You must keep sanity_v.bat in sync with this file (same steps, verbose flags added).
 REM ============================================================================
 REM
 REM  GATE STEPS (must match .github\workflows\ci.yml exactly):
@@ -35,6 +35,14 @@ REM ============================================================================
 setlocal enabledelayedexpansion
 set FAIL_COUNT=0
 
+REM Always run from the directory containing this script. This prevents a
+REM workspace-level invocation such as ".\Project\sanity.bat" from collecting
+REM sibling project files or using the wrong project root.
+pushd "%~dp0" || (
+    echo  FAILED: Could not change to script directory "%~dp0".
+    exit /b 1
+)
+
 REM Prefer the Python Launcher on Windows so the script works even when
 REM `python` is not on PATH. Adjust -3.12 if the repo upgrades Python.
 set PY_CMD=py -3.12
@@ -42,14 +50,51 @@ set PY_CMD=py -3.12
 REM -- Clean stale .coverage files that cause pytest-cov/xdist errors --------
 del /q .coverage* 2>nul
 
-REM -- Detect which Python source directories exist (must contain *.py) ------
+REM -- Detect Python source directories that contain *.py recursively --------
 set PY_TARGETS=
-if exist src\*.py (set "PY_TARGETS=!PY_TARGETS! src")
-if exist tests\*.py (set "PY_TARGETS=!PY_TARGETS! tests")
-if exist scripts\*.py (set "PY_TARGETS=!PY_TARGETS! scripts")
-if exist frontend\*.py (set "PY_TARGETS=!PY_TARGETS! frontend")
+
+for %%D in (src tests scripts frontend) do (
+    if exist "%%D\" (
+        dir /b /s "%%D\*.py" >nul 2>nul
+        if not errorlevel 1 (
+            set "PY_TARGETS=!PY_TARGETS! %%D"
+        )
+    )
+)
+
+REM Support the workspace root repo, where shared contract tests live under
+REM _copilot-shared\tests rather than a top-level tests directory.
+if exist "_copilot-shared\tests\" (
+    dir /b /s "_copilot-shared\tests\*.py" >nul 2>nul
+    if not errorlevel 1 (
+        set "PY_TARGETS=!PY_TARGETS! _copilot-shared\tests"
+    )
+)
+
 REM Strip leading space
 if defined PY_TARGETS (set "PY_TARGETS=!PY_TARGETS:~1!")
+
+REM -- Detect pytest target directories explicitly ----------------------------
+REM Pytest must receive explicit test paths so sibling workspaces are never
+REM collected when this script is launched from a parent folder.
+set TEST_TARGETS=
+
+if exist "tests\" (
+    dir /b /s "tests\*.py" >nul 2>nul
+    if not errorlevel 1 (
+        set "TEST_TARGETS=!TEST_TARGETS! tests"
+    )
+)
+
+if exist "_copilot-shared\tests\" (
+    dir /b /s "_copilot-shared\tests\*.py" >nul 2>nul
+    if not errorlevel 1 (
+        set "TEST_TARGETS=!TEST_TARGETS! _copilot-shared\tests"
+    )
+)
+
+REM Strip leading space
+if defined TEST_TARGETS (set "TEST_TARGETS=!TEST_TARGETS:~1!")
 
 REM -- Detect which config files exist ----------------------------------------
 set HAS_PYPROJECT=0
@@ -62,7 +107,7 @@ echo ===========================================================================
 echo  [1/7] Ruff format check
 echo ============================================================================
 if not defined PY_TARGETS (
-    echo  SKIPPED: No Python source directories found ^(src, tests, scripts, frontend^).
+    echo  SKIPPED: No Python source directories found ^(src, tests, scripts, frontend, _copilot-shared\tests^).
 ) else (
     %PY_CMD% -m ruff format --check %PY_TARGETS%
     if errorlevel 1 set /a FAIL_COUNT+=1
@@ -113,7 +158,7 @@ if %HAS_PYPROJECT% EQU 0 (
         %PY_CMD% -m bandit -c pyproject.toml -r !BANDIT_TARGETS! --exclude tests --quiet
         if errorlevel 1 set /a FAIL_COUNT+=1
     ) else (
-        echo  SKIPPED: pyproject.toml found but no src or scripts directories to scan.
+        echo  SKIPPED: pyproject.toml found but no src, scripts, or frontend directories to scan.
     )
 )
 
@@ -132,17 +177,18 @@ echo.
 echo ============================================================================
 echo  [6/7] Pytest (with coverage, parallel)
 echo ============================================================================
-if not exist tests (
-    echo  SKIPPED: No tests directory found.
+if not defined TEST_TARGETS (
+    echo  SKIPPED: No test directories found ^(tests, _copilot-shared\tests^).
 ) else if defined SANITY_NO_COV (
-    echo  (coverage disabled via SANITY_NO_COV)
-    %PY_CMD% -m pytest -n auto --no-cov --override-ini="addopts="
+    echo  ^(coverage disabled via SANITY_NO_COV^)
+    %PY_CMD% -m pytest %TEST_TARGETS% -n auto --no-cov --override-ini="addopts="
     if errorlevel 1 set /a FAIL_COUNT+=1
 ) else (
     REM Coverage flags (--cov, --cov-report, --cov-fail-under, --strict-markers)
     REM come from addopts in pyproject.toml automatically (if present).
     REM Only -n auto is added here for parallel execution.
-    %PY_CMD% -m pytest -n auto
+    REM Pass explicit test paths so sibling projects are never collected.
+    %PY_CMD% -m pytest %TEST_TARGETS% -n auto
     if errorlevel 1 set /a FAIL_COUNT+=1
 )
 
@@ -154,8 +200,13 @@ where npx >nul 2>&1
 if errorlevel 1 (
     echo  SKIPPED: npx not found in PATH. Install Node.js to enable markdownlint.
 ) else (
-    call npx markdownlint-cli2 --fix "docs/**/*.md" "*.md"
-    call npx markdownlint-cli2 "docs/**/*.md" "*.md"
+    if exist "_copilot-shared\" (
+        call npx markdownlint-cli2 --fix "docs/**/*.md" "_copilot-shared/**/*.md" "*.md"
+        call npx markdownlint-cli2 "docs/**/*.md" "_copilot-shared/**/*.md" "*.md"
+    ) else (
+        call npx markdownlint-cli2 --fix "docs/**/*.md" "*.md"
+        call npx markdownlint-cli2 "docs/**/*.md" "*.md"
+    )
     if errorlevel 1 set /a FAIL_COUNT+=1
 )
 
@@ -167,4 +218,7 @@ if %FAIL_COUNT% EQU 0 (
     echo  FAILED: %FAIL_COUNT% check^(s^) failed. See output above.
 )
 echo ============================================================================
-exit /b %FAIL_COUNT%
+
+set EXIT_CODE=%FAIL_COUNT%
+popd
+exit /b %EXIT_CODE%
