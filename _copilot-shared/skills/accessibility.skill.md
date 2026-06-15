@@ -187,6 +187,60 @@ button:focus-visible {
 }
 ```
 
+## Interactive Widget Accessibility (ARIA Patterns)
+
+When using ARIA roles for interactive widgets, the role creates a **keyboard
+contract** - screen reader users and keyboard users expect specific key
+interactions. Declaring the role without implementing the keys is worse than
+not declaring it at all.
+
+### Tablist / Tab Panels
+
+If you use `role="tablist"` with `role="tab"` children:
+
+- **Left/Right arrow keys** must switch between tabs.
+- Only the active tab has `tabindex="0"`. All others have `tabindex="-1"`.
+  This is called "roving tabindex".
+- `aria-selected="true"` on the active tab; `"false"` on all others.
+- The associated panel must be shown/hidden in sync.
+- **Home/End** (optional) jump to first/last tab.
+- **Tab key** moves focus OUT of the tablist to the panel content, not between
+  tabs (arrow keys handle that).
+
+### Modal / Dialog Focus Management
+
+When opening a dialog (`role="dialog"` or `<dialog>`):
+
+1. **Capture** `document.activeElement` before opening.
+2. **Move focus** to the first focusable element inside the dialog.
+3. **Trap focus** - Tab and Shift+Tab must cycle within the dialog only.
+4. **Close on Escape** - the dialog must close when Escape is pressed.
+5. **Restore focus** to the previously captured element on close.
+
+Without focus trapping, keyboard users can "fall behind" the dialog into
+content they cannot see, making the dialog unusable.
+
+### Live Regions for Streaming Content
+
+When content updates dynamically (log panels, status messages, notifications):
+
+- Use `aria-live="polite"` for non-urgent updates (log lines, status changes).
+- Use `aria-live="assertive"` for urgent alerts (errors, job failures).
+- Use `role="log"` for chronological streaming content (e.g. terminal output).
+- Set `aria-atomic="false"` on log regions so screen readers announce only new
+  additions, not the entire region.
+
+Without live regions, screen reader users have no way to know content changed.
+
+### Menu / Menubar
+
+If using `role="menu"` with `role="menuitem"` children:
+
+- **Up/Down arrow keys** navigate items.
+- **Enter/Space** activates the item.
+- **Escape** closes the menu and returns focus to the trigger.
+- Only one item has `tabindex="0"` at a time (roving tabindex).
+
 ## Responsive Layout
 
 Layouts should work at different sizes:
@@ -334,6 +388,11 @@ When reviewing accessibility, check:
 - [ ] Tables have headers and captions where useful.
 - [ ] Generated reports avoid unnecessary PII.
 - [ ] Documentation uses plain English.
+- [ ] ARIA roles have matching keyboard interactions implemented.
+- [ ] Tablist uses arrow keys (not Tab) to switch tabs.
+- [ ] Modals trap focus and restore it on close.
+- [ ] Live regions announce dynamic content to screen readers.
+- [ ] Scripts use `defer` to avoid render-blocking.
 
 ## Practical Testing
 
@@ -346,6 +405,11 @@ At minimum:
 5. Confirm images have alt text.
 6. Confirm forms have labels.
 7. Confirm status messages are understandable without color.
+8. Test arrow keys in tablists and menus.
+9. Open a modal and verify Tab does not escape the dialog.
+10. Close a modal and verify focus returns to the trigger element.
+11. Confirm streaming content (logs, status) is announced by screen readers.
+12. Verify no render-blocking scripts delay first paint.
 
 ## Important Note
 

@@ -81,6 +81,33 @@ Check:
 - no duplicated IDs,
 - no placeholder text left behind.
 
+## Interactive Widget Checks (ARIA)
+
+If the page uses ARIA roles for interactive widgets, verify:
+
+- **Tablist (`role="tablist"`):** Arrow keys switch tabs, roving `tabindex`
+  applied, `aria-selected` stays in sync with panel visibility, Tab key moves
+  to panel content (not next tab).
+- **Dialog (`role="dialog"` or `<dialog>`):** Focus moves inside on open, Tab
+  cycles within dialog only (focus trap), Escape closes the dialog, focus
+  returns to the trigger element on close.
+- **Menu (`role="menu"`):** Arrow keys navigate items, Enter/Space activates,
+  Escape closes and returns focus to trigger.
+- **Live regions (`aria-live`):** Streaming content uses `aria-live="polite"`,
+  urgent alerts use `aria-live="assertive"`, log panels use `role="log"`.
+- **General ARIA rule:** Every declared ARIA role has its required keyboard
+  interaction implemented. A role without keys is worse than no role.
+
+## Script Loading and Performance
+
+Check:
+
+- scripts in `<head>` use `defer` (not render-blocking),
+- execution order preserved (dependencies load before dependants),
+- no `async` where execution order matters,
+- no CDN scripts for core functionality (local copies preferred),
+- high-volume DOM updates use batching (not per-item mutations).
+
 ## CSS Checks
 
 Check:
@@ -162,7 +189,13 @@ APPROVE / REQUEST CHANGES / COMMENT ONLY
 
 ## Keyboard Accessibility
 
-[Assessment.]
+[Assessment - include tablist arrow key navigation, focus indicators, and Tab
+order through all interactive elements.]
+
+## Interactive Widgets (ARIA)
+
+[Assessment of ARIA roles vs implemented keyboard interactions. Check tablists,
+dialogs, menus, and live regions. "Not applicable" if no ARIA widgets present.]
 
 ## Screen Reader / Semantic Structure
 
@@ -175,6 +208,11 @@ APPROVE / REQUEST CHANGES / COMMENT ONLY
 ## Responsive Design
 
 [Assessment.]
+
+## Script Loading and Performance
+
+[Assessment of defer usage, render-blocking scripts, CDN dependencies, and
+high-volume DOM update patterns. "Not applicable" for static pages.]
 
 ## Forms and Error Messages
 
