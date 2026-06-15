@@ -78,6 +78,23 @@ Explain in a comment block at the top:
 - One `<h1>` per page.
 - Headings in logical order (`<h1>` -> `<h2>` -> `<h3>`). Never skip levels.
 
+### Script Loading
+
+- Use `defer` on all `<script>` tags in `<head>` - this downloads the script in
+  parallel but delays execution until the HTML is fully parsed:
+  ```html
+  <script src="/static/js/socket.io.min.js" defer></script>
+  <script src="/static/js/app.js" defer></script>
+  ```
+- **Execution order is preserved** with `defer` - scripts run in document order,
+  so dependencies (Socket.IO before app.js) remain correct.
+- Never use `async` when execution order matters - `async` scripts run as soon
+  as they download, which may be out of order.
+- Do **not** use render-blocking scripts in `<head>` without `defer` - they
+  delay first paint and harm perceived load time.
+- For inline `<script>` blocks that depend on deferred scripts, place them at
+  the end of `<body>` (inline scripts cannot use `defer`).
+
 ### Accessibility Baseline
 
 - All images must have `alt` text (use `alt=""` for purely decorative images).
@@ -86,6 +103,73 @@ Explain in a comment block at the top:
 - Colour must not be the only way to convey information.
 - Use `aria-live="polite"` for regions that update dynamically (e.g. log panels).
 - Respect `prefers-reduced-motion` in CSS for animations.
+
+### ARIA Tablist Keyboard Interaction
+
+When implementing `role="tablist"` with `role="tab"` children, complete keyboard
+support is **mandatory** - ARIA roles create an accessibility contract that
+screen readers and keyboard users rely on.
+
+Required keyboard behaviour:
+
+- **Left/Right arrow keys** switch between tabs (wrap around at edges).
+- **Roving tabindex:** Only the active tab has `tabindex="0"`. All others have
+  `tabindex="-1"`. Update on each switch.
+- **`aria-selected="true"`** on the active tab; `"false"` on all others.
+- **Panel visibility** must stay in sync with `aria-selected`.
+- **Home/End** (optional but recommended) jump to first/last tab.
+
+Example wiring:
+
+```javascript
+tablist.addEventListener("keydown", function(event) {
+  const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+  const current = tabs.indexOf(document.activeElement);
+  let next = current;
+
+  if (event.key === "ArrowRight") next = (current + 1) % tabs.length;
+  if (event.key === "ArrowLeft") next = (current - 1 + tabs.length) % tabs.length;
+
+  if (next !== current) {
+    tabs[current].setAttribute("tabindex", "-1");
+    tabs[current].setAttribute("aria-selected", "false");
+    tabs[next].setAttribute("tabindex", "0");
+    tabs[next].setAttribute("aria-selected", "true");
+    tabs[next].focus();
+    // Show/hide corresponding panels here
+  }
+});
+```
+
+### Modal / Dialog Focus Management
+
+When opening a `role="dialog"` or `<dialog>` element:
+
+1. **Capture** `document.activeElement` before opening (to restore later).
+2. **Move focus** to the first focusable element inside the dialog on open.
+3. **Trap focus** - intercept Tab and Shift+Tab to loop within the dialog:
+
+```javascript
+dialog.addEventListener("keydown", function(event) {
+  if (event.key !== "Tab") return;
+  const focusable = dialog.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+});
+```
+
+4. **Restore focus** to the previously captured element on close.
+5. **Close on Escape** - listen for `event.key === "Escape"`.
 
 ### No Inline Event Handlers
 
@@ -211,9 +295,22 @@ function placeOrbitSquare(square, container, progress) {
 
 ### Event Handling
 
-- Always use `addEventListener` - never inline `onclick` attributes.
+- Always use `addEventListener` for one-time wiring during initial page setup.
 - Remove event listeners when elements are destroyed (relevant for SPAs or
   dynamic content).
+- **Idempotent re-render pattern:** When a render function may be called
+  multiple times (e.g. re-rendering a dropdown after data refresh), use
+  **property assignment** instead of `addEventListener` to avoid accumulating
+  duplicate handlers:
+  ```javascript
+  // Bad - accumulates a new handler on every re-render
+  selectElement.addEventListener("change", onSelectionChanged);
+
+  // Good - property assignment is idempotent (only one handler at a time)
+  selectElement.onchange = onSelectionChanged;
+  ```
+- Reserve `addEventListener` for permanent, one-time wiring. Use `.onX =`
+  assignment inside any function that may execute more than once.
 
 ### Web Components (Custom Elements)
 
@@ -476,13 +573,60 @@ because the goal is education.
 - Limit `setInterval` / `setTimeout` usage - prefer `requestAnimationFrame` for
   visual updates.
 
+### High-Volume Streaming DOM Updates
+
+When a page receives rapid data (e.g. WebSocket log lines, real-time events):
+
+- **Do not query the DOM per item.** Use `container.children.length` instead of
+  `querySelectorAll(".log-entry").length` on every incoming message.
+- **Remove old entries efficiently.** Use a while loop on `firstElementChild`:
+  ```javascript
+  const maxEntries = 1000;
+  while (container.children.length > maxEntries) {
+    container.removeChild(container.firstElementChild);
+  }
+  ```
+- **Batch DOM writes** using `requestAnimationFrame` for bursty output. Collect
+  incoming items in an array, then flush once per frame:
+  ```javascript
+  let pending = [];
+
+  function flushPending() {
+    if (pending.length === 0) return;
+    const fragment = document.createDocumentFragment();
+    for (const item of pending) {
+      const el = document.createElement("div");
+      el.textContent = item;
+      fragment.appendChild(el);
+    }
+    container.appendChild(fragment);
+    pending = [];
+  }
+
+  socket.on("log", function(data) {
+    pending.push(data.message);
+    requestAnimationFrame(flushPending);
+  });
+  ```
+- **Use `DocumentFragment`** when appending multiple elements - this triggers
+  only one reflow instead of one per element.
+- **Avoid `innerHTML +=`** for appending - it re-parses the entire container
+  contents on every call.
+
 ---
 
 ## Testing & Validation
 
 - Open the file directly in a browser (no server needed for static files).
 - Check the browser's Developer Tools Console for errors.
-- Test keyboard navigation (Tab, Enter, Escape).
+- Test keyboard navigation:
+  - **Tab / Shift+Tab** - focus moves through all interactive elements in order.
+  - **Enter / Space** - activates buttons and links.
+  - **Escape** - closes modals and overlays.
+  - **Arrow keys** - navigates within tablists, menus, and composite widgets.
+  - **Home / End** - jumps to first/last item in lists (where implemented).
+- Verify focus is visible (outline or equivalent indicator) on every element.
+- Verify focus is trapped inside open modals and restored on close.
 - Test at viewport widths: 360px (phone), 768px (tablet), 1280px+ (desktop).
 - Validate HTML with the W3C Validator (`https://validator.w3.org/`) for
   production files.

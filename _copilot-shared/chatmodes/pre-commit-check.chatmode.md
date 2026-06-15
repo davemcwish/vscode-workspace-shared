@@ -1,6 +1,6 @@
 ---
 description: "Run the full quality gate and summarise results before a PR is raised."
-tools: ['search', 'execute']
+tools: ['search/codebase', 'runCommands/runInTerminal']
 ---
 
 <!-- SYNC NOTE: Kept intentionally in sync with pre-commit-check.agent.md.
