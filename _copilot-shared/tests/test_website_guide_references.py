@@ -25,7 +25,9 @@ def _find_project_root() -> Path:
     docs_guide = project_root / "docs" / "START-HERE-WEBSITE.md"
     if docs_guide.exists():
         return project_root
-    raise FileNotFoundError(f"Could not find docs/START-HERE-WEBSITE.md in {project_root}")
+    raise FileNotFoundError(
+        f"Could not find docs/START-HERE-WEBSITE.md in {project_root}"
+    )
 
 
 PROJECT_ROOT = _find_project_root()
@@ -83,7 +85,9 @@ INTENTIONAL_WEBSITE_PROJECT_ARTIFACTS = {
 
 def iter_markdown_references():
     """Yield line-numbered backticked markdown references from START-HERE-WEBSITE.md."""
-    for line_number, line in enumerate(GUIDE.read_text(encoding="utf-8").splitlines(), start=1):
+    for line_number, line in enumerate(
+        GUIDE.read_text(encoding="utf-8").splitlines(), start=1
+    ):
         for match in MARKDOWN_REFERENCE_RE.finditer(line):
             reference = match.group(1).strip().replace("\\", "/")
             if reference.startswith(("http://", "https://", "/", "./", "../")):
@@ -93,7 +97,7 @@ def iter_markdown_references():
 
 def test_website_guide_shared_references_exist():
     """Shared-library references in START-HERE-WEBSITE.md must point to real files.
-    
+
     This test is skipped if _copilot-shared is not available (e.g., in CI checkouts
     that only include the Salesforce repository).
     """
