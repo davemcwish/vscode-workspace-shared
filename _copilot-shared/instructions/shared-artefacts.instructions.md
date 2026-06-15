@@ -45,7 +45,7 @@ When a change is needed to any shared artefact:
    Add the change to the `[Unreleased]` section using Keep a Changelog format.
    Every commit that modifies `_copilot-shared/` content must have a
    corresponding Changelog entry - no exceptions.
-6. **Review other workspace documents** - review what change with the contents and
+6. **Review other workspace documents** - review what changed with the contents and
     purpose of other markdown documents such as
    "C:\Users\dwishar1\Documents\Visual Studio Code\README.md" and those in
    "C:\Users\dwishar1\Documents\Visual Studio Code\_copilot-shared".
