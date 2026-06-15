@@ -219,7 +219,7 @@ harder and more expensive than building it in from the start. Consider:
 
 | Action | How |
 | --- | --- |
-| HTML/CSS/JS standards | Automatic - Copilot reads `html-css-javascript.instructions.md` when you edit web files |
+| HTML/CSS/JS standards | Automatic - Copilot reads `instructions/html-css-javascript.instructions.md` when you edit web files |
 | Accessibility standards | Read: `skills/accessibility.skill.md` |
 | Review your HTML/CSS | Type `/website-html-css-review` in Chat |
 
@@ -335,7 +335,7 @@ If you're starting a brand new website project right now:
 2. Check whether the Website Launch Planner chat mode exists.
 3. If it exists, select it and type: "I want to create a website. Please help
    me plan it from scratch."
-4. If it does not exist, open `website-documentation.workflow.md` and start by
+4. If it does not exist, open `workflows/website-documentation.workflow.md` and start by
    creating `docs/01-website-brief.md`.
 5. Answer the planning questions slowly. Do not rush platform choice.
 6. When you have a proposed platform decision, use the critical-thinking
@@ -745,9 +745,9 @@ Use this quick index when you know what kind of website help you need.
 
 ### Notes
 
-- `website-monitoring-review.prompt.md`, `website-incident-response-review.prompt.md`, `website-business-continuity-review.prompt.md`, and `website-backup-restore-review.prompt.md` are complementary, not duplicates.
-- `website-security-privacy-review.prompt.md`, `website-access-permissions-review.prompt.md`, `website-data-retention-review.prompt.md`, `website-cookie-consent-review.prompt.md`, and `website-account-login-review.prompt.md` cover different parts of the privacy/security/access lifecycle.
-- `website-ai-chatbot-review.prompt.md`, `website-search-review.prompt.md`, `website-third-party-tools-review.prompt.md`, and `website-vendor-management-review.prompt.md` overlap intentionally around tools, vendors, data, and user experience.
+- `prompts/website-monitoring-review.prompt.md`, `prompts/website-incident-response-review.prompt.md`, `prompts/website-business-continuity-review.prompt.md`, and `prompts/website-backup-restore-review.prompt.md` are complementary, not duplicates.
+- `prompts/website-security-privacy-review.prompt.md`, `prompts/website-access-permissions-review.prompt.md`, `prompts/website-data-retention-review.prompt.md`, `prompts/website-cookie-consent-review.prompt.md`, and `prompts/website-account-login-review.prompt.md` cover different parts of the privacy/security/access lifecycle.
+- `prompts/website-ai-chatbot-review.prompt.md`, `prompts/website-search-review.prompt.md`, `prompts/website-third-party-tools-review.prompt.md`, and `prompts/website-vendor-management-review.prompt.md` overlap intentionally around tools, vendors, data, and user experience.
 <!-- WEBSITE-PROMPT-COVERAGE-INDEX:END -->
 
 ## Website-adjacent shared prompts
