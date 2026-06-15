@@ -380,6 +380,16 @@ Sync-File `
     -Source      (Join-Path $Shared "summary.md") `
     -Destination (Join-Path $rootGithub "summary.md")
 
+# Sync shared-owned scaffold files into the ROOT workspace folder too.
+# This allows the parent workspace repo to run sanity.bat / sanity_v.bat
+# directly, while the batch files adapt to _copilot-shared\tests.
+$rootScaffoldDir = Join-Path $Shared "scaffold"
+foreach ($scaffoldFile in $ScaffoldSyncFiles) {
+    Sync-File `
+        -Source      (Join-Path $rootScaffoldDir $scaffoldFile) `
+        -Destination (Join-Path $Root $scaffoldFile)
+}
+
 Write-Host "    Done." -ForegroundColor DarkGreen
 Write-Host ""
 

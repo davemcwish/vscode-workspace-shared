@@ -19,17 +19,18 @@ def _find_project_root() -> Path:
     """Find the project root by looking for docs/ folder (synced from _copilot-shared)."""
     current = Path(__file__).resolve()
     test_dir = current.parent  # The tests/ folder
-    project_root = test_dir.parent  # The project root (Salesforce, Trails and Tails, or _copilot-shared)
+    project_root = (
+        test_dir.parent
+    )  # The project root (Salesforce, Trails and Tails, or _copilot-shared)
     docs_guide = project_root / "docs" / "START-HERE-WEBSITE.md"
     if docs_guide.exists():
         return project_root
-    raise FileNotFoundError(
-        f"Could not find docs/START-HERE-WEBSITE.md in {project_root}"
-    )
+    raise FileNotFoundError(f"Could not find docs/START-HERE-WEBSITE.md in {project_root}")
 
 
 PROJECT_ROOT = _find_project_root()
 GUIDE = PROJECT_ROOT / "docs" / "START-HERE-WEBSITE.md"
+
 
 # For validating shared-library references, we need to check _copilot-shared
 def _find_copilot_shared() -> Path:
@@ -82,9 +83,7 @@ INTENTIONAL_WEBSITE_PROJECT_ARTIFACTS = {
 
 def iter_markdown_references():
     """Yield line-numbered backticked markdown references from START-HERE-WEBSITE.md."""
-    for line_number, line in enumerate(
-        GUIDE.read_text(encoding="utf-8").splitlines(), start=1
-    ):
+    for line_number, line in enumerate(GUIDE.read_text(encoding="utf-8").splitlines(), start=1):
         for match in MARKDOWN_REFERENCE_RE.finditer(line):
             reference = match.group(1).strip().replace("\\", "/")
             if reference.startswith(("http://", "https://", "/", "./", "../")):
