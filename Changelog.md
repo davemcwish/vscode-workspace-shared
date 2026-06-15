@@ -15,6 +15,30 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Accessibility across the full website lifecycle** (`a4be31b`): surfaced
+  accessibility awareness at every lifecycle stage, not just BUILD and TEST.
+  - `START-HERE-WEBSITE.md`: lifecycle diagram updated; accessibility added to
+    Stages 1 (THINK), 2 (CHALLENGE), 3 (PLAN), 7 (LAUNCH), 10 (MAINTAIN).
+  - `chatmodes/website-launch-planner.chatmode.md`: new Phase 1 question on
+    assistive technology needs; geographic accessibility law examples in Phase 2;
+    platform accessibility criterion in Phase 4; expanded UX/UI checks in
+    Phase 5; CMS accessibility checks in Phase 7; 6 explicit accessibility
+    items in Phase 8 pre-launch checklist.
+  - `workflows/website-live-launch.workflow.md`: accessibility needs added to
+    Step 1 Strategy clarification list.
+- **K-06 ADR compliance - browser-side accessibility and performance**
+  (`18692db`, `9e33da2`):
+  - `instructions/html-css-javascript.instructions.md`: Script Loading, ARIA
+    Tablist Keyboard, Modal Focus Management, Idempotent Event Listeners,
+    High-Volume Streaming DOM, and keyboard testing sections.
+  - `skills/accessibility.skill.md`: Interactive Widget Accessibility section
+    (tablist, modal, live regions, menu), expanded checklist (+5 items),
+    expanded practical testing (+5 steps).
+  - `chatmodes/accessibility-review.chatmode.md`: Interactive Widget Checks,
+    Script Loading and Performance checks, expanded output template.
+- **Changelog gate in shared-artefacts workflow**: added Step 5 to the Mandatory
+  Workflow in `instructions/shared-artefacts.instructions.md` requiring a
+  `Changelog.md` entry for every `_copilot-shared/` commit - no exceptions.
 - **Agent/chatmode sync gate** in `sync-shared-copilot.ps1`: runs
   `tests/test_agent_chatmode_sync.py` before propagating; a broken pairing
   contract aborts the sync before any copy. Verified positive + negative.

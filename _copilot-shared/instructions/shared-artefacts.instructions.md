@@ -41,8 +41,12 @@ When a change is needed to any shared artefact:
 
 4. **Inspect downstream diffs** - review what changed in each project's
    `.github/`, `tests/`, `sanity.bat`, etc. to confirm correctness.
-5. **Commit in both repos** - workspace-level (`_copilot-shared/` +
-   `sync-shared-copilot.ps1`) and the affected project(s).
+5. **Update `Changelog.md`** at the workspace root (`<workspace-root>/Changelog.md`).
+   Add the change to the `[Unreleased]` section using Keep a Changelog format.
+   Every commit that modifies `_copilot-shared/` content must have a
+   corresponding Changelog entry - no exceptions.
+6. **Commit in both repos** - workspace-level (`_copilot-shared/` +
+   `sync-shared-copilot.ps1` + `Changelog.md`) and the affected project(s).
 
 ## What Lives Where
 
