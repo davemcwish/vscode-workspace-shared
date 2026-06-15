@@ -61,6 +61,17 @@ Ask these questions unless already answered:
    - External agency
    - Unknown
 
+5. Will any visitors need accessible content?
+   - Screen reader users (blind or low-vision visitors)
+   - Keyboard-only users (motor impairments, power users)
+   - Users needing captions or transcripts (deaf or hard-of-hearing)
+   - Users needing large text or high contrast (low vision)
+   - Unknown (assume yes - accessibility benefits everyone)
+
+Note: If the answer is "unknown" or "not sure", treat the site as needing
+accessible content by default. Accessibility laws in most countries require it,
+and it improves usability for all visitors.
+
 ## Phase 2: Geographic Scope
 
 Ask:
@@ -77,8 +88,19 @@ Ask:
 - Does hosting or data storage need to be in a particular country or region?
 
 Explain that geography can influence platform choice, hosting, privacy notices,
-cookie banners, accessibility expectations, content, SEO, payment methods, tax,
+cookie banners, accessibility law, content, SEO, payment methods, tax,
 legal pages, trust signals, and support availability.
+
+Accessibility law examples to mention when relevant:
+
+- USA: ADA (Americans with Disabilities Act) and Section 508.
+- EU: European Accessibility Act (EAA) from June 2025, EN 301 549.
+- UK: Equality Act 2010, Public Sector Bodies Accessibility Regulations.
+- Australia: Disability Discrimination Act (DDA).
+- Canada: Accessible Canada Act (ACA), AODA (Ontario).
+
+If the user is unsure which accessibility law applies, recommend WCAG 2.1 Level
+AA as the practical baseline that satisfies most national requirements.
 
 ## Phase 3: Social Media and Online Presence
 
@@ -164,6 +186,8 @@ Recommend the simplest sustainable platform that meets:
 - the country or region requirements,
 - the content update frequency,
 - the social media and online presence needs,
+- the accessibility requirements (does the platform produce accessible HTML,
+  support keyboard navigation, and offer accessible themes or templates?),
 - the security and privacy requirements,
 - the budget and timeline.
 
@@ -189,7 +213,8 @@ Prompt the user to cover:
 - consistent spacing,
 - consistent colours,
 - consistent typography,
-- accessibility,
+- accessibility (keyboard navigation, visible focus, heading order, colour
+  contrast, alt text, form labels, error messages, touch targets),
 - page speed,
 - trust signals,
 - reviews or testimonials,
@@ -254,12 +279,13 @@ For HTML/CSS builds, include:
 For CMS/no-code builds, include:
 
 - account setup,
-- template selection,
+- template selection (prefer templates with accessible markup and good contrast),
 - page creation,
 - content entry,
 - theme settings,
 - social profile links,
 - share-preview settings,
+- accessibility checks (heading order, alt text, contrast, keyboard navigation),
 - domain connection,
 - publishing steps.
 
@@ -288,6 +314,12 @@ Always include:
 - [ ] Forms tested.
 - [ ] Links tested.
 - [ ] Images have alt text.
+- [ ] Keyboard navigation works on every page (Tab, Enter, Escape).
+- [ ] Focus indicator is visible when tabbing.
+- [ ] Headings follow logical order (H1, H2, H3 - no skipped levels).
+- [ ] Colour contrast meets WCAG AA minimums (4.5:1 for text).
+- [ ] Form fields have visible labels (not placeholder-only).
+- [ ] Error messages identify the problem and how to fix it.
 - [ ] Page titles and descriptions added.
 - [ ] Privacy and cookie requirements checked.
 - [ ] Analytics configured if needed.

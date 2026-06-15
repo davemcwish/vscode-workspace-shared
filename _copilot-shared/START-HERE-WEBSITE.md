@@ -126,15 +126,16 @@ every stage:
 
 ```text
 1. THINK     - What is this website for? Who is it for? What country/region?
-2. CHALLENGE - Are my assumptions sound? (Critical thinking)
-3. PLAN      - Platform, content, design, legal, security, social presence
+               Who needs accessible content?
+2. CHALLENGE - Are my assumptions sound? (Critical thinking, incl. accessibility)
+3. PLAN      - Platform, content, design, accessibility, legal, security, social
 4. BUILD     - Create pages, write copy, add images, configure platform
 5. SECURE    - Harden the site, check privacy/legal compliance
 6. TEST      - Accessibility, performance, mobile, forms, links, browsers
-7. LAUNCH    - Domain, SSL, DNS, go live, verify
+7. LAUNCH    - Domain, SSL, DNS, accessibility gate, go live, verify
 8. PROMOTE   - SEO, social media, advertising, email, offline promotion
 9. MEASURE   - Analytics, conversions, search visibility
-10. MAINTAIN - Monthly reviews, updates, security patches, content freshness
+10. MAINTAIN - Monthly reviews, updates, security, accessibility regression
 ```
 
 ---
@@ -161,7 +162,10 @@ The planner will ask you about:
 
 - What the website is for (leads, sales, information, bookings, etc.).
 - Who the audience is and where they are (country, region, language).
+- Whether any visitors will need accessible content (screen readers, keyboard
+  navigation, captions, large text, or other assistive technology).
 - What privacy and legal requirements apply in that geography.
+- What accessibility laws apply (these vary by country and sector).
 - What social media and online presence already exists.
 - Who will maintain the site after launch.
 - What your budget and timeline look like.
@@ -182,6 +186,10 @@ The critical thinking partner will ask probing questions like:
 - "Is this really the simplest platform that meets your needs?"
 - "Can the person maintaining this site actually use this technology?"
 - "Have you considered what privacy law requires in your target country?"
+- "Have you considered what accessibility law requires in your target country
+  or sector?"
+- "Can everyone in your target audience use this site - including people with
+  visual, motor, cognitive, or hearing differences?"
 - "What happens if your hosting provider goes down - is there a backup plan?"
 
 It never tells you what to do - it helps you think clearly.
@@ -192,9 +200,20 @@ It never tells you what to do - it helps you think clearly.
 | --- | --- |
 | Full planning workflow | Read: `workflows/website-live-launch.workflow.md` |
 | Content and copywriting guidance | Read: `skills/website-content-copywriting.skill.md` |
+| Accessibility planning | Read: `skills/accessibility.skill.md` |
 | Privacy and legal requirements | Read: `skills/website-privacy-legal.skill.md` |
 | Security planning | Read: `skills/website-security.skill.md` |
 | Performance planning | Read: `skills/website-performance.skill.md` |
+
+Plan accessibility **now**, not after the build. Retrofitting accessibility is
+harder and more expensive than building it in from the start. Consider:
+
+- heading structure and reading order,
+- colour contrast and text size,
+- keyboard navigation and focus management,
+- image alt text and captions,
+- form labels and error messages,
+- whether the chosen platform produces accessible output by default.
 
 ### Stage 4: BUILD - Create the Website
 
@@ -227,6 +246,11 @@ It never tells you what to do - it helps you think clearly.
 | --- | --- |
 | Full launch workflow | Read: `workflows/website-live-launch.workflow.md` |
 | Pre-launch checklist | In the Website Launch Planner chat mode, Phase 8 |
+| Accessibility gate | Run accessibility-review chat mode before publishing |
+
+Do not launch without verifying: keyboard navigation works on every page,
+focus is visible, images have alt text, forms have labels, and colour contrast
+meets minimum ratios. These are launch blockers, not nice-to-haves.
 
 ### Stage 8: PROMOTE - Get Found
 
@@ -251,6 +275,11 @@ It never tells you what to do - it helps you think clearly.
 | Create a maintenance plan | Type `/website-maintenance-plan` |
 | Monthly health check | Type `/website-monthly-review` |
 | Ongoing security | Read: `skills/website-security.skill.md` |
+| Accessibility regression check | Select chat mode: **accessibility-review** after any content or layout change |
+
+New content, updated pages, added widgets, or platform upgrades can break
+accessibility. Re-check keyboard navigation, heading order, alt text, and
+contrast whenever you change content - not only at launch.
 
 ---
 

@@ -24,6 +24,8 @@ Clarify:
 - target audience,
 - primary call to action,
 - success measures,
+- accessibility needs (will visitors use screen readers, keyboard-only
+  navigation, captions, or other assistive technology?),
 - maintenance owner.
 
 ## Step 2: Geographic Scope
@@ -88,7 +90,6 @@ Ask:
 - Are the social profiles accurate and up to date?
 - Are business name, logo, opening hours, address, phone number, and email
   consistent across social profiles and the website?
-
 
 Prefer simple links to social profiles unless embedded feeds have a clear
 business reason.
