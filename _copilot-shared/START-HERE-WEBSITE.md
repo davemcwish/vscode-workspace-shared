@@ -666,21 +666,37 @@ Use this quick index when you know what kind of website help you need.
 | Plan a new website | `/website-from-idea-to-launch` |
 | Choose a platform or stack | `/website-platform-decision` |
 | Improve search visibility | `/website-seo-review` |
+| Review site search or on-site findability | `/website-search-review` |
 | Improve local search visibility | `/website-local-seo-check` |
+| Review online presence across channels | `/website-online-presence-review` |
 | Improve conversions or lead capture | `/website-conversion-review` |
 | Review copy and page messaging | `/website-copy-review` |
+| Review content governance | `/website-content-governance-review` |
 | Review forms and submissions | `/website-forms-submissions-review` |
 | Review accessibility remediation | `/website-accessibility-remediation-review` |
 | Review performance and page speed | `/website-performance-review` |
 | Review privacy and security | `/website-security-privacy-review` |
 | Review cookies and consent | `/website-cookie-consent-review` |
+| Review accounts and login flows | `/website-account-login-review` |
+| Review access and permissions | `/website-access-permissions-review` |
+| Review data retention | `/website-data-retention-review` |
 | Review analytics and measurement | `/website-analytics-review` |
 | Plan ongoing growth | `/website-growth-plan` |
+| Review experiments and testing | `/website-experimentation-review` |
 | Create a maintenance plan | `/website-maintenance-plan` |
 | Run a monthly health check | `/website-monthly-review` |
 | Review backups and recovery | `/website-backup-restore-review` |
+| Review business continuity | `/website-business-continuity-review` |
 | Review monitoring and incidents | `/website-monitoring-review` and `/website-incident-response-review` |
+| Review governance and ownership | `/website-governance-review` |
+| Review documentation quality | `/website-documentation-review` |
+| Review change management | `/website-change-management-review` |
+| Review QA readiness | `/website-qa-review` |
+| Review costs and ownership | `/website-cost-ownership-review` |
 | Review vendors and third-party tools | `/website-vendor-management-review` and `/website-third-party-tools-review` |
+| Review localization needs | `/website-localization-review` |
+| Review migration planning | `/website-migration-review` |
+| Review digital sustainability | `/website-digital-sustainability-review` |
 | Review AI chatbot behavior | `/website-ai-chatbot-review` |
 
 ### Content, Copy, Search, Growth, and Experimentation
@@ -694,7 +710,6 @@ Use this quick index when you know what kind of website help you need.
 - `prompts/website-experimentation-review.prompt.md`
 - `prompts/website-online-presence-review.prompt.md`
 - `prompts/website-seo-review.prompt.md`
-- `prompts/website-review.prompt.md` - General website review prompt for broad site quality checks.
 - `prompts/website-local-seo-check.prompt.md`
 
 ### Accessibility, Localization, Performance, and Sustainability
