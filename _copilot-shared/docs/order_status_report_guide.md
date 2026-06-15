@@ -35,7 +35,7 @@ command-line tools. Every technical term is explained on first use.
 Each time you run `order_status_report.py` it:
 
 1. Connects to Salesforce and queries all Order records (Id, OrderNumber,
-   Status, CreatedDate, Agent name, Agency name).
+   Status, CreatedDate, PaymentMethod, Agent name, Agency name).
 2. Saves a dated JSON snapshot (a saved copy of the data) of every order to
    `output/order_snapshots/<ORG_ALIAS>/`.
 3. Compares the new snapshot against the previous one to find orders whose
@@ -226,6 +226,18 @@ alongside the snapshot:
 python scripts/order_status_report.py --sf-alias AXP_PROD --export-detail
 ```
 
+The CSV contains these columns:
+
+| Column | Description |
+| --- | --- |
+| `Id` | Salesforce internal record ID (unique identifier for each order). |
+| `OrderNumber` | Human-readable order number (e.g. `ON-00123`). |
+| `Status` | Current order status (e.g. `Submitted`, `InProduction`). |
+| `CreatedDate` | Date the order was created, in `YYYY-MM-DD` format (time portion is removed for readability). |
+| `PaymentMethod__c` | How the customer intends to pay (e.g. `Cash`, `Card`). Custom Salesforce field - the `__c` suffix means it was added by the development team. |
+| `Agency__r.Name` | Name of the agency the order belongs to. |
+| `Agent__r.Name` | Name of the agent who placed the order. |
+
 ### Send via Outlook instead of SMTP
 
 Use `--use-outlook` to send the email using Outlook 365 COM automation instead
@@ -349,7 +361,7 @@ The workbook contains these sheets:
 | **Summary** | Weekly pivot: statuses as columns, snapshot dates as rows, order counts as cell values. Includes week-over-week variance columns with traffic-light conditional formatting. |
 | **Chart-Line** | Stacked line chart showing the status trend over time. |
 | **Chart-Bar** | Stacked column chart showing composition at each snapshot. |
-| **Detail** | Full raw order list - OrderNumber, Status, CreatedDate, Agency, Agent. Same data as `--export-detail` but embedded in the workbook. |
+| **Detail** | Full raw order list - OrderNumber, Status, CreatedDate (date only, no time), PaymentMethod, Agency, Agent. Same data as `--export-detail` but embedded in the workbook. |
 | **Notes** | Workbook metadata (date range, snapshot count). |
 
 > **What is a pivot table?** A pivot table reorganises data into a summary grid.
