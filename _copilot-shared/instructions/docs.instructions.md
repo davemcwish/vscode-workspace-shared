@@ -120,6 +120,36 @@ The concepts/glossary section must repeat definitions that also appear inline - 
 Use numbered lists for steps that must be done in order; bullet lists otherwise.
 Avoid walls of text - break up paragraphs with headers, tables, or code blocks.
 
+### Project Dependencies in Script Guides
+
+Every script guide must include a **"How This Script Works (Dependencies)"**
+subsection within Prerequisites. This section must:
+
+- List every `src/sf_admin_utils/` module the script imports.
+- Provide a one-sentence plain-English explanation of each module's role.
+- Explain the call chain in beginner-friendly terms (e.g. "the script calls
+  `user_snapshot.py` to fetch data, then passes it to `user_report.py` to
+  build the summary").
+- Use a table for three or more dependencies; a bullet list for fewer.
+
+Example:
+
+```markdown
+### How This Script Works (Dependencies)
+
+This script does not do everything itself. It relies on helper modules in the
+`src/sf_admin_utils/` folder:
+
+| Module | What it does |
+| --- | --- |
+| `user_snapshot.py` | Fetches all User records from Salesforce and saves them as dated JSON files |
+| `user_report.py` | Compares two snapshots to find status changes, builds DataFrames and text summaries |
+| `email_sender.py` | Sends the formatted report via Outlook or SMTP |
+| `excel_report.py` | Builds the Excel workbook with Summary, Chart, and Detail sheets |
+```
+
+**Why this matters:** A beginner who opens a script and sees `from sf_admin_utils.user_snapshot import fetch_all_users` has no idea what that module does or where to find it. The dependency table gives them a map before they start reading code.
+
 ### Markdown formatting that linters enforce
 These two rules cause the most frequent markdownlint failures, so apply them deliberately:
 - MD022 - surround every heading with one blank line above and below.
