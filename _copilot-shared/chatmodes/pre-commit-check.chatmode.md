@@ -255,6 +255,7 @@ Produce a single summary table covering all checks:
 | 2i Test return annotations | | |
 | 2j Stale `# noqa` comments | | |
 | 2k Code review pairs | | |
+| 2m Docstring audit | | |
 
 If **all** checks are PASS: output **"Quality gate passed - safe to raise PR."**
 
@@ -447,6 +448,24 @@ if ($untracked) {
 though they pass on Windows. PASS if no `spec_from_file_location` calls are
 found, or all referenced scripts are tracked.
 
+### 2m - Docstring audit confirmation
+
+Confirm that the `docstring-auditor` agent (Standard Workflow Step 7) was run
+on all modified `.py` files in `src/` and `scripts/`.
+
+**Rule:** Every public function and every function longer than 10 lines in a
+modified file must have a complete-beginner docstring as defined in
+`docstrings.instructions.md`. This check does not require running the auditor
+now - it verifies the developer already ran it during implementation.
+
+**How to check:** Look at the modified files. If any public function or
+function longer than 10 lines lacks a docstring (or has only a one-liner with
+no Args/Returns/Raises), report FAIL.
+
+PASS if all modified source files have complete docstrings on qualifying
+functions. FAIL if any are missing - list the file, function name, and what
+is missing (e.g. "missing Args section", "no docstring at all").
+
 ---
 
 ## Step 3 - Final summary
@@ -468,6 +487,7 @@ Produce a single summary table covering all checks:
 | 2j Stale `# noqa` comments | | |
 | 2k Code review pairs | | |
 | 2l importlib script tracking | | |
+| 2m Docstring audit | | |
 
 If **all** checks are PASS: output **"Quality gate passed - safe to raise PR."**
 

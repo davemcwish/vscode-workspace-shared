@@ -301,14 +301,14 @@ Add these entries for GitHub. Replace `<PROXY_HOST>`, `<PROXY_PORT>`, and the
 path to `connect.exe` with your actual values:
 
 ```text
-# Ford GitHub (dwishar1_ford) — on Ford network, route through proxy
+# Ford GitHub (dwishar1_ford) - on Ford network, route through proxy
 Match Host github.com exec "ping -n 1 <PROXY_HOST>"
   User git
   ProxyCommand "<PATH_TO_CONNECT_EXE>" -H <PROXY_HOST>:<PROXY_PORT> %h %p
   IdentityFile ~/.ssh/id_ed25519
   IdentitiesOnly yes
 
-# Personal GitHub (davemcwish) — on Ford network, route through proxy
+# Personal GitHub (davemcwish) - on Ford network, route through proxy
 Match Host github-personal exec "ping -n 1 <PROXY_HOST>"
   HostName github.com
   User git
@@ -316,7 +316,7 @@ Match Host github-personal exec "ping -n 1 <PROXY_HOST>"
   IdentityFile ~/.ssh/id_ed25519_personal
   IdentitiesOnly yes
 
-# Personal GitHub (davemcwish) — off Ford network, connect directly
+# Personal GitHub (davemcwish) - off Ford network, connect directly
 Host github-personal
   HostName github.com
   User git
