@@ -318,7 +318,9 @@ function Repair-DestinationCase {
         Move-Item -LiteralPath $f.FullName -Destination $tempPath  -Force
         Move-Item -LiteralPath $tempPath   -Destination $finalPath -Force
         Write-Verbose "    Case-fixed: $destRel -> $wantRel"
-        $script:SyncReport.CaseFixed.Add("$(Split-Path $Destination -Leaf)/$wantRel")
+        $projectRoot = Split-Path (Split-Path $Destination -Parent) -Parent
+        $projectName = if ([string]::Equals($projectRoot, $Root, [System.StringComparison]::OrdinalIgnoreCase)) { "ROOT" } else { Split-Path $projectRoot -Leaf }
+        $script:SyncReport.CaseFixed.Add("$projectName/.github/$(Split-Path $Destination -Leaf)/$wantRel")
     }
 }
 
