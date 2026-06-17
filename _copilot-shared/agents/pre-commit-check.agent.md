@@ -186,6 +186,24 @@ docs/reviews/code-review-YYYY-MM-DDTHH-MM-remediation.md  (the remediation)
 Report as PASS if no `docs/reviews/` directory exists (not all projects use
 formal reviews), or if all pairs are complete.
 
+### Phase 6: Docstring Audit Confirmation
+
+Confirm that the `docstring-auditor` agent (Standard Workflow Step 7) was run
+on all modified `.py` files in `src/` and `scripts/`.
+
+**Rule:** Every public function and every function longer than 10 lines in a
+modified file must have a complete-beginner docstring as defined in
+`docstrings.instructions.md`. This check verifies the developer already ran
+the auditor during implementation -- it does not require re-running it now.
+
+**How to check:** Inspect modified source files. If any public function or
+function longer than 10 lines lacks a docstring (or has only a one-liner with
+no Args/Returns/Raises sections), report ❌ NEEDS FIX with the file, function
+name, and what is missing.
+
+Report PASS if all modified source files have complete docstrings on qualifying
+functions.
+
 ## Critical Rules
 
 - Run ALL checks - never skip one because others passed.
