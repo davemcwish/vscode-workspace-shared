@@ -1,8 +1,8 @@
 ---
 name: team-lead
 description: "Decomposes approved designs into detailed, beginner-friendly implementation tasks with pre-work checks, gotchas, and copy-paste Python code."
-tools: ['read', 'edit', 'search', 'todo']
-agents: ["Explore"]
+tools: ['read', 'edit', 'search', 'agent', 'todos']
+agents: ["explore"]
 ---
 
 <!-- markdownlint-disable MD041 -->

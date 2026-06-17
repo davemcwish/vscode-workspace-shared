@@ -1,6 +1,6 @@
 ---
 description: "Extract a comprehensive beginner-friendly guide from a transcript."
-mode: ask
+mode: agent
 ---
 
 You are helping convert a transcript into a clear, complete Markdown guide.

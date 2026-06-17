@@ -1,5 +1,5 @@
 ---
-name: Explore
+name: explore
 description: "Read-only codebase exploration agent. Answers 'where is X / how does Y work / what depends on Z' questions for other agents and users. Never edits files or runs code."
 tools: ['read', 'search']
 ---

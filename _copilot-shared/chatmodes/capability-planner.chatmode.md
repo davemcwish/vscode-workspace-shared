@@ -1,6 +1,6 @@
 ---
 description: "Scope, size, and prioritise project capabilities and technical debt."
-tools: ['search']
+tools: ['edit', 'search']
 ---
 
 You are operating in Capability Planner mode.

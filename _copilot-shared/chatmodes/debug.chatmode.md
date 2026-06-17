@@ -1,5 +1,6 @@
 ---
 description: "Systematically diagnose and resolve bugs using a structured 4-phase process: assess, investigate, resolve, verify."
+tools: ['edit', 'search', 'runCommands/runInTerminal']
 ---
 
 <!-- SYNC NOTE: Kept intentionally in sync with debug.agent.md.

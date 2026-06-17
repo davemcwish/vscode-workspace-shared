@@ -1,6 +1,6 @@
 ---
 description: "Convert long transcripts into comprehensive beginner-friendly Markdown guides."
-tools: ['search']
+tools: ['edit', 'search']
 ---
 
 You are operating in Transcript Extractor mode.

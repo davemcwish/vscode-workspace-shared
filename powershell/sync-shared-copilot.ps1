@@ -125,6 +125,7 @@ $script:SyncReport = @{
     FilesCopied      = 0
     FilesSkipped     = 0
     StaleFiles       = [System.Collections.Generic.List[string]]::new()
+    CaseFixed        = [System.Collections.Generic.List[string]]::new()
     ProjectsSynced   = [System.Collections.Generic.List[string]]::new()
     ProjectsSkipped  = [System.Collections.Generic.List[string]]::new()
     ValidationResults = @{}
@@ -168,6 +169,8 @@ function Sync-Folder {
     if ($LASTEXITCODE -ge 8) {
         throw "robocopy failed for '$Source' -> '$Destination' (exit $LASTEXITCODE)"
     }
+    # robocopy is case-insensitive and will not fix a case-only rename; do it here.
+    Repair-DestinationCase -Source $Source -Destination $Destination
 }
 
 function Sync-FolderStrict {
@@ -203,6 +206,8 @@ function Sync-FolderStrict {
     if ($LASTEXITCODE -ge 8) {
         throw "robocopy strict-sync failed for '$Source' -> '$Destination' (exit $LASTEXITCODE)"
     }
+    # robocopy is case-insensitive and will not fix a case-only rename; do it here.
+    Repair-DestinationCase -Source $Source -Destination $Destination
 }
 
 function Find-StaleFiles {
@@ -238,11 +243,82 @@ function Find-StaleFiles {
     $destFiles = Get-ChildItem $Destination -Recurse -File |
         ForEach-Object { $_.FullName.Substring($Destination.Length).TrimStart('\', '/') }
 
+    # Case-SENSITIVE membership test. PowerShell's -in / -notin are
+    # case-insensitive, which would HIDE case-only drift (for example a
+    # leftover Explore.agent.md after the source was renamed to
+    # explore.agent.md). An Ordinal HashSet makes such drift visible so it is
+    # reported instead of silently shipped to case-sensitive Linux (CI/Cycode).
+    $sourceSet = [System.Collections.Generic.HashSet[string]]::new(
+        [string[]]$sourceFiles, [System.StringComparer]::Ordinal)
+
     foreach ($df in $destFiles) {
-        if ($df -notin $sourceFiles) {
+        if (-not $sourceSet.Contains($df)) {
             $entry = "$ProjectName/.github/$(Split-Path $Destination -Leaf)/$df"
             $script:SyncReport.StaleFiles.Add($entry)
         }
+    }
+}
+
+function Repair-DestinationCase {
+    <#
+    .SYNOPSIS
+        Renames destination files whose filename case no longer matches source.
+
+    .DESCRIPTION
+        robocopy (used by Sync-Folder / Sync-FolderStrict) matches files
+        case-INSENSITIVELY on Windows. When a shared file is renamed by case
+        only - for example Explore.agent.md -> explore.agent.md - robocopy
+        copies the new CONTENT but keeps the OLD destination FILENAME. On
+        case-sensitive Linux (CI, Cycode) the old-cased name then fails to
+        resolve - e.g. an agents: ["explore"] reference cannot find
+        Explore.agent.md - so the rename must be propagated explicitly.
+
+        This walks the destination and, for every file that matches a source
+        file case-insensitively but NOT exactly, renames the destination to the
+        source's exact case. A two-step rename via a temporary name is used so
+        the change is reliable on case-insensitive filesystems, where a direct
+        case-only rename can be treated as a no-op.
+
+        Files in the destination with no source match are left untouched -
+        Find-StaleFiles reports those separately.
+
+    .PARAMETER Source
+        The _copilot-shared subfolder being mirrored (exact-case authority).
+
+    .PARAMETER Destination
+        The project folder to repair.
+    #>
+    param([string] $Source, [string] $Destination)
+    if (-not (Test-Path $Source)) { return }
+    if (-not (Test-Path $Destination)) { return }
+
+    # Lookup of source-relative paths keyed by their lower-case form; the value
+    # is the EXACT-case relative path the destination must end up using.
+    $sourceByLower = @{}
+    Get-ChildItem $Source -Recurse -File | ForEach-Object {
+        $rel = $_.FullName.Substring($Source.Length).TrimStart('\', '/')
+        $sourceByLower[$rel.ToLowerInvariant()] = $rel
+    }
+
+    # Materialise the destination list first so renames during the loop cannot
+    # disturb an in-flight enumeration.
+    $destFiles = @(Get-ChildItem $Destination -Recurse -File)
+    foreach ($f in $destFiles) {
+        $destRel = $f.FullName.Substring($Destination.Length).TrimStart('\', '/')
+        $key     = $destRel.ToLowerInvariant()
+        if (-not $sourceByLower.ContainsKey($key)) { continue }
+
+        $wantRel = $sourceByLower[$key]
+        if ([string]::Equals($destRel, $wantRel, [System.StringComparison]::Ordinal)) {
+            continue  # case already correct
+        }
+
+        $finalPath = Join-Path $Destination $wantRel
+        $tempPath  = "$($f.FullName).casefix.tmp"
+        Move-Item -LiteralPath $f.FullName -Destination $tempPath  -Force
+        Move-Item -LiteralPath $tempPath   -Destination $finalPath -Force
+        Write-Verbose "    Case-fixed: $destRel -> $wantRel"
+        $script:SyncReport.CaseFixed.Add("$(Split-Path $Destination -Leaf)/$wantRel")
     }
 }
 
@@ -480,6 +556,18 @@ if ($script:SyncReport.StaleFiles.Count -gt 0) {
     Write-Host ""
 } else {
     Write-Host "  Stale files      : none (all project .github/ files have a source in _copilot-shared/)" -ForegroundColor DarkGreen
+}
+
+if ($script:SyncReport.CaseFixed.Count -gt 0) {
+    Write-Host ""
+    Write-Host "  CASE-FIXED FILES ($($script:SyncReport.CaseFixed.Count)):" -ForegroundColor Yellow
+    Write-Host "  Destination filenames were renamed to match the source's exact case" -ForegroundColor Yellow
+    Write-Host "  (a case-only rename in _copilot-shared/). Commit these renames in each project." -ForegroundColor Yellow
+    Write-Host ""
+    foreach ($cf in $script:SyncReport.CaseFixed) {
+        Write-Host "    - $cf" -ForegroundColor DarkYellow
+    }
+    Write-Host ""
 }
 
 Write-Host ""

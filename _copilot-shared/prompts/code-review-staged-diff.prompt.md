@@ -1,6 +1,6 @@
 ---
 description: "Beginner-friendly code review of staged changes."
-mode: ask
+mode: agent
 ---
 
 Review the staged diff against the project's instruction files.

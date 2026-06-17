@@ -1,7 +1,7 @@
 ---
 name: dev
 description: "Executes granular implementation tasks exactly as specified by the team-lead."
-tools: ['read', 'edit', 'search', 'execute', 'todo']
+tools: ['read', 'edit', 'search', 'execute', 'todos']
 ---
 
 <!-- markdownlint-disable MD041 -->
