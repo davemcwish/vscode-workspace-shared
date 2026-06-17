@@ -1,5 +1,6 @@
 ---
 description: Review website analytics, conversion tracking, search data, campaign measurement, privacy, consent, ownership, reporting, and monthly improvement.
+mode: agent
 ---
 
 # Website Analytics Review Prompt

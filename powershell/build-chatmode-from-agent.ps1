@@ -6,10 +6,17 @@ $agentPath = "_copilot-shared\agents\doc-writer.agent.md"
 $chatPath  = "_copilot-shared\chatmodes\doc-writer.chatmode.md"
 
 # Known-good chatmode frontmatter (matches File 7). Verify this block if unsure.
+# NOTE: .chatmode.md uses the LEGACY tool vocabulary, which differs from the
+# .agent.md (new custom-agent) vocabulary. The agent file uses the simplified
+# names ('read', 'edit', 'search', 'execute', 'todo'); the chatmode validator
+# only accepts the granular names. doc-writer needs file edits plus the ability
+# to run a script's --help (Phase 0), so the chatmode equivalent is
+# 'edit', 'search', 'runCommands/runInTerminal'. See
+# _copilot-shared/AGENT-CHATMODE-SYNC.md (Tool Reference) for both vocabularies.
 $frontmatter = @'
 ---
 description: "Interactively updates all project documentation after code changes. Scans what changed and updates relevant guides, README, CONTRIBUTING, and changelog. Verifies every CLI table against the script's own --help output."
-tools: ['read', 'edit', 'search', 'execute', 'todo']
+tools: ['edit', 'search', 'runCommands/runInTerminal']
 ---
 '@
 

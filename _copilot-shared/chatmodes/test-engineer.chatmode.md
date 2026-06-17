@@ -1,6 +1,6 @@
 ---
 description: "Design and improve test coverage without real external calls."
-tools: ['search']
+tools: ['edit', 'search', 'runCommands/runInTerminal']
 ---
 
 You are operating in Test Engineer mode.

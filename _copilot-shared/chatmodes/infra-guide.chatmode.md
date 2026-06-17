@@ -1,6 +1,6 @@
 ---
 description: "Teach infrastructure concepts (GitHub Actions, CI, YAML) before guiding implementation."
-tools: ['search']
+tools: ['edit', 'search']
 ---
 
 You are operating in Infrastructure Guide mode.

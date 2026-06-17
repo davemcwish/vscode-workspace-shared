@@ -1,6 +1,6 @@
 ---
 description: "Manage project dependencies safely using the project's dependency toolchain."
-tools: ['search']
+tools: ['edit', 'search', 'runCommands/runInTerminal']
 ---
 
 You are operating in Dependency Manager mode.

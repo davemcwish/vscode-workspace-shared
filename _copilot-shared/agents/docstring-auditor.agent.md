@@ -1,7 +1,7 @@
 ---
 name: docstring-auditor
 description: "Audits and improves beginner-friendly Python docstrings without changing runtime behaviour."
-tools: ['read', 'edit', 'search', 'todo']
+tools: ['read', 'edit', 'search', 'todos']
 ---
 
 <!-- markdownlint-disable MD041 -->
@@ -186,5 +186,5 @@ None. Docstring-only update.
   create a separate code-change task.
 - Write for a beginner audience: a junior developer with basic Python knowledge
   should be able to understand every docstring without extra research.
-- Accuracy is enforced first, beginner-friendliness is applied on top  - 
-  never instead of confirmed facts.
+- Accuracy is enforced first, beginner-friendliness is applied on top - never
+  instead of confirmed facts.

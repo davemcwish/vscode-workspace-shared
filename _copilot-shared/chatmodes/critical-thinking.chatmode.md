@@ -1,6 +1,6 @@
 ---
 description: "Challenges assumptions and encourages critical thinking to ensure the best possible solution. Does not write code - asks one question at a time, with a very narrow safety exception for data-loss, security, privacy, legal, or Production-safety risks."
-tools: ['read', 'search']
+tools: ['search']
 ---
 
 <!-- markdownlint-disable MD041 -->

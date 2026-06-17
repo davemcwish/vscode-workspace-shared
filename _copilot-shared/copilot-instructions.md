@@ -294,7 +294,7 @@ Use these modes, prompts, or agents in order for every significant change:
 | --- | --- |
 | `critical-thinking.agent.md` (or `critical-thinking.chatmode.md`) | Challenge assumptions via open Socratic questioning before committing to a design or approach. Asks questions only - never writes code - with a single carve-out to flag data-loss, security, or Production-safety risks. Ends with a neutral recap of assumptions tested. |
 | `debug.agent.md` | Systematic troubleshooting when tests fail or behaviour is unexpected. |
-| `Explore.agent.md` | Read-only codebase exploration - locates code, traces call sites and dependencies, confirms what already exists. Used by architect, business-analyst, and team-lead during context discovery. |
+| `explore.agent.md` | Read-only codebase exploration - locates code, traces call sites and dependencies, confirms what already exists. Used by architect, business-analyst, and team-lead during context discovery. |
 
 
 Never skip step 4 (tests green) before step 5 (docs update).

@@ -1,6 +1,6 @@
 ---
 description: "Diagnose a command error using a structured diagnosis loop and produce a beginner-friendly fix plan."
-mode: ask
+mode: agent
 ---
 
 Diagnose the error output I provide using a disciplined loop. Do not guess  - 

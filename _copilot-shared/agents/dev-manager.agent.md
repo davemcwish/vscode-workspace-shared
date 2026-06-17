@@ -1,7 +1,7 @@
 ---
 name: dev-manager
 description: "Orchestrates implementation by coordinating the dev agent through a checklist of sequential tasks."
-tools: ['read', 'edit', 'search', 'agent', 'todo']
+tools: ['read', 'edit', 'search', 'agent', 'todos']
 agents: ["dev"]
 ---
 

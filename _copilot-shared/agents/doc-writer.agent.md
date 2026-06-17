@@ -1,7 +1,7 @@
 ---
 name: doc-writer
 description: "Automatically updates all project documentation after code changes are complete. Scans what changed and updates relevant guides, README, CONTRIBUTING, and changelog. Verifies every CLI table against the script's own --help output."
-tools: ['read', 'edit', 'search', 'execute', 'todo']
+tools: ['read', 'edit', 'search', 'execute', 'todos']
 ---
 
 # Doc Writer Agent

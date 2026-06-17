@@ -66,7 +66,7 @@ These agents guide you through the standard 9-step development workflow (backlog
 | `dev.agent.md` | Installed | Core development agent for implementing code changes |
 | `doc-writer.agent.md` | Installed | Produces comprehensive beginner-friendly documentation |
 | `docstring-auditor.agent.md` | Installed | Reviews and improves docstrings for complete-beginner clarity |
-| `Explore.agent.md` | Installed | Read-only codebase exploration - locates code, traces dependencies |
+| `explore.agent.md` | Installed | Read-only codebase exploration - locates code, traces dependencies |
 | `pre-commit-check.agent.md` | Installed | Runs full quality gate before commits; verifies all 9 steps completed |
 | `scope-change.agent.md` | Installed | Evaluates and sizes feature requests or scope changes |
 | `team-lead.agent.md` | Installed | Produces granular implementation tasks from architectural design |

@@ -1,6 +1,6 @@
 ---
 description: "Review and improve Python docstrings without changing runtime behaviour. Read-only plus docstring edits."
-tools: ['search', 'edit']
+tools: ['edit', 'search']
 ---
 
 # Docstring Review Mode

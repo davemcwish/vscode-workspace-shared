@@ -1,5 +1,6 @@
 ---
 description: Review website accessibility remediation readiness, including accessibility issue triage, backlog management, user-impact prioritization, remediation ownership, fix acceptance criteria, regression testing, third-party/vendor limitations, release planning, accessibility debt, risk acceptance, and small-team accessibility remediation governance.
+mode: agent
 ---
 
 # Website Accessibility Remediation Review Prompt

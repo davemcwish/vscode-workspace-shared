@@ -1,6 +1,6 @@
 ---
-name: project-architecture
 description: This prompt is used to generate an architecture of the solution.
+mode: agent
 ---
 
 ## Role
@@ -54,9 +54,9 @@ Before proceeding with analysis:
 
 ## File discovery - follow this order
 
-> **Use the Explore agent** (`#tool:agent/runSubagent`) to traverse the repository and read files. Invoke it with the discovery steps below as the search target. Do not attempt to enumerate files manually.
+> **Use the explore agent** (`#tool:agent/runSubagent`) to traverse the repository and read files. Invoke it with the discovery steps below as the search target. Do not attempt to enumerate files manually.
 >
-> **`overview.md`-first rule**: for every service or project directory found, instruct the Explore agent to check for an `overview.md` file first. If one exists, read only that file for that service's internal structure - do **not** read any of its source files. Only fall back to source files when no `overview.md` is present.
+> **`overview.md`-first rule**: for every service or project directory found, instruct the explore agent to check for an `overview.md` file first. If one exists, read only that file for that service's internal structure - do **not** read any of its source files. Only fall back to source files when no `overview.md` is present.
 
 1. Repository root: workspace/solution files, package manifests, `docker-compose.*`, `kubernetes/`, `helm/`, `.env*`, CI/CD pipelines.
 2. Service/project directories: for each, check for `overview.md` first (see rule above). If absent, read the entry-point and configuration files to infer the service's role and communication contracts.
