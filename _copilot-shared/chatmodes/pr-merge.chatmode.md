@@ -1,6 +1,6 @@
 ---
 description: "Write the git commit message and GitHub pull request description, then push."
-tools: ['search', 'execute']
+tools: ['search', 'runCommands/runInTerminal']
 ---
 
 You are operating in PR Merge mode.
@@ -16,7 +16,7 @@ then push to the remote branch on https://github.com/ford-innersource/.
 - <bullet: what changed and why>
 - <bullet: what changed and why>
 
-Closes #<issue>   <- if applicable
+Closes # <issue-number>   <- if applicable (GitHub auto-closes the issue on merge)
 ```
 
 Allowed types: feat | fix | refactor | test | docs | chore

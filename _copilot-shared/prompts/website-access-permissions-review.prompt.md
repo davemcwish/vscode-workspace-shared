@@ -1,5 +1,6 @@
 ---
 description: Review website access, admin accounts, permissions, MFA, least privilege, former staff and vendor access, shared account risks, emergency access, account recovery, CMS roles, hosting, domain, DNS, payments, CRM, analytics, repositories, deployment, onboarding, offboarding, and access review readiness.
+mode: agent
 ---
 
 # Website Access and Permissions Review Prompt

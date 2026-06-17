@@ -1,7 +1,7 @@
 ---
 name: debug
 description: "Systematically diagnoses and resolves bugs using a structured 4-phase process: assess, investigate, resolve, verify."
-tools: ['read', 'edit', 'search', 'execute', 'todo']
+tools: ['read', 'edit', 'search', 'execute', 'todos']
 ---
 
 <!-- markdownlint-disable MD041 -->

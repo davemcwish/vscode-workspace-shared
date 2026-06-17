@@ -470,7 +470,7 @@ If you're starting a brand new website project right now:
 | --- | --- |
 | `@critical-thinking` | Before any major decision - challenges assumptions |
 | `@debug` | Systematic troubleshooting when tests fail |
-| `@Explore` | Read-only codebase exploration - locates code, traces dependencies |
+| `@explore` | Read-only codebase exploration - locates code, traces dependencies |
 | `@code-reviewer` | Reviews code changes for quality and correctness |
 | `@business-analyst` | Creates structured functional requirements |
 | `@architect` | Produces module-level design documents |

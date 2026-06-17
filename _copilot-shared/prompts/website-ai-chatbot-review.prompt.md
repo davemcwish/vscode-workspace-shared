@@ -1,5 +1,6 @@
 ---
 description: Review website AI chatbot, AI assistant, generative answer, automated support, retrieval, grounding, source citation, hallucination, escalation, privacy, consent, logging, prompt-injection, access-control, accessibility, localization, regulated-content, vendor, analytics, fallback, and small-team AI governance readiness.
+mode: agent
 ---
 
 # Website AI Chatbot Review Prompt

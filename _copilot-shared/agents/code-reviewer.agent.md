@@ -1,7 +1,7 @@
 ---
 name: code-reviewer
 description: "Reviews completed code changes for quality, security, correctness, and adherence to project standards. Uses a critical review perspective."
-tools: ['read', 'search', 'execute', 'todo']
+tools: ['read', 'search', 'execute', 'todos']
 ---
 
 <!-- markdownlint-disable MD041 -->

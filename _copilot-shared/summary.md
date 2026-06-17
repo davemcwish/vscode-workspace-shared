@@ -116,7 +116,7 @@ in the middle of an ongoing conversation.
 
 | File | Purpose |
 | --- | --- |
-| `Explore.agent.md` | Read-only codebase exploration agent - locates code, traces call sites and dependencies, and confirms what already exists. Delegated to by architect, business-analyst, and team-lead. Never edits files or runs code. |
+| `explore.agent.md` | Read-only codebase exploration agent - locates code, traces call sites and dependencies, and confirms what already exists. Delegated to by architect, business-analyst, and team-lead. Never edits files or runs code. |
 | `scope-change.agent.md` | Captures and validates a new scope change request before it enters the backlog. |
 | `business-analyst.agent.md` | Translates a scope change into structured functional requirements. |
 | `architect.agent.md` | Produces a module-level technical design for approved requirements. |
@@ -145,7 +145,7 @@ Supporting agents (use at any step when you need them):
 ```text
 critical-thinking  -- challenge assumptions before committing to a design
 debug              -- systematic troubleshooting when tests fail
-Explore            -- read-only codebase discovery (used by architect, BA, team-lead)
+explore            -- read-only codebase discovery (used by architect, BA, team-lead)
 ```
 
 ---

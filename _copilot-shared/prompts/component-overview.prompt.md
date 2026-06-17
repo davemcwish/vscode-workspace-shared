@@ -1,5 +1,6 @@
 ---
 description: Generates a structured component overview document for a project by analyzing its repository files. The output is machine-parseable and consumed by AI agents.
+mode: agent
 ---
 
 ## Role
@@ -31,9 +32,9 @@ Analyse the repository at `{project}` and produce a single Markdown file at `{pr
 
 ## File discovery - follow this order
 
-> **Use the Explore agent** (`#tool:agent/runSubagent`) to traverse the repository and read files. Invoke it with the discovery steps below as the search target. Do not attempt to enumerate files manually.
+> **Use the explore agent** (`#tool:agent/runSubagent`) to traverse the repository and read files. Invoke it with the discovery steps below as the search target. Do not attempt to enumerate files manually.
 >
-> **`overview.md`-first rule**: before reading any source file in `{project}` or in any dependency, instruct the Explore agent to check whether an `overview.md` exists in that directory. If one exists, read only that file - do **not** read any source files beneath it. Only proceed to source files when no `overview.md` is present.
+> **`overview.md`-first rule**: before reading any source file in `{project}` or in any dependency, instruct the explore agent to check whether an `overview.md` exists in that directory. If one exists, read only that file - do **not** read any source files beneath it. Only proceed to source files when no `overview.md` is present.
 
 1. Root indicators: package manifests, lock files, workspace/solution files, and build tool configuration at the repository root (e.g., `package.json`, `*.sln`, `pom.xml`, `Makefile`, `build.gradle`, `pyproject.toml`, `go.mod`, `Cargo.toml`).
 2. Project/module files: per-module or per-service manifests under `src/`, `services/`, `apps/`, `packages/`, or `modules/`.

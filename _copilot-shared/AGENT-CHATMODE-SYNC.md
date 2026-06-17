@@ -34,7 +34,7 @@ If you are unsure whether a file has a counterpart, check the pair table below.
 | `agents/code-reviewer.agent.md` | *(no chatmode - agent only)* | - |
 | `agents/dev.agent.md` | *(no chatmode - agent only)* | - |
 | `agents/dev-manager.agent.md` | *(no chatmode - agent only)* | - |
-| `agents/Explore.agent.md` | *(no chatmode - agent only)* | - |
+| `agents/explore.agent.md` | *(no chatmode - agent only)* | - |
 | `agents/scope-change.agent.md` | *(no chatmode - agent only)* | - |
 | `agents/team-lead.agent.md` | *(no chatmode - agent only)* | - |
 | *(no agent)* | `chatmodes/accessibility-review.chatmode.md` | - |
@@ -78,3 +78,123 @@ Run a quick manual diff between the paired files whenever you change one:
 ```
 
 Or open both files side-by-side in VS Code (`Ctrl+\`) and scan manually.
+
+## Tool Reference
+
+The `tools:` line in the frontmatter declares which capabilities the AI is
+allowed to use while that agent or chatmode is active. Keep it **least
+privilege** - grant only what the artifact's task actually needs - **but
+sufficient** - if the body asks the AI to write files, run tests, or push git,
+the matching tool must be present or the action silently fails.
+
+### One canonical vocabulary, two linter registries (read this first)
+
+There is **one** canonical set of VS Code tool names. Both `.agent.md` (the
+current "custom agent" format) and `.chatmode.md` (the legacy "chat mode"
+format) run on the same Copilot Chat runtime, which uses those names. The full
+canonical list lives in
+`docs/canonical-vscode-tool-names.md`.
+
+What trips people up is that the **editor's frontmatter linter** validates the
+two file types against **different tool registries**:
+
+| Capability | `.agent.md` (current registry) | `.chatmode.md` (legacy registry) |
+| --- | --- | --- |
+| Read files | `read` | *(implicit - reading is always on; no token)* |
+| Search | `search` | `search` (also `search/codebase`, `search/fileSearch`, ...) |
+| Create / edit files | `edit` | `edit` (also `edit/editFiles`, `edit/createFile`, ...) |
+| Run terminal / tasks / tests | `execute` (canonical `execute/runInTerminal`) | `runCommands/runInTerminal` (legacy alias only) |
+| Track a to-do list | `todos` | `todos` |
+| Delegate to a sub-agent | `agent` (+ `agents: [...]`) | *(not available)* |
+
+**Empirically confirmed against this workspace's linter:**
+
+- The to-do tool is **`todos`** (plural). `todo` is a typo. The agent linter
+  tolerates `todo`, but the canonical runtime name is `todos`, so always write
+  `todos`.
+- The chatmode (legacy) linter does **not** know the `read` or `execute`
+  toolsets, nor their qualified forms (`read/readFile`, `execute/runInTerminal`).
+  In a chatmode, omit `read` (reading is implicit) and use the legacy terminal
+  alias `runCommands/runInTerminal` instead of `execute/*`.
+- The chatmode linter **does** accept `search`, `edit`, their qualified forms
+  (`search/codebase`, `edit/editFiles`, ...), and `todos`.
+- If an `.agent.md` declares `agents: [...]` (sub-agent delegation, e.g.
+  `explore`), it **must** also list the `agent` toolset, or the delegation
+  silently fails. `agent` / `agents` exist only in the agent format.
+- A `#word` anywhere in a chatmode **body** (even inside a code fence) is parsed
+  as a tool reference. Write `# word` (with a space) or avoid the literal `#`
+  to stop false `Unknown tool` errors - see `pr-merge.chatmode.md` for the
+  `Closes #` example.
+
+> **Forward direction:** chat modes are now called *custom agents* in current
+> VS Code. Prefer `.agent.md` with canonical names for new work; keep the paired
+> `.chatmode.md` on the legacy-compatible tokens above so the editor stays free
+> of false errors.
+
+Because the sync test (`tests/test_agent_chatmode_sync.py`) strips the **entire**
+frontmatter before comparing paired files, a paired agent and chatmode will
+legitimately have **different** `tools:` lines. That is expected and does not
+break the pairing gate.
+
+### Tools currently used in this workspace
+
+| Token (agent / chatmode) | What it lets the AI do | Typical artifacts |
+| --- | --- | --- |
+| `read` / *(implicit)* | Open and read workspace files | every artifact |
+| `search` / `search` | Semantic search, file glob, text grep | every artifact |
+| `edit` / `edit` | Create and modify files | authoring modes (architect, dev, doc-writer, capability-planner, test-engineer, ...) |
+| `execute` / `runCommands/runInTerminal` | Run shell commands, tasks, `sanity.bat`, git, pytest | pipeline modes (pre-commit-check, debug, dependency-manager, pr-merge, test-engineer) |
+| `todos` / `todos` | Track multi-step plans in the to-do list | long-running planning agents |
+| `agent` / *(n/a)* | Invoke a declared sub-agent (e.g. `explore`) | architect, business-analyst, team-lead, dev-manager |
+
+### Least-privilege ladder
+
+Pick the lowest rung that still lets the artifact finish its job:
+
+1. **Advisory / read-only review** -> `['search']`
+   (accessibility-review, backlog-gate, critical-thinking, release-pr-planner,
+   sf-safe-ops).
+2. **Authoring** (produces or edits files) -> add `edit`
+   (capability-planner, docstring-review, infra-guide, transcript-extractor,
+   website-launch-planner).
+3. **Pipeline** (runs commands, tests, or git) -> add `execute`
+   (agent) / `runCommands/runInTerminal` (chatmode)
+   (pre-commit-check, debug, dependency-manager, doc-writer, pr-merge,
+   test-engineer).
+4. **Orchestration** (delegates to a sub-agent) -> add `agent` and a matching
+   `agents: [...]` line (**agent format only**).
+
+### Other canonical tools available for future use
+
+The tokens above are the subset this workspace currently needs. The full
+canonical catalogue (the authoritative source for exact spelling) is in
+`docs/canonical-vscode-tool-names.md`; the live, install-aware
+list is the **Configure Tools** picker in the Chat view (it also shows tools
+added by installed extensions and MCP servers, which are qualified as
+`<server>/<tool>`). Common built-ins not yet used here:
+
+| Canonical token | What it does | Example future use |
+| --- | --- | --- |
+| `search/usages` | Find references / definitions / implementations of a symbol | a refactor-impact agent |
+| `search/changes` | List current source-control (git) changes | a review agent that inspects staged work |
+| `search/listDirectory` | List files in a workspace directory | a project-mapping agent |
+| `read/problems` | Pull Problems-panel diagnostics in as context | a lint-triage agent |
+| `read/terminalLastCommand`, `read/terminalSelection` | Read terminal context | a shell-debugging agent |
+| `execute/createAndRunTask` | Run a defined VS Code task (e.g. the sync task) | a build / deploy helper |
+| `execute/getTerminalOutput` | Read output from a running command | a long-running-job monitor |
+| `execute/testFailure` | Read details of the last failing test | a focused debug agent |
+| `web/fetch` | Fetch and summarise a web page | a docs-research agent |
+| `githubRepo`, `githubTextSearch` | Semantic / text search a GitHub repo or org | a cross-repo pattern finder |
+| `browser` | Drive an integrated browser (navigate, click, screenshot) | a live website reviewer |
+| `vscode/extensions`, `vscode/installExtension` | Find / install VS Code extensions | a workspace-setup agent |
+| `vscode/VSCodeAPI` | Look up VS Code extension API docs | a VS Code extension author agent |
+| `vscode/runCommand` | Run any VS Code command | a workspace-automation agent |
+| `newWorkspace` | Scaffold a new project / workspace | a project-bootstrap agent |
+| `edit/editNotebook`, `execute/runNotebookCell`, `read/getNotebookSummary` | Author and run Jupyter notebooks | a data-analysis agent |
+| `agent/runSubagent` | Invoke an isolated sub-agent run | any orchestrating agent |
+
+When adding any of these, copy the exact token from the canonical list or the
+Configure Tools picker (names changed in VS Code 1.105, which introduced
+fully-qualified names such as `search/codebase`). Apply the agent-vs-chatmode
+registry rules above, and update the artifact's `tools:` line in the same commit
+that adds the behaviour needing it.

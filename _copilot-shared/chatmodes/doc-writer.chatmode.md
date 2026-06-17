@@ -1,6 +1,6 @@
 ---
 description: "Interactively updates all project documentation after code changes. Scans what changed and updates relevant guides, README, CONTRIBUTING, and changelog. Verifies every CLI table against the script's own --help output."
-tools: ['read', 'edit', 'search', 'execute', 'todo']
+tools: ['edit', 'search', 'runCommands/runInTerminal']
 ---
 
 # Doc Writer

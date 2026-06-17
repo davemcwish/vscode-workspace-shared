@@ -1,8 +1,8 @@
 ---
 name: architect
 description: "Translates approved Functional Requirements into module-level design documents."
-tools: ['read', 'edit', 'search', 'todo']
-agents: ["Explore"]
+tools: ['read', 'edit', 'search', 'agent', 'todos']
+agents: ["explore"]
 ---
 
 <!-- markdownlint-disable MD041 -->

@@ -1,5 +1,6 @@
 ---
 description: Review website account, registration, login, authentication, password reset, account recovery, MFA, sessions, user profile, preferences, consent, privacy, security, accessibility, localization, identity provider, social login, fraud, abuse, support escalation, and small-team account journey governance readiness.
+mode: agent
 ---
 
 # Website Account Login Review Prompt

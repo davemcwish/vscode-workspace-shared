@@ -1,8 +1,8 @@
 ---
 name: business-analyst
 description: "Processes scope-change requests and generates structured Functional Requirements (User Stories)."
-tools: ['read', 'edit', 'search', 'todo']
-agents: ["Explore"]
+tools: ['read', 'edit', 'search', 'agent', 'todos']
+agents: ["explore"]
 ---
 
 <!-- markdownlint-disable MD041 -->

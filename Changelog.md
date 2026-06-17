@@ -15,6 +15,15 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Tool Reference section in `AGENT-CHATMODE-SYNC.md`**: documents the single
+  canonical VS Code tool vocabulary, how the `.agent.md` and `.chatmode.md`
+  editor linters validate it against different registries, the tools the
+  workspace uses today, a least-privilege ladder, and the wider canonical
+  catalogue (`search/usages`, `read/problems`, `search/changes`, `web/fetch`,
+  `githubRepo`, ...) that future artifacts can opt into.
+- **`docs/canonical-vscode-tool-names.md`**: canonical list of
+  current built-in VS Code tool / tool-set names (e.g. `execute/runInTerminal`,
+  `search/codebase`, `todos`), used as the source of truth for the tools audit.
 - **Accessibility across the full website lifecycle** (`a4be31b`): surfaced
   accessibility awareness at every lifecycle stage, not just BUILD and TEST.
   - `START-HERE-WEBSITE.md`: lifecycle diagram updated; accessibility added to
@@ -49,6 +58,32 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **Audited and corrected `tools:` on every agent and chatmode** so each
+  artifact's declared capabilities match the task described in its body (least
+  privilege but sufficient). There is **one** canonical VS Code tool vocabulary;
+  the `.chatmode.md` editor linter just validates against an older registry than
+  `.agent.md`, which is why some tokens differ between paired files.
+  - Agents: fixed the `todo` -> `todos` typo (the canonical name) across all 11
+    agents that track a to-do list. Added the `agent` toolset to
+    `architect.agent.md`, `business-analyst.agent.md`, and `team-lead.agent.md`
+    - each delegates to the `explore` sub-agent but lacked the tool to invoke it.
+  - Chatmodes: rewrote all 16 `tools:` lines to the tokens the legacy chatmode
+    linter accepts (`search`, `edit`, `runCommands/runInTerminal`; reading is
+    implicit). Notably `website-launch-planner` and `debug` gained `edit` (they
+    author artifacts), and `pr-merge` / `pre-commit-check` were corrected to
+    `runCommands/runInTerminal`.
+- **Completed the `Explore` -> `explore` agent rename** (the file was already
+  `explore.agent.md` with `name: explore`; lowercase is case-safe on Linux).
+  Updated every remaining reference: the `agents: [...]` delegation arrays in
+  architect / business-analyst / team-lead (these still said `"Explore"` and
+  would have failed to bind on case-sensitive Linux), plus prose in
+  `copilot-instructions.md`, `WEBSITE-ARTIFACT-MANIFEST.md`, `summary.md`,
+  `START-HERE-WEBSITE.md`, the `AGENT-CHATMODE-SYNC.md` pair table, and the
+  architecture / component prompts.
+- **`powershell/build-chatmode-from-agent.ps1`**: the generator no longer emits
+  agent-only tokens into `doc-writer.chatmode.md`; it now writes
+  `['edit', 'search', 'runCommands/runInTerminal']` with a NOTE explaining the
+  vocabulary split, so regeneration cannot reintroduce invalid tokens.
 - Regenerated `doc-writer.chatmode.md` body from `doc-writer.agent.md`; the
   identical baseline is now committed so it is durable.
 - Deduped `AGENT-CHATMODE-SYNC.md` (each pair listed once). Baseline:
@@ -56,6 +91,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **`critical-thinking.chatmode.md`**: removed the invalid `read` token (a
+  pre-existing bug) - now `['search']`, matching its read-only Socratic role.
+- **`pr-merge.chatmode.md`**: the `Closes #<issue>` template line was parsed by
+  the chatmode linter as a `#tool` reference; reworded to
+  `Closes # <issue-number>` to clear the false `Unknown tool` error.
 - Stopped tracking `__pycache__`; added `.gitignore` for Python artifacts.
 
 ## [2026-06-09] -- major summary.md overhaul

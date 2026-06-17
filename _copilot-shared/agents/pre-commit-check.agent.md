@@ -1,7 +1,7 @@
 ---
 name: pre-commit-check
 description: "Runs the full quality gate (ruff, mypy, bandit, detect-secrets, pytest) and reports pass/fail status. Final gate before commit."
-tools: ['read', 'search', 'execute', 'todo']
+tools: ['read', 'search', 'execute', 'todos']
 ---
 
 <!-- markdownlint-disable MD041 -->
