@@ -1,5 +1,7 @@
 # Website Artifact Manifest
 
+**Last Updated:** June 17, 2026 (current as-is inventory)
+
 ## Purpose
 
 This file lists the Copilot artifacts used for planning, building, launching,
@@ -50,6 +52,27 @@ manifest first.
 
 ---
 
+## Standard Development Workflow Agents
+
+These agents guide you through the standard 9-step development workflow (backlog-gate, capability-planner, architect, team-lead, dev, etc.):
+
+| Artifact | Status | Purpose |
+| --- | --- | --- |
+| `architect.agent.md` | Installed | Produces module-level design and architecture decisions |
+| `business-analyst.agent.md` | Installed | Produces approved Functional Requirements when needed |
+| `code-reviewer.agent.md` | Installed | Reviews completed changes for quality, correctness, and maintainability |
+| `debug.agent.md` | Installed | Systematic troubleshooting when tests fail or behavior is unexpected |
+| `dev-manager.agent.md` | Installed | Executes tasks through the dev agent in a structured workflow |
+| `dev.agent.md` | Installed | Core development agent for implementing code changes |
+| `doc-writer.agent.md` | Installed | Produces comprehensive beginner-friendly documentation |
+| `docstring-auditor.agent.md` | Installed | Reviews and improves docstrings for complete-beginner clarity |
+| `Explore.agent.md` | Installed | Read-only codebase exploration - locates code, traces dependencies |
+| `pre-commit-check.agent.md` | Installed | Runs full quality gate before commits; verifies all 9 steps completed |
+| `scope-change.agent.md` | Installed | Evaluates and sizes feature requests or scope changes |
+| `team-lead.agent.md` | Installed | Produces granular implementation tasks from architectural design |
+
+---
+
 ## Website Skills
 
 | Artifact | Status | Purpose |
@@ -66,12 +89,41 @@ manifest first.
 
 ---
 
+## General-Purpose Skills
+
+| Artifact | Status | Purpose |
+| --- | --- | --- |
+| `cli.skill.md` | Installed | Command-line interface design and scripting best practices |
+| `doc-writing.skill.md` | Installed | Documentation authoring for complete beginners |
+| `docstring.skill.md` | Installed | Python docstring writing standards and patterns |
+| `flask-websocket.skill.md` | Installed | Flask 3.x REST APIs, Flask-SocketIO WebSocket, and subprocess patterns |
+| `html-css.skill.md` | Installed | HTML and CSS authoring for static reports and simple websites |
+| `html-css-static-report.skill.md` | Installed | Specialized guidance for self-contained HTML/CSS reports |
+| `python.skill.md` | Installed | Python coding standards and best practices |
+| `salesforce.skill.md` | Installed | Salesforce API usage and integration patterns |
+| `security.skill.md` | Installed | Security-focused code patterns and vulnerability prevention |
+| `testing.skill.md` | Installed | Testing frameworks, strategies, and coverage best practices |
+
+---
+
 ## Website Workflows
 
 | Artifact | Status | Purpose |
 | --- | --- | --- |
 | `website-documentation.workflow.md` | Installed | Creates beginner-friendly offline Markdown documentation |
 | `website-live-launch.workflow.md` | Installed | End-to-end go-live workflow covering domain, DNS, SSL, testing, launch, rollback, and post-launch checks |
+
+---
+
+## General-Purpose Workflows
+
+| Artifact | Status | Purpose |
+| --- | --- | --- |
+| `standard-change.workflow.md` | Installed | Standard workflow for implementing code changes across all projects |
+| `doc-writing.workflow.md` | Installed | End-to-end workflow for creating comprehensive documentation guides |
+| `doc-writer-remediation.workflow.md` | Installed | Workflow for updating and improving existing documentation |
+| `docstring-writing.workflow.md` | Installed | Workflow for writing complete-beginner docstrings for all functions and classes |
+| `docstring-remediation.workflow.md` | Installed | Workflow for auditing and improving existing docstrings |
 
 ---
 
@@ -82,6 +134,26 @@ manifest first.
 | `website-launch-planner.chatmode.md` | Installed | Main guided planning conversation from idea to launch |
 | `accessibility-review.chatmode.md` | Installed | Accessibility review conversation |
 | `critical-thinking.chatmode.md` | Installed | Challenges assumptions before committing to decisions |
+
+---
+
+## General-Purpose Chat Modes
+
+| Artifact | Status | Purpose |
+| --- | --- | --- |
+| `backlog-gate.chatmode.md` | Installed | Confirms feature requests are not already in the backlog before starting work |
+| `capability-planner.chatmode.md` | Installed | Sizes and clarifies scope of requested changes |
+| `debug.chatmode.md` | Installed | Systematic troubleshooting when tests fail or behavior is unexpected |
+| `dependency-manager.chatmode.md` | Installed | Manages Python package dependencies, updates, and compatibility |
+| `doc-writer.chatmode.md` | Installed | Guides creation of comprehensive beginner-friendly documentation |
+| `docstring-review.chatmode.md` | Installed | Reviews and improves docstrings for complete-beginner clarity |
+| `infra-guide.chatmode.md` | Installed | Infrastructure setup and environment configuration guidance |
+| `pr-merge.chatmode.md` | Installed | Prepares commit messages and pull request documentation before push |
+| `pre-commit-check.chatmode.md` | Installed | Runs full quality gate (ruff, mypy, bandit, detect-secrets, pytest, coverage) before commits |
+| `release-pr-planner.chatmode.md` | Installed | Slices work into safe, ordered pull requests for phased delivery |
+| `sf-safe-ops.chatmode.md` | Installed | Salesforce-specific operational safety and validation checks |
+| `test-engineer.chatmode.md` | Installed | Designs and implements comprehensive test coverage |
+| `transcript-extractor.chatmode.md` | Installed | Extracts comprehensive guides from chat transcripts and support logs |
 
 ---
 
@@ -118,9 +190,23 @@ manifest first.
 | `html-css-javascript.instructions.md` | Installed | Auto-applied web coding standards for HTML, CSS, and JavaScript |
 | `security.instructions.md` | Installed | Project-specific secure coding rules |
 
-> **Note:** Some Copilot environments apply instruction files automatically.
-> Others may not. If Copilot seems unaware of an artifact, open the relevant
-> file and explicitly ask Copilot to use it as guidance.
+---
+
+## Project-Specific Instruction Files
+
+| Artifact | Status | Purpose |
+| --- | --- | --- |
+| `docs.instructions.md` | Installed | Audience, tone, and accuracy rules for project documentation |
+| `docstrings.instructions.md` | Installed | Mandatory complete-beginner docstring standards for Python, PowerShell, batch, and shell scripts |
+| `flask-websocket-subprocess.instructions.md` | Installed | Flask 3.x REST API, Flask-SocketIO WebSocket, and subprocess.Popen patterns for web frontends |
+| `markdown.instructions.md` | Installed | Markdown style and formatting standards for project documentation |
+| `powershell.instructions.md` | Installed | PowerShell scripting standards for Windows compatibility |
+| `pr-review-checklist.instructions.md` | Installed | Documentation and code consistency checks to run before raising a PR |
+| `python.instructions.md` | Installed | Python coding standards for complete-beginner maintainability |
+| `salesforce.instructions.md` | Installed | Salesforce API usage and production-safety rules |
+| `shared-artefacts.instructions.md` | Installed | Shared artefact ownership rules - never edit project-local copies directly |
+| `testing.instructions.md` | Installed | Pytest conventions and coverage expectations |
+| `transcript-extraction.instructions.md` | Installed | Rules for extracting comprehensive, beginner-friendly task guides from chat transcripts |
 
 ---
 

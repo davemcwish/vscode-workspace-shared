@@ -350,6 +350,8 @@ If you're starting a brand new website project right now:
 
 ### Skills (Training Manuals - Read Before Building)
 
+#### Website-Specific Skills
+
 | File | What It Covers |
 | --- | --- |
 | `skills/website-launch.skill.md` | Planning, platform choice, social presence, launch |
@@ -364,20 +366,65 @@ If you're starting a brand new website project right now:
 | `skills/html-css.skill.md` | HTML/CSS for static reports (not public websites) |
 | `skills/html-css-static-report.skill.md` | Constraints for generated reports |
 
+#### General-Purpose Skills (For Code and Docs)
+
+| File | What It Covers |
+| --- | --- |
+| `skills/doc-writing.skill.md` | Beginner-friendly documentation authoring standards |
+| `skills/docstring.skill.md` | Python docstring and comment-block standards |
+| `skills/cli.skill.md` | Command-line interface design and scripting best practices |
+| `skills/python.skill.md` | Python 3.12+ coding standards and best practices |
+| `skills/flask-websocket.skill.md` | Flask 3.x REST APIs, Flask-SocketIO WebSocket, subprocess patterns |
+| `skills/salesforce.skill.md` | Salesforce API and CLI usage patterns |
+| `skills/security.skill.md` | Security-focused code patterns and vulnerability prevention |
+| `skills/testing.skill.md` | Testing frameworks (pytest) and coverage strategies |
+
 ### Workflows (Step-by-Step Processes)
+
+#### Website Workflows
 
 | File | When to Use |
 | --- | --- |
 | `workflows/website-live-launch.workflow.md` | Full idea-to-launch process |
 | `workflows/website-documentation.workflow.md` | Recording decisions as reference docs |
 
+#### General-Purpose Workflows (For Code and Documentation)
+
+| File | When to Use |
+| --- | --- |
+| `workflows/standard-change.workflow.md` | Any non-trivial code change across all projects |
+| `workflows/doc-writing.workflow.md` | Writing or updating project documentation |
+| `workflows/doc-writer-remediation.workflow.md` | Reviewing and improving existing documentation |
+| `workflows/docstring-writing.workflow.md` | Writing docstrings for new or modified code |
+| `workflows/docstring-remediation.workflow.md` | Auditing and improving existing docstrings |
+
 ### Chat Modes (Persistent Conversation Partners)
+
+#### Website Planning and Review Chat Modes
 
 | File | When to Use |
 | --- | --- |
 | `chatmodes/website-launch-planner.chatmode.md` | Planning a new website |
 | `chatmodes/accessibility-review.chatmode.md` | Reviewing accessibility |
 | `chatmodes/critical-thinking.chatmode.md` | Challenging assumptions |
+
+#### General-Purpose Development Chat Modes
+
+| File | When to Use |
+| --- | --- |
+| `chatmodes/backlog-gate.chatmode.md` | Checking if an idea is already in the backlog |
+| `chatmodes/capability-planner.chatmode.md` | Sizing and clarifying requested changes |
+| `chatmodes/debug.chatmode.md` | Systematic troubleshooting when tests fail |
+| `chatmodes/dependency-manager.chatmode.md` | Managing Python dependencies and updates |
+| `chatmodes/doc-writer.chatmode.md` | Updating project documentation |
+| `chatmodes/docstring-review.chatmode.md` | Reviewing and improving docstrings |
+| `chatmodes/infra-guide.chatmode.md` | Infrastructure and environment setup |
+| `chatmodes/pr-merge.chatmode.md` | Preparing commit messages and pull request text |
+| `chatmodes/pre-commit-check.chatmode.md` | Running quality gates before commits |
+| `chatmodes/release-pr-planner.chatmode.md` | Slicing work into safe pull requests |
+| `chatmodes/sf-safe-ops.chatmode.md` | Salesforce-specific safety and validation |
+| `chatmodes/test-engineer.chatmode.md` | Designing and improving test coverage |
+| `chatmodes/transcript-extractor.chatmode.md` | Extracting guides from transcripts |
 
 ### Prompts (One-Shot Recipes)
 
@@ -394,16 +441,46 @@ If you're starting a brand new website project right now:
 
 ### Instructions (Auto-Applied Rules)
 
+#### Website Instructions
+
 | File | When It Activates |
 | --- | --- |
 | `instructions/html-css-javascript.instructions.md` | When you edit `.html`, `.css`, or `.js` files |
 | `instructions/security.instructions.md` | When you edit any file (security rules) |
 
+#### General-Purpose Instructions
+
+| File | When It Applies |
+| --- | --- |
+| `instructions/docs.instructions.md` | When editing project documentation (`.md` files) |
+| `instructions/docstrings.instructions.md` | When writing Python docstrings and script comments |
+| `instructions/flask-websocket-subprocess.instructions.md` | When writing Flask web apps and subprocesses |
+| `instructions/markdown.instructions.md` | When writing Markdown documentation |
+| `instructions/powershell.instructions.md` | When writing PowerShell scripts (`.ps1`) |
+| `instructions/pr-review-checklist.instructions.md` | Before raising a pull request |
+| `instructions/python.instructions.md` | When writing Python code (all `.py` files) |
+| `instructions/salesforce.instructions.md` | When using Salesforce APIs |
+| `instructions/shared-artefacts.instructions.md` | When working with shared Copilot artifacts |
+| `instructions/testing.instructions.md` | When writing tests (pytest conventions) |
+| `instructions/transcript-extraction.instructions.md` | When extracting guides from transcripts |
+
 ### Agents (Specialist Personas)
 
 | Agent | When to Use |
 | --- | --- |
-| `@critical-thinking` | Before any major decision |
+| `@critical-thinking` | Before any major decision - challenges assumptions |
+| `@debug` | Systematic troubleshooting when tests fail |
+| `@Explore` | Read-only codebase exploration - locates code, traces dependencies |
+| `@code-reviewer` | Reviews code changes for quality and correctness |
+| `@business-analyst` | Creates structured functional requirements |
+| `@architect` | Produces module-level design documents |
+| `@team-lead` | Breaks designs into detailed implementation tasks |
+| `@dev` | Implements granular code changes |
+| `@dev-manager` | Orchestrates implementation through multiple tasks |
+| `@doc-writer` | Updates documentation after code changes |
+| `@docstring-auditor` | Reviews and improves docstrings |
+| `@pre-commit-check` | Runs the full quality gate before commits |
+| `@scope-change` | Evaluates and sizes feature requests |
 
 ---
 
