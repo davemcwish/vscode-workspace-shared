@@ -377,6 +377,112 @@ When connecting to a Flask-SocketIO backend:
 
 ---
 
+## JavaScript Defensive Initialisation
+
+### The Rule: One Missing Element Must Never Abort Init
+
+This rule was hard-won. When a `DOMContentLoaded` handler calls
+`element.addEventListener(...)` and `element` is `null` (because the expected
+HTML element is absent or the server served a stale cached page), JavaScript
+throws a `TypeError` that silently kills the rest of the handler. Every
+subsequent `addEventListener` call in the same function is never reached. The
+result is a page that appears to load but has no interactive behaviour.
+
+**Always guard before you wire.** If a setup function targets optional or
+feature-specific elements, check they exist before touching them:
+
+```javascript
+function setupLogin() {
+  // Guard: these elements may be absent on older cached pages.
+  // If any are missing, skip login wiring entirely rather than crash.
+  // One missing element must never abort the rest of DOMContentLoaded.
+  const aliasInput = document.getElementById("org-alias");
+  const loginBtn   = document.getElementById("login-button");
+  if (!aliasInput || !loginBtn) {
+    console.warn("Login form elements not found; skipping login setup.");
+    return;  // <- early return keeps every other setup function running
+  }
+
+  loginBtn.addEventListener("click", function() { /* ... */ });
+  aliasInput.addEventListener("input", function() { /* ... */ });
+}
+```
+
+### Structure DOMContentLoaded as a Series of Independent Setup Calls
+
+Each UI feature gets its own setup function. A failure (or deliberate skip) in
+one function must not affect the others:
+
+```javascript
+document.addEventListener("DOMContentLoaded", function() {
+  // Each function is independent. If setupLogin() returns early, setupTabs()
+  // and loadConfig() still run. This is called progressive enhancement.
+  setupTabs();
+  setupLogin();   // may return early if elements not present
+  loadConfig();
+  loadScripts();
+});
+```
+
+This pattern is called **progressive enhancement**: the page delivers core
+functionality first, then adds optional features only when the required pieces
+are present. It also makes debugging much easier - a broken feature is isolated
+to its own function, and the rest of the page still works.
+
+### Helper Pattern: Set Panel Visibility Safely
+
+When toggling CSS classes on elements that may not always be present, wrap the
+operation in a helper rather than calling `classList.toggle(...)` inline:
+
+```javascript
+/**
+ * Show or hide a panel element safely.
+ *
+ * How it works:
+ *   classList.toggle(cls, true) adds the class; toggle(cls, false) removes it.
+ *   The null check means a missing element is silently ignored rather than
+ *   crashing the caller.
+ *
+ * @param {HTMLElement|null} el     - The element to show or hide.
+ * @param {string}           cls    - The CSS class that hides the element.
+ * @param {boolean}          hidden - True to add the class (hide); false to remove it (show).
+ */
+function setPanelHidden(el, cls, hidden) {
+  if (el) {
+    el.classList.toggle(cls, hidden);
+  }
+}
+```
+
+### Null-Safe DOM Lookups: Cache and Guard
+
+Cache element references once at the top of an initialisation function; never
+query the same element repeatedly inside loops or event handlers:
+
+```javascript
+// Query once at startup, not inside every event handler.
+// If any element is missing, the guard at the top of setupXxx() returns early.
+const dom = {
+  aliasInput:   document.getElementById("org-alias"),
+  loginButton:  document.getElementById("login-button"),
+  loginError:   document.getElementById("login-error"),
+  loginSuccess: document.getElementById("login-success"),
+};
+```
+
+Use `textContent`, not `innerHTML`, when inserting plain text - this prevents
+accidental HTML injection if user input ever reaches the DOM:
+
+```javascript
+// CORRECT - textContent treats the value as plain text, never parsed as HTML.
+dom.loginError.textContent = "Alias cannot be empty.";
+
+// WRONG - innerHTML would execute any <script> tags in the string.
+// dom.loginError.innerHTML = userMessage;
+```
+
+---
+
 ## Commenting & Documentation Standards
 
 ### Mandatory File-Header Block Comment
