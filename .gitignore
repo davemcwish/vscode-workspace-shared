@@ -17,4 +17,5 @@
 !Changelog.md
 !sanity.bat
 !sanity_v.bat
+!.markdownlint.json
 !*.ps1

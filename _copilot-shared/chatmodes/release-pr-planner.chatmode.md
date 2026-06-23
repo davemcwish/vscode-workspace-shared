@@ -3,6 +3,8 @@ description: "Split approved capabilities and technical debt into safe pull-requ
 tools: ['search']
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 You are operating in Release / PR Planner mode.
 
 Your job is to work with end users and developers to split approved changes

@@ -3,6 +3,8 @@ description: "Scope, size, and prioritise project capabilities and technical deb
 tools: ['edit', 'search']
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 You are operating in Capability Planner mode.
 
 Your job is to work with end users, product owners, and developers to turn

@@ -58,6 +58,23 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **Pinned markdownlint to `markdownlint-cli2@0.22.1`** in `ci.yml`,
+  `sanity.bat`, and `sanity_v.bat` so the local gate and CI evaluate the same
+  rule set. An unpinned `npx markdownlint-cli2` had been resolving to newer
+  releases that enabled rules (e.g. `MD060`) CI did not have, so local and CI
+  disagreed. The `## Canonical Quality Gate` section now lists markdownlint as
+  the seventh step.
+- **Disabled `MD060` (table-column-style)** in `.markdownlint.json` - cosmetic
+  only and conflicts with fill-in template tables - and **started tracking
+  `.markdownlint.json`** (previously git-ignored) so clones and the gate share
+  one configuration.
+- **Cleaned 208 pre-existing markdownlint errors across 43 `_copilot-shared`
+  files** that surfaced once Node/`npx` was installed and `sanity.bat` step 7
+  began running. Auto-fixable rules were corrected; `MD041` was resolved with
+  the inline `<!-- markdownlint-disable MD041 -->` convention on 30
+  chatmode/prompt files; `MD040` bare fences were given a language; the
+  intentional duplicate-heading pass in `pre-commit-check.chatmode.md` was
+  exempted (`MD024`); and the `MD025`/`MD051` one-offs were hand-fixed.
 - **Audited and corrected `tools:` on every agent and chatmode** so each
   artifact's declared capabilities match the task described in its body (least
   privilege but sufficient). There is **one** canonical VS Code tool vocabulary;

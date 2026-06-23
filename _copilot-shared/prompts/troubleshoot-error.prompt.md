@@ -3,7 +3,9 @@ description: "Diagnose a command error using a structured diagnosis loop and pro
 mode: agent
 ---
 
-Diagnose the error output I provide using a disciplined loop. Do not guess  - 
+<!-- markdownlint-disable MD041 -->
+
+Diagnose the error output I provide using a disciplined loop. Do not guess  -
 work through each phase in order.
 
 ## Phase 1: Build a Feedback Loop

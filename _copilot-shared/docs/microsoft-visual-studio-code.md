@@ -1,9 +1,9 @@
 # Micrisoft Visual Studio Code
 
-
 ## Extensions
 
 ### List Installed Extensions
+
 You can list the installed extensions via these commands
 
 Unix:
@@ -70,9 +70,7 @@ code.cmd --list-extensions | % { "- $_" }
 - salesforce.salesforcedx-vscode-visualforce
 - salesforce.sfdx-code-analyzer-vscode
 
-
 ### Installed Extension Locations
-
 
 | OS | Location |
 | --- | --- |

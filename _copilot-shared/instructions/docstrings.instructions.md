@@ -33,7 +33,7 @@ Two distinct jobs, never mixed:
 1. **WHAT the code does** (parameters accepted, values returned, exceptions
    raised, side effects performed) - a matter of FACT, extracted
    deterministically from reading the implementation. Never guessed.
-2. **HOW to explain it** (plain-English prose, examples, domain context)  - 
+2. **HOW to explain it** (plain-English prose, examples, domain context)  -
    where your language skill applies, but ONLY to facts confirmed in job 1.
 
 Most docstring bugs come from letting job 2 invent facts that belong to job 1.
@@ -66,7 +66,7 @@ function's own implementation as the source of truth.
 
 ## The Doubt Rule
 
-**If you are ever unsure whether a docstring or comment block is needed  - 
+**If you are ever unsure whether a docstring or comment block is needed  -
 always add it.**
 
 The cost of an unnecessary docstring is near-zero. The cost of a missing
@@ -144,7 +144,7 @@ This rule parallels the documentation standard: just as CLI docs must come from
 
 ## Complete-Beginner Content Requirements
 
-Every docstring must be written as if the reader is a **complete beginner**  - 
+Every docstring must be written as if the reader is a **complete beginner**  -
 no assumed Python experience, no assumed Salesforce knowledge, no assumed
 familiarity with this codebase. Concretely, every docstring must:
 

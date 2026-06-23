@@ -3,6 +3,8 @@ description: "Add or improve pytest coverage for a selected module."
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 For the file currently in focus:
 
 1. Identify whether the file is:

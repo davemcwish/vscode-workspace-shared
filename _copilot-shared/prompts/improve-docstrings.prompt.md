@@ -3,6 +3,8 @@ description: "Improve beginner-friendly Python docstrings without changing runti
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 Improve docstrings in the selected Python file, folder, or changed files.
 
 ## Primary Goal
@@ -92,15 +94,15 @@ For each selected Python file:
 
 Also check:
 
-3. Module docstring.
-4. Class docstrings.
-5. Function and method docstrings.
-6. CLI `parse_args()` docstring.
-7. CLI `main()` docstring.
-8. Complex pytest fixture docstrings.
-9. Missing `Args`, `Returns`, `Raises`, or `Example` sections.
-10. Salesforce terms that need plain-English explanation.
-11. PII, Production, dry-run, or security behavior that needs explanation.
+1. Module docstring.
+2. Class docstrings.
+3. Function and method docstrings.
+4. CLI `parse_args()` docstring.
+5. CLI `main()` docstring.
+6. Complex pytest fixture docstrings.
+7. Missing `Args`, `Returns`, `Raises`, or `Example` sections.
+8. Salesforce terms that need plain-English explanation.
+9. PII, Production, dry-run, or security behavior that needs explanation.
 
 ## Required Style
 

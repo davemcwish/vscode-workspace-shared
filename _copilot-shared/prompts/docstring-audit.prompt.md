@@ -3,6 +3,8 @@ description: "Audit Python docstrings against the code implementation and produc
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 Audit Python docstrings in the selected file, folder, or the entire repository.
 
 Read these before starting:

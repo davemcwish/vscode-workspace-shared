@@ -79,7 +79,7 @@ single PR.
 
 ---
 
-## ⚠️ Command Discrepancy - Action Required in B2
+## Command Discrepancy - Action Required in B2
 
 The `docs/github-actions-guide.md` published in commit 5f1663d contains
 simplified example commands that **do not exactly match** what `sanity.bat`
@@ -258,7 +258,7 @@ Same branch: `chore/group-b-ci`
 
 1. Open `sanity.bat` and `ci.yml` side by side.
 2. Compare each step using the discrepancy table in the
-   [⚠️ Command Discrepancy](#️-command-discrepancy--action-required-in-b2) section above.
+   [⚠️ Command Discrepancy](#command-discrepancy---action-required-in-b2) section above.
 3. The current `sanity.bat` commands are already correct - `ci.yml` must be
    written to match them (done in B1 above using the correct commands).
 4. Update `docs/github-actions-guide.md`:

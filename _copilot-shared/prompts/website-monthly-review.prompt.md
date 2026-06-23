@@ -357,4 +357,3 @@ Do not promise rankings, traffic, leads, sales, or conversion improvements.
 
 If current platform, legal, compliance, pricing, search, social, analytics, or
 provider details matter, tell the user what to verify from official sources.
-

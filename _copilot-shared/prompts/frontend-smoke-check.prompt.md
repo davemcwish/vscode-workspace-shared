@@ -3,6 +3,8 @@ description: "Verify the Flask frontend is healthy after any HTML, JS, or Python
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 Run a smoke check on the Flask frontend. Perform each step in order and report
 any failures immediately.
 
@@ -45,12 +47,14 @@ stack trace.
 Inspect `frontend/static/js/app.js`. Confirm:
 
 - [ ] `setupLogin()` begins with a null guard:
+
   ```javascript
   if (!dom.orgAlias || !dom.loginButton) {
     console.warn("Login form elements not found; skipping login setup.");
     return;
   }
   ```
+
 - [ ] `setPanelHidden()` (or equivalent) checks `if (el)` before calling
   `classList.toggle(...)`.
 - [ ] `DOMContentLoaded` calls each setup function independently (e.g.

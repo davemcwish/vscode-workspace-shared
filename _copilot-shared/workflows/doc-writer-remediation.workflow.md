@@ -200,8 +200,8 @@ project's documentation standard, and vice versa.
 
 ```bash
 pytest tests/test_docs_cli_contract.py -q
-npx markdownlint-cli2 --fix "docs/**/*.md" "*.md"
-npx markdownlint-cli2 "docs/**/*.md" "*.md"
+npx markdownlint-cli2@0.22.1 --fix "docs/**/*.md" "*.md"
+npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"
 
 The contract test confirms your flag fixes are correct against --help. The markdownlint pair auto-fixes MD022/MD032 and then fails on anything remaining.
 

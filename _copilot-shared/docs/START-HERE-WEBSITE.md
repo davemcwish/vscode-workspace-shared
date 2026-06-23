@@ -364,7 +364,6 @@ If you're starting a brand new website project right now:
 | `skills/website-content-copywriting.skill.md` | Writing headlines, CTAs, pages, for beginners |
 | `skills/accessibility.skill.md` | Making sites usable by everyone |
 | `skills/html-css.skill.md` | HTML/CSS for static reports (not public websites) |
-| `skills/html-css-static-report.skill.md` | Constraints for generated reports |
 
 #### General-Purpose Skills (For Code and Docs)
 

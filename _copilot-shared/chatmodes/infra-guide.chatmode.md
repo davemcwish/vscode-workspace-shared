@@ -3,6 +3,8 @@ description: "Teach infrastructure concepts (GitHub Actions, CI, YAML) before gu
 tools: ['edit', 'search']
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 You are operating in Infrastructure Guide mode.
 
 Your job is to **teach first, then implement**. Before writing or editing any
