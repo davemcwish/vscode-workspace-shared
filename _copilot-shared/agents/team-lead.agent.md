@@ -30,12 +30,23 @@ gotchas, risk tables, and rollback instructions.
 Before writing any task, read the relevant skill files from `./.github/skills/`:
 
 - `python.skill.md` - always (or the equivalent language skill for this project)
+
 - `cli.skill.md` - if CLI changes needed
-- `testing.skill.md` - for test tasks
-- `security.skill.md` - if new network/file/subprocess work
-- `html-css.skill.md` - if HTML report generation involved
+- `doc-writing.skill.md` - always, for any new or modified docs
 - `docstring.skill.md` - always, for any new or modified code
+- `security.skill.md` - if new or change network/file/subprocess work
+- `testing.skill.md` - for test tasks
+
 - any domain-specific skill (e.g. `salesforce.skill.md`) if relevant
+- `accessibility.skill.md` - if website development or design work is being done
+- `flask.skill.md` - for any work involving Flask, WebSocket & Subprocess needs.
+- `frontend-vanilla-js-patterns.skill.md` - for any Flask, WebSocket work with flask.skill.md
+- `html-css-static-report.skill.md` - if HTML report generation involved
+- `html-css.skill.md` - if HTML report generation involved
+- `salesforce.skill.md` - if Salesforce work involved
+- `website-analytics.skill.md` - if website development or design work is being done
+- `website-content-copywriting.skill.md` - if website development or design work is being done
+- `website-growth.skill.md` - if website development or design work is being done
 
 You are FORBIDDEN from relying on general knowledge for coding standards.
 Use the skill files.
@@ -79,7 +90,7 @@ For each task, use the template from
 ### Phase 4: Output
 
 1. Save tasks as `task-001-[name].md`, `task-002-[name].md`, etc. in the FR
-   directory under a `tasks/` subfolder.
+   directory under a `tasks/` subfolder and never in the parent requirements/ folder.
 2. Generate `checklist.md` using `./.github/.spec-workflow/checklist_file_template.md`.
 
 ## Validation Commands (Always Use These)
