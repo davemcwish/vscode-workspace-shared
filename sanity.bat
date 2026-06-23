@@ -200,12 +200,17 @@ where npx >nul 2>&1
 if errorlevel 1 (
     echo  SKIPPED: npx not found in PATH. Install Node.js to enable markdownlint.
 ) else (
+    REM markdownlint-cli2 is pinned to @0.22.1 so local results match CI exactly.
+    REM An unpinned "npx markdownlint-cli2" downloads the latest release, which
+    REM can enable new rules (or change existing ones) that CI does not yet have,
+    REM causing local and CI to disagree. Keep this version in sync with the
+    REM "Markdown lint" step in _copilot-shared\workflows\ci.yml.
     if exist "_copilot-shared\" (
-        call npx markdownlint-cli2 --fix "docs/**/*.md" "_copilot-shared/**/*.md" "*.md"
-        call npx markdownlint-cli2 "docs/**/*.md" "_copilot-shared/**/*.md" "*.md"
+        call npx markdownlint-cli2@0.22.1 --fix "docs/**/*.md" "_copilot-shared/**/*.md" "*.md"
+        call npx markdownlint-cli2@0.22.1 "docs/**/*.md" "_copilot-shared/**/*.md" "*.md"
     ) else (
-        call npx markdownlint-cli2 --fix "docs/**/*.md" "*.md"
-        call npx markdownlint-cli2 "docs/**/*.md" "*.md"
+        call npx markdownlint-cli2@0.22.1 --fix "docs/**/*.md" "*.md"
+        call npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"
     )
     if errorlevel 1 set /a FAIL_COUNT+=1
 )

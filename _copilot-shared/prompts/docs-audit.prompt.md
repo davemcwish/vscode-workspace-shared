@@ -3,6 +3,8 @@ description: "Audit an existing guide for accuracy against the script's own --he
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 Audit the accuracy of an existing documentation guide against the code it
 describes. Do NOT rewrite the guide from scratch and do NOT trust any sibling
 document - verify everything against program-generated ground truth.
@@ -22,6 +24,7 @@ If the guide mentions environment variables, also read .env.example. If the guid
 Treat these program-generated sources as the ONLY source of truth. Never treat a sibling guide, the README, or any prose document as authoritative.
 
 ## Step 2: Diff the guide against ground truth
+
 Compare the guide's CLI table to --help as set arithmetic:
 
 Invented - in the guide but not in --help.
@@ -43,7 +46,7 @@ Produce this table before changing anything:
 For each accuracy finding:
 
 1. Make the smallest change that corrects the fact.
-2. Re-derive every corrected value from the ground truth captured in Step 1  - 
+2. Re-derive every corrected value from the ground truth captured in Step 1  -
    never from another document.
 3. For omitted flags, add a beginner-friendly row: explain in plain English what
    the flag does, its default and choices, and when a beginner would use it.
@@ -63,13 +66,14 @@ Run:
 
 ```bash
 pytest tests/test_docs_cli_contract.py -q
-npx markdownlint-cli2 --fix "docs/**/*.md" "*.md"
-npx markdownlint-cli2 "docs/**/*.md" "*.md"
+npx markdownlint-cli2@0.22.1 --fix "docs/**/*.md" "*.md"
+npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"
 ```
 
 Then add a Fixed or Changed entry to Changelog.md referencing the exact guide path(s).
 
 ## Output
+
 Summarise: guides audited, findings by category, fixes applied, validation result (contract test + markdownlint), and the Changelog entry added.
 
 ## Output format
@@ -133,4 +137,3 @@ Do not change runtime behaviour while fixing documentation.
 
 Clearly separate accuracy fixes (facts wrong) from clarity improvements (prose
 weak).
-
