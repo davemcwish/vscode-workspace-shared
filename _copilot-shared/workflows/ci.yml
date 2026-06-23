@@ -21,14 +21,15 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        # requirements-dev.txt contains --index-url pointing to Ford's internal
-        # JFrog Artifactory, which is not reachable from GitHub Actions runners.
-        # We strip that directive before passing the file to pip so PyPI is used.
-        # The committed file is unchanged — local development still uses JFrog.
+        # requirements-dev.txt and requirements.txt both contain an --index-url
+        # pointing to Ford's internal JFrog Artifactory, which is not reachable
+        # from GitHub Actions runners. We strip that directive before passing
+        # each file to pip so PyPI is used instead. The committed files are
+        # unchanged — local development still uses JFrog.
         run: |
           python -m pip install --upgrade pip
           grep -v "index-url" requirements-dev.txt | pip install -r /dev/stdin
-          pip install -r requirements.txt
+          grep -v "index-url" requirements.txt | pip install -r /dev/stdin
           pip install -e .
 
       - name: Markdown lint
