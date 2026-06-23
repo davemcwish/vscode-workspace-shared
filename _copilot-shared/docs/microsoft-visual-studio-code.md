@@ -1,4 +1,4 @@
-# Micrisoft Visual Studio Code
+# Microsoft Visual Studio Code
 
 ## Extensions
 
