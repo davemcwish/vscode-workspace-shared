@@ -3,6 +3,8 @@ description: "Refactor an older standalone Salesforce script into the current pr
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 Refactor the selected legacy script into the current project architecture.
 
 Before editing:

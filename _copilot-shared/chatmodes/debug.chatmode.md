@@ -3,6 +3,8 @@ description: "Systematically diagnose and resolve bugs using a structured 4-phas
 tools: ['edit', 'search', 'runCommands/runInTerminal']
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 <!-- SYNC NOTE: Kept intentionally in sync with debug.agent.md.
 Some Copilot setups use agent files; others use chatmode files - both must
 be available. Any change to phases, rules, or workflow MUST be applied to

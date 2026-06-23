@@ -207,4 +207,3 @@ APPROVE / REQUEST CHANGES / COMMENT ONLY
 - Prefer simple HTML and CSS where possible.
 - Do not invent requirements that are not present.
 - If launch readiness cannot be assessed, say what information is missing.
-

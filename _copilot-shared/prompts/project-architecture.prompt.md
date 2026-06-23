@@ -3,6 +3,8 @@ description: This prompt is used to generate an architecture of the solution.
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 ## Role
 
 You are a senior software architect agent. Your task is to analyse a multi-service repository and produce a structured architecture document. The document is the **primary entry point** for other AI agents that need to understand how services in the system communicate with each other. To understand the internal structure of any individual service or project, agents will follow the references to that service's `overview.md`.
@@ -22,6 +24,7 @@ The document must be explicit, labeled, and machine-parseable. Omit all prose, n
 Analyse the repository at `{project}` and produce a single Markdown file at `{project}/architecture.md`.
 
 The document must answer these questions for any consuming agent:
+
 1. What services exist in the system?
 2. How do they communicate with each other (protocol, channel, direction)?
 3. What is the topology - which service calls which, and why?
@@ -30,6 +33,7 @@ The document must answer these questions for any consuming agent:
 ### Pre-flight check
 
 Before proceeding with analysis:
+
 1. Check if `{project}/architecture.md` already exists.
 2. If it exists, ask the user whether to:
    - Replace it with a fresh analysis
@@ -73,21 +77,26 @@ Before proceeding with analysis:
 Produce **exactly** the following headings in the output file, in this order.
 
 ### 1. Title
+
 Repository name - one sentence describing the system's overall purpose.
 
 ### 2. Summary
+
 3 - 5 bullet points: what the system does, the number and names of its services, primary communication styles (synchronous / asynchronous), and the deployment model.
 
 ### 3. Technology Stack
+
 Derived from discovery - do not assume. For each technology found:
+
 - CATEGORY: e.g., `Runtime`, `API Framework`, `Database`, `Message Broker`, `Cache`, `Frontend`, `Container`, `Cloud Platform`, `Auth`
 - TECHNOLOGY: name and version if determinable
 - USED_BY: list of services that use it
 
 ### 4. Services
+
 For **every** top-level service or deployable unit, produce one entry:
 
-```
+```text
 SERVICE_NAME: <canonical name>
 TYPE: <one of: API | Worker | Frontend | Gateway | Broker | Database | Cache | Function | Scheduler | Other>
 PURPOSE: <one sentence>
@@ -105,9 +114,10 @@ CONSUMES:
 ```
 
 ### 5. Service Communication Map
+
 For **every** service-to-service interaction, produce one entry. This is the primary machine-readable communication topology.
 
-```
+```text
 INTERACTION_ID: <sequential number>
 FROM_SERVICE: <name>
 TO_SERVICE: <name>
@@ -119,14 +129,16 @@ CONTRACT_REF: <path to proto, OpenAPI spec, event schema, or NONE>
 ```
 
 Rules:
+
 - List every interaction once, from the initiating service's perspective.
 - If service A calls B and B calls A separately, create two entries.
 - Request-Response interactions are synchronous. Event / Fire-and-Forget are asynchronous.
 
 ### 6. Shared Infrastructure
+
 For each shared infrastructure component (message broker instance, shared database, cache, API gateway, identity provider):
 
-```
+```text
 INFRA_NAME: <name>
 TYPE: <MessageBroker | Database | Cache | Gateway | IdentityProvider | ObjectStorage | Other>
 USED_BY_SERVICES: <list of service names>
@@ -135,23 +147,29 @@ CONFIG_REF: <path to configuration or compose/manifest file>
 ```
 
 ### 7. Folder Structure
+
 For each top-level folder or project:
+
 - PATH: relative path
 - ROLE: `Service` | `Library` | `Contract` | `Infrastructure` | `Test` | `Tool` | `Config`
 - PURPOSE: one-line description
 
 ### 8. Architectural Patterns
+
 For each identified pattern:
+
 - PATTERN: name (e.g., Microservices, Event-Driven, CQRS, Saga, API Gateway, Strangler Fig, BFF)
 - SCOPE: which services or the whole system
 - EVIDENCE: file path or service name where the pattern is observable
 
 ### 9. Security Topology
+
 - AUTHN_AUTHZ: mechanism and which services enforce it
 - TRUST_BOUNDARIES: list service pairs that cross a trust boundary and how that boundary is enforced
 - KNOWN_RISKS: hard-coded credentials, missing auth on internal endpoints, overly permissive CORS, etc.
 
 ### 10. Deployment Topology
+
 - DEPLOYMENT_MODEL: `Monolith` | `Microservices` | `Modular Monolith` | `Serverless` | `Hybrid`
 - CONTAINER_RUNTIME: Docker, Podman, etc., or NONE
 - ORCHESTRATION: Kubernetes, Compose, Helm, Nomad, etc., or NONE
@@ -159,7 +177,9 @@ For each identified pattern:
 - CONFIG_REFS: paths to Dockerfiles, compose files, manifests, or IaC files
 
 ### 11. Assumptions
+
 List any assumption made where evidence was absent or ambiguous. Format:
+
 - ASSUMPTION: <statement>
   BASIS: <why this was assumed>
 

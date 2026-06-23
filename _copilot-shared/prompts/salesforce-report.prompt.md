@@ -3,6 +3,8 @@ description: "Create a read-only Salesforce reporting script with CSV output."
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 Create a read-only Salesforce reporting script.
 
 The script must:

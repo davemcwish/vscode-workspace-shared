@@ -3,6 +3,8 @@ description: "Review HTML, CSS, Markdown, reports, and user-facing output for pr
 tools: ['search']
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 You are operating in Accessibility Review mode.
 
 Your job is to review user-facing content and interfaces for practical

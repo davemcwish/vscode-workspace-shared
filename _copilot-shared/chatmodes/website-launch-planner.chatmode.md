@@ -3,6 +3,8 @@ description: "Guide a beginner from website idea to platform choice, social pres
 tools: ['edit', 'search']
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 You are operating in Website Launch Planner mode.
 
 Your job is to guide a minimally computer-literate user from a website idea to a

@@ -3,6 +3,8 @@ description: Generates a structured component overview document for a project by
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 ## Role
 
 You are a senior software analyst agent. Your task is to read source code from a software repository and produce a structured component overview document. The document is consumed exclusively by other AI agents - not humans. Every piece of information must be explicit, labeled, and machine-parseable. Omit all prose, narrative, diagrams, and visual representations.
@@ -53,21 +55,26 @@ Analyse the repository at `{project}` and produce a single Markdown file at `{pr
 Produce **exactly** the following headings in the output file, in this order.
 
 ### 1. Title
+
 Repo name - one sentence describing the system's purpose.
 
 ### 2. Summary
+
 3 - 5 bullet points: what the system does, primary technologies, major services.
 
 ### 3. Projects and Folder Map
+
 For each top-level project or folder:
+
 - PATH: relative path
 - PURPOSE: one-line description
 - ENTRY_FILES: key entry-point files (e.g., `main.py`, `index.ts`, `Program.cs`, `app.go`)
 
 ### 4. Components
+
 For **every** identifiable runtime component, produce one entry using this exact structure:
 
-```
+```text
 COMPONENT_NAME: <canonical class or module name>
 TYPE: <one of: API | Service | Repository | Consumer | Producer | Worker | Gateway | Cache | Store | Utility>
 PURPOSE: <one sentence>
@@ -84,16 +91,18 @@ CALLED_BY:
 ```
 
 Rules:
+
 - Every component that calls another must list it under `CALLS`.
 - Every component that is called must list its callers under `CALLED_BY`.
 - If `CALLS` or `CALLED_BY` is empty, write `NONE`.
 
 ### 5. Component Call Sequences
+
 For the **two most important use-cases** in the system (e.g., "Place Order", "Add Item to Basket"), document the end-to-end component call sequence as numbered steps.
 
 Each step must follow this format:
 
-```
+```text
 STEP <n>: <CallingComponent> -> <CalledComponent>
   OPERATION: <method or event name>
   PURPOSE: <why this call occurs>
@@ -101,37 +110,46 @@ STEP <n>: <CallingComponent> -> <CalledComponent>
 ```
 
 ### 6. Communication Channels
+
 For each channel:
+
 - CHANNEL_TYPE: `HTTP` | `gRPC` | `MessageQueue` | `Webhook`
 - ENDPOINT / EXCHANGE / TOPIC: value
 - SOURCE: file path
 - NOTES: port, method, contract file, etc.
 
 ### 7. Dependency Registration and Wiring
+
 - DI_CONTAINER: name of the IoC container or service registry in use (e.g., built-in DI, Spring, Guice, Inversify, Wire)
 - REGISTRATION_FILE: file path and function/method name where registration occurs
 - For each registration: lifetime/scope (e.g., `Singleton`, `Transient`, `Scoped`, `Prototype`, `Request`), abstraction (interface or base type), concrete implementation, and a ≤ 6-line code snippet.
 
 ### 8. Configuration and Secrets
+
 For each configuration source:
+
 - SOURCE_TYPE: e.g., `config file` | `environment variable` | `secrets manager` | `vault` | `cloud config service` | other
 - KEYS: list of configuration keys used
 - SENSITIVE: `YES` / `NO`
 - LOCATION: file path or environment/service name
 
 ### 9. Persistence and Data Access
+
 - DATABASE: name and engine (e.g., PostgreSQL, MySQL, MongoDB, Redis, DynamoDB)
 - DATA_ACCESS: ORM, query builder, or driver in use (e.g., SQLAlchemy, Hibernate, Prisma, GORM, Mongoose)
 - MIGRATIONS_PATH: relative path to migrations or schema management folder
 - REPOSITORY_PATTERN: `YES` / `NO` - if YES, list each repository abstraction and its implementation with file paths.
 
 ### 10. Patterns and Architecture Notes
+
 For each applied pattern:
+
 - PATTERN: name (e.g., CQRS, Mediator, Repository, Outbox, Event-Driven, Clean Architecture)
 - EVIDENCE: file path and class/method name demonstrating the pattern
 - SNIPPET: ≤ 6-line code excerpt (only if it clearly demonstrates the pattern)
 
 ### 11. Security and Operational Considerations
+
 - AUTHN_AUTHZ: mechanism (e.g., JWT Bearer, API Key, none) and file where it is configured
 - KNOWN_RISKS: list any hard-coded secrets, overly permissive CORS, missing validation, etc.
 - OBSERVABILITY: logging framework, metrics, health-check endpoints with file paths

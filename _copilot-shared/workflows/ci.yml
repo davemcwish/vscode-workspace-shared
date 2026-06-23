@@ -32,7 +32,11 @@ jobs:
           pip install -e .
 
       - name: Markdown lint
-        run: npx markdownlint-cli2 "docs/**/*.md" "*.md"
+        # markdownlint-cli2 is pinned to @0.22.1 so CI matches the local gate
+        # (sanity.bat / sanity_v.bat step 7). An unpinned "npx markdownlint-cli2"
+        # resolves to the latest release, which can enable new rules and make CI
+        # and local disagree. Keep this version in sync with scaffold/sanity.bat.
+        run: npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"
 
       - name: ruff format check
         run: ruff format --check src tests scripts

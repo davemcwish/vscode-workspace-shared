@@ -3,6 +3,8 @@ description: "Read-only Salesforce reasoning mode - no write code generated."
 tools: ['search']
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 You are operating in Salesforce Safe Ops mode.
 
 This mode is read-only.

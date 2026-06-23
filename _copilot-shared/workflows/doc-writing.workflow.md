@@ -180,8 +180,8 @@ pytest --tb=short -q
 
 Then run the Markdown lint gate. This is mandatory, not optional -- it auto-fixes the two most common failures (MD022 blank lines around headings, MD032 blank lines around lists) and then fails if anything non-auto-fixable remains:
 
-npx markdownlint-cli2 --fix "docs/**/*.md" "*.md"
-npx markdownlint-cli2 "docs/**/*.md" "*.md"
+npx markdownlint-cli2@0.22.1 --fix "docs/**/*.md" "*.md"
+npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"
 
 The pytest run also executes tests/test_docs_cli_contract.py, which fails if a guide invents or omits a CLI flag. If it fails, return to Step 0 and re-audit.
 

@@ -3,6 +3,8 @@ description: "Plan a beginner-friendly website from idea to live launch and ongo
 mode: ask
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 Help me plan a website from the initial idea through live launch and ongoing
 maintenance.
 
@@ -49,7 +51,6 @@ First ask or infer:
    - Any language, currency, privacy, cookie, tax, payment, legal-page, hosting,
      or accessibility needs?
    - Should local or regional providers be compared with global platforms?
-
 
 3. Ownership and account control:
    - Does the business already have a domain name?
@@ -206,7 +207,6 @@ Review rules:
 - Recommend testing critical journeys before launch, including forms, calls,
   bookings, payments, downloads, maps, contact links, and social/profile links.
 - Recommend a post-launch review date before launch day.
-
 
 Replace it with:
 

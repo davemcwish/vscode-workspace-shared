@@ -41,7 +41,6 @@ Before writing any task, read the relevant skill files from `./.github/skills/`:
 - `accessibility.skill.md` - if website development or design work is being done
 - `flask.skill.md` - for any work involving Flask, WebSocket & Subprocess needs.
 - `frontend-vanilla-js-patterns.skill.md` - for any Flask, WebSocket work with flask.skill.md
-- `html-css-static-report.skill.md` - if HTML report generation involved
 - `html-css.skill.md` - if HTML report generation involved
 - `salesforce.skill.md` - if Salesforce work involved
 - `website-analytics.skill.md` - if website development or design work is being done

@@ -3,6 +3,10 @@ description: "Run the full quality gate and summarise results before a PR is rai
 tools: ['search', 'runCommands/runInTerminal']
 ---
 
+<!-- markdownlint-disable MD041 MD024 -->
+<!-- MD024: this checklist intentionally repeats Step/2x heading names in an
+overview pass and a detailed pass; duplicate headings here are by design. -->
+
 <!-- SYNC NOTE: Kept intentionally in sync with pre-commit-check.agent.md.
 Some Copilot setups use agent files; others use chatmode files - both must
 be available. Any change to phases, checklists, rules, or report format MUST
@@ -354,7 +358,7 @@ Report PASS (no matches) or FAIL.
 ### 2f - `Changelog.md` updated ⚠ MANDATORY
 
 > **This check must never be skipped.** The Changelog must be updated for
-> every commit that changes code, configuration, documentation, or tooling  - 
+> every commit that changes code, configuration, documentation, or tooling  -
 > not just feature additions.
 
 Check that `Changelog.md` contains an entry dated today for the current

@@ -139,7 +139,6 @@ Produce a plan with these sections:
 | Third-party integrations |  |  | Quarterly |  |
 | Incident response contact |  |  | Quarterly |  |
 
-
 ## Include maintenance checklists
 
 Use clear checkbox lists.

@@ -3,6 +3,8 @@ description: "Safely update dependencies using pip-tools."
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 Help update dependencies using this project's pip-tools workflow.
 
 Rules:

@@ -3,6 +3,8 @@ description: "Convert long transcripts into comprehensive beginner-friendly Mark
 tools: ['edit', 'search']
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 You are operating in Transcript Extractor mode.
 
 Your job is to convert transcripts, support sessions, Copilot sessions, and

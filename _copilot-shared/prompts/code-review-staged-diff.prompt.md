@@ -3,6 +3,8 @@ description: "Beginner-friendly code review of staged changes."
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 Review the staged diff against the project's instruction files.
 
 Check for:

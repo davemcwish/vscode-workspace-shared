@@ -3,6 +3,8 @@ description: "Update project documentation after a code or workflow change."
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 Update documentation for the current code or workflow change.
 
 Review:

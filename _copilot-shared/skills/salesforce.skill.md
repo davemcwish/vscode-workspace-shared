@@ -57,4 +57,3 @@ Use the highest-level helper that fits the task:
    the Salesforce client layer itself.
 3. Do not call `subprocess.run("sf ...")` directly from feature scripts unless
    no existing helper supports the required operation.
-
