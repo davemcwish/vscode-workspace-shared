@@ -98,7 +98,6 @@ These agents guide you through the standard 9-step development workflow (backlog
 | `docstring.skill.md` | Installed | Python docstring writing standards and patterns |
 | `flask-websocket.skill.md` | Installed | Flask 3.x REST APIs, Flask-SocketIO WebSocket, and subprocess patterns |
 | `html-css.skill.md` | Installed | HTML and CSS authoring for static reports and simple websites |
-| `html-css-static-report.skill.md` | Installed | Specialized guidance for self-contained HTML/CSS reports |
 | `python.skill.md` | Installed | Python coding standards and best practices |
 | `salesforce.skill.md` | Installed | Salesforce API usage and integration patterns |
 | `security.skill.md` | Installed | Security-focused code patterns and vulnerability prevention |

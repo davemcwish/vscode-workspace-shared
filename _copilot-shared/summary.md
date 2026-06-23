@@ -254,7 +254,6 @@ these yourself to understand the rules Copilot follows.
 | `docstring.skill.md` | Mandatory beginner-friendly Google-style docstring rules, examples, and review checklist. |
 | `flask-websocket.skill.md` | Flask 3.x, Flask-SocketIO, subprocess.Popen patterns for the JOSHUA frontend. |
 | `html-css.skill.md` | HTML and CSS patterns for static Salesforce reports. |
-| `html-css-static-report.skill.md` | Constraints and file structure for generated HTML reports. |
 | `python.skill.md` | Core Python standards: style, typing, error handling, logging. |
 | `salesforce.skill.md` | Salesforce API safety, SOQL patterns, PII handling, Production guardrails. |
 | `security.skill.md` | Subprocess safety (Cycode SAST), secret handling, TLS, path traversal. |
