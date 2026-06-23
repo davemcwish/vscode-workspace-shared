@@ -3,6 +3,8 @@ description: "Scaffold a new Salesforce admin utility script."
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 Create a new script under `scripts/` that performs the task I describe next.
 
 Before editing files:

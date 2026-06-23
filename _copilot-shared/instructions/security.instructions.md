@@ -6,6 +6,7 @@ description: "Secrets handling and sensitive data rules."
 # Security Rules
 
 ## Secrets
+
 - **Never** commit credentials, tokens, security tokens, session ids,
   certificates, or `.env` files.
 - Required env vars must be documented in `.env.example` with placeholder
@@ -14,11 +15,13 @@ description: "Secrets handling and sensitive data rules."
   must source secrets from the approved secrets manager.
 
 ## Logging
+
 - Redact tokens, passwords, and session ids before logging.
 - Treat Salesforce record data as confidential by default (see
   `salesforce.instructions.md`).
 
 ## Dependencies
+
 - Before adding a dependency, verify it is actively maintained.
 - Use the approved Ford security scanning process when available.
 - If `pip-audit` is available in the environment, use it; otherwise document
@@ -26,7 +29,9 @@ description: "Secrets handling and sensitive data rules."
 - Pin exact versions in `requirements*.txt`.
 
 ## Code Review Triggers
+
 Flag any change that:
+
 - Introduces a new outbound network call.
 - Reads or writes files outside the project directory.
 - Spawns subprocesses or uses `eval`/`exec`.
@@ -42,7 +47,7 @@ Cycode). Before that value enters a `subprocess.run` / `subprocess.Popen` call:
    for org aliases, or write an equivalent validator that raises `ValueError` on
    unsafe characters. The validated value must be stored in a clearly named
    variable (e.g. `safe_alias`) and only that variable used in the command list.
-2. **The validator must return `match.group(0)`, not the original input**  - 
+2. **The validator must return `match.group(0)`, not the original input**  -
    Cycode's taint-flow analysis traces the original tainted value through
    function return values. Returning `match.group(0)` from the regex fullmatch
    ensures the return value is derived from the match object itself, which SAST
@@ -142,9 +147,9 @@ with open(safe_path, "w", ...) as fh:
     ...
 ```
 
-3. **The regex must be defined as a module-level constant** - use
+1. **The regex must be defined as a module-level constant** - use
    `_SAFE_PATH_PATTERN` to avoid recompilation on every call.
-4. **The `from pathlib import Path as _Path` must be inline** - because the
+2. **The `from pathlib import Path as _Path` must be inline** - because the
    top-level `Path` import is in `TYPE_CHECKING` (annotation-only). The local
    import provides a runtime reference for constructing the sanitised path.
 
@@ -286,4 +291,3 @@ def _is_local_origin(request) -> bool:
 - **Limit subprocess runtime** with a timeout (see
   `flask-websocket-subprocess.instructions.md`).
 - **One job at a time** - reject concurrent launch requests.
-

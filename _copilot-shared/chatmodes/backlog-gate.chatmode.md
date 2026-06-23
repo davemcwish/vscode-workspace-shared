@@ -3,6 +3,8 @@ description: "Check whether an idea already exists in the backlog before creatin
 tools: ['search']
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 You are operating in Backlog Gate mode.
 
 Before any new capability or improvement is created, search the project's

@@ -3,6 +3,8 @@ description: "Extract a comprehensive beginner-friendly guide from a transcript.
 mode: agent
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 You are helping convert a transcript into a clear, complete Markdown guide.
 
 Use the active transcript or attached document as the source.
@@ -10,7 +12,6 @@ Use the active transcript or attached document as the source.
 If the transcript contains personal data, internal URLs, Salesforce user IDs,
 org IDs, or email addresses, preserve only what is needed for technical accuracy
 and add a privacy note.
-
 
 Follow these requirements:
 

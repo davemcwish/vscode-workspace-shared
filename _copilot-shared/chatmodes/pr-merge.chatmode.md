@@ -3,14 +3,16 @@ description: "Write the git commit message and GitHub pull request description, 
 tools: ['search', 'runCommands/runInTerminal']
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 You are operating in PR Merge mode.
 
 Your job is to write a clean commit message and pull request description,
-then push to the remote branch on https://github.com/ford-innersource/.
+then push to the remote branch on <https://github.com/ford-innersource/>.
 
 ## Commit message format
 
-```
+```text
 <type>(<scope>): <short summary>   <- 72 chars max
 
 - <bullet: what changed and why>

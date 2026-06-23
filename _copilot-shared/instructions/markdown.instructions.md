@@ -30,4 +30,3 @@ Use these canonical root documentation filenames:
 - `Changelog.md`
 - `architecture.md`
 - `dependency_management.md`
-

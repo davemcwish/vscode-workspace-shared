@@ -45,20 +45,23 @@ Whenever you write or update a table of command-line arguments:
    python scripts/<script_name>.py --help
 
 2. Perform a 1:1 audit between --help and the table:
+
 - Every flag in --help must appear in the table (no omissions).
 - Every row in the table must exist in --help (no inventions).
 - Defaults and choices must match --help exactly.
 
-3. Never copy a CLI table from a sibling guide. Two scripts that look similar (for example an "order" report and a "user" report) often have legitimately different flags. Copying one into the other propagates errors.
+1. Never copy a CLI table from a sibling guide. Two scripts that look similar (for example an "order" report and a "user" report) often have legitimately different flags. Copying one into the other propagates errors.
 
 This rule exists because of a real defect: a guide once documented flags that did not exist in the code (--no-excel, --attach-excel) while omitting flags that did (--use-outlook, --email-intro). Both failures are prevented by extracting from --help and auditing 1:1.
 
 ### Never invent to fill a gap
+
 If you are unsure whether a feature, flag, or behaviour exists, do NOT write a plausible-sounding description. Either confirm it from the code, or leave it out and flag it for manual review. A missing note is recoverable; a confidently wrong note misleads a beginner.
 
 ## Writing Rules
 
 ### Plain English first
+
 - Write as if explaining to a smart colleague who has never coded before.
 - Avoid jargon unless it is immediately explained in brackets or a callout.
 - Prefer short sentences. One idea per sentence.
@@ -78,25 +81,25 @@ links an uploaded file to a record - think of it as a join table between
 "files" and "records").
 
 ### Salesforce-specific terms to always explain inline
-Term	Plain-English explanation to include
-__c suffix	"(the __c suffix means this is a custom object, not a standard Salesforce one)"
-SOQL	"(Salesforce Object Query Language - Salesforce's version of SQL for querying its database)"
-Org	"(an 'org' is a single Salesforce environment - you typically have a Production org and one or more sandbox orgs for testing)"
-ContentDocumentLink	"(the Salesforce object that links an uploaded file to a record)"
-ContentVersion	"(represents one version of an uploaded file in Salesforce)"
-Visualforce	"(a Salesforce page-rendering technology - similar to a server-side HTML template)"
-Access token / session	"(a temporary password-like string that proves you are logged in - it expires and must be refreshed)"
-CLI alias	"(a short nickname you give to an org when you log in, so you don't have to type a long URL each time)"
+Term Plain-English explanation to include
+__c suffix "(the __c suffix means this is a custom object, not a standard Salesforce one)"
+SOQL "(Salesforce Object Query Language - Salesforce's version of SQL for querying its database)"
+Org "(an 'org' is a single Salesforce environment - you typically have a Production org and one or more sandbox orgs for testing)"
+ContentDocumentLink "(the Salesforce object that links an uploaded file to a record)"
+ContentVersion "(represents one version of an uploaded file in Salesforce)"
+Visualforce "(a Salesforce page-rendering technology - similar to a server-side HTML template)"
+Access token / session "(a temporary password-like string that proves you are logged in - it expires and must be refreshed)"
+CLI alias "(a short nickname you give to an org when you log in, so you don't have to type a long URL each time)"
 
 ### Python-specific terms to always explain inline
-Term	Plain-English explanation to include
-Virtual environment	"(an isolated folder of Python packages - prevents conflicts between projects)"
-pip install -e .	"(installs the local package in editable mode - code changes take effect immediately without reinstalling)"
-pip-compile	"(a tool that reads your loose dependency list and produces an exact pinned version lock file)"
-Type hint	"(a label on a function parameter that tells the reader - and the type checker - what kind of value is expected)"
-Decorator	"(a function that wraps another function to add behaviour - e.g. timing, retry logic)"
-monkeypatch	"(a pytest tool that temporarily replaces a real function with a fake one during testing)"
-Mocking	"(replacing a real dependency - like a network call - with a controlled fake during testing)"
+Term Plain-English explanation to include
+Virtual environment "(an isolated folder of Python packages - prevents conflicts between projects)"
+pip install -e . "(installs the local package in editable mode - code changes take effect immediately without reinstalling)"
+pip-compile "(a tool that reads your loose dependency list and produces an exact pinned version lock file)"
+Type hint "(a label on a function parameter that tells the reader - and the type checker - what kind of value is expected)"
+Decorator "(a function that wraps another function to add behaviour - e.g. timing, retry logic)"
+monkeypatch "(a pytest tool that temporarily replaces a real function with a fake one during testing)"
+Mocking "(replacing a real dependency - like a network call - with a controlled fake during testing)"
 
 
 **Part 4 of 4**
@@ -151,7 +154,9 @@ This script does not do everything itself. It relies on helper modules in the
 **Why this matters:** A beginner who opens a script and sees `from sf_admin_utils.user_snapshot import fetch_all_users` has no idea what that module does or where to find it. The dependency table gives them a map before they start reading code.
 
 ### Markdown formatting that linters enforce
+
 These two rules cause the most frequent markdownlint failures, so apply them deliberately:
+
 - MD022 - surround every heading with one blank line above and below.
 - MD032 - surround every list with one blank line above and below.
 These are auto-fixed by markdownlint-cli2 --fix in the local quality gate, but writing them correctly avoids noisy diffs.
@@ -165,6 +170,7 @@ These are auto-fixed by markdownlint-cli2 --fix in the local quality gate, but w
 These characters cause encoding corruption when files move between Windows (which may default to cp1252) and Linux (GitHub Actions, CI runners) where UTF-8 is assumed. Markdown editors often auto-convert `--` to em-dashes as a "nice" typography feature - disable this in your editor settings, or paste your text through a plain-text tool before committing.
 
 ### Transcript-Derived Guides
+
 When documentation is created from a transcript, support log, Copilot session, or LLM conversation:
 
 - Preserve the chronological order of events.
@@ -179,7 +185,9 @@ When documentation is created from a transcript, support log, Copilot session, o
 - Include a "Security and Privacy Notes" section.
 
 ### Repository Documentation Filenames
+
 Use these canonical root documentation filenames:
+
 - README.md
 - CONTRIBUTING.md
 - Changelog.md

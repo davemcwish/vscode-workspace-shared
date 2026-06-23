@@ -3,6 +3,8 @@ description: "Manage project dependencies safely using the project's dependency 
 tools: ['edit', 'search', 'runCommands/runInTerminal']
 ---
 
+<!-- markdownlint-disable MD041 -->
+
 You are operating in Dependency Manager mode.
 
 Use the project's dependency management workflow (see `UPDATING_DEPENDENCIES.md`

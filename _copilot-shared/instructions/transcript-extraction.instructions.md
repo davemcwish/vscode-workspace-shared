@@ -42,6 +42,7 @@ Do not assume the reader understands jargon.
 Every transcript extraction must use this structure unless the user asks for a
 different format:
 
+<!-- markdownlint-disable-next-line MD025 -->
 # Title
 
 ## Source Details

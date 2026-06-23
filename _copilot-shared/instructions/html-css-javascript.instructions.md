@@ -82,10 +82,12 @@ Explain in a comment block at the top:
 
 - Use `defer` on all `<script>` tags in `<head>` - this downloads the script in
   parallel but delays execution until the HTML is fully parsed:
+
   ```html
   <script src="/static/js/socket.io.min.js" defer></script>
   <script src="/static/js/app.js" defer></script>
   ```
+
 - **Execution order is preserved** with `defer` - scripts run in document order,
   so dependencies (Socket.IO before app.js) remain correct.
 - Never use `async` when execution order matters - `async` scripts run as soon
@@ -168,8 +170,8 @@ dialog.addEventListener("keydown", function(event) {
 });
 ```
 
-4. **Restore focus** to the previously captured element on close.
-5. **Close on Escape** - listen for `event.key === "Escape"`.
+1. **Restore focus** to the previously captured element on close.
+2. **Close on Escape** - listen for `event.key === "Escape"`.
 
 ### No Inline Event Handlers
 
@@ -302,6 +304,7 @@ function placeOrbitSquare(square, container, progress) {
   multiple times (e.g. re-rendering a dropdown after data refresh), use
   **property assignment** instead of `addEventListener` to avoid accumulating
   duplicate handlers:
+
   ```javascript
   // Bad - accumulates a new handler on every re-render
   selectElement.addEventListener("change", onSelectionChanged);
@@ -309,6 +312,7 @@ function placeOrbitSquare(square, container, progress) {
   // Good - property assignment is idempotent (only one handler at a time)
   selectElement.onchange = onSelectionChanged;
   ```
+
 - Reserve `addEventListener` for permanent, one-time wiring. Use `.onX =`
   assignment inside any function that may execute more than once.
 
@@ -348,27 +352,34 @@ When using Web Components (`class extends HTMLElement`):
 When connecting to a Flask-SocketIO backend:
 
 - Load the Socket.IO client library from the Flask server (not a CDN):
+
   ```html
   <script src="/static/js/socket.io.min.js"></script>
   ```
+
 - Connect with:
+
   ```javascript
   // socket.io creates a persistent WebSocket connection to the server.
   // Unlike fetch (which is request/response), WebSocket stays open so the
   // server can push data to the browser in real-time (e.g. log lines).
   const socket = io();
   ```
+
 - Listen for server events using `socket.on("event_name", callback)`:
+
   ```javascript
   socket.on("log", function(data) {
     // data = { level: "INFO", message: "...", timestamp: "..." }
     appendToTerminal(data.message, data.level);
   });
   ```
+
 - Emit events to the server using `socket.emit("event_name", payload)`.
 - Explain in a comment what WebSocket is and how it differs from HTTP fetch
   (persistent connection, server can push, no polling needed).
 - Handle disconnection gracefully:
+
   ```javascript
   socket.on("disconnect", function() {
     appendToTerminal("Connection lost. Reconnecting...", "WARNING");
@@ -573,6 +584,7 @@ Because the target reader may not know HTML/CSS/JS at all, inline comments in
 this project go beyond the normal "explain why" rule:
 
 - **Explain what the construct is** the first time it appears:
+
   ```css
   /* "box-sizing: border-box" makes width/height include padding and border.
      Without this, adding padding would make elements wider than you expect. */
@@ -582,6 +594,7 @@ this project go beyond the normal "explain why" rule:
   ```
 
 - **Explain browser behaviour** that is not obvious:
+
   ```javascript
   // requestAnimationFrame asks the browser to call our function just before
   // the next screen repaint (~60 times per second). It automatically pauses
@@ -590,6 +603,7 @@ this project go beyond the normal "explain why" rule:
   ```
 
 - **Explain design decisions:**
+
   ```css
   /* We use a radial-gradient background to create a subtle spotlight effect
      centred slightly above the middle of the page. This draws the eye toward
@@ -686,14 +700,17 @@ When a page receives rapid data (e.g. WebSocket log lines, real-time events):
 - **Do not query the DOM per item.** Use `container.children.length` instead of
   `querySelectorAll(".log-entry").length` on every incoming message.
 - **Remove old entries efficiently.** Use a while loop on `firstElementChild`:
+
   ```javascript
   const maxEntries = 1000;
   while (container.children.length > maxEntries) {
     container.removeChild(container.firstElementChild);
   }
   ```
+
 - **Batch DOM writes** using `requestAnimationFrame` for bursty output. Collect
   incoming items in an array, then flush once per frame:
+
   ```javascript
   let pending = [];
 
@@ -714,6 +731,7 @@ When a page receives rapid data (e.g. WebSocket log lines, real-time events):
     requestAnimationFrame(flushPending);
   });
   ```
+
 - **Use `DocumentFragment`** when appending multiple elements - this triggers
   only one reflow instead of one per element.
 - **Avoid `innerHTML +=`** for appending - it re-parses the entire container
