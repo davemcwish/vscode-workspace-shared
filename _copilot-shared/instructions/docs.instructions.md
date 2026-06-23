@@ -43,14 +43,15 @@ Whenever you write or update a table of command-line arguments:
 
    ```bash
    python scripts/<script_name>.py --help
+   ```
 
 2. Perform a 1:1 audit between --help and the table:
 
-- Every flag in --help must appear in the table (no omissions).
-- Every row in the table must exist in --help (no inventions).
-- Defaults and choices must match --help exactly.
+   - Every flag in --help must appear in the table (no omissions).
+   - Every row in the table must exist in --help (no inventions).
+   - Defaults and choices must match --help exactly.
 
-1. Never copy a CLI table from a sibling guide. Two scripts that look similar (for example an "order" report and a "user" report) often have legitimately different flags. Copying one into the other propagates errors.
+3. Never copy a CLI table from a sibling guide. Two scripts that look similar (for example an "order" report and a "user" report) often have legitimately different flags. Copying one into the other propagates errors.
 
 This rule exists because of a real defect: a guide once documented flags that did not exist in the code (--no-excel, --attach-excel) while omitting flags that did (--use-outlook, --email-intro). Both failures are prevented by extracting from --help and auditing 1:1.
 
