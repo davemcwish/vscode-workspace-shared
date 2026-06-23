@@ -1,6 +1,7 @@
 # Copilot Instructions
 
 Shared Copilot artefact ownership:
+
 - _copilot-shared is the only source of truth for shared Copilot artefacts.
 - Never edit project-local .github Copilot artefacts directly.
 - If a shared agent, prompt, instruction, skill, workflow, chatmode, or copilot-instructions file needs to change, edit _copilot-shared first.
@@ -296,7 +297,6 @@ Use these modes, prompts, or agents in order for every significant change:
 | `debug.agent.md` | Systematic troubleshooting when tests fail or behaviour is unexpected. |
 | `explore.agent.md` | Read-only codebase exploration - locates code, traces call sites and dependencies, confirms what already exists. Used by architect, business-analyst, and team-lead during context discovery. |
 
-
 Never skip step 4 (tests green) before step 5 (docs update).
 Never skip step 6 (quality gate) before step 7 (review).
 Never skip Step 8 (documentation update) once Step 6 (implementation) is complete.
@@ -314,23 +314,23 @@ When reviewing code (or interpreting review feedback), classify issues:
 | YY¡ | **IMPORTANT** | Requires discussion. SOLID violations, missing tests, performance, architecture drift. |
 | YY¢ | **SUGGESTION** | Non-blocking. Readability, naming, minor optimisations, documentation gaps. |
 
-
-##  Canonical Quality Gate
+## Canonical Quality Gate
 
 The single source of truth is `.github/workflows/ci.yml` (remote, blocks merge).
 `sanity.bat` is the **local mirror** of that pipeline - run it before every
 commit. The `pre-commit-check` agent and prompt must invoke `sanity.bat` (or run
 the identical commands below), not a simplified variant.
 
-The gate runs these six tool steps in order:
+The gate runs these seven tool steps in order:
 
-```
+```text
 ruff format --check src tests scripts
 ruff check src tests scripts
 mypy
 bandit -c pyproject.toml -r src scripts --exclude scripts/archive,tests
 python -m detect_secrets scan --baseline .secrets.baseline
 pytest -n auto
+npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"
 ```
 
 **Coverage flags are defined once** in `pyproject.toml` under
@@ -338,6 +338,16 @@ pytest -n auto
 `pytest` invocation - `ci.yml`, `sanity.bat`, and plain `pytest` at the
 terminal. Never pass `--cov`, `--cov-report`, or `--cov-fail-under` directly
 in `ci.yml` or `sanity.bat`. Change the threshold in `pyproject.toml` only.
+
+**Markdownlint** is pinned to `markdownlint-cli2@0.22.1` in both `ci.yml` and
+`sanity.bat` so local and CI evaluate the same rule set. An unpinned `npx
+markdownlint-cli2` downloads the latest release, which can enable new rules and
+make local and CI disagree. Rule configuration lives in `.markdownlint.json`
+(notably `MD013` line-length and `MD060` table-style are disabled). `ci.yml`
+runs markdownlint first; `sanity.bat` runs it last as step 7 (auto-fix then
+verify) and skips it with a warning if Node and `npx` are not installed - so a
+machine without Node will pass `sanity.bat` while CI still lints. Install Node
+locally to close that gap.
 
 If you change the gate, update **all four** in the same commit: `ci.yml`,
 `sanity.bat`, this section, and the `pre-commit-check` agent/prompt/chatmode.

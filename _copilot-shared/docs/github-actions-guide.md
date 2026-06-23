@@ -80,9 +80,11 @@ will replicate. Here is the pipeline in order:
 | 4 | `bandit` | No common security anti-patterns in the code |
 | 5 | `detect-secrets` | No accidentally committed secrets or tokens |
 | 6 | `pytest` | All tests pass (target: ≥ 90% coverage) |
+| 7 | `markdownlint-cli2` | Markdown docs follow the style rules |
 
-The CI workflow will run these same six steps, in the same order, every time
-code is pushed to any branch.
+The CI workflow will run these same seven steps every time code is pushed to
+any branch. (CI runs the Markdown lint first; `sanity.bat` runs it last as
+step 7 - the commands are identical, only the order differs.)
 
 ---
 
@@ -162,7 +164,7 @@ On Windows PowerShell, this creates `.github\workflows\` in your project root.
 ### Step 3 - Create the CI workflow file (B1)
 
 **What you are doing:** Writing the YAML file that tells GitHub Actions what to
-run. This file mirrors the six steps in `sanity.bat`.
+run. This file mirrors the seven steps in `sanity.bat`.
 
 Create `.github/workflows/ci.yml` with the following content:
 
@@ -195,6 +197,12 @@ jobs:
           pip install -r requirements-dev.txt
           pip install -e .
 
+      - name: Markdown lint
+        # markdownlint-cli2 is pinned to @0.22.1 so CI matches the local gate
+        # (sanity.bat step 7). The ubuntu-latest runner already has Node.js and
+        # npx preinstalled, so no separate setup-node step is required.
+        run: npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"
+
       - name: ruff format check
         run: ruff format --check src tests scripts
 
@@ -211,7 +219,9 @@ jobs:
         run: python -m detect_secrets scan --baseline .secrets.baseline
 
       - name: pytest
-        run: pytest -n auto --cov=src --cov=scripts --cov-report=term-missing
+        # Coverage flags live in pyproject.toml [tool.pytest.ini_options]
+        # addopts and are inherited automatically. Only -n auto is added here.
+        run: pytest -n auto
 ```
 
 **What each section means:**
@@ -227,6 +237,9 @@ jobs:
 - `pip install -e .` - installs the local `sf_admin_utils` package so imports
   work in tests (the `-e` flag means "editable" - the package points to your
   source files directly).
+- `npx markdownlint-cli2@0.22.1` - lints the Markdown docs. `npx` runs the
+  pinned tool using the Node.js already installed on the runner; the `@0.22.1`
+  pin keeps CI on the same rule set as `sanity.bat`.
 - Each subsequent step maps directly to one step in `sanity.bat`.
 
 **Success:** The file exists at `.github/workflows/ci.yml`.
@@ -262,10 +275,13 @@ Open `sanity.bat` and compare it to the CI steps. The commands should match:
 | `mypy` | `mypy` |
 | `bandit -c pyproject.toml -r src scripts --exclude scripts/archive,tests --quiet` | `bandit -c pyproject.toml -r src scripts --exclude scripts/archive,tests --quiet` |
 | `python -m detect_secrets scan --baseline .secrets.baseline` | `python -m detect_secrets scan --baseline .secrets.baseline` |
-| `pytest -n auto --cov=src --cov=scripts --cov-report=term-missing` | `pytest -n auto --cov=src --cov=scripts --cov-report=term-missing` |
+| `pytest -n auto` | `pytest -n auto` |
+| `npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"` | `npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"` |
 
 If `sanity.bat` uses different flags, update it to match. Keeping them
-identical means a green `sanity.bat` locally predicts a green CI run.
+identical means a green `sanity.bat` locally predicts a green CI run. (CI runs
+the Markdown lint first while `sanity.bat` runs it last as step 7 - only the
+order differs, not the command.)
 
 ---
 
@@ -288,6 +304,7 @@ checks as `sanity.bat`:
 4. bandit - security scan
 5. detect-secrets - secret detection
 6. pytest - test suite
+7. markdownlint - Markdown documentation style
 
 The workflow must be green before a PR can be merged. If CI is red, check the
 "Actions" tab on your PR for the error details.
@@ -307,7 +324,7 @@ before CI sees them.
 .\sanity.bat
 ```
 
-**Success:** All six steps exit with code 0. You should see no errors.
+**Success:** All seven steps exit with code 0. You should see no errors.
 
 ---
 

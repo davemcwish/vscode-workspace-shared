@@ -19,7 +19,9 @@ You've found one of my projects on GitHub at [davemcwish](https://github.com/dav
 
 ## Part 1: Install Required Software (5 minutes)
 
-You need three tools. If you already have them, skip to Part 2.
+You need three tools to run the projects. If you already have them, skip to
+Part 2. There is also an optional fourth tool (Node.js) for contributors who
+want to run the full local quality gate - see the note at the end of this part.
 
 ### Visual Studio Code
 
@@ -78,6 +80,28 @@ git --version
 ```
 
 Expected output: `git version X.X.X` (some version number).
+
+### Node.js (optional  -  for contributors only)
+
+**What is it?** A JavaScript runtime. You only need it if you plan to commit changes and run the full local quality gate (`sanity.bat`).
+
+**Why you need it:** `sanity.bat` step 7 lints the Markdown documentation with a tool called `markdownlint`, which runs through Node's `npx` command. Without Node.js, that one step is silently skipped on your machine  -  the rest of the gate still runs. GitHub's CI always runs the Markdown check, so installing Node lets you catch Markdown problems before you push instead of after.
+
+> **Just running the projects, not changing them?** Skip this. You do not need Node.js to run the code  -  only to run the Markdown lint locally.
+
+**Install it:**
+
+1. Go to [nodejs.org](https://nodejs.org/)
+2. Download the **LTS** version (labelled "Recommended For Most Users").
+3. Run the installer and accept all defaults.
+
+**Verify it works:** Open a *new* PowerShell window (so it picks up the updated PATH) and type:
+
+```powershell
+node --version
+```
+
+Expected output: `vXX.X.X` (some version number). The `npx` command that `sanity.bat` uses is installed alongside Node automatically.
 
 ---
 
