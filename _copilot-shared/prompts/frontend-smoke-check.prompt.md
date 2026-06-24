@@ -46,11 +46,21 @@ stack trace.
 
 Inspect `frontend/static/js/app.js`. Confirm:
 
-- [ ] `setupLogin()` begins with a null guard:
+- [ ] `setupLogin()` begins with a null guard that returns early (logging a
+  warning) if any of the key login elements are missing. The real guard checks
+  all four login elements:
 
   ```javascript
-  if (!dom.orgAlias || !dom.loginButton) {
-    console.warn("Login form elements not found; skipping login setup.");
+  if (
+    !dom.orgAlias ||
+    !dom.loginButton ||
+    !dom.loginError ||
+    !dom.loginSuccess
+  ) {
+    console.warn(
+      "Login form elements not found; skipping login setup. " +
+        "If you expected the Login tab, hard-refresh the page (Ctrl+F5).",
+    );
     return;
   }
   ```
