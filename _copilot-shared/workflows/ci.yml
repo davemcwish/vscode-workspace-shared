@@ -36,7 +36,8 @@ jobs:
         # markdownlint-cli2 is pinned to @0.22.1 so CI matches the local gate
         # (sanity.bat / sanity_v.bat step 7). An unpinned "npx markdownlint-cli2"
         # resolves to the latest release, which can enable new rules and make CI
-        # and local disagree. Keep this version in sync with scaffold/sanity.bat.
+        # and local disagree. Keep this version in sync with sanity.bat and
+        # sanity_v.bat in this repository.
         run: npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"
 
       - name: ruff format check
