@@ -681,6 +681,78 @@ because the goal is education.
 - Use `textContent` instead of `innerHTML` when inserting plain text.
 - If accepting user input, sanitise it before rendering.
 
+### DOM-Based XSS & SAST Sinks (Cycode)
+
+The Cycode SAST rule *"Unsanitized user input in dynamic HTML insertion (XSS)"*
+runs on every PR and **blocks merge**. It models a **source -> sink** data flow.
+It does **not** care that the value "looks safe" - it cares that an untrusted
+**source** reached an HTML-insertion **sink**. The reliable fix is to remove the
+source or the sink, **not** to validate the value in the middle.
+
+#### Standard pattern for all dynamic UI code
+
+Apply these six rules whenever JavaScript builds or rebuilds DOM elements. They
+are the project standard, not just a one-off SAST remedy - following them keeps
+new code clear of the Cycode rule before it is ever scanned:
+
+1. **Prefer `createElement()`** to build nodes - never assemble HTML strings.
+2. **Use `textContent`, not `innerHTML`**, for any text you insert.
+3. **Validate server-provided values** before assigning them to a DOM attribute
+   or form value (e.g. `String(x).match(/^[A-Za-z0-9_]{1,200}$/)?.[0]`).
+4. **Avoid deriving DOM `id`, `name`, or selector strings from untrusted
+   metadata** (server JSON, `el.id`/`el.name` DOM reads) wherever possible.
+5. **Use fixed string literals** for known frontend-only field ids/names,
+   guarded by an allowlist check for the one value they support.
+6. **Use `replaceChild(newNode, oldNode)`** when a SAST tool dislikes
+   `replaceWith()` - it is `Node`-typed and cannot be a string-insertion sink.
+
+**Prefer these node-building APIs (never flagged):**
+
+```javascript
+const opt = document.createElement("option");
+opt.value = apiName;                         // attribute value - safe
+opt.textContent = `${label} (${apiName})`;   // text only - never parsed as HTML
+select.appendChild(opt);                      // node insertion - safe
+
+// Replacing a node? Use replaceChild (Node-typed), NOT replaceWith (string sink).
+parent.replaceChild(newEl, oldEl);
+```
+
+**Avoid these sinks with any non-literal value:**
+
+```javascript
+el.innerHTML = value;                 // WRONG - parses value as HTML
+el.outerHTML = value;                 // WRONG
+el.insertAdjacentHTML("beforeend", value);  // WRONG
+oldEl.replaceWith(newEl);             // WRONG - replaceWith is on the sink list
+document.write(value);                // WRONG
+```
+
+**Fixed-literal DOM ids/names (avoids the taint source entirely):**
+
+When you create a replacement element, set its `id` / `name` from **module-level
+string literals**, never from server metadata or by reading `currentEl.id` /
+`currentEl.name` off the DOM. Reading a DOM property and writing it onto a new
+element is a *DOM-read -> DOM-write* flow that SAST flags:
+
+```javascript
+// CORRECT - literals defined once at the top of the file.
+const FIELD_ID = "arg-object";
+const FIELD_NAME = "object";
+newEl.id = FIELD_ID;
+newEl.name = FIELD_NAME;
+
+// WRONG - reading id/name back off the DOM, then writing them onto a new node.
+// const id = currentEl.id;            // <- SAST source
+// newEl.id = id;                      // <- SAST sink
+```
+
+If a component must support only one known argument, add an **allowlist guard**
+so the literal-id path only runs for that value, and log + bail out otherwise.
+
+For the full source/sink tables and the proven two-part remediation, see the
+**"Frontend DOM XSS"** section in `security.instructions.md`.
+
 ---
 
 ## Performance
