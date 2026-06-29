@@ -291,3 +291,109 @@ def _is_local_origin(request) -> bool:
 - **Limit subprocess runtime** with a timeout (see
   `flask-websocket-subprocess.instructions.md`).
 - **One job at a time** - reject concurrent launch requests.
+
+## Frontend DOM XSS (Cycode SAST Rule: "Unsanitized user input in dynamic HTML insertion (XSS)")
+
+This rule fires on client-side JavaScript that builds the page by writing into
+the DOM. Cycode (and most JS SAST engines) model it as a **source -> sink**
+data flow. A finding means a value Cycode treats as untrusted reached a DOM
+"insertion sink". To clear it, you must remove **either the source or the
+sink** from the flow - not merely validate the value in between. Validating in
+the middle (`String(x).match(...)[0]`) is **not** reliably recognised as a
+sanitiser by Cycode's JS engine and will keep getting flagged.
+
+### What Cycode treats as a SOURCE (untrusted input)
+
+- `fetch(...).then(r => r.json())` / `await res.json()` response data.
+- `location.*`, `document.URL`, `document.referrer`, `window.name`.
+- **DOM reads**: `el.value`, **`el.id`**, **`el.name`**, `el.dataset.*`,
+  `el.getAttribute(...)` - reading these back off an element returned by
+  `document.getElementById()` / `querySelector()` is a source.
+- Any server-rendered string injected into the page and later read by JS.
+
+### What Cycode treats as a SINK (HTML insertion)
+
+| Sink | Safe? | Notes |
+| --- | --- | --- |
+| `element.innerHTML = x` | NO | Parses `x` as HTML. Classic XSS sink. |
+| `element.outerHTML = x` | NO | Same as `innerHTML`. |
+| `element.insertAdjacentHTML(pos, x)` | NO | Parses `x` as HTML. |
+| `element.replaceWith(x)` | NO | **Accepts strings** - on the sink list even when you pass a Node. |
+| `document.write(x)` | NO | Legacy HTML sink. |
+| `eval(x)` / `new Function(x)` | NO | Code-execution sink. |
+| `element.id = x` / `element.name = x` | NO* | Flagged when `x` derives from a source (DOM-read or server data). |
+| `element.textContent = x` | YES | Never parsed as HTML. Preferred for text. |
+| `parent.replaceChild(newNode, oldNode)` | YES | **Strictly `Node`-typed** - cannot be a string sink. |
+| `element.setAttribute("class", x)` | YES | Attribute value, not HTML. |
+| `el.appendChild(createElement(...))` | YES | Builds nodes, never parses HTML. |
+
+`*` `innerHTML = ""` with a **string literal** is safe - a constant empty
+string is not a source.
+
+### The two-part fix (proven against this exact rule)
+
+When you build a field/widget dynamically, do **both**:
+
+1. **Remove the source** - use **fixed string-literal** ids/names, never values
+   derived from server metadata or read back off the DOM. Guard with an
+   allowlist so the literal path only runs for the one known-good value:
+
+   ```javascript
+   // Module-level literals - NOT derived from script metadata or DOM reads.
+   const OBJECT_ARG_DEST = "object";
+   const OBJECT_FIELD_ID = "arg-object";
+
+   function setupPicker(meta) {
+     // Allowlist guard: only the known dest uses the literal-id path.
+     if (meta.dest !== OBJECT_ARG_DEST) {
+       appendLog(`[Unsupported argument: ${String(meta.dest || "")}]`, "ERROR");
+       return;
+     }
+     // ... safe to proceed with literal ids below ...
+   }
+   ```
+
+2. **Remove the sink** - replace `replaceWith()` with `replaceChild()`, which
+   the engine cannot treat as a string-insertion sink:
+
+   ```javascript
+   function swap(newEl, currentEl) {
+     newEl.id = OBJECT_FIELD_ID;     // fixed literal, no source
+     newEl.name = OBJECT_ARG_DEST;   // fixed literal, no source
+     const parent = currentEl.parentNode;
+     if (!parent) return newEl;
+     // replaceChild() requires Nodes; it cannot be a string-insertion sink,
+     // so Cycode's "dynamic HTML insertion" rule has nothing to match.
+     parent.replaceChild(newEl, currentEl);
+     return newEl;
+   }
+   ```
+
+### For server data that must be displayed (not used as id/name)
+
+Use `textContent` (never `innerHTML`) and still validate the value with a
+match-group extraction as defence-in-depth:
+
+```javascript
+const m = String(item.api_name || "").match(/^[A-Za-z0-9_]{1,200}$/);
+if (!m) return;                       // skip malformed entries
+const apiName = m[0];                 // derived from the match object
+opt.value = apiName;                  // attribute value - safe
+opt.textContent = `${item.label} (${apiName})`;  // textContent - safe
+```
+
+> **Why validation-in-the-middle alone fails:** Cycode's JS taint analysis
+> treats DOM-read and `replaceWith` flows as sticky. A regex `.match()[0]` in
+> the middle is not recognised as a trust boundary the way `match.group(0)` is
+> on the Python side. The only reliable fix is to delete the **source** (use
+> literals) and/or the **sink** (use `replaceChild`/`textContent`).
+
+### Checklist before pushing JS that builds DOM
+
+- No `innerHTML` / `outerHTML` / `insertAdjacentHTML` / `document.write` with a
+  non-literal value.
+- No `replaceWith()` - use `replaceChild(newNode, oldNode)`.
+- No `el.id = ...` / `el.name = ...` where the right-hand side comes from a DOM
+  read or server metadata - use module-level string literals + an allowlist
+  guard instead.
+- All displayed server data goes through `textContent`, not `innerHTML`.
