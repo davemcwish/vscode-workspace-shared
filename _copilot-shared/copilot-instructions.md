@@ -310,9 +310,9 @@ When reviewing code (or interpreting review feedback), classify issues:
 
 | Level | Label | Action |
 | --- | --- | --- |
-| Y"' | **CRITICAL** | Blocks merge. Security, correctness, data loss, breaking changes. |
-| YY¡ | **IMPORTANT** | Requires discussion. SOLID violations, missing tests, performance, architecture drift. |
-| YY¢ | **SUGGESTION** | Non-blocking. Readability, naming, minor optimisations, documentation gaps. |
+| 🔴 | **CRITICAL** | Blocks merge. Security, correctness, data loss, breaking changes. |
+| 🟡 | **IMPORTANT** | Requires discussion. SOLID violations, missing tests, performance, architecture drift. |
+| 🟢 | **SUGGESTION** | Non-blocking. Readability, naming, minor optimisations, documentation gaps. |
 
 ## Canonical Quality Gate
 
@@ -349,14 +349,34 @@ verify) and skips it with a warning if Node and `npx` are not installed - so a
 machine without Node will pass `sanity.bat` while CI still lints. Install Node
 locally to close that gap.
 
+**Local advisory security scan (not one of the seven gate steps).** After the
+seven blocking steps, `sanity.bat` / `sanity_v.bat` run `security_scan.py` as a
+final **non-blocking** step. It is a conservative regex proxy for the Cycode
+SAST gate: it surfaces likely SAST/OWASP issues before you push, but it produces
+false positives, so in this phase it only prints findings and never changes the
+pass/fail result. It is deliberately **not** in `ci.yml` because CI already runs
+the real Cycode engine. The scanner is shared-owned
+(`_copilot-shared\scaffold\security_scan.py` / `.ps1`), always synced to every
+project root, and skips its own files. The parent workspace scans
+`_copilot-shared\` only; a project scans its own root.
+
 If you change the gate, update **all four** in the same commit: `ci.yml`,
 `sanity.bat`, this section, and the `pre-commit-check` agent/prompt/chatmode.
+The advisory security scan is the one exception: it lives in `sanity.bat`, this
+section, and the `pre-commit-check` trio, but **not** in `ci.yml`.
 
 **Cycode is a separate, additional gate** that runs automatically on every pull
 request (not locally). It scans for SAST violations, committed secrets, and
 vulnerable dependencies (SCA). Cycode runs on Linux - findings that only
-reproduce on Linux can still block merge. Any Cycode finding is Y"' CRITICAL.
+reproduce on Linux can still block merge. Any Cycode finding is 🔴 CRITICAL.
 The patterns that satisfy Cycode's SAST rules are documented in
 `security.instructions.md`. Running `sanity.bat` locally before pushing catches
 most issues that Cycode will flag (bandit covers SAST, detect-secrets covers
 secrets) but is not a guarantee - Cycode has additional rules.
+
+**Pipeline hardening** (SHA-pinned Actions, least-privilege `GITHUB_TOKEN`,
+workflow-injection prevention, OIDC, SBOM, and CI-side secret-scanning and SAST
+gating) is governed by `.github/instructions/ci-cd.instructions.md`. It applies
+automatically when you edit files under `.github/workflows/` or
+`.github/actions/`. Treat any pipeline-security or Cycode finding it raises as
+CRITICAL - the same fail-closed bar as the rest of this gate.

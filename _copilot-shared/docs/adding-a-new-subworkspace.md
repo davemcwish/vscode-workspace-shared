@@ -19,11 +19,11 @@ Visual Studio Code\                        <- parent folder (workspace root)
   Visual Studio Code.code-workspace        <- tells VS Code which folders to show
   Salesforce\                              <- project (its own git repo)
     .github\                               <- synced copy of _copilot-shared
-  Trails and Tails\                        <- project (its own git repo)
+  trails-and-tails\                        <- project (its own git repo)
     .github\                               <- synced copy of _copilot-shared
   woprcrt-terminal-main\                   <- project (its own git repo)
     .github\                               <- synced copy of _copilot-shared
-  powerpoint-reformat\                     <- project (its own git repo)
+  eu-spm\                                  <- project (its own git repo)
     .github\                               <- synced copy of _copilot-shared
 ```
 
@@ -52,9 +52,8 @@ through this list and copies `_copilot-shared\` into each folder's `.github\`.
 ```powershell
 $DefaultProjects = @(
     "Salesforce",
-    "Trails and Tails",
-    "woprcrt-terminal-main",
-    "powerpoint-reformat"
+    "trails-and-tails",
+    "eu-spm"
 )
 ```
 
@@ -74,13 +73,28 @@ sidebar. Its `"folders"` array contains objects with two properties:
 
 ```jsonc
 {
-  "folders": [
-    { "name": "Visual Studio Code",                              "path": "." },
-    { "name": "Salesforce",                                      "path": "Salesforce" },
-    { "name": "Trails and Tails",                                "path": "Trails and Tails" },
-    { "name": "WOPR (Joshua) War Games CRT Terminal and Game Hub", "path": "woprcrt-terminal-main" },
-    { "name": "PowerPoint Reformat",                             "path": "powerpoint-reformat" }
-  ],
+	"folders": [
+		{
+			"name": "Visual Studio Code",
+			"path": "."
+		},
+		{
+			"name": "Salesforce",
+			"path": "Salesforce"
+		},
+		{
+			"name": "Trails and Tails",
+			"path": "trails-and-tails"
+		},
+		{
+			"name": "WOPR (Joshua) War Games CRT Terminal and Game Hub",
+			"path": "woprcrt-terminal-main"
+		},
+		{
+			"name": "EU SPM",
+			"path": "eu-spm"
+		}		
+	],
   "settings": { ... }
 }
 ```
@@ -94,9 +108,10 @@ sidebar. Its `"folders"` array contains objects with two properties:
 | Sync script (`$DefaultProjects`) | Workspace file (`"folders"`) | Relationship |
 | --- | --- | --- |
 | `"Salesforce"` | `{ "name": "Salesforce", "path": "Salesforce" }` | `"path"` = folder name |
-| `"Trails and Tails"` | `{ "name": "Trails and Tails", "path": "Trails and Tails" }` | `"path"` = folder name |
+| `"Trails and Tails"` | `{ "name": "Trails and Tails", "path": "trails-and-tails" }` | `"path"` = folder name |
 | `"woprcrt-terminal-main"` | `{ "name": "WOPR (Joshua) ...", "path": "woprcrt-terminal-main" }` | `"path"` = folder name |
 | `"powerpoint-reformat"` | `{ "name": "PowerPoint Reformat", "path": "powerpoint-reformat" }` | `"path"` = folder name |
+| `"EU SPM"` | `{ "name": "EU SPM", "path": "eu-spm" }` | `"path"` = folder name |
 
 **Rule:** Every folder name in `$DefaultProjects` must also appear as a
 `"path"` value in the workspace file (and vice versa, except for the `"."`
@@ -158,6 +173,7 @@ $DefaultProjects = @(
     "Trails and Tails",
     "woprcrt-terminal-main",
     "powerpoint-reformat",
+    "eu-spm",
     "My-New-Project"          # <- add this line
 )
 ```

@@ -393,8 +393,8 @@ at or above 90%.
 - `code-reviewer.agent.md`
 - `website-review.prompt.md`
 
-Classify findings using the priority levels (Y"' CRITICAL, YY¡ IMPORTANT,
-YY¢ SUGGESTION). All Y"' issues block merge.
+Classify findings using the priority levels (🔴 CRITICAL, 🟡 IMPORTANT,
+🟢 SUGGESTION). All 🔴 issues block merge.
 
 **Success looks like:** No outstanding CRITICAL issues; IMPORTANT issues are
 resolved or explicitly accepted.

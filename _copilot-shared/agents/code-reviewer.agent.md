@@ -47,7 +47,7 @@ For each changed file, evaluate against ALL of these criteria:
 - [ ] Path traversal prevented (using an allowlist path validation function)?
 - [ ] Subprocess commands validated via an allowlist function before use?
 - [ ] Any `subprocess.run` call: uses a **list** (not a string), has `shell=False` explicit, all non-literal args pre-validated via an allowlist function? (Cycode SAST: "Unsanitized user input in OS command" - Critical)
-- [ ] Does the allowlist validator return `match.group(0)` (not the original input string)? Returning the original string, even after validation, keeps the SAST taint chain alive - only `match.group(0)` breaks it. See `security.instructions.md` § Subprocess Safety for the required pattern.
+- [ ] Is the allowlist validator **genuinely restrictive** - does it reject shell metacharacters, path separators, and `..`, raising on unsafe input rather than passing it through? (Returning `match.group(0)` from a strict pattern is fine; a permissive pass-through that only launders taint is not.) If Cycode raises a cross-module false positive, resolve it with a custom sanitizer or a documented suppression - see `security.instructions.md` -> "Resolving Cycode False Positives Correctly".
 - [ ] Sensitive data redacted before logging?
 - [ ] No `shell=True` with user input?
 - [ ] No `eval()` or `exec()`?

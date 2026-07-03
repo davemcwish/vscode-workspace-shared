@@ -10,12 +10,16 @@
 		},
 		{
 			"name": "Trails and Tails",
-			"path": "Trails and Tails"
+			"path": "trails-and-tails"
 		},
 		{
 			"name": "WOPR (Joshua) War Games CRT Terminal and Game Hub",
 			"path": "woprcrt-terminal-main"
-		}
+		},
+		{
+			"name": "EU SPM",
+			"path": "eu-spm"
+		}		
 	],
 	"settings": {
 		"chat.promptFiles": true,

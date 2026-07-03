@@ -1,4 +1,29 @@
-# Skill: Accessibility for Beginner-Friendly HTML, CSS, Documents, and Tools
+---
+name: accessibility
+description: "Human-facing skill for implementing accessible web UIs to WCAG 2.2 AA: keyboard/focus, ARIA, contrast, targets, forms, and testing. General guidance, not legal advice."
+owner: "TODO: team-or-DL"
+lastReviewed: "2026-07-01"
+reviewCadence: "quarterly"
+---
+
+# Skill: Web Accessibility
+
+> **Role & precedence.** This skill is *explanatory* (human onboarding) and
+> **non-normative**. Where accessibility techniques touch code that is also a
+> security concern - JavaScript that manages focus, updates ARIA live regions,
+> injects status text, or builds DOM nodes - the technical controls are governed
+> by `website-security.skill.md` and the security instruction files
+> (`security.instructions.md`, `security.instructions.owasp-expanded.md`). In
+> particular, update live regions and announcements with `textContent`, never
+> `innerHTML`. On any conflict, follow the **stricter security rule**, then meet
+> the accessibility requirement (the two are almost always compatible).
+>
+> **Legal note:** accessibility *legislation* (EAA, ADA, AODA, Section 508,
+> EN 301 549) is summarized in `website-privacy-legal.skill.md`. This skill
+> covers *implementation*; that skill covers *legal obligation*. This is general
+> guidance, not legal advice.
+>
+> **Related skills:** `website-security.skill.md`, `website-privacy-legal.skill.md`.
 
 ## Purpose
 
@@ -415,3 +440,24 @@ At minimum:
 
 This skill provides practical accessibility guidance for project work. It is not
 a substitute for formal legal accessibility review where one is required.
+
+---
+
+## Cross-References
+
+- `website-security.skill.md` - technical web controls that intersect with
+  accessibility: safe DOM updates (`textContent`/`createElement` over
+  `innerHTML`) for live regions and dynamic status messages, and safe handling of
+  any third-party accessibility/overlay widgets (pin + SRI, validate origins).
+- `website-privacy-legal.skill.md` - the legal side of accessibility (EAA, ADA,
+  AODA, Section 508, EN 301 549) and consent-UI accessibility obligations.
+- `security.instructions.md` / `security.instructions.owasp-expanded.md` -
+  canonical, normative security rules (source of truth for any code).
+
+> **Overlap rule of thumb:** accessibility decides *how the UI must behave for
+> all users*; the security skills decide *how the supporting code must be written
+> safely*. Apply both - and the stricter security rule when they differ.
+
+> **Currentness:** WCAG 2.2 AA, EN 301 549, and the EAA (in force 28 June 2025)
+> evolve; verify the current success criteria and any national transposition
+> before relying on a specific requirement.

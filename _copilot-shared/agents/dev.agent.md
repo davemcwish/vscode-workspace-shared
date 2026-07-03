@@ -33,8 +33,8 @@ exactly as written by the Team Lead.
 
 1. **Before writing subprocess, file I/O, or network code:** read the relevant
    section of `security.instructions.md`. Cycode's SAST rules require specific
-   patterns (taint-breaking `match.group(0)` for subprocess, `resolve_safe_path`
-   and local re-verification for file paths). Applying these at write time costs
+   patterns (a genuinely restrictive allowlist validator for subprocess,
+   `resolve_safe_path` for file paths). Applying these at write time costs
    nothing; fixing a Cycode violation after merge blocks the next PR.
 2. Apply code changes exactly as specified.
 3. Add imports exactly where instructed.

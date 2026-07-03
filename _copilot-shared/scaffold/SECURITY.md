@@ -46,8 +46,8 @@ The project applies the following security controls:
 | SAST | `bandit` - runs locally (sanity.bat) and in CI |
 | SAST (PR gate) | Cycode - runs on every pull request, blocks merge on findings |
 | SCA (dependencies) | [FILL IN: pip-audit if available; otherwise internal security review] |
-| Tainted input in subprocesses | Allowlist validation + `match.group(0)` taint-breaking (see `security.instructions.md`) |
-| Path traversal | `resolve_safe_path()` + local re-verification (see `security.instructions.md`) |
+| Tainted input in subprocesses | Genuinely restrictive allowlist validation (see `security.instructions.md`) |
+| Path traversal | `resolve_safe_path()` real containment check (see `security.instructions.md`) |
 | Credentials | Never committed; loaded from `.env` (local) or approved secrets manager (production) |
 
 ---

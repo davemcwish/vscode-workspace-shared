@@ -312,7 +312,7 @@ exclude_dirs = [
 ]
 # Skipped checks (with justification):
 #   B101 - assert_used:             fine in tests and defensive code
-#   B105 - hardcoded password:      empty string initialisers are not passwords
+#   B105 - hardcoded password:      empty string initialisers are not passwords  # pragma: allowlist secret
 #   B404 - import_subprocess:       informational; we need subprocess for CLI calls
 #   B603 - subprocess_without_shell: the SAFE pattern; not a real risk
 #   B608 - hardcoded SQL:           SOQL is not SQL; bind-variable patterns are safe

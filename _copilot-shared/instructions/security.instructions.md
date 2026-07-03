@@ -1,32 +1,109 @@
 ---
 applyTo: "**"
-description: "Secrets handling and sensitive data rules."
+description: "Canonical repository security rules: secrets, subprocess/path/XML/PRNG/SMTP safety, Flask endpoints, DOM XSS, and Cycode SAST alignment."
+owner: "TODO: team-or-DL"
+lastReviewed: "2026-07-01"
+reviewCadence: "quarterly"
 ---
 
-# Security Rules
+# Security Rules (Canonical)
+
+> **Precedence (most specific wins; on conflict, choose the STRICTER rule):**
+> 1. Domain-specific instructions (e.g. `salesforce.instructions.md`,
+>    `flask-websocket-subprocess.instructions.md`, `ci-cd.instructions.md`)
+> 2. **This file** - canonical repo Cycode/SAST rules (normative)
+> 3. `security.instructions.owasp-expanded.md` - broad OWASP/CWE coverage
+> 4. `*.skill.md` - human-facing narrative guidance (explanatory, non-normative)
+>
+> This file is the **single source of truth** for the shared code snippets it
+> defines (secrets, subprocess, path safety, security headers, `safe_extract_zip`,
+> `safe_filename`). Other files must link here rather than restate them.
+
+## Security Philosophy (read first)
+
+Security fixes must provide **real protection**, not merely satisfy SAST tooling.
+Never launder a tainted value through a no-op transformation just to silence a
+scanner - that creates a false sense of safety and trains bad habits. If a
+finding is a genuine false positive, resolve it with a **configured sanitizer**
+or a **documented, reviewed suppression**, never with fake validation.
 
 ## Secrets
 
-- **Never** commit credentials, tokens, security tokens, session ids,
+- **Never** commit credentials, tokens, security tokens, session IDs,
   certificates, or `.env` files.
 - Required env vars must be documented in `.env.example` with placeholder
   values and a comment explaining each.
 - Use `python-dotenv` for local development only; production deployments
   must source secrets from the approved secrets manager.
+- Enforce secret scanning in CI (push protection + `detect-secrets`), not only
+  in the local baseline. See `ci-cd.instructions.md`.
 
-## Logging
+## Logging Sensitive Data (Cycode: "Leakage of sensitive information in logger message")
 
-- Redact tokens, passwords, and session ids before logging.
-- Treat Salesforce record data as confidential by default (see
-  `salesforce.instructions.md`).
+Cycode flags logger calls when the variable name, context, or message text
+suggests user data, Salesforce data, email addresses, tokens, file paths, or
+other business-sensitive data may be emitted.
+
+Treat the following as **sensitive at INFO/WARNING/ERROR** unless sanitised:
+
+- Salesforce usernames, user IDs, org IDs, instance URLs, access/session tokens,
+  profile/manager/account/dealer/agency/agent names, order/quote data, and full
+  record payloads.
+- Email recipient addresses and distribution lists.
+- Local absolute paths, workstation usernames, generated report paths, and raw
+  exception output that may include paths or tokens.
+- Full HTTP response bodies, CLI stdout/stderr, and request URLs unless first
+  passed through a redaction helper.
+
+### Preferred logging pattern
+
+- `INFO`: counts, status, and generic event names only.
+- `DEBUG`: low-risk implementation details **after** sanitisation.
+- Snapshot/report files: log a generic event and count, not the path/filename.
+- Exceptions: log a short safe message; keep raw details out of normal logs
+  unless redacted.
+
+```python
+# Good: count-only INFO log
+logger.info("Retrieved %d User records.", len(records))
+logger.info("Snapshot saved successfully (%d users).", len(users))
+
+# Good: redacted CLI failure details
+safe_stderr = redact_sensitive_text(exc.stderr or "")
+raise RuntimeError("Salesforce CLI command failed; see redacted detail") from exc
+
+# Bad: logs sensitive Salesforce data or local paths
+logger.info("Retrieved users: %s", records)
+logger.info("Saved snapshot: %s", snapshot_file)
+logger.info("Recipients: %s", to_addrs)
+logger.error("Salesforce API error response: %s", response.text)
+```
+
+### If logging a generated filename is genuinely necessary
+
+Validate against a strict repository-controlled pattern and log at DEBUG. Here
+the regex is a **real constraint** (fixed prefix, fixed date shape, no path
+separators), so it is legitimate validation, not scanner-appeasement.
+
+```python
+_SNAPSHOT_NAME_PATTERN = re.compile(r"snapshot_\d{4}-\d{2}-\d{2}\.json")
+
+match = _SNAPSHOT_NAME_PATTERN.fullmatch(candidate.name)
+if match is None:
+    logger.debug("Skipped snapshot with unexpected filename pattern.")
+    continue
+
+logger.debug("Loaded generated snapshot file: %s", match.group(0))
+```
 
 ## Dependencies
 
-- Before adding a dependency, verify it is actively maintained.
-- Use the approved Ford security scanning process when available.
-- If `pip-audit` is available in the environment, use it; otherwise document
-  that the package must be reviewed through the approved internal process.
-- Pin exact versions in `requirements*.txt`.
+- Before adding a dependency, verify it is actively maintained **and that it
+  actually exists as the intended package** (guard against typo-squats and
+  AI-hallucinated / "slop-squatted" package names - see LLM section below).
+- Pin exact versions in `requirements*.txt`; commit lockfiles.
+- Run `pip-audit` if available; otherwise route the package through the approved
+  internal review process and record the outcome.
 
 ## Code Review Triggers
 
@@ -34,366 +111,302 @@ Flag any change that:
 
 - Introduces a new outbound network call.
 - Reads or writes files outside the project directory.
-- Spawns subprocesses or uses `eval`/`exec`.
+- Spawns subprocesses or uses `eval` / `exec`.
 - Disables TLS verification.
+- Sends email, reads recipient lists, or introduces SMTP / Outlook automation.
+- Parses XML, extracts ZIP archives, or rewrites Office Open XML (`.xlsx`) files.
+- Is **authored or substantially completed by an AI assistant** and touches any
+  sink above (require explicit human review - see LLM section).
 
-## Subprocess Safety (Cycode SAST Rule: "Unsanitized user input in OS command")
+## Resolving Cycode False Positives Correctly (IMPORTANT)
 
-Any value that originates from user input, CLI arguments, environment variables,
-or Salesforce API responses is considered **tainted** by SAST tools (including
-Cycode). Before that value enters a `subprocess.run` / `subprocess.Popen` call:
+Cycode performs **intra-procedural** taint analysis and may not follow a
+validator that lives in another module. There are three *correct* ways to
+resolve this, in order of preference. **Fabricating a permissive regex to
+"break the taint chain" is not one of them** - a regex that permits the
+dangerous characters validates nothing and is prohibited.
 
-1. **Validate with an allowlist function** - call `validate_salesforce_alias()`
-   for org aliases, or write an equivalent validator that raises `ValueError` on
-   unsafe characters. The validated value must be stored in a clearly named
-   variable (e.g. `safe_alias`) and only that variable used in the command list.
-2. **The validator must return `match.group(0)`, not the original input**  -
-   Cycode's taint-flow analysis traces the original tainted value through
-   function return values. Returning `match.group(0)` from the regex fullmatch
-   ensures the return value is derived from the match object itself, which SAST
-   tools treat as sanitised output, breaking the taint chain completely.
-3. **Always use a list, never a string** - `subprocess.run(["sf", "org", safe_alias], ...)`
-   not `subprocess.run(f"sf org {alias}", ...)`.
-4. **Always pass `shell=False` explicitly** - it is the default, but making it
-   explicit documents intent and satisfies SAST tools.
-5. **All other elements must be string literals** - no f-strings, no
-   concatenation, no variables other than the pre-validated input.
+1. **Register the validator as a custom sanitizer (preferred, repo-wide fix).**
+   Cycode supports sanitizer configuration. Declaring `validate_salesforce_alias`,
+   `validate_subprocess_command`, and `resolve_safe_path` as sanitizers clears
+   the false positive everywhere without changing application code.
+2. **Perform genuine validation in the calling function.** If you re-verify
+   locally, the check must be **truly restrictive** - it must reject the
+   dangerous input, not pass it through.
+3. **Documented, reviewed suppression.** For a confirmed false positive, use a
+   Cycode inline suppression with a rationale comment and reviewer sign-off.
+   Never suppress without understanding the risk.
 
-Example pattern (from `security.py` + `query_helpers.py`):
+## Subprocess Safety (Cycode: "Unsanitized user input in OS command")
+
+Any value from user input, CLI args, env vars, or Salesforce API responses is
+**tainted**. Before it enters `subprocess.run` / `Popen`:
+
+1. **Validate with an allowlist function** that raises `ValueError` on unsafe
+   input; store the result in a clearly named variable (e.g. `safe_alias`).
+2. **Always use a list, never a string**:
+   `subprocess.run(["sf", "org", safe_alias], ...)`.
+3. **Pass `shell=False` explicitly** (documents intent).
+4. **All other elements are string literals** - no f-strings/concatenation.
+5. **Set a `timeout`.**
+6. **Validate the executable with `validate_subprocess_command()`.** The
+   allow-list must include `sf`, `sf.exe`, and `sf.cmd` where Salesforce CLI is
+   expected.
 
 ```python
-# In security.py - validator returns match.group(0) to break taint chain
-_SF_ALIAS_PATTERN = re.compile(r"[A-Za-z0-9_\-\.]{1,40}")
+# In security.py - genuinely restrictive allowlist validator.
+_SF_ALIAS_PATTERN = re.compile(r"[A-Za-z0-9_\-.]{1,40}")  # no separators, no '..'
 
 def validate_salesforce_alias(alias: str) -> str:
     cleaned = alias.strip()
+    if ".." in cleaned:
+        raise ValueError(f"Invalid Salesforce alias: {cleaned!r}")
     match = _SF_ALIAS_PATTERN.fullmatch(cleaned)
     if match is None:
         raise ValueError(f"Invalid Salesforce alias: {cleaned!r}")
-    return match.group(0)  # <- derived from match object, not from `alias`
+    return match.group(0)
 
-# In query_helpers.py - caller stores result in clearly named variable
-safe_alias = validate_salesforce_alias(alias)   # raises ValueError if unsafe
-sf_command = str(shutil.which("sf"))            # resolved path, not user input
-command = [sf_command, "org", "display", "--target-org", safe_alias, "--json"]
-result = subprocess.run(command, capture_output=True, text=True, check=True, shell=False)
+# In query_helpers.py - caller uses the validated value only.
+safe_alias = validate_salesforce_alias(alias)   # raises on unsafe input
+sf_command = str(shutil.which("sf"))             # resolved path, not user input
+command = validate_subprocess_command(
+    [sf_command, "org", "display", "--target-org", safe_alias, "--json"]
+)
+result = subprocess.run(
+    command, capture_output=True, text=True, check=True, shell=False, timeout=60
+)
 ```
 
-This pattern satisfies Cycode's SAST rule at Critical severity.
+If Cycode still flags across modules, apply the sanitizer config (option 1) or
+add a documented suppression (option 3). **Do not** add a fake pass-through
+"re-verification."
 
-> **Why `match.group(0)` and not `cleaned`?**
-> Both values are identical at runtime. The difference is purely about SAST
-> taint-flow analysis. `cleaned` is derived from `alias` (tainted input), so
-> Cycode traces the taint forward through it. `match.group(0)` is derived from
-> the regex match object - an independent value - so the taint chain stops here.
+## File Path Safety (Cycode: "Unsanitized dynamic input in file path")
 
-### If Cycode Still Flags After Cross-Module Validation
-
-Cycode performs **intra-procedural** taint analysis. If the validator lives in
-a separate module (e.g. `security.py`), Cycode may not follow the call far
-enough to see `match.group(0)` and will still flag the caller.
-
-**Fix:** Add a **local inline re-verification** inside the same function that
-calls `subprocess.run`, reassigning `safe_alias` to `_m.group(0)` from a local
-regex match:
+Any path derived from user input, CLI args, or Salesforce data is **tainted**.
+Before it enters `open()`, `wb.save()`, `shutil.copy()`, etc., pass it through
+`resolve_safe_path()`, which performs real containment checking.
 
 ```python
-# Step 1 - cross-module validator (defence-in-depth, raises on bad input)
-safe_alias = validate_salesforce_alias(alias)
+def resolve_safe_path(candidate: str, base_dir: Path) -> Path:
+    """Resolve `candidate` and guarantee it stays inside `base_dir`."""
+    safe_base = base_dir.resolve()
+    resolved = (safe_base / candidate).resolve()
+    # Real containment check - NOT str.startswith (see safe_extract_zip note).
+    if not resolved.is_relative_to(safe_base):   # Python 3.9+
+        raise ValueError(f"Path escapes base directory: {candidate!r}")
+    return resolved
 
-# Step 2 - local inline re-verification so SAST sees match.group(0)
-# in this function's own scope (breaks the taint chain intra-procedurally)
-_m = re.fullmatch(r"[A-Za-z0-9_.@\-]{1,128}", safe_alias)
-if _m is None:
-    raise ValueError(f"Alias failed local re-verification: {safe_alias!r}")
-safe_alias = _m.group(0)  # <- SAST sees a local match object, not tainted input
-
-command = [sf_command, "org", "display", "--target-org", safe_alias, "--json"]
-result = subprocess.run(command, capture_output=True, text=True, check=True, shell=False)
-```
-
-After this reassignment, `safe_alias` is derived from a **locally-created**
-match object - Cycode's intra-procedural analysis can see the sanitisation
-directly without needing cross-module tracing.
-
-## File Path Safety (Cycode SAST Rule: "Unsanitized dynamic input in file path")
-
-Any file path derived from user input, CLI arguments, or constructed from
-Salesforce API data (e.g. object names, record IDs) is considered **tainted**
-by Cycode. Before that path enters `open()`, `wb.save()`, `shutil.copy()`,
-or any other file I/O call:
-
-1. **Validate with `resolve_safe_path()`** - this ensures no path traversal
-   (`../`) or escape from the allowed base directory. Store the result in a
-   variable named `safe_path`.
-2. **Add a local inline re-verification** - Cycode's intra-procedural analysis
-   cannot follow cross-module calls. Re-verify in the same function scope:
-
-```python
-# Step 1 - cross-module validator (defence-in-depth, raises on bad path)
-safe_path = resolve_safe_path(output_path)
-
-# Step 2 - local inline re-verification so SAST sees the taint chain
-# broken within this function's own scope (Cycode intra-procedural rule).
-from pathlib import Path as _Path  # noqa: PLC0415
-
-_SAFE_PATH_PATTERN = re.compile(r"[A-Za-z0-9_\-./\\ :()]{1,500}")
-_m = _SAFE_PATH_PATTERN.fullmatch(str(safe_path))
-if _m is None:
-    raise ValueError(f"Path failed local re-verification: {safe_path!r}")
-safe_path = _Path(_m.group(0))  # <- derived from match object, taint chain broken
-
-with open(safe_path, "w", ...) as fh:
+# Caller:
+safe_path = resolve_safe_path(output_name, OUTPUT_DIR)
+with open(safe_path, "w", encoding="utf-8") as fh:
     ...
 ```
 
-1. **The regex must be defined as a module-level constant** - use
-   `_SAFE_PATH_PATTERN` to avoid recompilation on every call.
-2. **The `from pathlib import Path as _Path` must be inline** - because the
-   top-level `Path` import is in `TYPE_CHECKING` (annotation-only). The local
-   import provides a runtime reference for constructing the sanitised path.
+If Cycode flags the caller, register `resolve_safe_path` as a **custom
+sanitizer** (preferred) or add a documented suppression. If you must re-verify
+locally, the check must genuinely enforce containment (call `is_relative_to`
+again) - **a permissive character-class regex is prohibited** because it would
+allow `../`, `/`, `\`, and `:` to pass through unchanged.
 
-> **Why this pattern?** `resolve_safe_path()` provides real security (blocks
-> traversal). The local regex + `_m.group(0)` provides SAST-tool-visible proof
-> that the value passed to `open()` is derived from a match object, not from
-> tainted input. Both are needed: one for actual safety, one for tooling.
+### Temporary files and attachments
 
-## Generated Data Files
+Do not derive temp filename prefixes from user-controlled attachment names.
 
-- Do not commit generated CSV, Excel, PDF, ZIP, log, or report files unless they
-  are intentionally sanitized samples.
-- Treat reports containing Salesforce usernames, emails, manager names, or user
-  IDs as confidential.
+```python
+with tempfile.NamedTemporaryFile(
+    delete=False, suffix=".xlsx", prefix="report_attachment_"
+) as tmp:
+    tmp.write(safe_attachment_path.read_bytes())
+    tmp_path = Path(tmp.name)
+```
 
-- **Never** commit real usernames, personal directory paths, or
-  workstation-specific paths in comments, docstrings, or example snippets.
-- Use `<you>`, `<username>`, or `<your-path>` as placeholders.
-- This includes Windows paths like `C:\Users\jsmith\...` - replace the username
-  portion with a generic placeholder.
+Validate any attachment path from CLI/config with `resolve_safe_path()` and
+never log the full path at INFO.
 
-## PRNG Usage (Cycode SAST Rule: "Usage of weak Pseudo-Random Number Generator")
+## Filename Safety on Windows (canonical `safe_filename`)
 
-`random.Random()` and all module-level `random.*` functions trigger Cycode's
-B311/S311 SAST rule at **High severity**. Cycode traces the PRNG taint from
-the constructor to **every downstream call-site** (`.choice()`, `.randint()`,
-etc.) and flags each one individually.
+Replacing `\ / * ? : " < > |` is **not enough**; reserved device names
+(`CON`, `PRN`, `AUX`, `NUL`, `COM1`-`COM9`, `LPT1`-`LPT9`) are invalid even
+with an extension.
 
-> ⚠ **`# nosec B311` does NOT satisfy Cycode SAST.**
-> `# nosec` is a bandit suppression comment. It suppresses the local `bandit`
-> scan in `sanity.bat` but has no effect on Cycode's own engine. If you add
-> `# nosec B311` to all call-sites and push, Cycode will still report the
-> violations as unresolved.
+```python
+_RESERVED_WINDOWS_NAMES = {
+    "CON", "PRN", "AUX", "NUL",
+    *(f"COM{i}" for i in range(1, 10)),
+    *(f"LPT{i}" for i in range(1, 10)),
+}
+
+def safe_filename(value: str, max_len: int = 160) -> str:
+    cleaned = str(value or "Untitled").strip()
+    cleaned = re.sub(r'[\\/*?:"<>|]', "_", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned).rstrip(". ")
+    cleaned = cleaned[:max_len].rstrip(". ") if len(cleaned) > max_len else cleaned
+    cleaned = cleaned or "Untitled"
+
+    stem = cleaned.split(".", 1)[0].upper()
+    if stem in _RESERVED_WINDOWS_NAMES:
+        cleaned = f"_{cleaned}"
+    return cleaned
+```
+
+## PRNG Usage (Cycode: "Usage of weak Pseudo-Random Number Generator")
+
+`random.Random()` and module-level `random.*` trigger B311/S311 at **High**.
+
+> ⚠ `# nosec B311` is a **bandit** suppression only. It has **no effect on
+> Cycode** and will not clear Cycode findings. Fix at the code level instead.
 
 | Context | Correct approach |
 | --- | --- |
-| **Security-sensitive** (tokens, session IDs, nonces, passwords) | Use `secrets.choice()`, `secrets.randbelow()`, `secrets.token_hex()`. Never suppress. |
-| **Non-security randomness where determinism is NOT required** (shuffling, sampling) | Use `random.SystemRandom()` - it uses `os.urandom()` internally and is Cycode-safe. |
-| **Non-security randomness where determinism IS required** (mock data, test fixtures, prototype generation) | **Eliminate the PRNG entirely.** Derive values from a counter or index using modular arithmetic. This is fully deterministic, Cycode cannot flag it, and it requires no suppression. |
-
-**Preferred pattern for deterministic mock data (no PRNG at all):**
+| Security-sensitive (tokens, session IDs, nonces, passwords) | `secrets.choice()`, `secrets.randbelow()`, `secrets.token_hex()`. Never suppress. |
+| Non-security, determinism NOT required (shuffling, sampling) | `random.SystemRandom()` - uses `os.urandom()`, Cycode-safe. |
+| Non-security, determinism REQUIRED (mock data, fixtures) | **Eliminate the PRNG.** Derive values from a counter via modular arithmetic. |
 
 ```python
-# Derive agency, agent, and date from the order counter.
-# Modular arithmetic gives realistic variety without any PRNG.
-# Every run produces identical results - no seed, no suppression needed.
-for idx, _ in enumerate(range(count)):
+# Deterministic mock data - no PRNG, no suppression needed.
+for idx in range(count):
     agency = _MOCK_AGENCIES[idx % len(_MOCK_AGENCIES)]
     agent  = agents[idx % len(agents)]
     days   = idx % 365
 ```
 
-**If `random.SystemRandom()` is used (non-deterministic, but Cycode-safe):**
+`random.SystemRandom()` does not support seeding - do not use it where the test
+suite requires determinism.
+
+## XML Parsing Safety (Cycode: "Usage of vulnerable XML libraries")
+
+Use `defusedxml` instead of `xml.etree.ElementTree`, including for Office Open
+XML (`.xlsx` are ZIPs containing XML). Pin `defusedxml` in requirements.
 
 ```python
-rng = random.SystemRandom()  # Uses os.urandom() - Cycode-safe, no seed support
-value = rng.choice(options)
+from defusedxml import ElementTree as ET
+sheet_tree = ET.parse(chartsheet_xml)
 ```
 
-Note: `random.SystemRandom()` does not support seeding. Do not use it when
-the test suite requires `test_is_deterministic_across_calls` to pass.
+## ZIP Extraction Guardrail (canonical `safe_extract_zip`)
 
-**Bandit suppression reference** (local `sanity.bat` only, NOT Cycode):
+**Never** use `str.startswith` for containment - a sibling like `/tmp/base-evil`
+passes a check against `/tmp/base`. Use a real containment test and reject
+symlink members and absolute paths.
 
-The suppression comment `# nosec B311` on the instantiation line covers the
-local `bandit` scan. It has no effect on Cycode. Do not rely on it to clear
-Cycode SAST violations - use one of the code-level approaches above.
+```python
+import stat, zipfile
+from pathlib import Path
 
-## Flask / Web Endpoint Security (OWASP)
+def safe_extract_zip(zf: zipfile.ZipFile, target_dir: Path) -> None:
+    safe_base = target_dir.resolve()
+    for member in zf.infolist():
+        name = member.filename
+        # Reject absolute paths and traversal outright.
+        if name.startswith(("/", "\\")) or ".." in Path(name).parts:
+            raise ValueError(f"Unsafe ZIP member path: {name!r}")
+        destination = (safe_base / name).resolve()
+        # Real containment check (Python 3.9+).
+        if not destination.is_relative_to(safe_base):
+            raise ValueError(f"Unsafe ZIP member path: {name!r}")
+        # Reject symlink members (external_attr high bits carry Unix mode).
+        mode = member.external_attr >> 16
+        if stat.S_ISLNK(mode):
+            raise ValueError(f"Symlink members are not allowed: {name!r}")
+        zf.extract(member, safe_base)
+```
 
-When building Flask REST API endpoints (e.g. the JOSHUA frontend), apply these
-rules in addition to the subprocess and file-path rules above.
+Prefer avoiding TAR extraction entirely; if required, apply the same checks and
+also reject hard links and device files.
 
-### Input Validation (OWASP A05 - Injection)
+## Email / SMTP Security (Cycode: "Usage of insecure SMTP connection")
 
-- **Validate ALL request data** - `request.get_json()`, `request.args`,
-  `request.form` - before use. Never trust client input.
-- **Use allowlists** over denylists. If a parameter should be one of 8 script
-  names, check `if value not in ALLOWED_SCRIPTS`.
-- **Type-check** JSON fields: verify strings are strings, numbers are numbers.
-- **Limit lengths** - reject excessively long strings before further processing.
+Avoid plaintext `smtplib.SMTP(...)` for new code.
 
-### XSS Prevention (OWASP A05)
+```python
+import ssl, smtplib
+context = ssl.create_default_context()
+with smtplib.SMTP_SSL(host=host, port=465, timeout=30, context=context) as smtp:
+    smtp.send_message(message)
+```
 
-- **Use `textContent`** (not `innerHTML`) when inserting dynamic text in the
-  frontend JavaScript.
-- **Jinja2 auto-escapes by default** - never use `| safe` unless the content
-  is trusted and static.
-- **Never** construct HTML from user-submitted data in Python code. Use Jinja2
-  templates with auto-escaping enabled.
-- **Content-Security-Policy header** - set it even for localhost to catch issues
-  early:
+Fallback using STARTTLS (fail closed if TLS cannot be negotiated):
 
+```python
+context = ssl.create_default_context()
+with smtplib.SMTP(host=host, port=587, timeout=30) as smtp:
+    smtp.starttls(context=context)
+    smtp.send_message(message)
+```
+
+Internal plaintext SMTP requires explicit approval, a documented exception,
+recipient restrictions, and count-only logging. Prefer Outlook COM or a
+TLS-capable relay.
+
+## Flask / Web Endpoint Security
+
+Apply in addition to the subprocess and file-path rules above.
+
+### Input validation (Injection)
+- Validate ALL request data (`get_json`, `args`, `form`) before use.
+- Use allowlists; type-check fields; enforce length limits.
+
+### XSS prevention
+- Insert dynamic text with `textContent`, never `innerHTML`.
+- Rely on Jinja2 auto-escaping; never `| safe` for non-static values.
+- Never build HTML from user data in Python.
+
+### Security headers (canonical block - used everywhere in the repo)
 ```python
 @app.after_request
 def set_security_headers(response):
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
         "script-src 'self'; "
-        "style-src 'self' 'unsafe-inline'; "
-        "connect-src 'self' ws://localhost:*"
+        "style-src 'self' 'unsafe-inline'; "   # localhost only; use nonces for public deploys
+        "connect-src 'self' ws://localhost:* ws://127.0.0.1:*; "
+        "object-src 'none'; "
+        "base-uri 'self'; "
+        "frame-ancestors 'none'"
     )
     response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "no-referrer"
     return response
 ```
+> `style-src 'unsafe-inline'` is tolerated **for a localhost-only tool**. For any
+> public deployment, replace it with nonces/hashes and add HSTS.
 
-### CSRF Protection
-
-- For a localhost-only app, CSRF risk is minimal but not zero (browser
-  extensions, malicious local pages).
-- Flask-SocketIO uses its own session-based verification.
-- For REST endpoints that mutate state (`POST`, `PUT`, `DELETE`), verify the
-  `Origin` or `Referer` header matches `localhost`:
-
+### CSRF / origin checks
+Verify the Origin host/port **exactly** by parsing - not with `startswith`.
 ```python
+from urllib.parse import urlparse
+
+_ALLOWED_ORIGINS = {("localhost", 5000), ("127.0.0.1", 5000)}
+
 def _is_local_origin(request) -> bool:
     origin = request.headers.get("Origin", "")
-    return origin.startswith("http://localhost:") or origin.startswith("http://127.0.0.1:")
+    if not origin:
+        return False
+    parsed = urlparse(origin)
+    return (
+        parsed.scheme == "http"
+        and (parsed.hostname, parsed.port) in _ALLOWED_ORIGINS
+    )
 ```
 
-### Authentication & Authorisation
+### Binding & error leakage
+- Bind to `127.0.0.1` only - never `0.0.0.0`. This is the primary control.
+- Add authentication before any exposure beyond localhost.
+- Never return stack traces / internal paths in JSON. Log server-side; return a
+  generic message. Set `debug=False` (the Werkzeug debugger allows RCE via the
+  interactive console and must never be enabled outside isolated local dev).
 
-- For a single-user local app, authentication is not required.
-- **Bind to `127.0.0.1` only** - never `0.0.0.0`. This is the primary access
-  control mechanism.
-- If ever exposed beyond localhost, add authentication before deployment.
+## AI / LLM-Generated Code (Copilot workstream)
 
-### Error Information Leakage (OWASP A10)
+Because much code here is AI-authored, apply these rules to every AI suggestion:
 
-- **Never** return stack traces or internal paths in JSON error responses.
-- Log the full exception server-side; return only a user-friendly message.
-- Set `debug=False` in production. `debug=True` exposes the Werkzeug debugger
-  which allows arbitrary code execution.
+- **Verify suggested packages exist and are the intended, maintained project**
+  before installing (defends against hallucinated / slop-squatted names).
+- **Check the license** of any non-trivial AI-suggested snippet.
+- **Require human review** for AI-authored code touching subprocess, file I/O,
+  network calls, deserialization, XML/ZIP parsing, or auth.
+- Do not accept AI-suggested SAST suppressions without confirming the finding is
+  a true false positive and recording the rationale.
 
-### Denial of Service (Local Context)
-
-- **Limit request body size**: `app.config["MAX_CONTENT_LENGTH"] = 1_048_576`
-  (1 MB).
-- **Limit subprocess runtime** with a timeout (see
-  `flask-websocket-subprocess.instructions.md`).
-- **One job at a time** - reject concurrent launch requests.
-
-## Frontend DOM XSS (Cycode SAST Rule: "Unsanitized user input in dynamic HTML insertion (XSS)")
-
-This rule fires on client-side JavaScript that builds the page by writing into
-the DOM. Cycode (and most JS SAST engines) model it as a **source -> sink**
-data flow. A finding means a value Cycode treats as untrusted reached a DOM
-"insertion sink". To clear it, you must remove **either the source or the
-sink** from the flow - not merely validate the value in between. Validating in
-the middle (`String(x).match(...)[0]`) is **not** reliably recognised as a
-sanitiser by Cycode's JS engine and will keep getting flagged.
-
-### What Cycode treats as a SOURCE (untrusted input)
-
-- `fetch(...).then(r => r.json())` / `await res.json()` response data.
-- `location.*`, `document.URL`, `document.referrer`, `window.name`.
-- **DOM reads**: `el.value`, **`el.id`**, **`el.name`**, `el.dataset.*`,
-  `el.getAttribute(...)` - reading these back off an element returned by
-  `document.getElementById()` / `querySelector()` is a source.
-- Any server-rendered string injected into the page and later read by JS.
-
-### What Cycode treats as a SINK (HTML insertion)
-
-| Sink | Safe? | Notes |
-| --- | --- | --- |
-| `element.innerHTML = x` | NO | Parses `x` as HTML. Classic XSS sink. |
-| `element.outerHTML = x` | NO | Same as `innerHTML`. |
-| `element.insertAdjacentHTML(pos, x)` | NO | Parses `x` as HTML. |
-| `element.replaceWith(x)` | NO | **Accepts strings** - on the sink list even when you pass a Node. |
-| `document.write(x)` | NO | Legacy HTML sink. |
-| `eval(x)` / `new Function(x)` | NO | Code-execution sink. |
-| `element.id = x` / `element.name = x` | NO* | Flagged when `x` derives from a source (DOM-read or server data). |
-| `element.textContent = x` | YES | Never parsed as HTML. Preferred for text. |
-| `parent.replaceChild(newNode, oldNode)` | YES | **Strictly `Node`-typed** - cannot be a string sink. |
-| `element.setAttribute("class", x)` | YES | Attribute value, not HTML. |
-| `el.appendChild(createElement(...))` | YES | Builds nodes, never parses HTML. |
-
-`*` `innerHTML = ""` with a **string literal** is safe - a constant empty
-string is not a source.
-
-### The two-part fix (proven against this exact rule)
-
-When you build a field/widget dynamically, do **both**:
-
-1. **Remove the source** - use **fixed string-literal** ids/names, never values
-   derived from server metadata or read back off the DOM. Guard with an
-   allowlist so the literal path only runs for the one known-good value:
-
-   ```javascript
-   // Module-level literals - NOT derived from script metadata or DOM reads.
-   const OBJECT_ARG_DEST = "object";
-   const OBJECT_FIELD_ID = "arg-object";
-
-   function setupPicker(meta) {
-     // Allowlist guard: only the known dest uses the literal-id path.
-     if (meta.dest !== OBJECT_ARG_DEST) {
-       appendLog(`[Unsupported argument: ${String(meta.dest || "")}]`, "ERROR");
-       return;
-     }
-     // ... safe to proceed with literal ids below ...
-   }
-   ```
-
-2. **Remove the sink** - replace `replaceWith()` with `replaceChild()`, which
-   the engine cannot treat as a string-insertion sink:
-
-   ```javascript
-   function swap(newEl, currentEl) {
-     newEl.id = OBJECT_FIELD_ID;     // fixed literal, no source
-     newEl.name = OBJECT_ARG_DEST;   // fixed literal, no source
-     const parent = currentEl.parentNode;
-     if (!parent) return newEl;
-     // replaceChild() requires Nodes; it cannot be a string-insertion sink,
-     // so Cycode's "dynamic HTML insertion" rule has nothing to match.
-     parent.replaceChild(newEl, currentEl);
-     return newEl;
-   }
-   ```
-
-### For server data that must be displayed (not used as id/name)
-
-Use `textContent` (never `innerHTML`) and still validate the value with a
-match-group extraction as defence-in-depth:
-
-```javascript
-const m = String(item.api_name || "").match(/^[A-Za-z0-9_]{1,200}$/);
-if (!m) return;                       // skip malformed entries
-const apiName = m[0];                 // derived from the match object
-opt.value = apiName;                  // attribute value - safe
-opt.textContent = `${item.label} (${apiName})`;  // textContent - safe
-```
-
-> **Why validation-in-the-middle alone fails:** Cycode's JS taint analysis
-> treats DOM-read and `replaceWith` flows as sticky. A regex `.match()[0]` in
-> the middle is not recognised as a trust boundary the way `match.group(0)` is
-> on the Python side. The only reliable fix is to delete the **source** (use
-> literals) and/or the **sink** (use `replaceChild`/`textContent`).
-
-### Checklist before pushing JS that builds DOM
-
-- No `innerHTML` / `outerHTML` / `insertAdjacentHTML` / `document.write` with a
-  non-literal value.
-- No `replaceWith()` - use `replaceChild(newNode, oldNode)`.
-- No `el.id = ...` / `el.name = ...` where the right-hand side comes from a DOM
-  read or server metadata - use module-level string literals + an allowlist
-  guard instead.
-- All displayed server data goes through `textContent`, not `innerHTML`.

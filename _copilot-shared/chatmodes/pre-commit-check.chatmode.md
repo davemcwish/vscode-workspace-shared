@@ -34,19 +34,24 @@ running it. Report each as ✅ PASS / ❌ NEEDS FIX / N/A.
 
 - [ ] Every `subprocess.run` / `subprocess.Popen` call uses a list, not a string.
 - [ ] Every tainted input (CLI arg, env var, API response) is validated before
-      reaching the command list.
-- [ ] The validator returns `match.group(0)` - not the original input - to break
-      Cycode's intra-procedural taint chain.
-- [ ] A local inline re-verification (`_m = re.fullmatch(...); safe_x = _m.group(0)`)
-      is present in the **same function** that calls `subprocess.run`.
+      reaching the command list by a **genuinely restrictive** allowlist
+      validator that raises on unsafe input (rejects shell metacharacters,
+      path separators, `..`) - not a permissive pass-through.
 - [ ] `shell=False` is passed explicitly.
+- [ ] If Cycode raises a cross-module false positive, it is resolved correctly:
+      register the validator as a custom sanitizer (preferred) or add a
+      documented, reviewed suppression. Do **not** launder the value through a
+      permissive regex to "break the taint chain". See `security.instructions.md`
+      -> "Resolving Cycode False Positives Correctly".
 
 ### File path safety (Cycode: "Unsanitized dynamic input in file path")
 
-- [ ] Every path derived from user input or external data is validated with an
-      allowlist function (e.g. `resolve_safe_path()`).
-- [ ] A local inline re-verification breaks the taint chain in the same function
-      scope before the path reaches `open()`, `wb.save()`, or `shutil.copy()`.
+- [ ] Every path derived from user input or external data is validated with
+      `resolve_safe_path()` (or equivalent), which performs a **real containment
+      check** (not a string prefix test) before the path reaches `open()`,
+      `wb.save()`, or `shutil.copy()`.
+- [ ] Any Cycode cross-module false positive is resolved via custom sanitizer or
+      documented suppression - never a permissive re-verification regex.
 
 ### Secrets and credentials
 
@@ -100,6 +105,10 @@ Run `sanity.bat` from the project root and report each tool result:
 | 4 | bandit | |
 | 5 | detect-secrets | |
 | 6 | pytest + coverage | |
+
+`sanity.bat` then runs an **advisory** security scan (`security_scan.py`) after
+the seven gate steps. Report its findings as informational only - it never fails
+the gate and is not in `ci.yml` (CI runs the real Cycode engine).
 
 If **any** step fails, show the exact error output and stop - do not proceed
 to Step 2.
@@ -281,6 +290,10 @@ PASS / FAIL table:
 | 4 | bandit | |
 | 5 | detect-secrets | |
 | 6 | pytest + coverage | |
+
+`sanity.bat` then runs an **advisory** security scan (`security_scan.py`) after
+the seven gate steps. Report its findings as informational only - it never fails
+the gate and is not in `ci.yml` (CI runs the real Cycode engine).
 
 If **any** step fails, show the exact error output and stop - do not proceed
 to Step 2.

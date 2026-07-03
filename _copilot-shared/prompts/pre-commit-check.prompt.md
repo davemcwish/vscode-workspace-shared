@@ -14,6 +14,10 @@ gate (ruff format, ruff lint, mypy, bandit, detect-secrets, pytest + coverage
 with `--cov-fail-under=90`). If `sanity.bat` is unavailable, run the equivalent
 commands listed in `copilot-instructions.md` § Canonical Quality Gate.
 
+`sanity.bat` also runs an **advisory** security scan (`security_scan.py`) after
+the gate steps. It prints likely Cycode/OWASP findings but never fails the gate
+and is not in `ci.yml`, so treat it as informational only.
+
 If any command fails:
 
 - Stop.

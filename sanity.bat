@@ -24,6 +24,12 @@ REM    5. detect-secrets - scans for accidentally committed secrets
 REM    6. Pytest         - test suite with coverage (parallel)
 REM    7. markdownlint   - checks Markdown files for style issues
 REM
+REM  ADVISORY (local only - deliberately NOT in ci.yml):
+REM    security_scan - conservative regex proxy for the Cycode SAST gate. Runs
+REM    after the 7 gate steps, prints likely SAST/OWASP findings, but NEVER
+REM    fails the build (it produces false positives). CI runs the real Cycode
+REM    engine instead. The scanner is shared-owned and skips its own files.
+REM
 REM  COVERAGE NOTE:
 REM    --cov flags are NOT passed here. They are defined once in
 REM    pyproject.toml [tool.pytest.ini_options] addopts and inherited
@@ -213,6 +219,24 @@ if errorlevel 1 (
         call npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"
     )
     if errorlevel 1 set /a FAIL_COUNT+=1
+)
+
+echo.
+echo ============================================================================
+echo  [ADVISORY] Security scan ^(does not block the gate^)
+echo ============================================================================
+REM Local proxy for the Cycode SAST gate that runs on every PR (see
+REM security.instructions.md). Conservative regex scanner: surfaces likely
+REM Cycode/OWASP issues early but produces false positives, so findings are
+REM printed and NEVER added to FAIL_COUNT. Deliberately NOT in ci.yml because
+REM CI already runs the real Cycode engine. The scanner skips its own files.
+if not exist security_scan.py (
+    echo  SKIPPED: security_scan.py not found in project root.
+) else if exist "_copilot-shared\" (
+    REM Parent workspace: scan the shared source only, not every sub-project.
+    %PY_CMD% security_scan.py --root "_copilot-shared" --fail-on NONE
+) else (
+    %PY_CMD% security_scan.py --root . --fail-on NONE
 )
 
 echo.

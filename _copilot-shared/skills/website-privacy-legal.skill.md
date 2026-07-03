@@ -1,4 +1,26 @@
+---
+name: website-privacy-legal
+description: "Human-facing skill for privacy law, cookie consent, accessibility legislation, and legal compliance for public websites across major jurisdictions. General guidance, not legal advice."
+owner: "TODO: team-or-DL"
+lastReviewed: "2026-07-01"
+reviewCadence: "quarterly"
+---
+
 # Skill: Website Privacy and Legal Compliance
+
+> **Role & precedence.** This skill is *explanatory* (human onboarding) and is
+> **not legal advice** (see the disclaimer below). It is also **non-normative**:
+> where privacy/security concerns overlap - cookies, third-party scripts,
+> client-side storage, embeds, analytics pixels - the technical controls are
+> governed by `website-security.skill.md` and, above it, the security
+> instruction files (`security.instructions.md`,
+> `security.instructions.owasp-expanded.md`). On any conflict between privacy
+> convenience and a security rule, follow the **stricter security rule**, then
+> resolve the privacy obligation.
+>
+> **Related skills:** `website-security.skill.md` (technical web controls),
+> `accessibility.skill.md` (referenced below - **verify this file exists**; if it
+> does not, create it or remove the reference).
 
 ## Purpose
 
@@ -619,3 +641,25 @@ Also get legal advice when:
 - Always document your compliance decisions for future reference.
 - Always document legal and compliance decisions so future maintainers know
   what was checked, when, and why.
+
+---
+
+## Cross-References
+
+- `website-security.skill.md` - technical web controls that intersect with
+  privacy: cookie/storage handling (`HttpOnly`/`Secure`/`SameSite`), CSP and
+  security headers, Subresource Integrity for third-party/CDN scripts, and
+  `postMessage`/origin validation for embeds. Consult it before adding any
+  third-party embed, pixel, analytics tag, map, video, or chat widget mentioned
+  in this skill.
+- `security.instructions.md` / `security.instructions.owasp-expanded.md` -
+  canonical, normative security rules (source of truth for any code/control).
+- `ci-cd.instructions.md` - pipeline hardening (relevant when consent tooling,
+  analytics, or third-party scripts are added via automated deploys).
+- `accessibility.skill.md` - comprehensive accessibility implementation guidance
+  referenced in the "Accessibility Legislation" section (**verify this file
+  exists**).
+
+> **Overlap rule of thumb:** privacy law decides *whether* you may collect/track;
+> the security skills decide *how* to load, store, and transmit that data safely.
+> Apply both - and the stricter of the two when they differ.

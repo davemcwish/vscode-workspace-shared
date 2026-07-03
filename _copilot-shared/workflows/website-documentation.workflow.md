@@ -312,7 +312,7 @@ When using Copilot prompts, agents, or workflows for website work:
 
 ## Critical Constraints
 
-- Never leave a significant decision undocumented.
+- Never leave a decision undocumented.
 - Never use technical jargon without explanation.
 - Never create documentation without a "Last Updated" date.
 - Never assume the reader has context - write as if they're reading this for
