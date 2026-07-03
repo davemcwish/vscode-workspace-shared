@@ -19,3 +19,13 @@
 !sanity_v.bat
 !.markdownlint.json
 !*.ps1
+
+# Re-ignore the scanner convenience copies synced to the workspace root.
+# The canonical, tracked versions live in _copilot-shared/scaffold/; the root
+# copies exist only so the parent repo can run sanity.bat and must not be
+# double-tracked. The leading "/" anchors to the workspace root, so the
+# scaffold/ copies are unaffected. (security_scan.py is already ignored by the
+# "*" rule above - there is no "!*.py" whitelist - but it is listed here too so
+# the intent is explicit and both scanners are treated identically.)
+/security_scan.py
+/security_scan.ps1

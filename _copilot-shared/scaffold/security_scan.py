@@ -530,7 +530,13 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Local repo security pattern scanner")
     parser.add_argument("--root", default=".", help="Repository root to scan; default: current directory")
     parser.add_argument("--format", choices=("text", "json"), default="text", help="Output format")
-    parser.add_argument("--output", help="Optional output file; otherwise prints to stdout")
+    parser.add_argument(
+        "--output",
+        help=(
+            "Optional output file, resolved relative to the current directory and "
+            "required to stay inside it; otherwise prints to stdout."
+        ),
+    )
     parser.add_argument(
         "--fail-on",
         choices=("LOW", "MEDIUM", "HIGH", "CRITICAL", "NONE"),
@@ -550,6 +556,22 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Root path does not exist: {root}", file=sys.stderr)
         return 2
 
+    # Validate the optional --output path BEFORE any file is written. The value
+    # comes from the command line (untrusted input), so we contain it inside the
+    # current working directory to block path traversal (e.g. "../../secrets")
+    # or an absolute path escaping to an unintended location. This is a genuine
+    # containment check using Path.is_relative_to - NOT str.startswith, which a
+    # sibling directory like "<cwd>-evil" would defeat. The check runs in this
+    # function (intra-procedural) so a SAST taint-tracker sees the guard.
+    safe_output: Path | None = None
+    if args.output:
+        output_base = Path.cwd().resolve()
+        candidate = (output_base / args.output).resolve()
+        if not candidate.is_relative_to(output_base):
+            print(f"Output path escapes base directory: {args.output!r}", file=sys.stderr)
+            return 2
+        safe_output = candidate
+
     included_exts = set(DEFAULT_INCLUDED_EXTS)
     included_exts.update(
         ext.lower() if ext.startswith(".") else f".{ext.lower()}"
@@ -564,14 +586,14 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.format == "json":
         payload = json.dumps([asdict(f) for f in sort_findings(findings)], indent=2)
-        if args.output:
-            Path(args.output).write_text(payload + "\n", encoding="utf-8")
+        if safe_output is not None:
+            safe_output.write_text(payload + "\n", encoding="utf-8")
         else:
             print(payload)
     else:
-        if args.output:
+        if safe_output is not None:
             original_stdout = sys.stdout
-            with Path(args.output).open("w", encoding="utf-8") as fh:
+            with safe_output.open("w", encoding="utf-8") as fh:
                 sys.stdout = fh
                 try:
                     print_text(findings)

@@ -314,6 +314,26 @@ catch {
     [Console]::Error.WriteLine("Root path does not exist: $Root")
     exit 2
 }
+
+# Validate the optional -Output path BEFORE any file is written. The value comes
+# from the command line (untrusted input), so we contain it inside the current
+# directory to block path traversal or an absolute path escaping elsewhere. The
+# trailing separator on the base defeats a sibling like "<cwd>-evil" that a plain
+# StartsWith without a separator would wrongly accept. Windows PowerShell 5.1 has
+# no Path.is_relative_to, so GetFullPath + separator-anchored prefix is the
+# genuine containment equivalent.
+$SafeOutput = ''
+if ($Output) {
+    $OutputBase = (Get-Location).Path
+    $ResolvedOutput = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($OutputBase, $Output))
+    $BaseWithSep = $OutputBase.TrimEnd([System.IO.Path]::DirectorySeparatorChar) + [System.IO.Path]::DirectorySeparatorChar
+    if (-not $ResolvedOutput.StartsWith($BaseWithSep, [System.StringComparison]::OrdinalIgnoreCase)) {
+        [Console]::Error.WriteLine("Output path escapes base directory: $Output")
+        exit 2
+    }
+    $SafeOutput = $ResolvedOutput
+}
+
 $Findings = [System.Collections.Generic.List[object]]::new()
 
 $Files = Get-ChildItem -Path $RootPath -File -Recurse -Force |
@@ -414,7 +434,7 @@ if ($Format -eq 'Json') {
     else {
         $Json = $Sorted | ConvertTo-Json -Depth 5
     }
-    if ($Output) { Set-Content -Path $Output -Value $Json -Encoding UTF8 } else { $Json }
+    if ($Output) { Set-Content -Path $SafeOutput -Value $Json -Encoding UTF8 } else { $Json }
 }
 else {
     $LinesOut = [System.Collections.Generic.List[string]]::new()
@@ -437,7 +457,7 @@ else {
         $LinesOut.Add("  TOTAL: $($Findings.Count)") | Out-Null
     }
 
-    if ($Output) { Set-Content -Path $Output -Value $LinesOut -Encoding UTF8 } else { $LinesOut | ForEach-Object { Write-Host $_ } }
+    if ($Output) { Set-Content -Path $SafeOutput -Value $LinesOut -Encoding UTF8 } else { $LinesOut | ForEach-Object { Write-Host $_ } }
 }
 
 if ($FailOn -ne 'NONE') {
