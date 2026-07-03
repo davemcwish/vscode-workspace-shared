@@ -10,6 +10,7 @@ reviewCadence: "quarterly"
 
 > **Role & precedence.** This skill is *explanatory* (human onboarding). The
 > **normative** rules and canonical code snippets live in:
+>
 > 1. `security.instructions.md` - canonical Cycode/SAST rules (source of truth)
 > 2. `security.instructions.owasp-expanded.md` - broad OWASP/CWE coverage
 > 3. `ci-cd.instructions.md` - pipeline hardening
@@ -51,6 +52,7 @@ reviewCadence: "quarterly"
 > has been removed.** A pass-through or permissive regex provides *no* real
 > protection and only hides the finding. When Cycode raises a cross-module
 > false positive, resolve it correctly:
+>
 > 1. register the validator as a **custom sanitizer** (preferred, repo-wide), or
 > 2. add a **documented, reviewed suppression** with rationale.
 >

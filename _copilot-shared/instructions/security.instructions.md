@@ -9,6 +9,7 @@ reviewCadence: "quarterly"
 # Security Rules (Canonical)
 
 > **Precedence (most specific wins; on conflict, choose the STRICTER rule):**
+>
 > 1. Domain-specific instructions (e.g. `salesforce.instructions.md`,
 >    `flask-websocket-subprocess.instructions.md`, `ci-cd.instructions.md`)
 > 2. **This file** - canonical repo Cycode/SAST rules (normative)
@@ -344,15 +345,18 @@ TLS-capable relay.
 Apply in addition to the subprocess and file-path rules above.
 
 ### Input validation (Injection)
+
 - Validate ALL request data (`get_json`, `args`, `form`) before use.
 - Use allowlists; type-check fields; enforce length limits.
 
 ### XSS prevention
+
 - Insert dynamic text with `textContent`, never `innerHTML`.
 - Rely on Jinja2 auto-escaping; never `| safe` for non-static values.
 - Never build HTML from user data in Python.
 
 ### Security headers (canonical block - used everywhere in the repo)
+
 ```python
 @app.after_request
 def set_security_headers(response):
@@ -370,11 +374,14 @@ def set_security_headers(response):
     response.headers["Referrer-Policy"] = "no-referrer"
     return response
 ```
+
 > `style-src 'unsafe-inline'` is tolerated **for a localhost-only tool**. For any
 > public deployment, replace it with nonces/hashes and add HSTS.
 
 ### CSRF / origin checks
+
 Verify the Origin host/port **exactly** by parsing - not with `startswith`.
+
 ```python
 from urllib.parse import urlparse
 
@@ -392,6 +399,7 @@ def _is_local_origin(request) -> bool:
 ```
 
 ### Binding & error leakage
+
 - Bind to `127.0.0.1` only - never `0.0.0.0`. This is the primary control.
 - Add authentication before any exposure beyond localhost.
 - Never return stack traces / internal paths in JSON. Log server-side; return a
@@ -409,4 +417,3 @@ Because much code here is AI-authored, apply these rules to every AI suggestion:
   network calls, deserialization, XML/ZIP parsing, or auth.
 - Do not accept AI-suggested SAST suppressions without confirming the finding is
   a true false positive and recording the rationale.
-

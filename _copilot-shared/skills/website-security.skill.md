@@ -168,6 +168,7 @@ def is_local_origin(request) -> bool:
 ## Content Security Policy & Security Headers
 
 Use the **canonical `set_security_headers` block in `security.instructions.md`**
+
 - do not fork a weaker variant. Summary of what it enforces:
 
 - `default-src 'self'`, `script-src 'self'`, `object-src 'none'`,

@@ -9,6 +9,7 @@ reviewCadence: "quarterly"
 # CI/CD Pipeline Security Rules
 
 > **Precedence (most specific wins; on conflict, choose the STRICTER rule):**
+>
 > 1. **This file** - governs anything under `.github/**` (workflows, actions).
 > 2. `security.instructions.md` - canonical code-level Cycode/SAST rules.
 > 3. `security.instructions.owasp-expanded.md` - broad OWASP/CWE coverage.
@@ -119,6 +120,7 @@ steps:
 
 This is the CI equivalent of shell injection. Never interpolate
 attacker-controllable `${{ ... }}` expressions **directly** into a `run:` script
+
 - GitHub substitutes the raw value before the shell runs, so a crafted PR title
 or branch name can execute commands.
 

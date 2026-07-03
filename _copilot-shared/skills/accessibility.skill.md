@@ -457,7 +457,7 @@ a substitute for formal legal accessibility review where one is required.
 > **Overlap rule of thumb:** accessibility decides *how the UI must behave for
 > all users*; the security skills decide *how the supporting code must be written
 > safely*. Apply both - and the stricter security rule when they differ.
-
+>
 > **Currentness:** WCAG 2.2 AA, EN 301 549, and the EAA (in force 28 June 2025)
 > evolve; verify the current success criteria and any national transposition
 > before relying on a specific requirement.

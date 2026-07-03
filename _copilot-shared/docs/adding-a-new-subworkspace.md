@@ -73,28 +73,28 @@ sidebar. Its `"folders"` array contains objects with two properties:
 
 ```jsonc
 {
-	"folders": [
-		{
-			"name": "Visual Studio Code",
-			"path": "."
-		},
-		{
-			"name": "Salesforce",
-			"path": "Salesforce"
-		},
-		{
-			"name": "Trails and Tails",
-			"path": "trails-and-tails"
-		},
-		{
-			"name": "WOPR (Joshua) War Games CRT Terminal and Game Hub",
-			"path": "woprcrt-terminal-main"
-		},
-		{
-			"name": "EU SPM",
-			"path": "eu-spm"
-		}		
-	],
+ "folders": [
+  {
+   "name": "Visual Studio Code",
+   "path": "."
+  },
+  {
+   "name": "Salesforce",
+   "path": "Salesforce"
+  },
+  {
+   "name": "Trails and Tails",
+   "path": "trails-and-tails"
+  },
+  {
+   "name": "WOPR (Joshua) War Games CRT Terminal and Game Hub",
+   "path": "woprcrt-terminal-main"
+  },
+  {
+   "name": "EU SPM",
+   "path": "eu-spm"
+  }  
+ ],
   "settings": { ... }
 }
 ```
