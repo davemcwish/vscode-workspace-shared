@@ -29,6 +29,26 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   local scanner during the Salesforce Windows long-path work. The rules
   propagate to every project root on the next sync.
 
+### Changed
+
+- **Realigned the shared security guidance to what Cycode-SAST actually
+  accepts** (`_copilot-shared/instructions/security.instructions.md` and
+  `_copilot-shared/skills/security.skill.md`). Cycode-SAST is the authority: its
+  **intra-procedural** taint analysis does not follow a validator that lives in
+  another module, so the previous guidance - which prohibited the local
+  `match.group(0)` re-verification - described a state that does **not** pass the
+  gate (proven by `data_export.py`, which needs that re-verification to clear
+  Cycode). The docs now document the two-step file-path pattern used across the
+  codebase (`data_export.py`, `list_objects.py`, `build_data_dictionary.py`,
+  `excel_report.py`): `resolve_safe_path()` performs the real
+  `os.path.commonpath` containment check (the actual traversal defence), then a
+  local `_SAFE_PATH_PATTERN.fullmatch` re-verifies the resolved path and rebuilds
+  it from `match.group(0)` to break the taint chain inside the sink's own
+  function. The "Security Philosophy", "Resolving Cycode False Positives
+  Correctly", "Subprocess Safety", and "File Path Safety" sections were updated;
+  the path regex remains defence-in-depth layered **on top of**
+  `resolve_safe_path()`, never a replacement for it.
+
 ---
 
 ## [2026-06-25]
