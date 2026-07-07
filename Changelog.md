@@ -11,6 +11,26 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2026-07-07]
+
+### Added
+
+- **Two file-path SAST rules in the shared local scanner**
+  (`_copilot-shared/scaffold/security_scan.py` and its PowerShell twin
+  `security_scan.ps1`):
+  - `PY-SHUTIL-DYNAMIC-PATH` (MEDIUM) - flags `shutil.move` / `copy` / `copy2` /
+    `copyfile` / `copytree` calls, which Cycode reports as "Unsanitized dynamic
+    input in file path".
+  - `PY-ZIPFILE-DYNAMIC-PATH` (MEDIUM) - flags `zipfile.ZipFile()` opened on a
+    non-literal path.
+  Both recommend validating the source and destination with
+  `resolve_safe_path()` before the sink. Added after a live Cycode "Unsanitized
+  dynamic input in file path" finding on a `shutil.move` sink slipped past the
+  local scanner during the Salesforce Windows long-path work. The rules
+  propagate to every project root on the next sync.
+
+---
+
 ## [2026-06-25]
 
 ### Added

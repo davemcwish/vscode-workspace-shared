@@ -172,6 +172,22 @@ RULES: list[Rule] = [
         recommendation="Validate every ZIP member destination stays under the intended target directory before extracting.",
     ),
     compile_rule(
+        "PY-SHUTIL-DYNAMIC-PATH",
+        "MEDIUM",
+        "shutil file operation uses a path argument; Cycode flags unsanitized dynamic input in file paths.",
+        r"\bshutil\.(move|copy|copy2|copyfile|copytree)\s*\(",
+        {".py"},
+        recommendation="Validate the source and destination with resolve_safe_path() before the shutil call; only then wrap the OS call (e.g. to_long_path). Never pass a raw or tainted path.",
+    ),
+    compile_rule(
+        "PY-ZIPFILE-DYNAMIC-PATH",
+        "MEDIUM",
+        "zipfile.ZipFile() opens a non-literal path; Cycode flags unsanitized dynamic input in file paths.",
+        r"\bzipfile\.ZipFile\s*\(\s*(?!['\"])",
+        {".py"},
+        recommendation="Pass a resolve_safe_path()-validated path into zipfile.ZipFile(); never open an archive at a raw user- or Salesforce-derived path.",
+    ),
+    compile_rule(
         "PY-XML-STDLIB",
         "HIGH",
         "Python standard-library XML parser usage; may be vulnerable to hostile XML payloads.",

@@ -117,6 +117,18 @@ $Rules = @(
         Fix = 'Validate every ZIP member destination stays under the intended target directory before extracting.'
     }
     [pscustomobject]@{
+        Id = 'PY-SHUTIL-DYNAMIC-PATH'; Severity = 'MEDIUM'; Exts = @('.py')
+        Regex = '\bshutil\.(move|copy|copy2|copyfile|copytree)\s*\('
+        Description = 'shutil file operation uses a path argument; Cycode flags unsanitized dynamic input in file paths.'
+        Fix = 'Validate the source and destination with resolve_safe_path() before the shutil call; only then wrap the OS call (e.g. to_long_path). Never pass a raw or tainted path.'
+    }
+    [pscustomobject]@{
+        Id = 'PY-ZIPFILE-DYNAMIC-PATH'; Severity = 'MEDIUM'; Exts = @('.py')
+        Regex = '\bzipfile\.ZipFile\s*\(\s*(?![''\"])'
+        Description = 'zipfile.ZipFile() opens a non-literal path; Cycode flags unsanitized dynamic input in file paths.'
+        Fix = 'Pass a resolve_safe_path()-validated path into zipfile.ZipFile(); never open an archive at a raw user- or Salesforce-derived path.'
+    }
+    [pscustomobject]@{
         Id = 'PY-XML-STDLIB'; Severity = 'HIGH'; Exts = @('.py')
         Regex = '(from\s+xml\.etree\s+import|import\s+xml\.etree|xml\.etree\.ElementTree|\bET\.parse\s*\()'
         Description = 'Python standard-library XML parser usage; may be vulnerable to hostile XML payloads.'
