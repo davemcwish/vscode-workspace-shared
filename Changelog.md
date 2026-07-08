@@ -11,6 +11,52 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2026-07-08]
+
+### Added
+
+- **Python engine upgrade guide and GitHub CLI section in the shared
+  getting-started doc** (`_copilot-shared/docs/START-HERE-WINDOWS.md`):
+  - New `#### Upgrade it (moving to a newer Python engine)` subsection with the
+    exact, beginner-friendly steps for rebuilding a project's `.venv` on a newer
+    Python (back up the old `.venv`, create a fresh one with the new engine,
+    reinstall dependencies one file at a time, `pip check`, run the tests, point
+    VS Code at the new interpreter, then delete the backup). Written
+    version-agnostic so it applies to any future upgrade.
+  - New `### GitHub CLI` section (install, verify, `gh auth login`, and an
+    in-place upgrade note), plus an "Upgrade it" note on the Git section stating
+    that both tools upgrade in place, unlike the Python engine.
+  - New "No `py` launcher?" note under the Python verify step, showing the full
+    `python.exe` path alternative for managed/enterprise builds (e.g.
+    NativePython) that don't register the `py` launcher on `PATH`.
+- **New shared doc `_copilot-shared/docs/python-package-index-policy.md`**
+  recording the company-mandated JFrog gold-remote index, that installable
+  package versions are constrained to what that mirror serves (e.g. `pikepdf`
+  tops out at 9.11.0 here, not the 10.x on public PyPI), how to check available
+  versions with `pip index versions`, and a note that other environments without
+  this mirror may use other versions. Propagated to every project's `docs/`.
+- **New draft task `_copilot-shared/TASK-ci-yml-reconciliation.md`** capturing a
+  regression found during the sync: the blind `workflows` sync overwrote
+  `eu-spm`'s hardened `ci.yml` with the generic, under-hardened shared master
+  (unpinned Actions, missing `permissions: {}`, wrong `src/`+JFrog shape). The
+  regression was reverted (working-tree only). The doc records confirmed facts,
+  hypotheses to verify, the related `py -3.12` hard-coding in the sync/scaffold,
+  and a recommended fix (make `ci.yml` project-owned like `pyproject.toml`,
+  re-harden to a canonical template) routed through the CI/CD workflow. Not a
+  synced doc; no workflow files were changed.
+
+### Changed
+
+- **Made the Python section of `START-HERE-WINDOWS.md` version-agnostic.** The
+  `### Python 3.12` heading is now `### Python Engine`; the body states the
+  projects need "Python 3.12 or newer" and records "at the time of writing, we
+  used Python 3.13.5" instead of pinning 3.12. The stray `3.12` / `Python312`
+  references in Parts 2.3, 4.1, and Troubleshooting now show 3.13 with a note to
+  substitute your installed version. Propagates to every project's `docs/` on
+  the next `sync-shared-copilot.ps1` run.
+
+---
+
 ## [2026-07-07]
 
 ### Added

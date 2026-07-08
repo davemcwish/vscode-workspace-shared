@@ -19,9 +19,11 @@ You've found one of my projects on GitHub at [davemcwish](https://github.com/dav
 
 ## Part 1: Install Required Software (5 minutes)
 
-You need three tools to run the projects. If you already have them, skip to
-Part 2. There is also an optional fourth tool (Node.js) for contributors who
-want to run the full local quality gate - see the note at the end of this part.
+You need three tools to run the projects  -  Visual Studio Code, a Python
+engine, and Git. If you already have them, skip to Part 2. Two further tools
+are optional and used by contributors: the **GitHub CLI** (for working with
+pull requests from the terminal) and **Node.js** (for running the full local
+quality gate). Both are covered below.
 
 ### Visual Studio Code
 
@@ -38,16 +40,18 @@ want to run the full local quality gate - see the note at the end of this part.
 
 **Verify it works:** VS Code opens and you see the Welcome screen. ✅
 
-### Python 3.12
+### Python Engine
 
-**What is it?** A programming language. This project is written in Python, so your computer needs a Python engine to run it.
+**What is it?** A programming language. These projects are written in Python, so your computer needs a **Python engine** (the software that actually runs `.py` files) installed.
 
 **Why you need it:** Because the code is Python. Without it, running `.py` files fails.
+
+**Which version?** These projects need **Python 3.12 or newer**. This section is deliberately version-agnostic, because Python publishes a new version roughly once a year. **At the time of writing, we used Python 3.13.5.** Unless a project's own `README.md` says otherwise, install the latest stable release from python.org.
 
 **Install it:**
 
 1. Go to [python.org/downloads](https://www.python.org/downloads/)
-2. Click **Download Python 3.12.x** (the latest 3.12 version  -  not 3.13, not 2.7, specifically 3.12).
+2. Click the big **Download Python** button. It offers the latest stable version automatically (at the time of writing, 3.13.5).
 3. Run the installer.
 4. **IMPORTANT:** Check the box labeled **"Add Python to PATH"** before clicking Install. This lets your computer find Python from any folder.
 5. Click **Install Now**.
@@ -58,7 +62,82 @@ want to run the full local quality gate - see the note at the end of this part.
 py --version
 ```
 
-Expected output: `Python 3.12.x` (some version number). If you see "command not found," Python isn't on your PATH  -  go back and re-run the installer, making sure to check "Add Python to PATH."
+Expected output: `Python 3.13.5` (or whatever version you installed). If you see "command not found," Python isn't on your PATH  -  go back and re-run the installer, making sure to check "Add Python to PATH."
+
+> **No `py` launcher?** Some managed or enterprise Python builds don't register the `py` launcher, so `py` returns "command not found" even though Python is installed. In that case use the full path to `python.exe` instead  -  for example `& "C:\Users\$env:USERNAME\AppData\Local\Programs\Python\Python313\python.exe" --version` (change `Python313` to your version). Every `py -3.13` command in this guide can be replaced with that full path.
+
+#### Upgrade it (moving to a newer Python engine)
+
+Python releases a new version about once a year. Upgrading the **Python engine** is different from upgrading Git or the GitHub CLI (below): you cannot upgrade a project's virtual environment in place. Instead you install the new engine alongside the old one, then rebuild each project's virtual environment (the `.venv` folder) on top of it.
+
+> **What is a virtual environment (`.venv`)?** An isolated folder of Python packages that belongs to one project (explained fully in Part 4). Because it is tied to the exact Python engine that created it, you cannot swap the engine underneath it  -  you rebuild it. That is why this is more work than a normal upgrade.
+
+Here is the exact, beginner-friendly process we followed. It is safe because it keeps a backup until you have proved the new engine works. Do this once per project.
+
+1. **Install the new Python engine.** Follow the "Install it" steps above for the new version. The old and new versions can live side by side  -  the `py` launcher lets you choose which one to use (for example `py -3.13` or `py -3.12`).
+
+2. **Open PowerShell in the project folder.** For example:
+
+   ```powershell
+   cd "C:\Users\$env:USERNAME\Projects\Salesforce"
+   ```
+
+3. **Back up the old virtual environment.** Renaming it (instead of deleting it) lets you roll back instantly if anything goes wrong:
+
+   ```powershell
+   Rename-Item .venv .venv-old-bak
+   ```
+
+4. **Create a fresh virtual environment with the new engine.** Change `3.13` to match the version you installed:
+
+   ```powershell
+   py -3.13 -m venv .venv
+   ```
+
+5. **Activate the new environment.** Your prompt gains a `(.venv)` prefix:
+
+   ```powershell
+   .venv\Scripts\Activate.ps1
+   ```
+
+6. **Reinstall the project's dependencies, one file at a time.** Installing them separately (rather than all in one command) avoids version clashes between the runtime and developer dependency lists:
+
+   ```powershell
+   python -m pip install --upgrade pip
+   pip install -e .
+   pip install -r requirements.txt
+   pip install -r requirements-dev.txt
+   ```
+
+   If a project has no `requirements-dev.txt`, skip that line. If it has a `frontend/` folder, also run `pip install -r frontend/requirements-frontend.txt`.
+
+7. **Check the dependency tree is consistent.** This reports any conflicting package versions:
+
+   ```powershell
+   pip check
+   ```
+
+   Expected output: `No broken requirements found.`
+
+8. **Run the project's tests to prove the new engine works.** Most projects in this workspace use `pytest`:
+
+   ```powershell
+   pytest
+   ```
+
+   Expected: every test passes. If they do, the new engine is working correctly.
+
+9. **Point VS Code at the new environment.** Open the Command Palette (`Ctrl+Shift+P`), run **Python: Select Interpreter**, and choose the one inside your project's `.venv` folder. Then run **Developer: Reload Window** so VS Code lets go of the old files.
+
+10. **Delete the backup once you are happy.** Only after the tests pass and VS Code is using the new environment:
+
+    ```powershell
+    Remove-Item .venv-old-bak -Recurse -Force
+    ```
+
+    If Windows says a file such as `python.exe` is "in use," something still has the old environment open. Close it (or run **Developer: Reload Window** again) and retry.
+
+> **Roll back if needed:** If the new engine causes problems, delete the new `.venv`, rename `.venv-old-bak` back to `.venv`, and you are exactly where you started.
 
 ### Git
 
@@ -80,6 +159,39 @@ git --version
 ```
 
 Expected output: `git version X.X.X` (some version number).
+
+**Upgrade it:** Git upgrades in place  -  no project rebuild is needed, unlike the Python engine. On recent versions you can run `git update-git-for-windows`, or simply download and run the latest installer from [git-scm.com/download/win](https://git-scm.com/download/win). Your settings and cloned repositories are left untouched.
+
+### GitHub CLI
+
+**What is it?** The **GitHub CLI** (`gh`) is GitHub's official command-line tool. It lets you do GitHub tasks  -  sign in, clone repositories, and open, review, or merge pull requests  -  straight from PowerShell, without opening a browser.
+
+**Why you need it:** It is optional for just running the projects, but it makes contributing much smoother. We used it recently to sign in and manage pull requests from the terminal. If you plan to push changes back to GitHub, it is well worth installing.
+
+**Install it:**
+
+1. Go to [cli.github.com](https://cli.github.com/)
+2. Click **Download for Windows**. This guide stays version-agnostic because `gh` updates often  -  take whatever the latest version is.
+3. Run the installer and accept all defaults.
+4. Close and reopen PowerShell so it picks up the new `gh` command.
+
+**Verify it works:** Open a *new* PowerShell window and type:
+
+```powershell
+gh --version
+```
+
+Expected output: `gh version X.X.X` (some version number).
+
+**Sign in (first time only):** Connect `gh` to your GitHub account:
+
+```powershell
+gh auth login
+```
+
+Follow the prompts (choose **GitHub.com**, then **HTTPS**, then **Login with a web browser**). This is a one-time step; `gh` remembers you afterwards.
+
+**Upgrade it:** Like Git, the GitHub CLI upgrades in place  -  no virtual environment rebuild needed. Re-run the latest installer from [cli.github.com](https://cli.github.com/), or if you installed it with the Windows package manager, run `winget upgrade --id GitHub.cli`.
 
 ### Node.js (optional  -  for contributors only)
 
@@ -139,7 +251,7 @@ Open PowerShell and run:
 py -c "import sys; print(sys.executable)"
 ```
 
-Expected output: Something like `C:\Users\YourUsername\AppData\Local\Programs\Python\Python312\python.exe`
+Expected output: Something like `C:\Users\YourUsername\AppData\Local\Programs\Python\Python313\python.exe` (the `Python313` part will match whatever version you installed).
 
 If you see an error, Python is not on your PATH. Go back and re-run the Python installer, checking "Add Python to PATH."
 
@@ -188,12 +300,12 @@ Every Python project should have its own isolated **virtual environment** (a `.v
 Open PowerShell in the project folder and run:
 
 ```powershell
-py -3.12 -m venv .venv
+py -3.13 -m venv .venv
 ```
 
 **What this does:**
 
-- `py -3.12`  -  runs Python 3.12
+- `py -3.13`  -  runs Python 3.13 (change this number to match the version you installed  -  for example `py -3.12`)
 - `-m venv`  -  the venv module (which creates isolated Python environments)
 - `.venv`  -  the name of the folder to create
 
@@ -396,13 +508,13 @@ See [Adding a New Subworkspace](./adding-a-new-subworkspace.md) for full details
 
 ### ".venv already exists" or "venv folder is not empty"
 
-**Cause:** You ran `py -3.12 -m venv .venv` twice, or the venv is corrupted.
+**Cause:** You ran `py -3.13 -m venv .venv` twice, or the venv is corrupted.
 
 **Fix:** Delete the `.venv` folder and recreate it:
 
 ```powershell
 rm -r .venv
-py -3.12 -m venv .venv
+py -3.13 -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
