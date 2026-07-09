@@ -11,6 +11,41 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2026-07-09]
+
+### Changed
+
+- **`ci.yml` is now PROJECT-OWNED (scaffold-once), not blind-synced**
+  (`powershell/sync-shared-copilot.ps1`). The `workflows` folder is still
+  mirrored into every project's `.github/workflows/`, but `ci.yml` is now
+  excluded from that copy so each project keeps its own, correctly shaped CI
+  workflow. The three projects have genuinely different shapes and one file
+  cannot serve them all: `Salesforce` has an installable `src/` package with
+  compiled `requirements*.txt` (plus a JFrog index), `eu-spm` is scripts-only
+  with `requirements*.in` and a hardened (SHA-pinned, least-privilege) workflow,
+  and `trails-and-tails` is a docs/website repo with no importable Python
+  source. Implementation:
+  - Added a `$FolderExcludeFiles` map (`workflows` -> `ci.yml`) beside
+    `$Folders`, documenting why `ci.yml` is project-owned.
+  - Added an optional `-ExcludeFiles` parameter to `Sync-FolderStrict` that
+    passes the file names straight to robocopy's `/XF` (exclude-file) flag.
+  - Both sync loops (the ROOT workspace `.github/` and each project's
+    `.github/`) now pass `$FolderExcludeFiles[$folder]`.
+  The shared `_copilot-shared/workflows/ci.yml` is intentionally kept in place
+  so the stale-file check still recognises each project's `ci.yml`; it is never
+  copied. This fixes the regression recorded in
+  `_copilot-shared/TASK-ci-yml-reconciliation.md`, where a blind sync silently
+  downgraded `eu-spm`'s hardened workflow (stripped SHA-pinning and the
+  least-privilege `permissions:` block).
+- **Marked `_copilot-shared/workflows/ci.yml` as a REFERENCE TEMPLATE ONLY.**
+  Added a header comment stating the file is project-owned and no longer synced,
+  listing the three project shapes, and pointing to
+  `TASK-ci-yml-reconciliation.md`. Also reverted an abandoned, in-progress
+  "auto-detect project layout" edit to this master - that approach was replaced
+  by the project-owned model above.
+
+---
+
 ## [2026-07-08]
 
 ### Added

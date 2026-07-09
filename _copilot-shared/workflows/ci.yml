@@ -1,3 +1,20 @@
+# ============================================================================
+#  REFERENCE TEMPLATE ONLY - this file is NOT auto-synced into projects.
+#
+#  ci.yml is PROJECT-OWNED (scaffold-once), like pyproject.toml. The sync
+#  script (powershell\sync-shared-copilot.ps1) deliberately EXCLUDES ci.yml
+#  from the workflows copy via $FolderExcludeFiles, because each project has a
+#  different CI shape and one file cannot serve them all:
+#    - Salesforce      : installable src\ package + requirements*.txt (+ JFrog)
+#    - eu-spm          : scripts-only, requirements*.in, hardened (SHA-pinned)
+#    - trails-and-tails: docs/website, no importable Python source
+#
+#  To change a project's CI, edit THAT project's own .github\workflows\ci.yml.
+#  This file is a generic starting point kept for reference only. See
+#  _copilot-shared\TASK-ci-yml-reconciliation.md for the planned hardening and
+#  reconciliation of every project's CI (SHA-pinned Actions, least-privilege
+#  token, correct per-project layout).
+# ============================================================================
 name: CI
 
 on:
