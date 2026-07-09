@@ -43,6 +43,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   `TASK-ci-yml-reconciliation.md`. Also reverted an abandoned, in-progress
   "auto-detect project layout" edit to this master - that approach was replaced
   by the project-owned model above.
+- **Updated `_copilot-shared/TASK-ci-yml-reconciliation.md`** to reflect that
+  Option B (make `ci.yml` project-owned) was implemented, and added a short
+  follow-up backlog (Section 9): (1) harden `Salesforce`'s `ci.yml` (still
+  unpinned Actions, no `permissions:` block) and confirm `eu-spm`'s;
+  (2) right-size `trails-and-tails/pyproject.toml` so its local `sanity.bat`
+  (mypy + coverage) matches the project-owned CI; (3) remove the `py -3.12`
+  hard-coding from the sync validation and scaffold gate scripts. This task
+  doc is not a synced artefact.
 
 ---
 

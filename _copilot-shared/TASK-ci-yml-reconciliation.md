@@ -1,6 +1,7 @@
 # TASK (Draft): Shared `ci.yml` Reconciliation
 
-**Status:** Draft - not started. Do NOT execute the fix from this document.
+**Status:** In progress. The core Option B change (make `ci.yml` project-owned)
+was implemented on 2026-07-09 - see Section 9 for what is done and what remains.
 **Raised:** 2026-07-08, during the Python 3.13.5 migration + shared doc sync.
 **Owner (proposed):** route through the CI/CD workflow governed by
 `.github/instructions/ci-cd.instructions.md`. Any change is CRITICAL-tier and
@@ -107,7 +108,47 @@ root cause.
 
 ## 8. Out of scope / cautions
 
-- This document is a **plan only**. It changes no workflow files.
+- The **remaining** items in Section 9 are plan-only until scheduled; the
+  Option B sync change and the `trails-and-tails` workflow are already done.
 - Editing any file under `.github/workflows/` triggers the CI/CD hardening
   instructions; treat all findings as CRITICAL and fail-closed.
 - No merge, push, deploy, or Production action without explicit human approval.
+
+## 9. Progress log and follow-up backlog
+
+### Done (2026-07-09)
+
+- **Option B item 1 implemented.** `ci.yml` is now project-owned: the sync
+  script (`powershell/sync-shared-copilot.ps1`) excludes it from the blind
+  `workflows` copy via a new `$FolderExcludeFiles` map and an `-ExcludeFiles`
+  parameter on `Sync-FolderStrict` (robocopy `/XF`). The shared
+  `_copilot-shared/workflows/ci.yml` is now a REFERENCE TEMPLATE ONLY and is
+  never copied into a project. Committed to the workspace repo (`main`).
+- **`trails-and-tails/.github/workflows/ci.yml` authored to its real shape**
+  (docs/website, no importable Python source): SHA-pinned Actions,
+  `permissions: {}` + `contents: read`, install from `requirements-dev.in`,
+  ruff on `tests/` only, markdownlint, detect-secrets, `pytest --no-cov`
+  (mypy and bandit omitted). Committed on the `website-planning-and-mockup`
+  branch to fix that project's red CI.
+
+### Follow-up backlog (short)
+
+1. **Harden `Salesforce`'s `ci.yml` and confirm `eu-spm`'s.** `Salesforce`
+   still uses unpinned Actions (`checkout@v4`, `setup-python@v5`) and has no
+   `permissions:` block, so it does not satisfy `ci-cd.instructions.md`.
+   SHA-pin its Actions and add the deny-all-plus-`contents: read` block,
+   keeping its `src/` + `requirements*.txt` + JFrog shape. Re-confirm
+   `eu-spm`'s `ci.yml` already meets the baseline (it appears to: SHA-pinned,
+   `permissions: {}`). CRITICAL-tier; route through the CI/CD workflow.
+2. **Right-size `trails-and-tails/pyproject.toml` for a no-Python-source repo.**
+   Its local gate (`sanity.bat`) still runs `mypy` (exits 2 - no `.py` under
+   the configured `src`/`scripts`) and the coverage gate (0% - nothing to
+   measure), so local and CI now diverge. Point mypy/coverage at what exists
+   (or make them conditional) so `sanity.bat` matches the project-owned CI.
+   Lower risk; project-local change.
+3. **Remove the `py -3.12` hard-coding** from the sync pre-sync validation in
+   `powershell/sync-shared-copilot.ps1` and the scaffold gate scripts
+   (`sanity.bat` / `sanity_v.bat`, `PY_CMD=py -3.12`). Make the interpreter
+   configurable / launcher-independent so it works on managed builds where the
+   `py` launcher is not on `PATH` and on Python 3.13+. Also add the Section 6
+   item 5 note to `ci-cd.instructions.md` that `ci.yml` is project-owned.
