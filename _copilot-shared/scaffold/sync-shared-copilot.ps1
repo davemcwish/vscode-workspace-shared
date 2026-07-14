@@ -113,7 +113,8 @@ $ScaffoldSyncFiles = @(
     "sanity.bat",
     "sanity_v.bat",
     "security_scan.py",
-    "security_scan.ps1"
+    "security_scan.ps1",
+    "sync-backups.ps1"
 )
 
 # Skill subfolders under .github\skills\ that are installed and maintained by an

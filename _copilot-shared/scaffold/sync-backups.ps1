@@ -41,8 +41,17 @@
 
 .PARAMETER RepoPath
     The folder that contains the Git repository to mirror. Defaults to the
-    folder this script lives in, which is the repository root. You normally do
-    not need to set this.
+    directory you run the script FROM (your current location), NOT the folder
+    the script file lives in. This matters because this one shared script lives
+    in the parent workspace's "powershell" folder but is used to mirror several
+    separate sub-repositories (for example "Salesforce"), each with its own
+    remotes. Defaulting to your current directory means:
+
+        cd <the repo you want to mirror>
+        ..\powershell\sync-backups.ps1
+
+    mirrors THAT repo. Pass -RepoPath explicitly if you want to mirror a repo
+    other than the one you are standing in.
 
 .PARAMETER SourceRemote
     The name of the MASTER remote that the backups must copy. Defaults to
@@ -59,9 +68,17 @@
 .OUTPUTS
     None. The script writes coloured progress messages and a final summary table
     to the screen. It stops with an error (throws) if the source branch cannot
-    be found, or if any reachable backup fails to push or cannot be verified.
-    Unreachable backups (those whose fetch fails) are reported as warnings and
-    recorded as UNREACHABLE in the summary table; they do not cause a throw.
+    be found, or if any reachable backup's force-push is rejected, or if the
+    post-push re-read finds a DIFFERENT commit than we just pushed (a genuine
+    mismatch, e.g. someone pushed during the sync).
+
+    A successful force-push is treated as proof of success on its own. If the
+    optional post-push re-read cannot reach the remote (typically a missed SSH
+    passphrase prompt on that extra query), the backup is still reported OK
+    (shown as "OK*" - pushed, remote re-read skipped); it does NOT throw.
+    Unreachable backups (those whose initial fetch fails) are reported as
+    warnings and recorded as UNREACHABLE in the summary table; they do not cause
+    a throw.
 
 .EXAMPLE
     .\sync-backups.ps1 -WhatIf
@@ -98,6 +115,17 @@
     for the pre-push fetch, one for the push itself, and one for the post-push
     verification query (git ls-remote).
 
+    Reduce the prompts to one: load your key into ssh-agent before running this
+    script, so every Git call reuses the cached key instead of asking again.
+    In the SAME PowerShell window, run:
+
+        Start-Service ssh-agent          # once per machine; may need an admin shell
+        ssh-add $HOME\.ssh\id_ed25519    # type the passphrase this one time
+
+    Then run this script - Git will not prompt again for that session. If the
+    verification query is skipped because a prompt was missed, the run reports
+    that backup as FAIL (not a crash) so you can simply re-run it.
+
     Branch protection: if a backup has GitHub branch protection that forbids
     force-pushes, the push is rejected with "GH006: Cannot force-push to this
     branch". Temporarily allow force-pushes on that branch
@@ -112,7 +140,15 @@
 param(
     # RepoPath is a filesystem path; it is not validated against the remote-name
     # pattern below. Push-Location will fail early if the path does not exist.
-    [string]$RepoPath = $PSScriptRoot,
+    #
+    # Default to the caller's CURRENT directory, not $PSScriptRoot. This script
+    # lives in the parent workspace's "powershell" folder but mirrors whichever
+    # sub-repository you run it from (each sub-repo has its own remotes, e.g.
+    # only "Salesforce" has a "personal" backup). Using $PSScriptRoot here would
+    # always mirror the parent workspace repo instead - which silently skipped
+    # "personal" and pushed the wrong repository. (Get-Location).Path is the
+    # directory the user invoked the script from.
+    [string]$RepoPath = (Get-Location).Path,
 
     # Git remote and branch names must start with a letter or digit. The pattern
     # below also rejects anything starting with "-", which git would silently
@@ -294,10 +330,38 @@ try {
         # the server's true tip and keeps the summary honest. This is
         # authoritative but costs one more network round-trip and, on a
         # passphrase-protected remote, one more prompt (see the .NOTES section).
-        $lsRemote = git ls-remote $remote "refs/heads/$Branch" 2>$null
-        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($lsRemote)) {
-            Write-Warning "Verification failed for '$remote': could not read the remote SHA for refs/heads/$Branch."
-            $results += [pscustomobject]@{ Remote = $remote; Status = 'FAIL'; Sha = '(verify failed)' }
+        #
+        # IMPORTANT: this verification is BEST-EFFORT, not a gate. A
+        # "git push --force-with-lease" that exits 0 has already succeeded - the
+        # remote now holds $targetSha; the lease check even guarantees we did not
+        # clobber unexpected work. So the push is the real proof of success. The
+        # only failure this extra query can legitimately catch is a genuine SHA
+        # MISMATCH (someone pushed again between our push and this read). If the
+        # query merely cannot authenticate (a fumbled third passphrase prompt),
+        # that says nothing about whether the push worked, so we must NOT mark
+        # the backup FAIL for it - doing so previously produced false failures.
+        #
+        # The try/catch also handles a PowerShell 5.1 quirk: when a native
+        # command BOTH exits non-zero AND writes to stderr while its stderr is
+        # redirected with "2>$null", $ErrorActionPreference = 'Stop' turns that
+        # into a *terminating* NativeCommandError. Catching it keeps the run
+        # alive so the summary and the other backups are unaffected.
+        try {
+            $lsRemote = git ls-remote $remote "refs/heads/$Branch" 2>$null
+            $lsExitCode = $LASTEXITCODE
+        }
+        catch {
+            $lsRemote = $null
+            $lsExitCode = 1
+        }
+        if ($lsExitCode -ne 0 -or [string]::IsNullOrWhiteSpace($lsRemote)) {
+            # Push succeeded (we only reach here after exit 0 above); we just
+            # could not RE-READ the remote to double-check. Trust the push and
+            # report OK with a note rather than a false FAIL.
+            Write-Warning "Could not re-read '$remote' to double-check the push (often a missed SSH passphrase prompt on the verification query)."
+            Write-Warning "  The force-push itself succeeded, so '$remote/$Branch' is at $targetSha. Load your key into ssh-agent (see .NOTES) to get a clean verification next time."
+            Write-Host "[OK] $remote/$Branch pushed to $targetSha (push confirmed; remote re-read skipped)" -ForegroundColor Green
+            $results += [pscustomobject]@{ Remote = $remote; Status = 'OK*'; Sha = $targetSha }
             continue
         }
         # ls-remote prints "<sha><TAB>refs/heads/<branch>". Take the first line's
@@ -308,7 +372,11 @@ try {
             $results += [pscustomobject]@{ Remote = $remote; Status = 'OK'; Sha = $backupSha }
         }
         else {
-            Write-Warning "Verification failed for '$remote': expected $targetSha but found '$backupSha'."
+            # A genuine mismatch: the remote holds a DIFFERENT SHA than we just
+            # pushed, which means someone pushed again in between. This is the
+            # one case worth failing on, so re-running (with the lease check)
+            # can reconcile it safely.
+            Write-Warning "Verification failed for '$remote': expected $targetSha but found '$backupSha'. Someone may have pushed during the sync; re-run this script."
             $results += [pscustomobject]@{ Remote = $remote; Status = 'FAIL'; Sha = "$backupSha" }
         }
     }
