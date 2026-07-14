@@ -440,8 +440,54 @@ Write-Host ""
 # The masters in _copilot-shared\ are the single source of truth. Refuse to
 # propagate anything if the agent/chatmode pairing contract is broken.
 
+function Resolve-ValidationPython {
+    <#
+        Returns a hashtable @{ Exe = <path-or-command>; Prefix = @(<args>) }
+        for the first Python 3 runtime that actually has pytest installed.
+
+        We deliberately do NOT hard-code 'py -3.12': the launcher throws
+        "No suitable Python runtime found" on machines where 3.12 is absent
+        (e.g. only 3.13 installed). Instead we probe, in order:
+          1. the currently ACTIVE virtual environment ($env:VIRTUAL_ENV),
+          2. the workspace-root .venv (created next to _copilot-shared\),
+          3. the 'py -3' launcher (any Python 3),
+          4. plain 'python' on PATH.
+        The first candidate whose "import pytest" succeeds is used.
+
+        Throws with recovery instructions if none is found.
+    #>
+    $candidates = @()
+    if ($env:VIRTUAL_ENV) {
+        $candidates += @{ Exe = (Join-Path $env:VIRTUAL_ENV "Scripts\python.exe"); Prefix = @() }
+    }
+    $candidates += @{ Exe = (Join-Path $Root ".venv\Scripts\python.exe"); Prefix = @() }
+    $candidates += @{ Exe = "py";     Prefix = @("-3") }
+    $candidates += @{ Exe = "python"; Prefix = @() }
+
+    foreach ($cand in $candidates) {
+        # Skip explicit interpreter paths that do not exist on disk.
+        if ($cand.Exe -like "*\*" -and -not (Test-Path $cand.Exe)) { continue }
+        try {
+            # A native command that exits non-zero while 2>$null under
+            # $ErrorActionPreference='Stop' can escalate to a terminating
+            # error in Windows PowerShell 5.1, so wrap the probe in try/catch.
+            & $cand.Exe @($cand.Prefix) -c "import pytest" 2>$null
+        } catch {
+            continue
+        }
+        if ($LASTEXITCODE -eq 0) { return $cand }
+    }
+    throw @"
+No Python 3 runtime with pytest was found for pre-sync validation.
+Create the workspace-root virtual environment and install pytest:
+  py -m venv .venv
+  .\.venv\Scripts\python.exe -m pip install pytest
+"@
+}
+
 Write-Host "  -> Validating agent/chatmode pairs..." -ForegroundColor Green
-& py -3.12 -m pytest (Join-Path $Shared "tests\test_agent_chatmode_sync.py") -q --no-cov
+$validationPython = Resolve-ValidationPython
+& $validationPython.Exe @($validationPython.Prefix) -m pytest (Join-Path $Shared "tests\test_agent_chatmode_sync.py") -q --no-cov
 if ($LASTEXITCODE -ne 0) {
     throw "Agent/chatmode pairing validation FAILED. Fix the masters in _copilot-shared\ before syncing."
 }
