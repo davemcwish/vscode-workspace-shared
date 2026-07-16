@@ -408,7 +408,7 @@ The script is organised into logical sections. Here is what each piece does.
 | --- | --- |
 | `process_single_pdf()` | Downloads one PDF, handles fallback logic, and returns a result dict. Designed to run in a thread. |
 | `log_export_summary()` | Prints a final count of downloads, skips, and errors. |
-| `main()` | Top-level orchestration: authenticate -> query -> download -> verify -> reconcile -> write manifest. |
+| `main()` | Top-level orchestration: authenticate -> query -> download -> verify -> write manifest -> reconcile. |
 
 ### Shared Integrity Modules (REQ-T)
 
@@ -438,7 +438,7 @@ After a successful run the output folder (e.g.
 ```text
 AXP_Contract_PDFs_Prod_2026.05.19/
 +-- 00000124_Misker Emmen_a0A8d00000DK2smEAD/
-|   +-- 068ABC123_ContractDocument.pdf
+|   +-- 069ABC123_ContractDocument.pdf
 +-- 00000258_Another Agency_a0AJw000000uWq1MAE/
 |   +-- ...
 +-- _short_path_fallback/          <- only if long paths failed

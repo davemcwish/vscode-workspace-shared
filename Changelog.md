@@ -20,10 +20,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   `_copilot-shared/docs/export_quote_pdfs_guide.md`, the source of truth, then
   synced to every project's `docs/`). The guides now document the full REQ-T
   behaviour that shipped in PRs 1-5:
-  - **Filename scheme** - `<id>_<shortened title>.pdf`; the `.pdf` extension is
-    never truncated; the `_short_path_fallback/` scheme; and why
-    `LatestPublishedVersionId` is dropped from the Contract name but kept in the
-    manifest.
+  - **Filename scheme** - Contract:
+    `<ContentDocumentId>_<shortened title>.pdf`; Quote:
+    `<QuoteNumber>_<QuoteId>_<shortened quote name>_QuoteCustomPDF.pdf`; the
+    `.pdf` extension is never truncated; the `_short_path_fallback/` scheme; and
+    why `LatestPublishedVersionId` is dropped from the Contract name but kept in
+    the manifest.
   - **How downloads are verified** - the four verification tiers (metadata and
     header; full read-back with `%%EOF` / SHA-256 / wire-completeness / Contract
     MD5 vs `ContentVersion.Checksum`; `pikepdf`/`pypdfium2` structural parse; and

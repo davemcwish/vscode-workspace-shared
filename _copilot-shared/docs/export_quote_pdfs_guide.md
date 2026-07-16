@@ -252,27 +252,30 @@ python scripts/export_quote_pdfs.py --limit 5
 
 ## Filename Scheme
 
-Each rendered Quote PDF is named from the quote number and quote name, and it
-**always** ends in `.pdf`:
+Each rendered Quote PDF is named from the quote number, the Quote id, and the
+quote name, and it **always** ends in `.pdf`:
 
 ```text
-<QuoteNumber>_<shortened quote name>.pdf
+<QuoteNumber>_<QuoteId>_<shortened quote name>_QuoteCustomPDF.pdf
 ```
 
 Two rules make this safe:
 
-- **The `.pdf` extension is never truncated.** Only the human-readable quote name
-  is shortened to fit a length budget (`QUOTE_MAX_PDF_FILENAME_LEN`). The unique
-  prefix and the `.pdf` suffix are always kept in full.
-- **Both identifiers are retained.** The Quote id and the `QuoteNumber` are kept,
-  so two quotes can never collide even if their names shorten to the same text.
+- **The `.pdf` extension is never truncated.** Only the human-readable stem
+  (`<quote name>_QuoteCustomPDF`) is shortened to fit a length budget
+  (`QUOTE_MAX_PDF_FILENAME_LEN`). The `<QuoteNumber>_<QuoteId>_` prefix and the
+  `.pdf` suffix are always kept in full.
+- **Both identifiers are retained.** The `QuoteNumber` and the Quote id are kept
+  as the prefix, so two quotes can never collide even if their names shorten to
+  the same text.
 
 The Contract and Quote length budgets are deliberately **different** and are not
 shared - do not assume they are the same number.
 
 If Windows rejects a path (the 260-character limit), the script falls back to a
 `_short_path_fallback/` folder and names the file
-`<OfferNum>_<AgencyId>_<QuoteId>.pdf`, again always keeping the `.pdf` extension.
+`<QuoteId>_<OfferNum>_<AgencyPrivacyDataId>_QuoteCustomPDF.pdf`, again always
+keeping the `.pdf` extension.
 
 ---
 
@@ -329,12 +332,14 @@ The report flags: a master item with no manifest row; a `Downloaded`/`Skipped`
 row with no file on disk; any `Error` row; an **orphan** `.pdf` on disk with no
 manifest row; two rows resolving to the **same** path; and any SHA-256 mismatch.
 
-There is also an **independent aggregate `COUNT()`** leg: the script issues a
-separate `SELECT COUNT()` (outside the per-record download loop) and confirms it
-matches both the number of master items processed and the manifest row count, so
-a silent row drop upstream fails the run. This proves *completeness of
-retrieval*; it does not prove the query *filter* is correct - that needs human
-sign-off.
+There is also an **independent aggregate `COUNT()`** leg **on a full run**: the
+script issues a separate `SELECT COUNT()` (outside the per-record download loop)
+and confirms it matches both the number of master items processed and the
+manifest row count, so a silent row drop upstream fails the run. This proves
+*completeness of retrieval*; it does not prove the query *filter* is correct -
+that needs human sign-off. On a `--limit` test run this leg is deliberately
+**skipped** (a limited run truncates the master set on purpose), so a limited
+run does not carry this completeness guarantee.
 
 A fully matching run exits `0`. There is no `--allow-partial` flag: a discrepancy
 always fails the run.
@@ -478,7 +483,7 @@ to the next:
 | --- | --- |
 | `build_manifest_row()` | Assembles one CSV row from record data and status. |
 | `log_batch_summary()` | Prints final counts of downloads, skips, and errors. |
-| `main()` | Top-level orchestration: auth -> query -> download -> verify -> reconcile -> write manifest. |
+| `main()` | Top-level orchestration: auth -> query -> download -> verify -> write manifest -> reconcile. |
 
 ### Concurrency Model
 
@@ -509,7 +514,7 @@ contains:
 ```text
 AXP_Quote_PDFs_Prod_2026.05.19/
 +-- Q-12345_Agency Name_a0A8d00000DK2smEAD/
-|   +-- Q-12345_Quote Name.pdf
+|   +-- Q-12345_0Q0xx0000000AbcEAE_Quote Name_QuoteCustomPDF.pdf
 +-- Q-67890_Another Agency_a0AJw000000uWq1MAE/
 |   +-- ...
 +-- _short_path_fallback/          <- only if long paths failed
@@ -521,9 +526,9 @@ AXP_Quote_PDFs_Prod_2026.05.19/
 +-- export_quote_pdfs_2026.05.19.log
 ```
 
-Each PDF is named `<QuoteNumber>_<shortened quote name>.pdf` (see
-[Filename Scheme](#filename-scheme)). The reconciliation report is a Markdown file
-(see [End-of-Run Reconciliation](#end-of-run-reconciliation)).
+Each PDF is named `<QuoteNumber>_<QuoteId>_<shortened quote name>_QuoteCustomPDF.pdf`
+(see [Filename Scheme](#filename-scheme)). The reconciliation report is a Markdown
+file (see [End-of-Run Reconciliation](#end-of-run-reconciliation)).
 
 ### Manifest CSV Columns
 
