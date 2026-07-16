@@ -14,6 +14,11 @@ are new to Python scripting and Salesforce administration.
 - [Salesforce CLI Setup](#salesforce-cli-setup)
 - [Running the Script](#running-the-script)
 - [Configuration Reference](#configuration-reference)
+- [Filename Scheme](#filename-scheme)
+- [How Downloads Are Verified](#how-downloads-are-verified)
+- [End-of-Run Reconciliation](#end-of-run-reconciliation)
+- [OneDrive and Cloud Placeholder Files](#onedrive-and-cloud-placeholder-files)
+- [PII and Generated Reports](#pii-and-generated-reports)
 - [Code Walkthrough](#code-walkthrough)
 - [Output Files](#output-files)
 - [Troubleshooting](#troubleshooting)
@@ -32,8 +37,15 @@ script must **render the PDF on demand** by navigating Salesforce's Visualforce 
 (`/apex/quotecustompdf?Id=<QuoteId>`). This involves following JavaScript redirects,
 extracting iframe URLs, and handling Salesforce's frontdoor authentication flow.
 
+Every rendered PDF is **verified** the moment it lands (see
+[How Downloads Are Verified](#how-downloads-are-verified)) - a file is only marked
+`Downloaded` after it passes a series of integrity checks. At the end of the run the
+script performs a **three-way reconciliation** (see
+[End-of-Run Reconciliation](#end-of-run-reconciliation)) and **exits with a non-zero
+code** if Salesforce, the manifest, and the disk do not agree.
+
 It writes a **manifest CSV** listing every record processed - including Salesforce IDs,
-download path, and status.
+download path, integrity fingerprint, and status.
 
 ---
 
@@ -47,6 +59,18 @@ download path, and status.
 | Fallback strategies | Retry with backoff | Three methods: frontdoor -> VF session -> bearer |
 | Related object | Order | Quote |
 
+> **A common point of confusion (worth reading once).** If you browse the
+> Salesforce **ContentVersion** object (the store of uploaded files) you will see
+> many PDFs titled `Quote #00039182 ...`. These are **not** what this Quote
+> script downloads. Those stored files are **DocuSign snapshots** - a separate
+> archived document - and they are all roughly the same size because they come
+> from one template. This script instead asks Salesforce to **render the Quote
+> PDF fresh** from the Visualforce page each time it runs, so there is no stored
+> file, no stored byte-size, and no stored checksum for it. The Contract script
+> is the opposite: it downloads a genuinely stored file (a `ContentVersion`) that
+> **does** have a size and an MD5 checksum Salesforce can verify against. This
+> difference is why the two scripts verify their downloads differently.
+
 ---
 
 ## Prerequisites
@@ -58,6 +82,7 @@ Before running this script you need:
 | Python 3.12+ | The script uses modern type hints and standard library features. |
 | Salesforce CLI (`sf`) | Used to authenticate without storing passwords. |
 | `requests` library | Handles HTTP calls and cookie-based browser sessions. |
+| `pikepdf` (or `pypdfium2`) | Reads each rendered PDF to confirm it is structurally valid (Tier 3 verification). `pikepdf==9.11.0` is preferred; `pypdfium2==5.0.0` is a weaker fallback. Both are pinned in `requirements.txt`. |
 | Network access to Salesforce | Your machine must reach `*.salesforce.com` and `*.force.com`. |
 | Sufficient disk space | Each Quote PDF is typically 50-500 KB. |
 
@@ -170,12 +195,7 @@ python scripts/export_quote_pdfs.py --help
 | `--force-redownload` | No | `False` (flag) | Re-download PDFs that already exist locally. Omit to skip already-downloaded files (safe resume). |
 | `--dry-run` | No | `False` (flag) | Query Salesforce and log what would be downloaded, but do not write any files to disk. Safe to run against Production at any time. |
 | `--yes` | No | `False` (flag) | Skip the interactive Production confirmation prompt. Use in CI or automation where interactive input is not available. Has no effect when `--dry-run` is active. |
-
-Example - safety check (recommended first run):
-
-```bash
-python scripts/export_quote_pdfs.py --sf-alias AXP_PROD --dry-run --limit 5
-```
+| `--allow-onedrive` | No | `False` (flag) | Permit an output directory managed by OneDrive. By default the export refuses a OneDrive output directory (unless you confirm at the prompt), because OneDrive can evict files to the cloud and leave incomplete placeholders. Set the folder to "Always keep on this device" in OneDrive before using this flag. See [OneDrive and Cloud Placeholder Files](#onedrive-and-cloud-placeholder-files). |
 
 Example - full production run:
 
@@ -230,6 +250,132 @@ python scripts/export_quote_pdfs.py --limit 5
 
 ---
 
+## Filename Scheme
+
+Each rendered Quote PDF is named from the quote number and quote name, and it
+**always** ends in `.pdf`:
+
+```text
+<QuoteNumber>_<shortened quote name>.pdf
+```
+
+Two rules make this safe:
+
+- **The `.pdf` extension is never truncated.** Only the human-readable quote name
+  is shortened to fit a length budget (`QUOTE_MAX_PDF_FILENAME_LEN`). The unique
+  prefix and the `.pdf` suffix are always kept in full.
+- **Both identifiers are retained.** The Quote id and the `QuoteNumber` are kept,
+  so two quotes can never collide even if their names shorten to the same text.
+
+The Contract and Quote length budgets are deliberately **different** and are not
+shared - do not assume they are the same number.
+
+If Windows rejects a path (the 260-character limit), the script falls back to a
+`_short_path_fallback/` folder and names the file
+`<OfferNum>_<AgencyId>_<QuoteId>.pdf`, again always keeping the `.pdf` extension.
+
+---
+
+## How Downloads Are Verified
+
+A file is only marked `Downloaded` (or `Skipped - already exists`) after it
+passes a series of integrity checks. The same checks run on the **skip path**
+too: an already-present file is re-proven rather than trusted blindly. The checks
+are grouped into four tiers, cheapest first:
+
+| Tier | What it proves | Quote specifics |
+| --- | --- | --- |
+| **Tier 1 - metadata + header** | The file exists, ends in `.pdf`, and starts with the `%PDF-` marker. | Quote **skips** the size-vs-`ContentSize` check - a Visualforce-rendered PDF has no stored Salesforce file, so there is no reported size to compare against. |
+| **Tier 2 - full read-back** | Every byte is read back off disk, the trailing `%%EOF` marker is present, and a SHA-256 fingerprint is computed and stored. | See the wire-completeness note below. There is **no** Salesforce `Checksum` to compare against (the PDF is rendered fresh, not stored). |
+| **Tier 3 - structural parse** | A real PDF engine (`pikepdf`, or `pypdfium2` as a fallback) opens the file and confirms it has at least one page. | Same for both scripts. The engine is imported lazily, so a missing wheel only fails at parse time, never at import. |
+| **Tier 4 - OneDrive placeholder guard** | On a OneDrive folder, the file is real local bytes and not a cloud-only placeholder. | See [OneDrive and Cloud Placeholder Files](#onedrive-and-cloud-placeholder-files). |
+
+**Wire-completeness gap (Quote only).** Salesforce renders the Quote PDF through
+Visualforce, which is often sent as a *chunked* HTTP response with **no**
+`Content-Length` header. When that header is absent the script cannot prove
+completeness from the wire, so it relies on the size floor, the `%%EOF` marker,
+and the Tier 3 structural parse instead. When a `Content-Length` **is** present,
+it is checked. A short or truncated response still fails.
+
+The SHA-256 fingerprint from Tier 2 is written to the manifest's `Sha256` column,
+so the reconciliation step can re-prove every file without re-rendering it. The
+Quote manifest has **no** `ContentVersionChecksum` column (there is no stored
+file to checksum).
+
+If any mandatory check fails, the row is marked `Error` and the file is never
+reported as `Downloaded`.
+
+---
+
+## End-of-Run Reconciliation
+
+After all downloads finish, the script performs a **three-way reconciliation**
+and writes a report named:
+
+```text
+reconciliation_report_quote_prod_YYYY.MM.DD.md
+```
+
+It compares three independent views of the run and fails closed (exits non-zero)
+if any of them disagree:
+
+1. **Master (Salesforce)** - every `AgencyPrivacyData__c` record with a Quote the
+   query said should exist.
+2. **Manifest** - every row the script wrote (keyed by `AgencyPrivacyDataId`).
+3. **Disk** - every `.pdf` file actually present in the output folder, re-hashed
+   with SHA-256 and compared to the manifest `Sha256`.
+
+The report flags: a master item with no manifest row; a `Downloaded`/`Skipped`
+row with no file on disk; any `Error` row; an **orphan** `.pdf` on disk with no
+manifest row; two rows resolving to the **same** path; and any SHA-256 mismatch.
+
+There is also an **independent aggregate `COUNT()`** leg: the script issues a
+separate `SELECT COUNT()` (outside the per-record download loop) and confirms it
+matches both the number of master items processed and the manifest row count, so
+a silent row drop upstream fails the run. This proves *completeness of
+retrieval*; it does not prove the query *filter* is correct - that needs human
+sign-off.
+
+A fully matching run exits `0`. There is no `--allow-partial` flag: a discrepancy
+always fails the run.
+
+---
+
+## OneDrive and Cloud Placeholder Files
+
+OneDrive (and similar cloud-sync tools) can replace a real file on disk with a
+tiny **placeholder** - the file *looks* present in Explorer but its bytes live in
+the cloud until something opens it. Writing thousands of PDFs into such a folder
+risks an export that looks complete but is not.
+
+To prevent this:
+
+- If the output directory is detected as OneDrive-managed, the script prints a
+  prominent warning and **aborts** unless you confirm at the prompt or pass
+  `--allow-onedrive`.
+- With `--allow-onedrive`, the export continues but every file still gets a
+  per-file **placeholder check** (Tier 4): a file whose bytes are cloud-only is
+  marked `Error`, never `Downloaded`.
+
+**Recommendation:** before exporting into a OneDrive folder, right-click it and
+choose **"Always keep on this device"**, then run with `--allow-onedrive`. This
+detection is Windows-only; on other platforms Tier 4 is a no-op.
+
+---
+
+## PII and Generated Reports
+
+The manifest CSV, the log file, and the reconciliation report all contain
+**business-derived data** - agency names, account names, quote numbers, and file
+paths that may reveal customer information (PII). Treat them as confidential:
+
+- **Never commit** a real manifest, log, or reconciliation report to version
+  control. Only tiny, sanitised fixtures belong in the repository.
+- Store the output folder somewhere access-controlled.
+- When sharing a report for troubleshooting, redact names and IDs first.
+
+---
+
 ## Code Walkthrough
 
 The script is organised into logical sections. Here is what each piece does.
@@ -255,6 +401,7 @@ The script is organised into logical sections. Here is what each piece does.
 | Name | Purpose |
 | --- | --- |
 | `safe_filename()` | Removes invalid Windows filename characters and truncates length. |
+| `safe_filename_with_extension()` | Like `safe_filename` but shortens only the stem and always keeps the extension and a unique prefix (see [Filename Scheme](#filename-scheme)). |
 | `soql_escape()` | Escapes single quotes and backslashes for SOQL literals. |
 | `chunk_list()` | Splits a list into smaller batches for SOQL `IN` clauses. |
 | `redact_sensitive_text()` | Removes session tokens from text before logging. |
@@ -331,7 +478,7 @@ to the next:
 | --- | --- |
 | `build_manifest_row()` | Assembles one CSV row from record data and status. |
 | `log_batch_summary()` | Prints final counts of downloads, skips, and errors. |
-| `main()` | Top-level orchestration: auth -> query -> download -> write manifest. |
+| `main()` | Top-level orchestration: auth -> query -> download -> verify -> reconcile -> write manifest. |
 
 ### Concurrency Model
 
@@ -340,6 +487,17 @@ thread processes one AgencyPrivacyData__c record at a time (including the full
 redirect-following flow). The `SalesforceSession` class uses a `threading.Lock` so
 only one thread refreshes the token if it expires - all other threads wait and then
 use the new token.
+
+### Shared Integrity Modules (REQ-T)
+
+These live under `src/sf_admin_utils/` and are shared with the Contract exporter
+so the two scripts can never drift apart in how they verify or reconcile:
+
+| Module | What it does |
+| --- | --- |
+| `pdf_verification.py` | Tier 1-3 per-file checks (`verify_pdf_bytes`, `verify_pdf_on_disk`) returning a `VerificationResult`. |
+| `onedrive_guard.py` | Detects a OneDrive output folder and the Tier 4 per-file placeholder check (Windows-only). |
+| `pdf_reconciliation.py` | End-of-run three-way reconciliation (`reconcile`, `write_report`). |
 
 ---
 
@@ -351,7 +509,7 @@ contains:
 ```text
 AXP_Quote_PDFs_Prod_2026.05.19/
 +-- Q-12345_Agency Name_a0A8d00000DK2smEAD/
-|   +-- Q-12345_Quote Name_0Q0xxx_QuoteCustomPDF.pdf
+|   +-- Q-12345_Quote Name.pdf
 +-- Q-67890_Another Agency_a0AJw000000uWq1MAE/
 |   +-- ...
 +-- _short_path_fallback/          <- only if long paths failed
@@ -359,8 +517,13 @@ AXP_Quote_PDFs_Prod_2026.05.19/
 +-- _debug_responses/              <- non-PDF responses saved for investigation
 |   +-- debug_frontdoor_0Q0xxx.html
 +-- export_quote_pdf_manifest_prod_2026.05.19.csv
++-- reconciliation_report_quote_prod_2026.05.19.md
 +-- export_quote_pdfs_2026.05.19.log
 ```
+
+Each PDF is named `<QuoteNumber>_<shortened quote name>.pdf` (see
+[Filename Scheme](#filename-scheme)). The reconciliation report is a Markdown file
+(see [End-of-Run Reconciliation](#end-of-run-reconciliation)).
 
 ### Manifest CSV Columns
 
@@ -387,6 +550,7 @@ AXP_Quote_PDFs_Prod_2026.05.19/
 | `LocalPath` | Where the file was saved on disk. |
 | `Status` | `Downloaded`, `Skipped - already exists`, or `Error`. |
 | `Error` | Error details (empty on success). |
+| `Sha256` | SHA-256 fingerprint of the verified file (Tier 2). Blank if no file was produced. There is no `ContentVersionChecksum` column because the Quote PDF is rendered fresh, not stored. |
 
 ---
 
@@ -456,3 +620,10 @@ actually returned (session tokens are automatically redacted).
 | **ThreadPoolExecutor** | A Python standard-library class that runs functions in parallel threads. |
 | **Exponential backoff** | A retry strategy where wait times double after each failure (3s, 6s, 12s). |
 | **iframe** | An HTML element that embeds another page; Salesforce uses these to wrap PDFs. |
+| **SHA-256** | A cryptographic fingerprint of a file's bytes. Identical files share a SHA-256; any change produces a different one. Stored in the `Sha256` manifest column. |
+| **`%%EOF` marker** | The text a valid PDF must contain near its end. A missing `%%EOF` usually means the download was cut short. |
+| **pikepdf / pypdfium2** | Python libraries that open a PDF and confirm it is structurally valid (Tier 3). `pikepdf` is preferred; `pypdfium2` is a weaker fallback. |
+| **Chunked response** | An HTTP reply sent without a `Content-Length` header. Common for Visualforce PDFs, which is why Quote wire-completeness relies on other checks. |
+| **Reconciliation** | Comparing independent records of the same run (Salesforce, manifest, disk) to prove nothing was lost. |
+| **OneDrive placeholder** | A cloud-only stand-in for a file: it appears in Explorer but its bytes are not on disk until opened. Tier 4 rejects these. |
+| **PII** | Personally Identifiable Information - data that can identify a person or customer. Manifests and reports may contain it and must not be committed. |

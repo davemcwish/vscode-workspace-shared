@@ -11,6 +11,35 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2026-07-16]
+
+### Changed
+
+- **REQ-T PR 6: rewrote both shared PDF export guides**
+  (`_copilot-shared/docs/export_contract_pdfs_guide.md` and
+  `_copilot-shared/docs/export_quote_pdfs_guide.md`, the source of truth, then
+  synced to every project's `docs/`). The guides now document the full REQ-T
+  behaviour that shipped in PRs 1-5:
+  - **Filename scheme** - `<id>_<shortened title>.pdf`; the `.pdf` extension is
+    never truncated; the `_short_path_fallback/` scheme; and why
+    `LatestPublishedVersionId` is dropped from the Contract name but kept in the
+    manifest.
+  - **How downloads are verified** - the four verification tiers (metadata and
+    header; full read-back with `%%EOF` / SHA-256 / wire-completeness / Contract
+    MD5 vs `ContentVersion.Checksum`; `pikepdf`/`pypdfium2` structural parse; and
+    the OneDrive placeholder check), including skip-path re-verification.
+  - **End-of-run reconciliation** - the three-way (master / manifest / disk)
+    report, the independent aggregate `COUNT()` leg, and the fail-closed
+    non-zero exit.
+  - **OneDrive and cloud placeholder files** - detection, the confirmation
+    prompt, `--allow-onedrive`, and the "Always keep on this device" guidance.
+  - **PII and generated reports** - never commit manifests, logs, or reports.
+  - Added the `--allow-onedrive` flag to both CLI reference tables (audited 1:1
+    against each script's `--help`) and the `pikepdf`/`pypdfium2` dependency
+    note. markdownlint-clean; no em-dashes or smart quotes.
+
+---
+
 ## [2026-07-09]
 
 ### Changed
