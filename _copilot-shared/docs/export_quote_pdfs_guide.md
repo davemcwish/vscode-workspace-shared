@@ -274,7 +274,7 @@ shared - do not assume they are the same number.
 
 If Windows rejects a path (the 260-character limit), the script falls back to a
 `_short_path_fallback/` folder and names the file
-`<QuoteId>_<OfferNum>_<AgencyPrivacyDataId>_QuoteCustomPDF.pdf`, again always
+`<QuoteId>_<QuoteNumber>_<AgencyPrivacyDataId>_QuoteCustomPDF.pdf`, again always
 keeping the `.pdf` extension.
 
 ---
@@ -473,9 +473,9 @@ to the next:
 
 | Name | Purpose |
 | --- | --- |
-| `build_quote_pdf_output_path()` | Normal path: `OfferNum_AgencyName_AgencyId/QuoteNum_QuoteName.pdf`. |
-| `build_quote_pdf_fallback_output_path()` | Short path: `_short_path_fallback/OfferNum_AgencyId_QuoteId.pdf`. |
-| `get_quote_offer_number()` | Extracts the offer number for folder naming. |
+| `build_quote_pdf_output_path()` | Normal path: `QuoteNumber_AgencyName_AgencyId/QuoteNum_QuoteName.pdf`. |
+| `build_quote_pdf_fallback_output_path()` | Short path: `_short_path_fallback/QuoteId_QuoteNumber_AgencyId.pdf`. |
+| `get_quote_offer_number()` | Extracts the QuoteNumber (the offer number) for folder naming. |
 
 ### Manifest and Summary
 
