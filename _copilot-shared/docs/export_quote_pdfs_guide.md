@@ -290,7 +290,7 @@ are grouped into four tiers, cheapest first:
 | --- | --- | --- |
 | **Tier 1 - metadata + header** | The file exists, ends in `.pdf`, and starts with the `%PDF-` marker. | Quote **skips** the size-vs-`ContentSize` check - a Visualforce-rendered PDF has no stored Salesforce file, so there is no reported size to compare against. |
 | **Tier 2 - full read-back** | Every byte is read back off disk, the trailing `%%EOF` marker is present, and a SHA-256 fingerprint is computed and stored. | See the wire-completeness note below. There is **no** Salesforce `Checksum` to compare against (the PDF is rendered fresh, not stored). |
-| **Tier 3 - structural parse** | A real PDF engine (`pikepdf`, or `pypdfium2` as a fallback) opens the file and confirms it has at least one page. | Same for both scripts. The engine is imported lazily, so a missing wheel only fails at parse time, never at import. |
+| **Tier 3 - structural parse** | A real PDF engine (`pikepdf`, or `pypdfium2` as a fallback) opens the file and confirms it has at least one page. | Same for both scripts. The engine is imported lazily, so a missing wheel only fails at parse time, never at import. A **valid but password-protected (encrypted)** PDF cannot be page-counted, but it is a genuine, byte-complete download - it is kept, marked `Downloaded`, counts as complete, and is flagged in the `Encrypted` manifest column. |
 | **Tier 4 - OneDrive placeholder guard** | On a OneDrive folder, the file is real local bytes and not a cloud-only placeholder. | See [OneDrive and Cloud Placeholder Files](#onedrive-and-cloud-placeholder-files). |
 
 **Wire-completeness gap (Quote only).** Salesforce renders the Quote PDF through
@@ -556,6 +556,7 @@ file (see [End-of-Run Reconciliation](#end-of-run-reconciliation)).
 | `Status` | `Downloaded`, `Skipped - already exists`, or `Error`. |
 | `Error` | Error details (empty on success). |
 | `Sha256` | SHA-256 fingerprint of the verified file (Tier 2). Blank if no file was produced. There is no `ContentVersionChecksum` column because the Quote PDF is rendered fresh, not stored. |
+| `Encrypted` | `yes` when the rendered PDF is valid but **password-protected**; blank otherwise. An encrypted file is still a complete, genuine download - this flag just tells you it needs a password to open. |
 
 ---
 
@@ -626,7 +627,8 @@ actually returned (session tokens are automatically redacted).
 | **Exponential backoff** | A retry strategy where wait times double after each failure (3s, 6s, 12s). |
 | **iframe** | An HTML element that embeds another page; Salesforce uses these to wrap PDFs. |
 | **SHA-256** | A cryptographic fingerprint of a file's bytes. Identical files share a SHA-256; any change produces a different one. Stored in the `Sha256` manifest column. |
-| **`%%EOF` marker** | The text a valid PDF must contain near its end. A missing `%%EOF` usually means the download was cut short. |
+| **`%%EOF` marker** | The text a valid PDF must contain near its end. A missing `%%EOF` usually means the download was cut short. Some Salesforce files pad the end with harmless NUL bytes, so the check looks past any trailing NUL/whitespace before deciding the marker is missing. |
+| **Encrypted (password-protected) PDF** | A valid PDF whose contents are locked behind a password. It downloads completely and passes reconciliation; it simply cannot be opened or page-counted without the password. Flagged in the `Encrypted` manifest column. |
 | **pikepdf / pypdfium2** | Python libraries that open a PDF and confirm it is structurally valid (Tier 3). `pikepdf` is preferred; `pypdfium2` is a weaker fallback. |
 | **Chunked response** | An HTTP reply sent without a `Content-Length` header. Common for Visualforce PDFs, which is why Quote wire-completeness relies on other checks. |
 | **Reconciliation** | Comparing independent records of the same run (Salesforce, manifest, disk) to prove nothing was lost. |

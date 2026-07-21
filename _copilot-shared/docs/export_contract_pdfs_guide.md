@@ -265,7 +265,7 @@ The checks are grouped into four tiers, cheapest first:
 | --- | --- | --- |
 | **Tier 1 - metadata + header** | The file exists, ends in `.pdf`, and starts with the `%PDF-` marker. | The file size must also match Salesforce's reported `ContentSize`. |
 | **Tier 2 - full read-back** | Every byte is read back off disk, the trailing `%%EOF` marker is present, and a SHA-256 fingerprint is computed and stored. | The bytes are also checked against the HTTP `Content-Length` / `Content-MD5` the server sent, and against Salesforce's own `ContentVersion.Checksum` (an MD5 hash). |
-| **Tier 3 - structural parse** | A real PDF engine (`pikepdf`, or `pypdfium2` as a fallback) opens the file and confirms it has at least one page. | Same for both scripts. The engine is imported lazily, so a missing wheel only fails at parse time, never at import. |
+| **Tier 3 - structural parse** | A real PDF engine (`pikepdf`, or `pypdfium2` as a fallback) opens the file and confirms it has at least one page. | Same for both scripts. The engine is imported lazily, so a missing wheel only fails at parse time, never at import. A file that is **valid but password-protected (encrypted)** cannot be opened for its page count, but it is a genuine, byte-complete download - it is kept, marked `Downloaded`, counts as complete, and is flagged in the `Encrypted` manifest column. |
 | **Tier 4 - OneDrive placeholder guard** | On a OneDrive folder, the file is real local bytes and not a cloud-only placeholder. | See [OneDrive and Cloud Placeholder Files](#onedrive-and-cloud-placeholder-files). |
 
 The SHA-256 fingerprint from Tier 2 is written to the manifest's `Sha256` column,
@@ -479,6 +479,7 @@ file (see [End-of-Run Reconciliation](#end-of-run-reconciliation)).
 | `Error` | Error details (empty on success). |
 | `Sha256` | SHA-256 fingerprint of the verified file (Tier 2). Blank if no file was produced. |
 | `ContentVersionChecksum` | Salesforce's own MD5 checksum of the stored file, used to cross-check the download (Contract only). |
+| `Encrypted` | `yes` when the downloaded PDF is valid but **password-protected**; blank otherwise. An encrypted file is still a complete, genuine download - this flag just tells you it needs a password to open. |
 
 ---
 
@@ -532,7 +533,8 @@ non-empty) and skips it. Only missing files are re-downloaded.
 | **Exponential backoff** | A retry strategy where wait times double after each failure (3s, 6s, 12s). |
 | **SHA-256** | A cryptographic fingerprint of a file's bytes. If two files have the same SHA-256, they are identical; any change produces a different fingerprint. |
 | **MD5 / Checksum** | An older, shorter fingerprint. Salesforce stores an MD5 `Checksum` for each `ContentVersion`; the script compares it to the download as an extra integrity check. |
-| **`%%EOF` marker** | The text a valid PDF must contain near its end. A missing `%%EOF` usually means the download was cut short. |
+| **`%%EOF` marker** | The text a valid PDF must contain near its end. A missing `%%EOF` usually means the download was cut short. Some Salesforce files pad the end with harmless NUL bytes, so the check looks past any trailing NUL/whitespace before deciding the marker is missing. |
+| **Encrypted (password-protected) PDF** | A valid PDF whose contents are locked behind a password. It downloads completely and passes reconciliation; it simply cannot be opened or page-counted without the password. Flagged in the `Encrypted` manifest column. |
 | **pikepdf / pypdfium2** | Python libraries that open a PDF and confirm it is structurally valid (Tier 3). `pikepdf` is preferred; `pypdfium2` is a weaker fallback. |
 | **Reconciliation** | Comparing independent records of the same run (Salesforce, manifest, disk) to prove nothing was lost. |
 | **OneDrive placeholder** | A cloud-only stand-in for a file: it appears in Explorer but its bytes are not on disk until opened. Tier 4 rejects these. |
