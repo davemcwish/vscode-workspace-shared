@@ -13,7 +13,7 @@ Shared Copilot artefact ownership:
 
 ## Project Context
 
-- **Language:** Python 3.12+
+- **Language:** Python 3.13+
 - **Purpose:** Utility scripts to administer Salesforce (UAT and Production orgs)
 - **Platform:** Windows 11, Visual Studio Code
 - **Target audience:** Complete beginners to Python who will maintain this code
@@ -221,7 +221,7 @@ misunderstandings:
 | OS (local dev) | Windows 11 |
 | CPU | Intel Core Ultra 7 165U (12 cores, 14 logical) |
 | RAM | 32 GB |
-| Python | 3.12 |
+| Python | 3.13 |
 | IDE | Visual Studio Code with GitHub Copilot |
 | Auth | Salesforce CLI (`sf org display`) |
 | HTTP | `requests` library with session management |

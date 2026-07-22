@@ -73,7 +73,7 @@ You should see `AXP_PROD` with a current access token.
 python --version
 ```
 
-Expected output: `Python 3.12.x`
+Expected output: `Python 3.13.x`
 
 ---
 

@@ -34,7 +34,7 @@ limits, an `.xlsx` copy is also produced.
 
 ## Prerequisites
 
-1. Python 3.12+ with the project virtual environment activated.
+1. Python 3.13+ with the project virtual environment activated.
 2. Salesforce CLI (`sf`) installed and on your PATH.
 3. An authenticated Salesforce org alias (run `sf org login web --alias
    AXP_UAT` if not already authenticated).

@@ -372,7 +372,7 @@ If you're starting a brand new website project right now:
 | `skills/doc-writing.skill.md` | Beginner-friendly documentation authoring standards |
 | `skills/docstring.skill.md` | Python docstring and comment-block standards |
 | `skills/cli.skill.md` | Command-line interface design and scripting best practices |
-| `skills/python.skill.md` | Python 3.12+ coding standards and best practices |
+| `skills/python.skill.md` | Python 3.13+ coding standards and best practices |
 | `skills/flask-websocket.skill.md` | Flask 3.x REST APIs, Flask-SocketIO WebSocket, subprocess patterns |
 | `skills/salesforce.skill.md` | Salesforce API and CLI usage patterns |
 | `skills/security.skill.md` | Security-focused code patterns and vulnerability prevention |

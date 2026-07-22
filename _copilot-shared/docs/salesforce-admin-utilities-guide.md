@@ -26,22 +26,25 @@ Gemma 4, GitHub Copilot (Claude Opus 4.6)
 | Tool | Version | Purpose |
 | --- | --- | --- |
 | Windows 11 | - | Operating system |
-| Python | 3.12.7 | Runtime (do NOT upgrade to 3.13+ yet - Ford JFrog has limited packages) |
+| Python | 3.13 | Runtime (project target) |
 | pip | bundled | Package installer |
 | pip-tools | 7.4+ | Dependency locking (`pip-compile`, `pip-sync`) |
 | Salesforce CLI (`sf`) | latest | Authentication to Salesforce orgs |
 | VS Code | latest | IDE |
 | Git | latest | Version control |
 
-### 1.2 Why Python 3.12 (Not Newer)
+### 1.2 Why Python 3.13
 
-Python 3.12 is the project target because:
+Python 3.13 is the project target because:
 
-- Ford's JFrog Artifactory mirror has reliable package availability for 3.12.
-- `pyproject.toml` is configured with `requires-python = ">=3.12"`.
-- mypy is configured with `python_version = "3.12"`.
-- Python 3.13/3.14/3.15 introduce breaking changes to typing and C API that
-  some dependencies may not yet support on Ford's constrained mirror.
+- It is the version installed on the maintainer's development machine.
+- `pyproject.toml` is configured with `requires-python = ">=3.13"`.
+- mypy is configured with `python_version = "3.13"`.
+- Ruff is configured with `target-version = "py313"`.
+
+If Ford's JFrog Artifactory mirror lacks a wheel for a dependency on 3.13,
+pin an available version in `requirements*.txt` or raise it through the approved
+package-review process rather than downgrading the interpreter.
 
 ### 1.3 Virtual Environment Setup
 
@@ -463,7 +466,7 @@ automatically on the updated commit.
 
 | Tool | Key Settings |
 | --- | --- |
-| **Ruff** | `target-version = "py312"`, `line-length = 100`, Google docstring convention, 20+ rule families enabled |
+| **Ruff** | `target-version = "py313"`, `line-length = 100`, Google docstring convention, 20+ rule families enabled |
 | **Mypy** | `strict = true` for `src/` only; relaxed for `tests/` and `scripts/` |
 | **Bandit** | Skips B101/B105/B404/B603/B608 (test asserts, CLI subprocess, SOQL) |
 | **detect-secrets** | Baseline file at `.secrets.baseline` |

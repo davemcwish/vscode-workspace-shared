@@ -52,14 +52,13 @@ pushd "%~dp0" || (
 REM Prefer the project virtual environment if present, because the quality
 REM tools (ruff, mypy, bandit, pytest, detect-secrets) are installed there and
 REM NOT in the global interpreter. Fall back to the Windows Python Launcher,
-REM picking the first installed version from a preference list so machines on
-REM 3.13 or 3.12 both work. Add newer versions to the front of the list on
-REM upgrade.
+REM picking the first installed version from a preference list. The project
+REM targets Python 3.13; add newer versions to the front of the list on upgrade.
 set PY_CMD=
 if exist ".venv\Scripts\python.exe" set PY_CMD=".venv\Scripts\python.exe"
 if not defined PY_CMD if exist "venv\Scripts\python.exe" set PY_CMD="venv\Scripts\python.exe"
 if not defined PY_CMD (
-    for %%V in (3.13 3.12) do (
+    for %%V in (3.13) do (
         if not defined PY_CMD (
             py -%%V --version >nul 2>nul
             if not errorlevel 1 set PY_CMD=py -%%V

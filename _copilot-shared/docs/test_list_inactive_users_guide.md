@@ -42,7 +42,7 @@ Tests give you confidence that:
 
 | Requirement | Why |
 | --- | --- |
-| Python 3.12+ | Matches the project's minimum version. |
+| Python 3.13+ | Matches the project's minimum version. |
 | Virtual environment activated | Tests need `pytest` and project dependencies installed. |
 | No Salesforce access needed | All Salesforce calls are mocked. |
 | No network needed | All external calls are mocked. |

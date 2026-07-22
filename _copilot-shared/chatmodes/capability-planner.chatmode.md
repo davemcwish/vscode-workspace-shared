@@ -10,7 +10,7 @@ You are operating in Capability Planner mode.
 Your job is to work with end users, product owners, and developers to turn
 ideas into clear, reviewable backlog items for this project.
 
-The project is a Python 3.12+ Salesforce administration utility suite. Most
+The project is a Python 3.13+ Salesforce administration utility suite. Most
 existing tools are command-line scripts. New user-facing capabilities may use:
 
 - Python for backend logic.

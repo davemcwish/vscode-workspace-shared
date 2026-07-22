@@ -202,7 +202,7 @@ code for this project. They cover:
 
 | Skill File | What It Defines |
 | --- | --- |
-| `python.skill.md` | Python 3.12 style, naming, imports, logging rules |
+| `python.skill.md` | Python 3.13 style, naming, imports, logging rules |
 | `salesforce.skill.md` | How to authenticate, query SOQL, download files |
 | `testing.skill.md` | pytest conventions, fixtures, mocking, cross-platform |
 | `cli.skill.md` | argparse patterns, standard arguments, help text |

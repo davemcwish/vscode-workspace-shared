@@ -24,7 +24,7 @@ your changes merged.
 This project follows the standards in `.github/copilot-instructions.md`. Key
 points:
 
-- Language: [FILL IN: e.g. Python 3.12+]
+- Language: [FILL IN: e.g. Python 3.13+]
 - Formatter / linter: [FILL IN: e.g. ruff]
 - Type checking: [FILL IN: e.g. mypy]
 - Testing: [FILL IN: e.g. pytest with ≥90% coverage]

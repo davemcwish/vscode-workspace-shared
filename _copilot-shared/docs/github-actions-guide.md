@@ -17,7 +17,7 @@ Before starting Group B work:
 - You have a local clone of `ford-innersource/eu-crm-sf-admin-utils`.
 - `.\sanity.bat` passes on `main` with no errors.
 - You have permission to push branches and open PRs on the Ford InnerSource repo.
-- Python 3.12 and the virtual environment are set up (see
+- Python 3.13 and the virtual environment are set up (see
   [`docs/running-the-scripts-guide.md`](running-the-scripts-guide.md)).
 
 ---
@@ -186,10 +186,10 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.12
+      - name: Set up Python 3.13
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
 
       - name: Install dependencies
         run: |
@@ -231,7 +231,7 @@ jobs:
 - `runs-on: ubuntu-latest` - use a fresh Linux virtual machine for each run.
 - `actions/checkout@v4` - a reusable action that downloads your code onto the
   runner. `@v4` means version 4 of that action.
-- `actions/setup-python@v5` - installs Python 3.12 on the runner.
+- `actions/setup-python@v5` - installs Python 3.13 on the runner.
 - `pip install -r requirements-dev.txt` - installs the same dev tools that
   `sanity.bat` uses locally.
 - `pip install -e .` - installs the local `sf_admin_utils` package so imports
@@ -362,7 +362,7 @@ Actions tab of the repository.
 After setup, you should update `.github/workflows/ci.yml` when:
 
 - You add a new quality-gate tool to `sanity.bat` - add the matching step to CI.
-- You change Python version - update `python-version: "3.12"` to match.
+- You change Python version - update `python-version: "3.13"` to match.
 - You pin a new version of a tool in `requirements-dev.txt` - CI picks it up
   automatically on the next run.
 

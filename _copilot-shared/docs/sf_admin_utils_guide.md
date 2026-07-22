@@ -23,7 +23,7 @@ setup. If you are new to Python, Salesforce APIs, or this project, start here.
 
 Before working with this code you need:
 
-1. **Python 3.12+** installed and available on your PATH.
+1. **Python 3.13+** installed and available on your PATH.
 1. **Git** for cloning the repository.
 1. The **Salesforce CLI** (`sf`) installed and on your PATH. Download it from
    <https://developer.salesforce.com/tools/salesforcecli>.

@@ -49,7 +49,7 @@ chart sheet, and a Detail sheet.
 
 | Requirement | Why |
 | --- | --- |
-| Python 3.12+ | The script uses modern type hints and standard library features. |
+| Python 3.13+ | The script uses modern type hints and standard library features. |
 | Virtual environment activated | The script requires `pandas` and `openpyxl` from `requirements.txt`. |
 | No Salesforce CLI needed | All data is hard-coded -- no network calls are made. |
 | No `.env` file needed | No environment variables are required. |

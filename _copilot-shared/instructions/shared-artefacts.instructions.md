@@ -29,7 +29,7 @@ When a change is needed to any shared artefact:
 
    ```powershell
    cd "<workspace-root>"
-   py -3.12 -m pytest _copilot-shared/tests/test_agent_chatmode_sync.py -q --no-cov
+   py -3.13 -m pytest _copilot-shared/tests/test_agent_chatmode_sync.py -q --no-cov
    ```
 
 3. **Run the sync script** to propagate changes to all registered projects:

@@ -79,7 +79,7 @@ Before running this script you need:
 
 | Requirement | Why |
 | --- | --- |
-| Python 3.12+ | The script uses modern type hints and standard library features. |
+| Python 3.13+ | The script uses modern type hints and standard library features. |
 | Salesforce CLI (`sf`) | Used to authenticate without storing passwords. |
 | `requests` library | Handles HTTP calls and cookie-based browser sessions. |
 | `pikepdf` (or `pypdfium2`) | Reads each rendered PDF to confirm it is structurally valid (Tier 3 verification). `pikepdf==9.11.0` is preferred; `pypdfium2==5.0.0` is a weaker fallback. Both are pinned in `requirements.txt`. |
@@ -88,7 +88,7 @@ Before running this script you need:
 
 ### Installing Python
 
-1. Download Python 3.12+ from <https://www.python.org/downloads/>.
+1. Download Python 3.13+ from <https://www.python.org/downloads/>.
 2. During installation tick **"Add Python to PATH"**.
 3. Verify in a terminal:
 

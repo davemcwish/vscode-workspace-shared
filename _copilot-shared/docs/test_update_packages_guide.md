@@ -40,7 +40,7 @@ are monkeypatched to return fake data.
 
 | Requirement | Why |
 | --- | --- |
-| Python 3.12+ | Matches the project minimum |
+| Python 3.13+ | Matches the project minimum |
 | Virtual environment activated | Tests use pytest and project fixtures |
 | `pip install -e .` | Makes `sf_admin_utils` importable (needed by conftest) |
 | `pip install -r requirements-dev.txt` | Installs pytest and coverage tools |

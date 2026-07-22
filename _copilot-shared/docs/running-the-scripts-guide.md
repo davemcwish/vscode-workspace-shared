@@ -19,7 +19,7 @@ or, optionally, as a variable in your `.env` file.
 Before running any script you need to have completed the one-time setup
 described in `README.md`:
 
-1. Python 3.12 installed and available as `py` or `python`.
+1. Python 3.13 installed and available as `py` or `python`.
 2. Virtual environment created and activated (`.venv\Scripts\Activate.ps1`).
 3. Salesforce CLI (`sf`) installed and on your PATH.
 4. At least one Salesforce org alias set up with `sf org login web`.

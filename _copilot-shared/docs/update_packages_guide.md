@@ -44,7 +44,7 @@ No Salesforce CLI, credentials, or network access to Salesforce is required.
 
 | Requirement | Why |
 | --- | --- |
-| Python 3.12+ | The script uses modern type hints and f-strings. |
+| Python 3.13+ | The script uses modern type hints and f-strings. |
 | Virtual environment activated | Upgrades run inside the venv so they do not affect system Python. |
 | `pip-tools` installed | Provides the `pip-compile` command used to recalculate pinned versions. |
 | Internet access to PyPI or Ford JFrog mirror | `pip-compile` needs to reach the package index to discover newer versions. |

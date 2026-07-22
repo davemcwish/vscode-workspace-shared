@@ -26,7 +26,7 @@
 name = "my-project"
 version = "0.1.0"
 description = "[FILL IN: one-sentence description of what this project does]"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 readme = "README.md"
 
 # Runtime dependencies are pinned in requirements.txt for reproducible installs.
@@ -59,7 +59,7 @@ allow-unsafe = true
 #  Docs: https://docs.astral.sh/ruff/
 # ============================================================================
 [tool.ruff]
-target-version = "py312"
+target-version = "py313"
 line-length = 100
 force-exclude = true
 extend-exclude = [
@@ -183,7 +183,7 @@ max-complexity = 12
 #    3. The [[tool.mypy.overrides]] for tests.* already signals the intent.
 # ============================================================================
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.13"
 # CUSTOMISE THIS: list the source directories mypy should check.
 files = ["src", "scripts"]
 # Allow mypy to find your package when checking individual files

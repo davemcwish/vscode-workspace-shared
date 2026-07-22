@@ -33,7 +33,7 @@ if not defined VIRTUAL_ENV (
         echo [ERROR] No .venv folder found.
         echo.
         echo Create one with:
-        echo   py -3.12 -m venv .venv
+        echo   py -3.13 -m venv .venv
         echo   .venv\Scripts\Activate.ps1
         echo   pip install -r requirements.txt
         echo.

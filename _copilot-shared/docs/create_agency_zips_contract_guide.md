@@ -42,7 +42,7 @@ The script:
 
 | Requirement | Why |
 | --- | --- |
-| Python 3.12+ | The script uses modern type hints and standard library features. |
+| Python 3.13+ | The script uses modern type hints and standard library features. |
 | No extra packages | This script uses **only the Python standard library** - no `pip install` needed. |
 | Completed PDF export | You must have already run `export_contract_pdfs.py` to download the PDFs. |
 | Sufficient disk space | The ZIP files will be roughly 30-70% the size of the originals. |
@@ -57,7 +57,7 @@ setup instructions.
 
 ### Installing Python
 
-1. Download Python 3.12+ from <https://www.python.org/downloads/>.
+1. Download Python 3.13+ from <https://www.python.org/downloads/>.
 2. During installation tick **"Add Python to PATH"**.
 3. Verify in a terminal:
 

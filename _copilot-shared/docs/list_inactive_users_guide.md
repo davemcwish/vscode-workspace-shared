@@ -47,7 +47,7 @@ Typical use cases:
 
 | Requirement | Why |
 | --- | --- |
-| Python 3.12+ | The script uses modern type hints and standard library features. |
+| Python 3.13+ | The script uses modern type hints and standard library features. |
 | Virtual environment activated | The script uses packages from `requirements.txt`. |
 | Salesforce CLI installed | Authentication is delegated to the `sf` CLI. |
 | CLI logged in to each org | One-time browser login per org; the CLI stores the session in the OS keychain. |

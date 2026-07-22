@@ -1,8 +1,8 @@
-# Skill: Python 3.12+
+# Skill: Python 3.13+
 
 ## Language & Runtime
 
-- Python 3.12+ on Windows 11.
+- Python 3.13+ on Windows 11.
 - Virtual environment managed via `py -m venv .venv`.
 - Dependencies pinned in `requirements.txt` and `requirements-dev.txt`.
 

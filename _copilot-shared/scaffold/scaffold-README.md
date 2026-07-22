@@ -77,8 +77,10 @@ has generated or archived directories you do not want scanned:
 
 #### Python version
 
-Both files use `py -3.12`.  If this project runs on a different Python
-version, update the `PY_CMD` line at the top of each file:
+Both files auto-detect the project `.venv` first, then fall back to the
+Windows Python Launcher for Python 3.13 (`py -3.13`). If this project runs on
+a different Python version, update the `PY_CMD` detection block near the top of
+each file (the `for %%V in (3.13)` line):
 
 ```bat
 set PY_CMD=py -3.11

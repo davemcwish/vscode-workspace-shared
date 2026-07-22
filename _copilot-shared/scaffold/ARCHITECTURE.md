@@ -71,7 +71,7 @@ decision, note what was decided, why, and what was rejected.
 
 | Item | Value |
 | --- | --- |
-| Language / runtime | [FILL IN: e.g. Python 3.12] |
+| Language / runtime | [FILL IN: e.g. Python 3.13] |
 | OS (local dev) | [FILL IN: e.g. Windows 11] |
 | CI/CD platform | GitHub Actions - `ubuntu-latest` (Linux) |
 | Security scanner | Cycode - runs on Linux, scans SAST + secrets + SCA on every PR |

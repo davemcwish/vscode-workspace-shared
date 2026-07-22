@@ -57,7 +57,7 @@ deactivated.
 
 Before running this script you need:
 
-- **Python 3.12+** installed and available on your PATH.
+- **Python 3.13+** installed and available on your PATH.
 - A **virtual environment** (`.venv`) with dependencies installed - run
   `setup.bat` if you have not done this already.
 - **Salesforce CLI** (`sf`) installed and logged in to the target org. Run

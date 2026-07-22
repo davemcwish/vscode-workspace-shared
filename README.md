@@ -90,7 +90,7 @@ then run the sync script.
 
 - Git installed
 - Windows 11 (the sync script uses PowerShell and robocopy)
-- Python 3.12+ (via the `py` launcher)
+- Python 3.13+ (via the `py` launcher)
 - VS Code with the GitHub Copilot extension
 
 ### Step 1 - Clone the workspace repo
