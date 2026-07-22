@@ -97,6 +97,22 @@ $Folders = @(
     "workflows"
 )
 
+# Files WITHIN a synced $Folders subfolder that are PROJECT-OWNED and must NOT
+# be overwritten by the sync. Keyed by the folder name (from $Folders above),
+# the value is the list of filenames to exclude from the robocopy copy.
+#
+# workflows\ci.yml is the canonical example: every project needs a CI workflow,
+# but each project's CI has a DIFFERENT shape and cannot share one file:
+#   - Salesforce      : installable src\ package + requirements*.txt (+ JFrog)
+#   - eu-spm          : scripts-only, requirements*.in, hardened (SHA-pinned)
+#   - trails-and-tails: docs/website, no importable Python source
+# So _copilot-shared\workflows\ci.yml is a REFERENCE TEMPLATE ONLY. Each project
+# owns its real .github\workflows\ci.yml, and this exclusion stops the sync from
+# clobbering that project-owned file with the template.
+$FolderExcludeFiles = @{
+    "workflows" = @("ci.yml")
+}
+
 # Subfolders inside _copilot-shared\ to mirror into each project's ROOT
 # (not .github\).  Use this for content that belongs at the project top-level,
 # e.g. shared test scaffolds, default pytest fixtures, or config folders.
@@ -209,8 +225,18 @@ function Sync-FolderStrict {
 
     .PARAMETER Destination
         Absolute path to the folder to copy into. Created if missing.
+
+    .PARAMETER ExcludeFiles
+        Optional list of filenames (not full paths) to exclude from the copy,
+        passed to robocopy's /XF flag. Use this for PROJECT-OWNED files that
+        happen to live inside a synced folder (e.g. workflows\ci.yml) so the
+        sync never overwrites them. Defaults to an empty list (copy everything).
     #>
-    param([string] $Source, [string] $Destination)
+    param(
+        [string]   $Source,
+        [string]   $Destination,
+        [string[]] $ExcludeFiles = @()
+    )
     if (-not (Test-Path $Source)) {
         Write-Verbose "  Skipping '$Source' (not found in shared)"
         return
@@ -218,7 +244,13 @@ function Sync-FolderStrict {
     $null = New-Item -ItemType Directory -Path $Destination -Force
     # No /XO -- source always wins. /IS copies even same-timestamp files.
     # /FFT still used for OneDrive timestamp granularity tolerance.
-    robocopy $Source $Destination /E /IS /FFT /NFL /NDL /NJH /NJS /NP /MT:4 | Out-Null
+    # /XF excludes PROJECT-OWNED files (e.g. ci.yml) so they are never clobbered.
+    $robocopyArgs = @($Source, $Destination, "/E", "/IS", "/FFT", "/NFL", "/NDL", "/NJH", "/NJS", "/NP", "/MT:4")
+    if ($ExcludeFiles.Count -gt 0) {
+        $robocopyArgs += "/XF"
+        $robocopyArgs += $ExcludeFiles
+    }
+    robocopy @robocopyArgs | Out-Null
     if ($LASTEXITCODE -ge 8) {
         throw "robocopy strict-sync failed for '$Source' -> '$Destination' (exit $LASTEXITCODE)"
     }
@@ -512,9 +544,12 @@ $rootGithub = Join-Path $Root ".github"
 Write-Host "  -> ROOT (.github\)" -ForegroundColor Green
 
 foreach ($folder in $Folders) {
+    $exclude = @()
+    if ($FolderExcludeFiles.ContainsKey($folder)) { $exclude = $FolderExcludeFiles[$folder] }
     Sync-FolderStrict `
-        -Source      (Join-Path $Shared $folder) `
-        -Destination (Join-Path $rootGithub $folder)
+        -Source       (Join-Path $Shared $folder) `
+        -Destination  (Join-Path $rootGithub $folder) `
+        -ExcludeFiles $exclude
     Find-StaleFiles `
         -Source      (Join-Path $Shared $folder) `
         -Destination (Join-Path $rootGithub $folder) `
@@ -565,9 +600,12 @@ foreach ($project in $Projects) {
 
     # Sync each managed subfolder (source-wins, stale detection)
     foreach ($folder in $Folders) {
+        $exclude = @()
+        if ($FolderExcludeFiles.ContainsKey($folder)) { $exclude = $FolderExcludeFiles[$folder] }
         Sync-FolderStrict `
-            -Source      (Join-Path $Shared $folder) `
-            -Destination (Join-Path $githubPath $folder)
+            -Source       (Join-Path $Shared $folder) `
+            -Destination  (Join-Path $githubPath $folder) `
+            -ExcludeFiles $exclude
         Find-StaleFiles `
             -Source      (Join-Path $Shared $folder) `
             -Destination (Join-Path $githubPath $folder) `
