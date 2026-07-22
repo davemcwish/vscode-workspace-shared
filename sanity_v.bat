@@ -49,9 +49,24 @@ pushd "%~dp0" || (
     exit /b 1
 )
 
-REM Prefer the Python Launcher on Windows so the script works even when
-REM `python` is not on PATH. Adjust -3.12 if the repo upgrades Python.
-set PY_CMD=py -3.12
+REM Prefer the project virtual environment if present, because the quality
+REM tools (ruff, mypy, bandit, pytest, detect-secrets) are installed there and
+REM NOT in the global interpreter. Fall back to the Windows Python Launcher,
+REM picking the first installed version from a preference list so machines on
+REM 3.13 or 3.12 both work. Add newer versions to the front of the list on
+REM upgrade.
+set PY_CMD=
+if exist ".venv\Scripts\python.exe" set PY_CMD=".venv\Scripts\python.exe"
+if not defined PY_CMD if exist "venv\Scripts\python.exe" set PY_CMD="venv\Scripts\python.exe"
+if not defined PY_CMD (
+    for %%V in (3.13 3.12) do (
+        if not defined PY_CMD (
+            py -%%V --version >nul 2>nul
+            if not errorlevel 1 set PY_CMD=py -%%V
+        )
+    )
+)
+if not defined PY_CMD set PY_CMD=py -3
 
 REM -- Clean stale .coverage files that cause pytest-cov/xdist errors --------
 del /q .coverage* 2>nul
