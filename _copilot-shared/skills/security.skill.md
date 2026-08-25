@@ -35,6 +35,19 @@ reviewCadence: "quarterly"
 - Never write files outside the designated output directory.
 - Reject paths containing `..`, absolute paths, or paths crossing drive
   boundaries.
+- **Test files are in scope.** Cycode scans `tests/` exactly like `src/` and
+  `scripts/`, and a path sink in a test is a blocking, High-severity PR
+  finding. A `tmp_path` fixture does not make a path untainted - Cycode cannot
+  tell a fixture from user input.
+- **Centralise the sink.** Rather than repeating the two-step sanitisation at
+  every call site, put `open()` (or `zipfile` / `shutil`) inside one small
+  helper that sanitises immediately before the sink, and call that helper
+  everywhere. Cycode then sees sanitiser and sink in the same function, and
+  call sites contain no sink to flag. See "Test files are IN SCOPE" and
+  "Centralise the sink" in `security.instructions.md`.
+- `sanity.bat` passing does **not** guarantee Cycode will pass: the local
+  advisory scan reports test-file findings at MEDIUM and never blocks, while
+  Cycode blocks the merge.
 
 ## Subprocess Safety
 
