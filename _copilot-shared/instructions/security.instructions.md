@@ -310,6 +310,14 @@ content = read_text_safely(output_dir / module.MANIFEST_FILE_NAME,
 rows = list(csv.DictReader(io.StringIO(content)))
 ```
 
+> **The validation must be inline in the sink function.** Extracting the
+> `fullmatch` into a private helper (e.g. `open(_verified_path(path))`) does
+> **not** work - Cycode does not follow that call either, and re-flags the
+> sink. Keep the `match = ...` / `match.group(0)` lines in the same function
+> body as `open()`. Keep exactly **one** such function and have every other
+> helper build on it (e.g. CSV helpers call `read_text_safely()` and parse
+> from an `io.StringIO` buffer) so there is only one sink to sanitise.
+
 Checklist when adding or editing **any** test that touches the filesystem:
 
 - [ ] No bare `open()`, `zipfile.ZipFile()`, `shutil.copy()`, or `Path.write_*`
