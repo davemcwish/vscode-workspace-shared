@@ -13,6 +13,7 @@ are new to Python scripting and Salesforce administration.
 - [Prerequisites](#prerequisites)
 - [Salesforce CLI Setup](#salesforce-cli-setup)
 - [Running the Script](#running-the-script)
+- [Reading the throughput telemetry](#reading-the-throughput-telemetry)
 - [Configuration Reference](#configuration-reference)
 - [Filename Scheme](#filename-scheme)
 - [How Downloads Are Verified](#how-downloads-are-verified)
@@ -190,8 +191,9 @@ python scripts/export_quote_pdfs.py --help
 | --- | --- | --- | --- |
 | `--output-dir` | No | Current working directory | Base output directory. The script creates a dated `AXP_Quote_PDFs_Prod_YYYY.MM.DD` subfolder here. |
 | `--sf-alias` | No | `AXP_PROD` | Salesforce CLI org alias to authenticate with. |
-| `--workers` | No | `3` | Number of concurrent download threads. Increase for faster downloads; reduce if you see HTTP 429 errors. |
+| `--workers` | No | `3` | Number of concurrent download threads. Increase for faster downloads; reduce if you see HTTP 429 errors. The maximum is `12` (a safe ceiling) - a higher value is rejected with a clear message. Leave it at `3` unless the end-of-run telemetry shows spare headroom (see [Reading the throughput telemetry](#reading-the-throughput-telemetry)). |
 | `--limit` | No | *(no limit)* | Maximum number of AgencyPrivacyData__c records to query. Omit (or use `0`) for a full run. Useful for testing: `--limit 10`. |
+| `--ids` | No | *(none)* | Restrict the run to specific AgencyPrivacyData__c record IDs. Accepts an inline list (comma-, space-, or newline-separated) or `@path/to/file.txt` to read IDs from a file (one or many per line; leading `-` bullets are tolerated). Each ID is validated as a 15- or 18-character Salesforce ID. When set, `--limit` is ignored and the independent count leg of reconciliation is skipped (the set is deliberately narrowed). Ideal for re-running a known list of failed records. |
 | `--force-redownload` | No | `False` (flag) | Re-download PDFs that already exist locally. Omit to skip already-downloaded files (safe resume). |
 | `--dry-run` | No | `False` (flag) | Query Salesforce and log what would be downloaded, but do not write any files to disk. Safe to run against Production at any time. |
 | `--yes` | No | `False` (flag) | Skip the interactive Production confirmation prompt. Use in CI or automation where interactive input is not available. Has no effect when `--dry-run` is active. |
@@ -219,6 +221,38 @@ The script will:
 
 Expect the full run to take **1-3 hours** depending on record count and network
 speed (Visualforce rendering is slower than direct file downloads).
+
+### Reading the throughput telemetry
+
+At the end of every run the script logs a short **"Throughput telemetry"**
+block. It contains only counts and timings - never record IDs, quote numbers,
+URLs, or file paths - so it is safe to copy into a ticket. It looks like this:
+
+```text
+Throughput telemetry (counts and timings only):
+  Files timed:          1200
+  HTTP 429 responses:   0
+  Automatic retries:    2
+  Per-file mean:        4.10s
+  Per-file p95:         7.80s
+  Effective throughput: 42.0 files/min
+  Error breakdown by cause: none
+```
+
+How to use it to choose `--workers`:
+
+- **HTTP 429 responses is 0** and **effective throughput** is not improving when
+  you raise `--workers`? The bottleneck is Salesforce's server-side rendering,
+  not your thread count - stay at `3`.
+- **HTTP 429 responses is above 0**? Salesforce rate-limited you. The run still
+  completes because each 429 is retried with a backoff wait, but you are pushing
+  too hard - **lower** `--workers`.
+- **Per-file p95** far exceeds **per-file mean**? A minority of quotes render
+  slowly; more threads will not fix those specific files.
+
+Raise `--workers` one step at a time, and only when the telemetry shows zero
+429s and rising throughput. The hard ceiling is `12`; a guided ramp and adaptive
+throttling are planned for a later release.
 
 ---
 

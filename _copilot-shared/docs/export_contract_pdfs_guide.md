@@ -164,6 +164,7 @@ python scripts/export_contract_pdfs.py --help
 | `--sf-alias` | No | `AXP_PROD` | Salesforce CLI org alias to authenticate with. |
 | `--workers` | No | `3` | Number of concurrent PDF download threads. Increase for faster downloads; reduce if you see HTTP 429 errors. |
 | `--limit` | No | *(no limit)* | Maximum number of AgencyPrivacyData__c records to query. Omit (or use `0`) for a full run. Useful for testing: `--limit 10`. |
+| `--ids` | No | *(none)* | Restrict the run to specific AgencyPrivacyData__c record IDs. Accepts an inline list (comma-, space-, or newline-separated) or `@path/to/file.txt` to read IDs from a file (one or many per line; leading `-` bullets are tolerated). Each ID is validated as a 15- or 18-character Salesforce ID. When set, `--ids` takes precedence over the built-in target record, `--limit` is ignored, and the completeness check is skipped (the set is deliberately narrowed). Ideal for re-running a known list of failed records. |
 | `--force-redownload` | No | `False` (flag) | Re-download PDFs that already exist locally. Omit this flag to skip already-downloaded files (safe resume). |
 | `--dry-run` | No | `False` (flag) | Query Salesforce and log what would be downloaded, but do not write any files to disk. Safe to run against Production at any time. |
 | `--yes` | No | `False` (flag) | Skip the interactive Production confirmation prompt. Use in CI or automation where interactive input is not available. Has no effect when `--dry-run` is active. |
