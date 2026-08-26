@@ -2,7 +2,7 @@
 applyTo: "**"
 description: "Canonical repository security rules: secrets, subprocess/path/XML/PRNG/SMTP safety, Flask endpoints, DOM XSS, and Cycode SAST alignment."
 owner: "TODO: team-or-DL"
-lastReviewed: "2026-07-01"
+lastReviewed: "2026-08-25"
 reviewCadence: "quarterly"
 ---
 
@@ -228,9 +228,10 @@ pattern proven to pass across this codebase - see `data_export.py`,
 local **two-step** re-verification in the function that owns the sink:
 
 ```python
-# Module level - permissive enough for real Windows/POSIX paths, but rejects
-# quotes, control bytes, and shell metacharacters.
-_SAFE_PATH_PATTERN = re.compile(r"[A-Za-z0-9_\-./\\ :()]{1,500}")
+# Module level - a DENY-list, not an allow-list. Rejects only NUL/control
+# bytes, double quotes, and the characters Windows forbids in a filename.
+# See "The re-verification pattern must be a deny-list" below.
+_SAFE_PATH_PATTERN = re.compile(r'[^\x00-\x1f"*?<>|]{1,500}')
 
 # In the function that owns the sink:
 # Step 1 - real containment check (the actual traversal defence); raises.
@@ -249,6 +250,125 @@ plus the `match.group(0)` taint break Cycode requires. The path regex must
 **never** replace `resolve_safe_path()`. If your Cycode tenant registers
 `resolve_safe_path` as a custom sanitizer, step 2 becomes unnecessary; absent
 that configuration, step 2 is what actually passes the gate.
+
+### The re-verification pattern must be a DENY-list, never an ASCII allow-list
+
+This has caused two production outages. Write the step-2 pattern as:
+
+```python
+_SAFE_PATH_PATTERN = re.compile(r'[^\x00-\x1f"*?<>|]{1,500}')
+```
+
+**Never** write it as an ASCII allow-list such as
+`r"[A-Za-z0-9_\-./\\ :()]{1,500}"`. That form silently omits `&`, `,`, `+`,
+apostrophes, and every accented letter - all of which occur routinely in real
+data and in ordinary folder names:
+
+- Agency and dealer names: `Zeeuw & Zeeuw Utrecht`, `O'Brien Motors`,
+  `Baan, Twente + Hengelo`, `Citroen Cafe` (with accents).
+- Salesforce record titles used to build filenames.
+- The operator's own output directory, e.g. `D:\R&D Reports\`.
+
+When the pattern rejects one of these, the script raises
+`ValueError: Path failed local re-verification` and **stops**. Real incidents:
+
+| Date | Module | Impact |
+| --- | --- | --- |
+| 2026-07-14 | `pdf_verification.py` | Valid PDFs recorded as verification errors |
+| 2026-08-25 | `zip_verification.py` | 31-minute run aborted on the last of 19 archives; manifest for the 18 successful agencies lost |
+
+The allow-list's apparent strictness buys **no security whatsoever**:
+`resolve_safe_path()` has already blocked traversal before this line runs. The
+regex exists only to give Cycode a `match.group(0)` it recognises as sanitised.
+Narrowing it therefore adds outages without adding protection.
+
+The deny-list rejects everything that genuinely matters - NUL and control
+bytes, double quotes, and the five characters Windows itself forbids in a
+filename (`* ? < > |`).
+
+> This rule applies **only** to path re-verification. Allow-lists remain
+> correct - and required - where the strictness *is* the security control and
+> the value cannot legitimately contain punctuation: `_SF_ALIAS_PATTERN` for
+> Salesforce org aliases, and command-name allow-lists for
+> `validate_subprocess_command()`. Do not widen those.
+
+### Test files are IN SCOPE (common cause of surprise PR failures)
+
+**Cycode scans `tests/` exactly like `src/` and `scripts/`.** A path-sink in a
+test file is a **blocking, High-severity** PR finding - there is no test
+exemption. This is the single most common way a PR that passed `sanity.bat`
+still fails CI, because the **local advisory `security_scan.py` reports test
+files at MEDIUM and never blocks**, while Cycode blocks the merge.
+
+Assume nothing is safe just because it is "only a test". A line such as:
+
+```python
+# BAD - Cycode flags this in a test file exactly as it would in production.
+manifest_path = output_dir / module.MANIFEST_FILE_NAME
+with open(manifest_path, encoding="utf-8-sig") as f:
+    ...
+```
+
+is a violation even though `output_dir` came from pytest's `tmp_path` fixture.
+Cycode cannot tell a fixture from user input; `output_dir` is a non-literal
+value flowing into a path sink, so it is tainted.
+
+**Do not** scatter the two-step `resolve_safe_path()` + `_SAFE_PATH_PATTERN`
+dance across dozens of test call sites. Instead, apply the rule below.
+
+### Centralise the sink (preferred fix everywhere, essential in tests)
+
+Because Cycode is intra-procedural, the cheapest durable fix is to **put the
+sink and its sanitisation inside one small helper**, then call that helper
+everywhere. Cycode sees sanitiser and sink in the same function (clean), and
+call sites contain no sink at all (nothing to flag).
+
+```python
+# tests/conftest.py (or a shared test helper module)
+import re
+from pathlib import Path
+
+_SAFE_PATH_PATTERN = re.compile(r'[^\x00-\x1f"*?<>|]{1,500}')
+
+
+def read_text_safely(path: Path, *, encoding: str = "utf-8") -> str:
+    """Read a file after re-verifying its path, so the sink is sanitised here.
+
+    Centralising ``open()`` in this helper means Cycode analyses the
+    sanitisation and the sink together, and test call sites contain no path
+    sink for it to flag.
+    """
+    match = _SAFE_PATH_PATTERN.fullmatch(str(path))
+    if match is None:
+        raise ValueError(f"Path failed local re-verification: {path!r}")
+    with open(Path(match.group(0)), encoding=encoding) as handle:
+        return handle.read()
+```
+
+```python
+# GOOD - call site has no sink, so nothing is flagged.
+content = read_text_safely(output_dir / module.MANIFEST_FILE_NAME,
+                           encoding="utf-8-sig")
+rows = list(csv.DictReader(io.StringIO(content)))
+```
+
+> **The validation must be inline in the sink function.** Extracting the
+> `fullmatch` into a private helper (e.g. `open(_verified_path(path))`) does
+> **not** work - Cycode does not follow that call either, and re-flags the
+> sink. Keep the `match = ...` / `match.group(0)` lines in the same function
+> body as `open()`. Keep exactly **one** such function and have every other
+> helper build on it (e.g. CSV helpers call `read_text_safely()` and parse
+> from an `io.StringIO` buffer) so there is only one sink to sanitise.
+
+Checklist when adding or editing **any** test that touches the filesystem:
+
+- [ ] No bare `open()`, `zipfile.ZipFile()`, `shutil.copy()`, or `Path.write_*`
+      on a non-literal path at the call site.
+- [ ] Reads/writes go through a shared, sanitising test helper.
+- [ ] If a raw sink is genuinely unavoidable, apply the same two-step
+      `resolve_safe_path()` + `match.group(0)` pattern used in production code.
+- [ ] Remember `sanity.bat` passing does **not** mean Cycode will pass - check
+      the advisory scan output for `tests/` findings on lines you touched.
 
 ### Temporary files and attachments
 
