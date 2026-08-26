@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Enhanced PDF counter with per-folder breakdown and CSV comparison.
 

@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Compares two directories for identity including nested subfolders.
 

@@ -15,6 +15,35 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Working quality gate for the workspace-root repository.** `sanity.bat` was
+  present but five of its seven steps were failing with `No module named ...`,
+  so this repository had no effective linting, type-checking, secret-scanning,
+  or test enforcement at all. The gate now reports
+  `SUCCESS: All checks passed` with **1505 tests passing**.
+  - `requirements-dev.txt` (new) - pins the gate toolchain: `ruff==0.15.7`,
+    `mypy==1.19.1`, `bandit==1.7.9`, `detect-secrets==1.5.0`,
+    `pytest-xdist==3.8.0`, alongside the already-present `pytest` and
+    `pytest-cov`. Versions deliberately match the sibling projects so a rule
+    that passes in one repository behaves identically in the others. There is
+    no matching `requirements.in` - this repository has no runtime
+    dependencies.
+  - `pyproject.toml` (new) - adapted from
+    `_copilot-shared/scaffold/pyproject.toml`. The scaffold assumes a
+    `src/` + `scripts/` layout; this repository has neither, so ruff, mypy,
+    and pytest are pointed at `_copilot-shared/tests` instead. Sibling project
+    directories are excluded from every tool so the workspace-root gate never
+    reaches into a repository that owns its own gate. Coverage thresholds are
+    deliberately **not** enabled - the suite validates Markdown artefact
+    pairing and ASCII rules rather than exercising an importable package, so a
+    line-coverage percentage would be meaningless.
+  - `.secrets.baseline` (new) - generated across the 252 tracked files. It
+    contains one reviewed false positive: a regex in
+    `security_scan_teaching_comments.ps1` that *lists* secret keywords
+    (`api_key|secret|token|...`) as scanner rule data. Path separators were
+    converted to POSIX `/` per the cross-platform rule, and the UTF-8 BOM that
+    PowerShell 5.1 writes was stripped - with it, detect-secrets fails with
+    `Unable to read baseline`.
+
 - **`powershell/Compare-Folders.ps1`** - a read-only helper that compares two
   directory trees recursively and reports three kinds of difference: missing in
   destination, content mismatch, and extra item in destination. Two comparison
@@ -50,6 +79,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Switched `Get-ChildItem` and `Get-FileHash` to `-LiteralPath` so folder names
   containing PowerShell wildcard characters (`[`, `]`, `*`, `?`) are treated as
   literal text rather than glob patterns.
+- **Stripped UTF-8 BOMs from `powershell/Compare-Folders.ps1` and
+  `powershell/count-pdf-total-enhanced.ps1`.** A BOM decodes to `U+FEFF`, which
+  is non-ASCII, so both files violated the repository's pure-ASCII rule for
+  code files. This was a pre-existing failure in
+  `count-pdf-total-enhanced.ps1` that had never been visible because the test
+  suite could not run.
+- **Annotated `iter_markdown_references()` in
+  `_copilot-shared/tests/test_website_guide_references.py`** with
+  `-> Iterator[tuple[int, str]]`. Under mypy `strict`, calling an unannotated
+  function from a typed context raises `no-untyped-call`; this was the only
+  type error in the repository.
 
 ### Changed
 
@@ -58,16 +98,27 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Notes
 
-- Verified manually against temporary fixtures: a hidden-only difference is now
-  detected; identical trees report success both with and without a trailing
-  separator on the input paths; and `-UseChecksums` agrees with the fast path.
-- Two known limitations were reviewed and deliberately left as-is. The fast
-  comparison mode can report spurious `Content Mismatch` results when comparing
-  across filesystems, because NTFS stores timestamps at 100-nanosecond
-  resolution while FAT/exFAT stores them at 2-second resolution - use
-  `-UseChecksums` for drive-to-USB verification. The script also reports
+- `Compare-Folders.ps1` verified manually against temporary fixtures: a
+  hidden-only difference is now detected; identical trees report success both
+  with and without a trailing separator on the input paths; and `-UseChecksums`
+  agrees with the fast path.
+- Two known `Compare-Folders.ps1` limitations were reviewed and deliberately
+  left as-is. The fast comparison mode can report spurious `Content Mismatch`
+  results when comparing across filesystems, because NTFS stores timestamps at
+  100-nanosecond resolution while FAT/exFAT stores them at 2-second resolution
+  - use `-UseChecksums` for drive-to-USB verification. The script also reports
   differences but does not offer to reconcile them, which is intentional: it is
   read-only by design.
+- **Step 4 (bandit) still reports `SKIPPED`.** `sanity.bat` looks for `src`,
+  `scripts`, or `frontend` directories, and this repository has none - its
+  Python lives in `_copilot-shared/tests/` and `_copilot-shared/scaffold/`.
+  Fixing this means changing the shared scaffold `sanity.bat`, which is synced
+  to every project, so it was left for a separate deliberate change rather
+  than bundled here.
+- **`security_scan.py` and `_copilot-shared/scaffold/*.py` are outside the
+  gate's target list** for the same reason: `sanity.bat` only collects `src`,
+  `tests`, `scripts`, `frontend`, and `_copilot-shared\tests`. They are linted
+  by neither ruff nor mypy today.
 
 ---
 
