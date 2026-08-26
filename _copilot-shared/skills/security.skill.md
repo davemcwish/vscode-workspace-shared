@@ -45,6 +45,13 @@ reviewCadence: "quarterly"
   everywhere. Cycode then sees sanitiser and sink in the same function, and
   call sites contain no sink to flag. See "Test files are IN SCOPE" and
   "Centralise the sink" in `security.instructions.md`.
+- **The re-verification regex must be a deny-list**
+  (`r'[^\x00-\x1f"*?<>|]{1,500}'`), never an ASCII allow-list. An allow-list
+  omits `&`, `,`, `+`, apostrophes, and accented letters, which appear in real
+  agency names and folder names - it has caused two production outages while
+  buying no security, because `resolve_safe_path()` already blocks traversal.
+  Allow-lists remain correct for org aliases and command names, where the
+  strictness *is* the control.
 - `sanity.bat` passing does **not** guarantee Cycode will pass: the local
   advisory scan reports test-file findings at MEDIUM and never blocks, while
   Cycode blocks the merge.

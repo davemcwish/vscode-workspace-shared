@@ -228,9 +228,10 @@ pattern proven to pass across this codebase - see `data_export.py`,
 local **two-step** re-verification in the function that owns the sink:
 
 ```python
-# Module level - permissive enough for real Windows/POSIX paths, but rejects
-# quotes, control bytes, and shell metacharacters.
-_SAFE_PATH_PATTERN = re.compile(r"[A-Za-z0-9_\-./\\ :()]{1,500}")
+# Module level - a DENY-list, not an allow-list. Rejects only NUL/control
+# bytes, double quotes, and the characters Windows forbids in a filename.
+# See "The re-verification pattern must be a deny-list" below.
+_SAFE_PATH_PATTERN = re.compile(r'[^\x00-\x1f"*?<>|]{1,500}')
 
 # In the function that owns the sink:
 # Step 1 - real containment check (the actual traversal defence); raises.
@@ -249,6 +250,47 @@ plus the `match.group(0)` taint break Cycode requires. The path regex must
 **never** replace `resolve_safe_path()`. If your Cycode tenant registers
 `resolve_safe_path` as a custom sanitizer, step 2 becomes unnecessary; absent
 that configuration, step 2 is what actually passes the gate.
+
+### The re-verification pattern must be a DENY-list, never an ASCII allow-list
+
+This has caused two production outages. Write the step-2 pattern as:
+
+```python
+_SAFE_PATH_PATTERN = re.compile(r'[^\x00-\x1f"*?<>|]{1,500}')
+```
+
+**Never** write it as an ASCII allow-list such as
+`r"[A-Za-z0-9_\-./\\ :()]{1,500}"`. That form silently omits `&`, `,`, `+`,
+apostrophes, and every accented letter - all of which occur routinely in real
+data and in ordinary folder names:
+
+- Agency and dealer names: `Zeeuw & Zeeuw Utrecht`, `O'Brien Motors`,
+  `Baan, Twente + Hengelo`, `Citroen Cafe` (with accents).
+- Salesforce record titles used to build filenames.
+- The operator's own output directory, e.g. `D:\R&D Reports\`.
+
+When the pattern rejects one of these, the script raises
+`ValueError: Path failed local re-verification` and **stops**. Real incidents:
+
+| Date | Module | Impact |
+| --- | --- | --- |
+| 2026-07-14 | `pdf_verification.py` | Valid PDFs recorded as verification errors |
+| 2026-08-25 | `zip_verification.py` | 31-minute run aborted on the last of 19 archives; manifest for the 18 successful agencies lost |
+
+The allow-list's apparent strictness buys **no security whatsoever**:
+`resolve_safe_path()` has already blocked traversal before this line runs. The
+regex exists only to give Cycode a `match.group(0)` it recognises as sanitised.
+Narrowing it therefore adds outages without adding protection.
+
+The deny-list rejects everything that genuinely matters - NUL and control
+bytes, double quotes, and the five characters Windows itself forbids in a
+filename (`* ? < > |`).
+
+> This rule applies **only** to path re-verification. Allow-lists remain
+> correct - and required - where the strictness *is* the security control and
+> the value cannot legitimately contain punctuation: `_SF_ALIAS_PATTERN` for
+> Salesforce org aliases, and command-name allow-lists for
+> `validate_subprocess_command()`. Do not widen those.
 
 ### Test files are IN SCOPE (common cause of surprise PR failures)
 
@@ -286,7 +328,7 @@ call sites contain no sink at all (nothing to flag).
 import re
 from pathlib import Path
 
-_SAFE_PATH_PATTERN = re.compile(r"[A-Za-z0-9_\-./\\ :()]{1,500}")
+_SAFE_PATH_PATTERN = re.compile(r'[^\x00-\x1f"*?<>|]{1,500}')
 
 
 def read_text_safely(path: Path, *, encoding: str = "utf-8") -> str:

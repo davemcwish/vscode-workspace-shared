@@ -59,6 +59,11 @@ running it. Report each as PASS / ❌ NEEDS FIX / N/A.
 - [ ] The advisory `security_scan.py` output has been checked for `tests/`
       findings **on lines this change touched** - `sanity.bat` reports those at
       MEDIUM and does **not** block, but Cycode will block the merge.
+- [ ] Any new or copied path re-verification regex is the **deny-list**
+      `r'[^\x00-\x1f"*?<>|]{1,500}'`, not an ASCII allow-list. An allow-list
+      omits `&`, `,`, `+`, apostrophes, and accented letters, and has twice
+      crashed production runs on real agency names. (Allow-lists are still
+      correct for org aliases and command names.)
 - [ ] Any Cycode cross-module false positive is resolved via custom sanitizer or
       documented suppression - never a permissive re-verification regex.
 
