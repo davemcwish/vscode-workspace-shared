@@ -16,6 +16,10 @@
 
     If there are no differences at all, it prints a success message instead.
 
+    Hidden and system files ARE included in the comparison. This matters: by
+    default PowerShell skips them, which would let two folders differing only
+    by a hidden file be reported as identical.
+
 .PARAMETER SourcePath
     Required. The full path to the folder you are treating as the "known good"
     original, for example "D:\Reports\2026". Must already exist, or the script
@@ -58,21 +62,38 @@ param (
 
 function Get-FolderSnapshot {
     param ([string]$Path)
-    
-    # Get all files and directories recursively
-    $items = Get-ChildItem -Path $Path -Recurse
-    
+
+    # Normalise the root so the relative-path maths below is stable whether or
+    # not the caller supplied a trailing separator (e.g. "D:\Reports" vs
+    # "D:\Reports\"). Without this, every relative key would be off by one
+    # character and every file would appear to differ.
+    $rootPath = (Resolve-Path -LiteralPath $Path).ProviderPath.TrimEnd(
+        [System.IO.Path]::DirectorySeparatorChar,
+        [System.IO.Path]::AltDirectorySeparatorChar
+    )
+
+    # -Force is required: without it Get-ChildItem silently skips hidden and
+    # system files, so two folders differing only by a hidden file would be
+    # reported as identical. For a verification tool that is the worst possible
+    # failure mode, so we always include them.
+    $items = Get-ChildItem -LiteralPath $rootPath -Recurse -Force
+
     $snapshot = @{}
     foreach ($item in $items) {
-        # Get path relative to the root folder being scanned
-        $relativePath = $item.FullName.Substring($Path.Length).TrimStart('\')
-        
+        # Get path relative to the root folder being scanned. Trim both
+        # separator styles so the script behaves identically on Windows
+        # (backslash) and on PowerShell Core under Linux/macOS (forward slash).
+        $relativePath = $item.FullName.Substring($rootPath.Length).TrimStart(
+            [System.IO.Path]::DirectorySeparatorChar,
+            [System.IO.Path]::AltDirectorySeparatorChar
+        )
+
         if ($item.PSIsContainer) {
             $snapshot[$relativePath] = "Directory"
         } else {
             if ($UseChecksums) {
                 # Calculate SHA256 Hash
-                $hash = (Get-FileHash -Path $item.FullName -Algorithm SHA256).Hash
+                $hash = (Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash
                 $snapshot[$relativePath] = $hash
             } else {
                 # Compare by Length and LastWriteTime for a "fast" check

@@ -11,6 +11,66 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2026-08-26]
+
+### Added
+
+- **`powershell/Compare-Folders.ps1`** - a read-only helper that compares two
+  directory trees recursively and reports three kinds of difference: missing in
+  destination, content mismatch, and extra item in destination. Two comparison
+  modes: the default fingerprints each file by size plus last-write timestamp
+  (fast), and `-UseChecksums` fingerprints by SHA256 (slower, but proof against
+  a change that preserves both size and timestamp). The script never creates,
+  modifies, or deletes anything in either folder.
+  - Completed the comment-based help to meet the repository PowerShell
+    documentation standard: `.PARAMETER` blocks for all three parameters, two
+    `.EXAMPLE` blocks, and a `.NOTES` block recording the read-only guarantee.
+    The description now explains the speed-versus-reliability trade-off of
+    `-UseChecksums`, including the fact that it forces OneDrive to download any
+    "cloud-only" files it touches.
+
+### Fixed
+
+- **`Compare-Folders.ps1` silently ignored hidden and system files.**
+  `Get-ChildItem` omits them unless `-Force` is supplied, so two folders that
+  differed only by a hidden file were reported as **"Success: Folders are
+  identical!"**. For a tool whose entire purpose is verifying that a backup
+  matches its source, a false pass is the worst possible failure mode. Now
+  scans with `-Force`.
+- **`Compare-Folders.ps1` hard-coded the Windows path separator.** The relative
+  path was derived with `.TrimStart('\')`, so under PowerShell Core on
+  Linux/macOS every relative key retained a leading `/` and *every* file was
+  reported as differing. Now trims both `DirectorySeparatorChar` and
+  `AltDirectorySeparatorChar`.
+- **`Compare-Folders.ps1` miscalculated relative paths when the caller supplied
+  a trailing separator.** `$item.FullName.Substring($Path.Length)` shifted by
+  one character for `"D:\Reports\"` versus `"D:\Reports"`, corrupting every key
+  in the snapshot. The root is now normalised with `Resolve-Path` and its
+  trailing separator stripped before any offset arithmetic.
+- Switched `Get-ChildItem` and `Get-FileHash` to `-LiteralPath` so folder names
+  containing PowerShell wildcard characters (`[`, `]`, `*`, `?`) are treated as
+  literal text rather than glob patterns.
+
+### Changed
+
+- Regenerated `_copilot-shared/MANIFEST.md` (automatic timestamp update from
+  the last `sync-shared-copilot.ps1` run).
+
+### Notes
+
+- Verified manually against temporary fixtures: a hidden-only difference is now
+  detected; identical trees report success both with and without a trailing
+  separator on the input paths; and `-UseChecksums` agrees with the fast path.
+- Two known limitations were reviewed and deliberately left as-is. The fast
+  comparison mode can report spurious `Content Mismatch` results when comparing
+  across filesystems, because NTFS stores timestamps at 100-nanosecond
+  resolution while FAT/exFAT stores them at 2-second resolution - use
+  `-UseChecksums` for drive-to-USB verification. The script also reports
+  differences but does not offer to reconcile them, which is intentional: it is
+  read-only by design.
+
+---
+
 ## [2026-07-16]
 
 ### Changed
