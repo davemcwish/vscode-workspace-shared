@@ -11,7 +11,75 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
-## [2026-08-27]
+## [2026-08-27] - Scaffold lint coverage, stage 2
+
+### Changed
+
+- `_copilot-shared/scaffold/update_packages.py` now passes `ruff check`
+  cleanly. Two findings were resolved, both properly rather than suppressed:
+  - **`S603` (subprocess without validated input).** The script may now only
+    launch programs on an explicit allow-list (`python`, `bash`, and the
+    project's own `sanity` script). The program path is additionally
+    re-verified inline against a deny-list pattern immediately before
+    `subprocess.run`, and `shell=False` is now explicit. Anything else raises
+    `ValueError`. The remaining `# noqa: S603` carries a written rationale.
+  - **`PLR0912` (too many branches).** `main()` was split into four named
+    helpers - `warn_if_not_in_virtualenv`, `compile_requirements`,
+    `install_upgraded_packages`, and `run_sanity_gate` - each with a
+    complete-beginner docstring.
+- `_copilot-shared/scaffold/create_security_scan_pack.py` now passes
+  `ruff check` cleanly (33 findings). Thirteen docstrings were added, an
+  unused lambda argument renamed, and eleven teaching-note strings wrapped as
+  implicitly-concatenated literals.
+- **The generator was emitting lint errors into its own output.** Docstrings
+  were built with the opening `"""` alone on its own line (rule `D212`) and
+  blank lines were emitted as indentation followed by a newline (rule `W293`).
+  Both are now handled by a single new helper, `build_docstring_block`, which
+  documents why each rule matters.
+- `_copilot-shared/scaffold/security_scan_teaching_docstrings.py` and
+  `security_scan_teaching_comments.ps1` regenerated. Both are **generated
+  artefacts**, not source, and both were stale - the PowerShell copy predated
+  the `shutil` and `zipfile` rules added to `security_scan.ps1`.
+
+### Added
+
+- `[tool.ruff.lint.per-file-ignores]` entry in
+  `_copilot-shared/scaffold/pyproject.toml` ignoring `E501` for
+  `create_security_scan_pack.py` only. That file embeds the verbatim text of
+  the documents it generates, and a few of those lines are longer than 100
+  characters because the target format requires it. Re-wrapping them in the
+  Python source would change the generated documents.
+- A pointer comment in the workspace-root `pyproject.toml` recording that it
+  does **not** govern `_copilot-shared/scaffold/`.
+
+### Notes
+
+- **`security_scan_teaching_docstrings.py` was never a hand-editable file.**
+  It had 62 lint findings, but hand-fixing them would have been undone by the
+  next generator run. Three of those findings (`C420`, `PLR5501`, `UP035`)
+  were inherited copies of errors already fixed in `security_scan.py`, which
+  is what revealed the file was stale. Regenerating dropped it from 62
+  findings to 3; fixing the generator dropped it to zero.
+- **Ruff resolves configuration from the nearest `pyproject.toml`.**
+  `_copilot-shared/scaffold/` contains its own `pyproject.toml` - the template
+  copied into new projects - so the workspace-root config does not apply to
+  anything in that folder. This matters for the sequenced gate-targeting
+  change, which must account for two config files rather than one.
+- **Behaviour was verified, not assumed.** The regenerated teaching scanner
+  and the real scanner produce byte-identical JSON output and the same exit
+  code when run over the same tree. All five generated Markdown documents are
+  byte-identical to the committed copies, which proves the generator refactor
+  changed only what it was meant to change.
+- `update_packages.py` is **not** in `$ScaffoldSyncFiles`, so this change does
+  not propagate automatically. Copies exist in three sibling repositories:
+  `trails-and-tails` and `eu-spm` hold byte-identical copies of the previous
+  version, and `Salesforce` holds a diverged copy under `scripts/` with its
+  own test. Propagating the subprocess allow-list to those copies is tracked
+  separately.
+
+---
+
+## [2026-08-27] - Scaffold lint coverage, stage 1
 
 ### Changed
 

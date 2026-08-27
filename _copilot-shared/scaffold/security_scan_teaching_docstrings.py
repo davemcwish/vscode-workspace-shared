@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Teaching version of the local high-risk security pattern scanner.
+"""Teaching version of the local high-risk security pattern scanner.
 
 This file keeps the scanner's executable behaviour aligned with security_scan.py
 and adds explanatory docstrings for learning and review. The comments and
@@ -27,6 +26,7 @@ Typical usage:
   python security_scan_teaching_docstrings.py --format json --output security_findings.json
   python security_scan_teaching_docstrings.py --include-ext .ps1
 """
+
 from __future__ import annotations
 
 import argparse
@@ -36,32 +36,94 @@ import re
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Iterable
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    # Imported for type annotations only. ``from __future__ import annotations``
+    # (above) makes every annotation a string at runtime, so this import does
+    # not need to execute when the scanner runs.
+    from collections.abc import Iterable
 
 SEVERITY_ORDER = {"LOW": 1, "MEDIUM": 2, "HIGH": 3, "CRITICAL": 4}
 
 DEFAULT_EXCLUDED_DIRS = {
-    ".git", ".hg", ".svn", ".venv", "venv", "env", "node_modules",
-    "__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".tox",
-    "dist", "build", "coverage", "htmlcov", ".idea",
+    ".git",
+    ".hg",
+    ".svn",
+    ".venv",
+    "venv",
+    "env",
+    "node_modules",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".tox",
+    "dist",
+    "build",
+    "coverage",
+    "htmlcov",
+    ".idea",
 }
 
 DEFAULT_INCLUDED_EXTS = {
-    ".py", ".js", ".jsx", ".ts", ".tsx", ".html", ".htm", ".css",
-    ".md", ".json", ".yml", ".yaml", ".toml", ".cfg", ".ini", ".txt", ".env",
+    ".py",
+    ".js",
+    ".jsx",
+    ".ts",
+    ".tsx",
+    ".html",
+    ".htm",
+    ".css",
+    ".md",
+    ".json",
+    ".yml",
+    ".yaml",
+    ".toml",
+    ".cfg",
+    ".ini",
+    ".txt",
+    ".env",
 }
 
-SECRETISH_WORDS = r"api[_-]?key|secret|token|password|passwd|pwd|session[_-]?id|client[_-]?secret|private[_-]?key|access[_-]?token|refresh[_-]?token"
+# NOTE: This is a list of secret-ish KEYWORD NAMES the scanner searches for,
+# not an actual secret. The inline pragma keeps detect-secrets from flagging
+# this line when the scanner is synced into a project whose gate runs
+# detect-secrets (its PowerShell twin is flagged without the pragma).
+# The line is kept intact (noqa: E501) rather than split across several
+# implicitly-concatenated strings, because detect-secrets matches its pragma
+# per line - splitting would need the pragma repeated on every fragment.
+SECRETISH_WORDS = r"api[_-]?key|secret|token|password|passwd|pwd|session[_-]?id|client[_-]?secret|private[_-]?key|access[_-]?token|refresh[_-]?token"  # noqa: E501  # pragma: allowlist secret
 
 
 @dataclass(frozen=True)
 class Rule:
+    """One security pattern the scanner looks for.
+
+    A "rule" pairs a regular expression with the metadata needed to report a
+    readable finding. Rules are created by :func:`compile_rule` and collected
+    in the module-level ``RULES`` list; every line of every scanned file is
+    tested against every applicable rule.
+
+    Attributes:
+        rule_id: Short stable identifier printed in output, e.g.
+            ``"PY-SUBPROCESS-SHELL-TRUE"``. Used to recognise a finding
+            across runs, so keep it unchanged once published.
+        severity: One of ``"LOW"``, ``"MEDIUM"``, ``"HIGH"``, ``"CRITICAL"``.
+            Must be a key of ``SEVERITY_ORDER``.
+        description: Plain-English explanation of what was matched and why it
+            is a concern.
+        pattern: The compiled regular expression searched for in each line.
+        extensions: File extensions this rule applies to, lower-case and
+            including the dot, e.g. ``{".py"}``. ``None`` means "apply to
+            every scanned file".
+        recommendation: The suggested fix, printed after ``Fix:``.
+
+    Note:
+        The class is frozen (immutable) because rules are shared constants -
+        accidentally mutating one mid-scan would change later results.
     """
-    Describe one regex-based scanning rule.
-    
-    Each rule has a stable rule id, severity, human-readable description, compiled
-    regex pattern, optional extension allow-list, and recommended remediation text.
-    """
+
     rule_id: str
     severity: str
     description: str
@@ -72,12 +134,25 @@ class Rule:
 
 @dataclass
 class Finding:
+    """A single place in the codebase where a :class:`Rule` matched.
+
+    One ``Finding`` is created per matching line. It carries everything needed
+    to print a report entry or serialise to JSON, so the file does not have to
+    be read again later.
+
+    Attributes:
+        severity: Copied from the rule that matched.
+        rule_id: Copied from the rule that matched.
+        file: Path of the offending file relative to the scan root where
+            possible, otherwise the absolute path.
+        line: 1-based line number (the first line of a file is 1, not 0).
+        description: Copied from the rule that matched.
+        snippet: The offending line, trimmed and passed through
+            :func:`sanitize_snippet` so likely secret values are replaced with
+            ``[REDACTED]`` before display.
+        recommendation: Copied from the rule that matched.
     """
-    Represent one scanner result.
-    
-    A finding is what appears in text or JSON output. It records severity, rule id,
-    relative file path, line number, description, redacted snippet, and fix guidance.
-    """
+
     severity: str
     rule_id: str
     file: str
@@ -96,11 +171,49 @@ def compile_rule(
     flags: int = re.IGNORECASE,
     recommendation: str = "Review and apply security.instructions.md.",
 ) -> Rule:
-    """
-    Build a Rule object from plain rule metadata.
-    
+    """Build a Rule object from plain rule metadata.
+
     Most rules use case-insensitive matching by default. Individual rules can pass a
     different regex flag value when exact behaviour is needed.
+    """
+    r"""Build one :class:`Rule`, compiling its regular expression up front.
+
+    This is a small convenience wrapper so the big ``RULES`` list below stays
+    readable. Compiling each pattern once here (rather than on every line of
+    every file) is what keeps the scan fast.
+
+    Args:
+        rule_id: Short stable identifier for the rule, e.g. ``"PY-WEAK-PRNG"``.
+        severity: One of ``"LOW"``, ``"MEDIUM"``, ``"HIGH"``, ``"CRITICAL"``.
+        description: Plain-English explanation of the problem.
+        regex: The pattern to search for, as a string. It is compiled here.
+        exts: File extensions the rule applies to, lower-case and including
+            the dot, e.g. ``[".py"]``. Pass ``None`` (the default) to apply
+            the rule to every scanned file. An empty collection is also
+            treated as "every file".
+        flags: Regular-expression flags. Defaults to ``re.IGNORECASE`` so
+            rules match regardless of capitalisation.
+        recommendation: The suggested fix, printed after ``Fix:``.
+
+    Returns:
+        A ready-to-use :class:`Rule` with its ``pattern`` already compiled.
+
+    Raises:
+        re.error: If ``regex`` is not a valid regular expression. This means
+            the rule definition itself is wrong; fix the pattern in ``RULES``.
+            Because rules are built at import time, a bad pattern stops the
+            scanner from starting at all rather than failing mid-scan.
+
+    Example:
+        >>> rule = compile_rule(
+        ...     "PY-EXAMPLE",
+        ...     "LOW",
+        ...     "Example only.",
+        ...     r"\bTODO\b",
+        ...     [".py"],
+        ... )
+        >>> rule.rule_id
+        'PY-EXAMPLE'
     """
     return Rule(
         rule_id=rule_id,
@@ -111,6 +224,7 @@ def compile_rule(
         recommendation=recommendation,
     )
 
+
 RULES: list[Rule] = [
     # Secrets / credentials
     compile_rule(
@@ -119,7 +233,10 @@ RULES: list[Rule] = [
         "Possible hard-coded secret, token, password, or session id.",
         rf"\b({SECRETISH_WORDS})\b\s*[:=]\s*['\"](?!\s*(?:<|your-|placeholder|example|changeme|dummy|test|none|null))[^'\"]{{8,}}['\"]",
         None,
-        recommendation="Move secrets to approved secret storage or environment variables; commit only placeholders in .env.example.",
+        recommendation=(
+            "Move secrets to approved secret storage or environment variables; "
+            "commit only placeholders in .env.example."
+        ),
     ),
     compile_rule(
         "SECRET-PRIVATE-KEY",
@@ -139,7 +256,10 @@ RULES: list[Rule] = [
         "subprocess call uses shell=True.",
         r"\bsubprocess\.(run|Popen|call|check_call|check_output)\s*\([^#\n]*shell\s*=\s*True",
         {".py"},
-        recommendation="Use subprocess with a list, shell=False, literal command parts, and validated arguments.",
+        recommendation=(
+            "Use subprocess with a list, shell=False, literal command parts, "
+            "and validated arguments."
+        ),
     ),
     compile_rule(
         "PY-OS-SYSTEM",
@@ -147,7 +267,9 @@ RULES: list[Rule] = [
         "Shell command execution via os.system/os.popen/commands.getoutput.",
         r"\b(os\.system|os\.popen|commands\.getoutput|commands\.getstatusoutput)\s*\(",
         {".py"},
-        recommendation="Replace with subprocess.run([...], shell=False) and allow-list validated inputs.",
+        recommendation=(
+            "Replace with subprocess.run([...], shell=False) and allow-list validated inputs."
+        ),
     ),
     compile_rule(
         "PY-SUBPROCESS-STRING-COMMAND",
@@ -155,24 +277,36 @@ RULES: list[Rule] = [
         "subprocess appears to receive a string/f-string command rather than a safe argument list.",
         r"\bsubprocess\.(run|Popen|call|check_call|check_output)\s*\(\s*(f?['\"]|[a-zA-Z_][\w.]*\s*\+)",
         {".py"},
-        recommendation="Pass a list of arguments; validate executable with validate_subprocess_command(); validate dynamic args locally.",
+        recommendation=(
+            "Pass a list of arguments; validate executable with "
+            "validate_subprocess_command(); validate dynamic args locally."
+        ),
     ),
     compile_rule(
         "PY-EVAL-EXEC",
         "CRITICAL",
         "Dynamic Python code execution via eval/exec/compile.",
-        r"\b(eval|exec|compile)\s*\(",
+        r"(?<![\w.])(eval|exec|compile)\s*\(",
         {".py"},
-        recommendation="Avoid dynamic code execution. Use allow-listed functions or data-driven dispatch tables.",
+        recommendation=(
+            "Avoid dynamic code execution. Use allow-listed functions or "
+            "data-driven dispatch tables."
+        ),
     ),
     # Python file paths / archive / XML
     compile_rule(
         "PY-DYNAMIC-OPEN",
         "MEDIUM",
-        "open() appears to use a non-literal path; ensure resolve_safe_path() and local re-validation are used.",
+        (
+            "open() appears to use a non-literal path; ensure resolve_safe_path() "
+            "and local re-validation are used."
+        ),
         r"(?<![\w.])open\s*\(\s*(?!['\"])",
         {".py"},
-        recommendation="Use resolve_safe_path(), assign safe_path, and pass only the validated path into file I/O.",
+        recommendation=(
+            "Use resolve_safe_path(), assign safe_path, and pass only the "
+            "validated path into file I/O."
+        ),
     ),
     compile_rule(
         "PY-TEMPFILE-DYNAMIC-PREFIX",
@@ -180,7 +314,10 @@ RULES: list[Rule] = [
         "NamedTemporaryFile prefix appears dynamic; Cycode flags tainted temp filename prefixes.",
         r"\bNamedTemporaryFile\s*\([^#\n]*prefix\s*=\s*(?!['\"])",
         {".py"},
-        recommendation="Use a fixed literal prefix, e.g. prefix='report_attachment_'. Do not derive temp filenames from attachment names.",
+        recommendation=(
+            "Use a fixed literal prefix, e.g. prefix='report_attachment_'. "
+            "Do not derive temp filenames from attachment names."
+        ),
     ),
     compile_rule(
         "PY-ZIP-EXTRACTALL",
@@ -188,7 +325,39 @@ RULES: list[Rule] = [
         "ZipFile.extractall() can allow ZIP Slip path traversal if archive members are untrusted.",
         r"\.extractall\s*\(",
         {".py"},
-        recommendation="Validate every ZIP member destination stays under the intended target directory before extracting.",
+        recommendation=(
+            "Validate every ZIP member destination stays under the intended "
+            "target directory before extracting."
+        ),
+    ),
+    compile_rule(
+        "PY-SHUTIL-DYNAMIC-PATH",
+        "MEDIUM",
+        (
+            "shutil file operation uses a path argument; Cycode flags "
+            "unsanitized dynamic input in file paths."
+        ),
+        r"\bshutil\.(move|copy|copy2|copyfile|copytree)\s*\(",
+        {".py"},
+        recommendation=(
+            "Validate the source and destination with resolve_safe_path() before "
+            "the shutil call; only then wrap the OS call (e.g. to_long_path). "
+            "Never pass a raw or tainted path."
+        ),
+    ),
+    compile_rule(
+        "PY-ZIPFILE-DYNAMIC-PATH",
+        "MEDIUM",
+        (
+            "zipfile.ZipFile() opens a non-literal path; Cycode flags "
+            "unsanitized dynamic input in file paths."
+        ),
+        r"\bzipfile\.ZipFile\s*\(\s*(?!['\"])",
+        {".py"},
+        recommendation=(
+            "Pass a resolve_safe_path()-validated path into zipfile.ZipFile(); "
+            "never open an archive at a raw user- or Salesforce-derived path."
+        ),
     ),
     compile_rule(
         "PY-XML-STDLIB",
@@ -196,16 +365,25 @@ RULES: list[Rule] = [
         "Python standard-library XML parser usage; may be vulnerable to hostile XML payloads.",
         r"(from\s+xml\.etree\s+import|import\s+xml\.etree|xml\.etree\.ElementTree|\bET\.parse\s*\()",
         {".py"},
-        recommendation="Use defusedxml.ElementTree for XML parsing, especially for files influenced by users or external systems.",
+        recommendation=(
+            "Use defusedxml.ElementTree for XML parsing, especially for files "
+            "influenced by users or external systems."
+        ),
     ),
     # Python crypto/random/network
     compile_rule(
         "PY-WEAK-PRNG",
         "HIGH",
-        "Use of random.* or random.Random(); not suitable for security-sensitive randomness and historically flagged by Cycode.",
+        (
+            "Use of random.* or random.Random(); not suitable for "
+            "security-sensitive randomness and historically flagged by Cycode."
+        ),
         r"\brandom\.(Random\s*\(|random\s*\(|randint\s*\(|randrange\s*\(|choice\s*\(|choices\s*\(|shuffle\s*\(|sample\s*\()",
         {".py"},
-        recommendation="For secrets use secrets.*. For non-security randomness use SystemRandom() or deterministic index-based selection.",
+        recommendation=(
+            "For secrets use secrets.*. For non-security randomness use "
+            "SystemRandom() or deterministic index-based selection."
+        ),
     ),
     compile_rule(
         "PY-INSECURE-SMTP",
@@ -213,7 +391,10 @@ RULES: list[Rule] = [
         "Plain smtplib.SMTP() usage; Cycode flags insecure SMTP connections.",
         r"\bsmtplib\.SMTP\s*\(",
         {".py"},
-        recommendation="Prefer SMTP_SSL(), or call starttls() and fail closed before sending. Use Outlook COM if that is the approved path.",
+        recommendation=(
+            "Prefer SMTP_SSL(), or call starttls() and fail closed before "
+            "sending. Use Outlook COM if that is the approved path."
+        ),
     ),
     compile_rule(
         "PY-TLS-VERIFY-FALSE",
@@ -221,7 +402,10 @@ RULES: list[Rule] = [
         "TLS certificate verification disabled.",
         r"\bverify\s*=\s*False\b|\.verify\s*=\s*False\b|CERT_NONE",
         {".py"},
-        recommendation="Do not disable TLS verification. Use trusted CA bundles or approved corporate TLS configuration.",
+        recommendation=(
+            "Do not disable TLS verification. Use trusted CA bundles or "
+            "approved corporate TLS configuration."
+        ),
     ),
     compile_rule(
         "PY-INSECURE-DESERIALIZATION",
@@ -229,7 +413,10 @@ RULES: list[Rule] = [
         "Potential unsafe deserialization.",
         r"\b(pickle\.load|pickle\.loads|dill\.load|dill\.loads|marshal\.load|marshal\.loads|yaml\.load\s*\()",
         {".py"},
-        recommendation="Do not deserialize untrusted data. Use json, safe_load(), or a schema-validated format.",
+        recommendation=(
+            "Do not deserialize untrusted data. Use json, safe_load(), or a "
+            "schema-validated format."
+        ),
     ),
     compile_rule(
         "PY-SQL-DYNAMIC",
@@ -237,7 +424,10 @@ RULES: list[Rule] = [
         "SQL execution appears to use string formatting/f-strings.",
         r"\.execute\s*\(\s*(f['\"]|['\"][^'\"]*(%s|\{)|[a-zA-Z_][\w.]*\s*%)",
         {".py"},
-        recommendation="Use parameterized queries; never build SQL by concatenating/formatting user-controlled values.",
+        recommendation=(
+            "Use parameterized queries; never build SQL by "
+            "concatenating/formatting user-controlled values."
+        ),
     ),
     compile_rule(
         "PY-FLASK-DEBUG",
@@ -253,15 +443,24 @@ RULES: list[Rule] = [
         "Server appears to bind to 0.0.0.0.",
         r"host\s*=\s*['\"]0\.0\.0\.0['\"]|app\.run\s*\([^#\n]*['\"]0\.0\.0\.0['\"]",
         {".py"},
-        recommendation="For local tools bind to 127.0.0.1 only. Add authentication before exposing beyond localhost.",
+        recommendation=(
+            "For local tools bind to 127.0.0.1 only. Add authentication before "
+            "exposing beyond localhost."
+        ),
     ),
     compile_rule(
         "PY-LOGGING-SENSITIVE",
         "MEDIUM",
-        "Logger call may include sensitive data, paths, Salesforce payloads, recipients, or raw command/API output.",
+        (
+            "Logger call may include sensitive data, paths, Salesforce "
+            "payloads, recipients, or raw command/API output."
+        ),
         r"\blogger\.(debug|info|warning|error|exception|critical)\s*\([^#\n]*(records|users?|emails?|recipients?|tokens?|password|session|profile|manager|account|dealer|agency|path|file|snapshot|response\.text|stdout|stderr|traceback|exception)",
         {".py"},
-        recommendation="At INFO/WARNING/ERROR log counts/status only. Redact sensitive values and avoid full paths/payloads.",
+        recommendation=(
+            "At INFO/WARNING/ERROR log counts/status only. Redact sensitive "
+            "values and avoid full paths/payloads."
+        ),
     ),
     # JavaScript / TypeScript / HTML
     compile_rule(
@@ -270,7 +469,10 @@ RULES: list[Rule] = [
         "Dynamic HTML insertion sink; possible DOM XSS.",
         r"(\.innerHTML\s*=|\.outerHTML\s*=|\.insertAdjacentHTML\s*\(|document\.write\s*\(|\.replaceWith\s*\()",
         {".js", ".jsx", ".ts", ".tsx", ".html", ".htm"},
-        recommendation="Use textContent, createElement/appendChild, or replaceChild(newNode, oldNode). Avoid replaceWith().",
+        recommendation=(
+            "Use textContent, createElement/appendChild, or "
+            "replaceChild(newNode, oldNode). Avoid replaceWith()."
+        ),
     ),
     compile_rule(
         "JS-CODE-EXECUTION",
@@ -278,7 +480,10 @@ RULES: list[Rule] = [
         "Dynamic JavaScript code execution.",
         r"\b(eval\s*\(|new\s+Function\s*\(|setTimeout\s*\(\s*['\"]|setInterval\s*\(\s*['\"])",
         {".js", ".jsx", ".ts", ".tsx", ".html", ".htm"},
-        recommendation="Avoid dynamic JS execution. Use function references, allow-listed dispatch, or structured data.",
+        recommendation=(
+            "Avoid dynamic JS execution. Use function references, allow-listed "
+            "dispatch, or structured data."
+        ),
     ),
     compile_rule(
         "JS-LOCALSTORAGE-SECRET",
@@ -286,7 +491,10 @@ RULES: list[Rule] = [
         "Potential token/secret stored in browser localStorage/sessionStorage.",
         rf"(localStorage|sessionStorage)\.(setItem|getItem)\s*\([^\n]*({SECRETISH_WORDS})",
         {".js", ".jsx", ".ts", ".tsx", ".html", ".htm"},
-        recommendation="Do not store secrets/tokens in localStorage. Prefer secure, HttpOnly cookies or server-side session state where applicable.",
+        recommendation=(
+            "Do not store secrets/tokens in localStorage. Prefer secure, "
+            "HttpOnly cookies or server-side session state where applicable."
+        ),
     ),
     compile_rule(
         "JS-INSECURE-FETCH-HTTP",
@@ -294,7 +502,9 @@ RULES: list[Rule] = [
         "HTTP URL used in fetch/XMLHttpRequest; confirm it is localhost-only or switch to HTTPS.",
         r"(fetch\s*\(|XMLHttpRequest|axios\.)[^\n]*['\"]http://(?!localhost|127\.0\.0\.1)",
         {".js", ".jsx", ".ts", ".tsx", ".html", ".htm"},
-        recommendation="Use HTTPS for non-local endpoints and avoid sending sensitive data over HTTP.",
+        recommendation=(
+            "Use HTTPS for non-local endpoints and avoid sending sensitive data over HTTP."
+        ),
     ),
     compile_rule(
         "HTML-INLINE-EVENT-HANDLER",
@@ -302,7 +512,9 @@ RULES: list[Rule] = [
         "Inline HTML event handler found; increases XSS risk and weakens CSP.",
         r"\son[a-zA-Z]+\s*=\s*['\"]",
         {".html", ".htm"},
-        recommendation="Attach event handlers from JavaScript with addEventListener() and keep CSP strict.",
+        recommendation=(
+            "Attach event handlers from JavaScript with addEventListener() and keep CSP strict."
+        ),
     ),
     # CSS
     compile_rule(
@@ -324,14 +536,56 @@ RULES: list[Rule] = [
 ]
 
 
+def is_own_scanner_file(name: str) -> bool:
+    """Return True if ``name`` is one of this scanner's own files.
+
+    Why this exists:
+        This scanner's rule table literally contains the dangerous code
+        patterns it hunts for (for example the text ``eval(`` and
+        ``verify=False`` appear inside regex strings). If the scanner scans its
+        own source, every one of those rule strings is reported as a finding -
+        pure false positives. Because the shared sync copies this scanner into
+        every project root, it must skip its own files wherever it runs.
+
+    Args:
+        name: A bare file name with no directory part, e.g.
+            ``"security_scan.py"``.
+
+    Returns:
+        True for the scanner's own source and teaching files - any name that
+        starts with ``security_scan`` (such as ``security_scan.py``,
+        ``security_scan.ps1``, ``security_scan_teaching_docstrings.py``) and
+        the pack builder ``create_security_scan_pack.py``; otherwise False. A
+        real project would never legitimately name a file ``security_scan*``.
+    """
+    lowered = name.lower()
+    return lowered.startswith("security_scan") or lowered == "create_security_scan_pack.py"
+
+
 def should_scan_file(path: Path, included_exts: set[str]) -> bool:
+    """Decide whether a single file should be scanned.
+
+    Args:
+        path: The file being considered.
+        included_exts: Lower-case extensions to scan, each including the dot,
+            e.g. ``{".py", ".js"}``.
+
+    Returns:
+        True if the file should be scanned, False to skip it. Files are
+        skipped when they belong to the scanner itself; any ``.env*`` file is
+        always scanned (even ``.env.local``, which has no matching suffix),
+        because those are the files most likely to hold real secrets.
+
+    Example:
+        >>> should_scan_file(Path("app.py"), {".py"})
+        True
+        >>> should_scan_file(Path("notes.rst"), {".py"})
+        False
     """
-    Return True when a file should be scanned.
-    
-    The extension list handles normal source/config files. Files whose names start
-    with .env are always included so .env, .env.local, .env.backup, and similar files
-    are checked consistently with the PowerShell version.
-    """
+    # Never scan the scanner's own files - they contain the very patterns it
+    # detects, so scanning them would only ever produce false positives.
+    if is_own_scanner_file(path.name):
+        return False
     # ALIGNED (item 3): match any .env* file via broad prefix, same as PowerShell.
     if path.name.lower().startswith(".env"):
         return True
@@ -339,11 +593,27 @@ def should_scan_file(path: Path, included_exts: set[str]) -> bool:
 
 
 def iter_files(root: Path, included_exts: set[str], excluded_dirs: set[str]) -> Iterable[Path]:
-    """
-    Yield scan-eligible files under the root directory.
-    
-    The walk prunes excluded directories before descending into them. This avoids
-    scanning dependency folders, build outputs, caches, and Python .eggs folders.
+    """Walk ``root`` and yield every file that should be scanned.
+
+    Directories in ``excluded_dirs`` are pruned as the walk proceeds, so the
+    scanner never descends into them. That is what keeps large folders such as
+    ``node_modules`` and ``.venv`` from dominating the run time.
+
+    Args:
+        root: Directory to scan, searched recursively.
+        included_exts: Lower-case extensions to scan, each including the dot.
+        excluded_dirs: Directory names (not paths) to skip entirely, e.g.
+            ``{".git", "node_modules"}``. Any directory whose name starts with
+            ``.eggs`` is also skipped.
+
+    Yields:
+        Each file worth scanning, as a :class:`~pathlib.Path`. This is a
+        generator, so files are produced one at a time rather than collected
+        into a list - the whole tree is never held in memory at once.
+
+    Example:
+        >>> for found in iter_files(Path("src"), {".py"}, {".git"}):
+        ...     print(found)  # doctest: +SKIP
     """
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = [d for d in dirnames if d not in excluded_dirs and not d.startswith(".eggs")]
@@ -355,11 +625,34 @@ def iter_files(root: Path, included_exts: set[str], excluded_dirs: set[str]) -> 
 
 
 def sanitize_snippet(line: str) -> str:
-    """
-    Redact likely secret values from a single output snippet.
-    
-    The scanner reports enough context to help a reviewer find the issue, but it
-    tries not to print raw credentials, tokens, passwords, or private key contents.
+    """Make a source line safe to print in a report.
+
+    Findings quote the offending line so a reader can see the problem. If that
+    line contains a real secret, printing it verbatim would copy the secret
+    into the report - and reports get pasted into tickets and chat. This
+    function replaces likely secret values with ``[REDACTED]`` first.
+
+    Args:
+        line: The raw source line. Leading and trailing whitespace is removed.
+
+    Returns:
+        The trimmed line with any ``key = "value"``-style secret replaced by
+        ``[REDACTED]`` and any private-key header collapsed. Lines longer than
+        220 characters are truncated with a trailing ``...`` to keep report
+        output readable.
+
+    Note:
+        Redaction is regex-based and best-effort. Treat it as a safety net,
+        not a guarantee, and still review a report before sharing it widely.
+
+    Example:
+        Given a source line that assigns a quoted value to a secret-ish name
+        (``password``, ``api_key``, ``token`` and similar), the value between
+        the quotes is replaced, so the report shows the shape of the problem
+        without reproducing the credential itself. A literal example is
+        deliberately not written out here: this docstring would then contain a
+        secret-shaped string, and every secret scanner running over this file
+        in every project it is synced into would flag it.
     """
     s = line.strip()
     s = re.sub(
@@ -368,18 +661,42 @@ def sanitize_snippet(line: str) -> str:
         s,
     )
     # ALIGNED (item 4): (?i) so lowercase key markers are redacted too.
-    s = re.sub(r"(?i)-----BEGIN [A-Z ]*PRIVATE KEY-----.*", "-----BEGIN [REDACTED PRIVATE KEY]-----", s)
+    s = re.sub(
+        r"(?i)-----BEGIN [A-Z ]*PRIVATE KEY-----.*", "-----BEGIN [REDACTED PRIVATE KEY]-----", s
+    )
     if len(s) > 220:
         s = s[:217] + "..."
     return s
 
 
 def scan_file(path: Path, root: Path) -> list[Finding]:
-    """
-    Scan one file using filename checks and the generic regex rule table.
-    
-    This function handles .env* filename findings, read errors, comment suppression
-    for noisy non-secret rules, regex matching, and finding creation.
+    """Scan one file against every applicable rule.
+
+    Two kinds of check run here: a filename check (a committed ``.env`` file
+    is itself a finding, whatever is inside it), then a line-by-line regex
+    check against ``RULES``.
+
+    Full-line comments are skipped for most rules, because a comment
+    describing a risky call is not the same as making one. Secret-related
+    rules still run on comments, since a secret pasted into a comment is
+    every bit as leaked.
+
+    Args:
+        path: The file to scan.
+        root: The scan root, used to shorten reported paths to something
+            relative and readable.
+
+    Returns:
+        A list of :class:`Finding` objects, one per matching line. An empty
+        list means nothing matched - that is the normal, healthy result.
+
+    Note:
+        A file that cannot be read is reported as a ``LOW`` severity
+        ``SCAN-READ-ERROR`` finding rather than raising. A scanner that stops
+        on the first unreadable file would be useless on a real repository,
+        so unreadable files are recorded and the scan continues. Undecodable
+        bytes are replaced rather than raising, so binary files that slip
+        through the extension filter cannot crash the run.
     """
     findings: list[Finding] = []
     rel = str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
@@ -393,9 +710,13 @@ def scan_file(path: Path, root: Path) -> list[Finding]:
                 rule_id="SECRET-ENV-FILE",
                 file=rel,
                 line=1,
-                description="Environment file may contain real secrets and should not be committed.",
+                description=(
+                    "Environment file may contain real secrets and should not be committed."
+                ),
                 snippet="[filename only]",
-                recommendation="Commit .env.example only. Keep real .env files local and ignored by git.",
+                recommendation=(
+                    "Commit .env.example only. Keep real .env files local and ignored by git."
+                ),
             )
         )
 
@@ -442,12 +763,27 @@ def scan_file(path: Path, root: Path) -> list[Finding]:
 
 
 def scan_requirements(path: Path, root: Path) -> list[Finding]:
-    """
-    Apply Python dependency pinning checks to requirements*.txt files.
-    
-    Blank lines, comments, recursive includes, and command-style options are skipped.
-    A dependency is considered pinned if it uses == or a whitespace-separated direct
-    reference marker such as package @ location.
+    """Report Python dependencies that are not pinned to an exact version.
+
+    An unpinned dependency (``requests`` rather than ``requests==2.32.3``) can
+    resolve to a different version on a later install, which makes builds
+    irreproducible and lets a compromised release in without any change to
+    your own code.
+
+    Args:
+        path: File to inspect. Files that are not named ``requirements*.txt``
+            are ignored, so this can safely be called for every file.
+        root: The scan root, used to shorten reported paths.
+
+    Returns:
+        One ``MEDIUM`` ``DEP-UNPINNED-PIP`` finding per unpinned line, or an
+        empty list. Comments, blank lines, ``-r`` includes and ``--`` options
+        are skipped, as are direct references using ``name @ url`` syntax,
+        which are pinned by URL rather than by ``==``.
+
+    Note:
+        An unreadable file yields an empty list rather than raising - the
+        caller is scanning a whole tree and should not stop for one file.
     """
     findings: list[Finding] = []
     if not path.name.lower().startswith("requirements") or path.suffix.lower() != ".txt":
@@ -472,18 +808,41 @@ def scan_requirements(path: Path, root: Path) -> list[Finding]:
                     line=line_no,
                     description="Python dependency is not pinned to an exact version.",
                     snippet=sanitize_snippet(stripped),
-                    recommendation="Pin exact versions in requirements files, e.g. package==1.2.3, per repository guidance.",
+                    recommendation=(
+                        "Pin exact versions in requirements files, e.g. "
+                        "package==1.2.3, per repository guidance."
+                    ),
                 )
             )
     return findings
 
 
 def scan_package_json(path: Path, root: Path) -> list[Finding]:
-    """
-    Apply NPM dependency pinning checks to package.json.
-    
-    The scanner checks dependencies, devDependencies, and optionalDependencies. It
-    flags wildcard, latest, range, greater-than, and less-than style versions.
+    """Report NPM dependencies that are not pinned to an exact version.
+
+    The JavaScript equivalent of :func:`scan_requirements`. Range specifiers
+    such as ``^1.2.3`` or ``~1.2.3`` let a future ``npm install`` pull code
+    that was never reviewed here, so they are reported.
+
+    Args:
+        path: File to inspect. Anything not named ``package.json`` is ignored,
+            so this can safely be called for every file.
+        root: The scan root, used to shorten reported paths.
+
+    Returns:
+        One ``MEDIUM`` ``DEP-UNPINNED-NPM`` finding per unpinned dependency
+        across the ``dependencies``, ``devDependencies`` and
+        ``optionalDependencies`` sections, or an empty list.
+
+    Note:
+        Every finding is reported at line 1. The file is parsed as JSON, which
+        discards line numbers, so the exact line is not available - open the
+        file and search for the dependency name.
+
+        Malformed JSON yields an empty list rather than raising. That is a
+        deliberate trade-off: this is an advisory scanner, and one broken
+        ``package.json`` should not abort a whole-repository scan. The cost is
+        that a malformed file is silently unscanned.
     """
     if path.name.lower() != "package.json":
         return []
@@ -514,27 +873,58 @@ def scan_package_json(path: Path, root: Path) -> list[Finding]:
                         line=1,
                         description=f"NPM dependency in {section} is not exactly pinned: {name}",
                         snippet=f"{name}: {version}",
-                        recommendation="Prefer lockfiles and exact pinned versions for reproducible builds; review supply-chain risk.",
+                        recommendation=(
+                            "Prefer lockfiles and exact pinned versions for "
+                            "reproducible builds; review supply-chain risk."
+                        ),
                     )
                 )
     return findings
 
 
 def severity_at_or_above(severity: str, threshold: str) -> bool:
-    """
-    Return True when a finding severity meets or exceeds a configured threshold.
-    
-    This is used to decide whether the process should exit with code 1.
+    """Test whether one severity is at least as serious as another.
+
+    Used to decide the exit code: with ``--fail-on HIGH``, a ``HIGH`` or
+    ``CRITICAL`` finding fails the run, while ``MEDIUM`` and ``LOW`` do not.
+
+    Args:
+        severity: The severity to test, e.g. ``"HIGH"``.
+        threshold: The severity to compare against, e.g. ``"MEDIUM"``.
+
+    Returns:
+        True if ``severity`` is the same as, or more serious than,
+        ``threshold``.
+
+    Raises:
+        KeyError: If either value is not one of ``"LOW"``, ``"MEDIUM"``,
+            ``"HIGH"`` or ``"CRITICAL"``. In normal use this cannot happen -
+            argparse restricts the threshold and rule severities are fixed
+            constants - so a KeyError means a rule was defined with a typo in
+            its severity.
+
+    Example:
+        >>> severity_at_or_above("HIGH", "MEDIUM")
+        True
+        >>> severity_at_or_above("LOW", "HIGH")
+        False
     """
     return SEVERITY_ORDER[severity] >= SEVERITY_ORDER[threshold]
 
 
 def sort_findings(findings: list[Finding]) -> list[Finding]:
-    """
-    Return findings in deterministic reporting order.
-    
-    Both text and JSON output use this same order: severity descending, file path,
-    line number, then rule id.
+    """Return findings in a stable, most-serious-first order.
+
+    Sorting matters for more than tidiness: a deterministic order means two
+    runs over unchanged code produce identical output, so a diff of two
+    reports shows real changes rather than reshuffling.
+
+    Args:
+        findings: The findings to sort. The input list is not modified.
+
+    Returns:
+        A new list ordered by descending severity, then file path, then line
+        number, then rule id.
     """
     # ALIGNED (item 7): single deterministic ordering used for text AND json.
     # (Original dumped JSON unsorted while sorting text - an internal inconsistency.)
@@ -542,11 +932,18 @@ def sort_findings(findings: list[Finding]) -> list[Finding]:
 
 
 def print_text(findings: list[Finding]) -> None:
-    """
-    Print findings in the human-readable text format.
-    
-    The output includes finding details, redacted snippets where available, suggested
-    fixes, and a summary by severity.
+    """Print findings as human-readable text, followed by a summary count.
+
+    Args:
+        findings: The findings to print, in any order - they are sorted here.
+
+    Returns:
+        None. Output goes to standard output. The caller redirects
+        ``sys.stdout`` when ``--output`` is used.
+
+    Note:
+        When there are no findings a single reassuring line is printed
+        instead of an empty report, so a clean run never looks like a crash.
     """
     if not findings:
         print("No high-risk security patterns found by local regex scan.")
@@ -561,7 +958,7 @@ def print_text(findings: list[Finding]) -> None:
         print(f"  Fix:  {f.recommendation}")
         print()
 
-    counts: dict[str, int] = {sev: 0 for sev in SEVERITY_ORDER}
+    counts: dict[str, int] = dict.fromkeys(SEVERITY_ORDER, 0)
     for f in findings:
         counts[f.severity] += 1
     print("Summary:")
@@ -571,18 +968,49 @@ def print_text(findings: list[Finding]) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    """
-    Parse command-line arguments, run the scan, write output, and return an exit code.
-    
-    Exit codes:
-      - 0 means no finding met the fail threshold.
-      - 1 means at least one finding met the fail threshold.
-      - 2 means the requested root path did not exist.
+    """Run the scanner from the command line.
+
+    Parses arguments, walks the tree, applies every rule, writes the report,
+    and returns the process exit code.
+
+    Args:
+        argv: Command-line arguments *excluding* the program name. Pass
+            ``None`` (the default) to read from ``sys.argv``. Passing an
+            explicit list is what makes this function testable.
+
+    Returns:
+        An exit code for the shell:
+
+        * ``0`` - scan completed and nothing met the ``--fail-on`` threshold.
+        * ``1`` - scan completed but findings met or exceeded the threshold.
+        * ``2`` - the scan could not run: ``--root`` does not exist, or
+          ``--output`` pointed outside the current directory.
+
+        Note that ``0`` means "nothing at or above the threshold", not
+        "nothing found" - with ``--fail-on NONE`` the result is always ``0``.
+
+    Note:
+        The ``--output`` path is validated before anything is written, using
+        a real containment check, so a value like ``../../secrets.json``
+        cannot escape the working directory.
+
+    Example:
+        Run against the current directory and never fail the build::
+
+            python security_scan.py --root . --fail-on NONE
     """
     parser = argparse.ArgumentParser(description="Local repo security pattern scanner")
-    parser.add_argument("--root", default=".", help="Repository root to scan; default: current directory")
+    parser.add_argument(
+        "--root", default=".", help="Repository root to scan; default: current directory"
+    )
     parser.add_argument("--format", choices=("text", "json"), default="text", help="Output format")
-    parser.add_argument("--output", help="Optional output file; otherwise prints to stdout")
+    parser.add_argument(
+        "--output",
+        help=(
+            "Optional output file, resolved relative to the current directory and "
+            "required to stay inside it; otherwise prints to stdout."
+        ),
+    )
     parser.add_argument(
         "--fail-on",
         choices=("LOW", "MEDIUM", "HIGH", "CRITICAL", "NONE"),
@@ -602,10 +1030,25 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Root path does not exist: {root}", file=sys.stderr)
         return 2
 
+    # Validate the optional --output path BEFORE any file is written. The value
+    # comes from the command line (untrusted input), so we contain it inside the
+    # current working directory to block path traversal (e.g. "../../secrets")
+    # or an absolute path escaping to an unintended location. This is a genuine
+    # containment check using Path.is_relative_to - NOT str.startswith, which a
+    # sibling directory like "<cwd>-evil" would defeat. The check runs in this
+    # function (intra-procedural) so a SAST taint-tracker sees the guard.
+    safe_output: Path | None = None
+    if args.output:
+        output_base = Path.cwd().resolve()
+        candidate = (output_base / args.output).resolve()
+        if not candidate.is_relative_to(output_base):
+            print(f"Output path escapes base directory: {args.output!r}", file=sys.stderr)
+            return 2
+        safe_output = candidate
+
     included_exts = set(DEFAULT_INCLUDED_EXTS)
     included_exts.update(
-        ext.lower() if ext.startswith(".") else f".{ext.lower()}"
-        for ext in args.include_ext
+        ext.lower() if ext.startswith(".") else f".{ext.lower()}" for ext in args.include_ext
     )
 
     findings: list[Finding] = []
@@ -616,23 +1059,24 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.format == "json":
         payload = json.dumps([asdict(f) for f in sort_findings(findings)], indent=2)
-        if args.output:
-            Path(args.output).write_text(payload + "\n", encoding="utf-8")
+        if safe_output is not None:
+            safe_output.write_text(payload + "\n", encoding="utf-8")
         else:
             print(payload)
+    elif safe_output is not None:
+        original_stdout = sys.stdout
+        with safe_output.open("w", encoding="utf-8") as fh:
+            sys.stdout = fh
+            try:
+                print_text(findings)
+            finally:
+                sys.stdout = original_stdout
     else:
-        if args.output:
-            original_stdout = sys.stdout
-            with Path(args.output).open("w", encoding="utf-8") as fh:
-                sys.stdout = fh
-                try:
-                    print_text(findings)
-                finally:
-                    sys.stdout = original_stdout
-        else:
-            print_text(findings)
+        print_text(findings)
 
-    if args.fail_on != "NONE" and any(severity_at_or_above(f.severity, args.fail_on) for f in findings):
+    if args.fail_on != "NONE" and any(
+        severity_at_or_above(f.severity, args.fail_on) for f in findings
+    ):
         return 1
     return 0
 

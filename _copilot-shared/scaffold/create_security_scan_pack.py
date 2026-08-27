@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Build the security scan teaching pack from the finalized source scripts.
+"""Build the security scan teaching pack from the finalized source scripts.
 
 Run from the folder containing:
   security_scan.py
@@ -22,30 +21,104 @@ import re
 from pathlib import Path
 from textwrap import dedent
 
-
 ROOT = Path.cwd()
 PY_IN = ROOT / "security_scan.py"
 PS_IN = ROOT / "security_scan.ps1"
 
 
 def read_required(path: Path) -> str:
+    """Read a file that the build cannot proceed without.
+
+    Args:
+        path: Location of the file to read, for example ``security_scan.py``
+            in the current working directory.
+
+    Returns:
+        The complete text of the file, decoded as UTF-8.
+
+    Raises:
+        SystemExit: If the file does not exist. This stops the build with a
+            clear message rather than failing later with a confusing error.
+            If you see it, you are almost certainly running the script from
+            the wrong folder - run it from the folder that contains
+            ``security_scan.py`` and ``security_scan.ps1``.
+    """
     if not path.exists():
         raise SystemExit(f"Missing required input file: {path}")
     return path.read_text(encoding="utf-8")
 
 
 def write_output(name: str, content: str) -> None:
+    """Write one generated file into the output folder and announce it.
+
+    Trailing blank lines are stripped and exactly one newline is added at the
+    end, so every generated file finishes consistently no matter how the
+    content was assembled.
+
+    Args:
+        name: File name to create, relative to ``ROOT`` (the folder the
+            script was run from), for example
+            ``"security_scan_teaching_docstrings.py"``.
+        content: The full text to write. It is written as UTF-8.
+
+    Returns:
+        Nothing. A ``Created: <name>`` line is printed so the operator can
+        see what the run produced.
+    """
     output_path = ROOT / name
     output_path.write_text(content.rstrip() + "\n", encoding="utf-8")
     print(f"Created: {name}")
 
 
 def assert_contains(source: str, needle: str, label: str) -> None:
+    """Fail the build unless an expected marker is present in an input file.
+
+    These checks are guard rails. The generator finds places to insert
+    teaching text by searching for exact snippets of the original scripts.
+    If someone edits those scripts and removes a snippet, the generator would
+    otherwise produce a silently incomplete file. Checking up front turns
+    that into an immediate, named failure instead.
+
+    Args:
+        source: The full text of the input file being checked.
+        needle: The exact substring that must appear somewhere in ``source``.
+        label: A short human-readable name for what this check protects, for
+            example ``"Python deterministic sort helper"``. It is the only
+            part shown when the check fails, so make it descriptive.
+
+    Returns:
+        Nothing when the check passes.
+
+    Raises:
+        SystemExit: If ``needle`` is absent. Fix the input script, or update
+            this check if the change to the input was intentional.
+    """
     if needle not in source:
         raise SystemExit(f"Input check failed: {label}")
 
 
 def assert_ascii(name: str, content: str) -> None:
+    """Fail the build if generated content contains non-ASCII characters.
+
+    ASCII is the set of plain English letters, digits, and common punctuation.
+    The generated files are synced into several projects whose test suites
+    reject anything outside it, because characters such as curly quotes or an
+    en dash render inconsistently across Windows code pages and break
+    byte-for-byte comparison between machines.
+
+    Args:
+        name: The file name being checked, used only in the error message.
+        content: The full generated text to inspect.
+
+    Returns:
+        Nothing when the content is pure ASCII.
+
+    Raises:
+        SystemExit: If any character is outside ASCII. The message names the
+            file and the offending position. The usual cause is a curly
+            quote or a dash pasted in from a word processor - replace it with
+            a plain ``'``, ``"``, or ``-``.
+    """
     try:
         content.encode("ascii")
     except UnicodeEncodeError as exc:
@@ -53,23 +126,52 @@ def assert_ascii(name: str, content: str) -> None:
 
 
 def check_inputs(py: str, ps: str) -> None:
+    """Verify both input scripts still contain every snippet the generator needs.
+
+    This runs all the :func:`assert_contains` guard rails in one place, before
+    any output is written, so a stale input fails fast and leaves no
+    half-generated files behind.
+
+    Args:
+        py: Full text of ``security_scan.py``.
+        ps: Full text of ``security_scan.ps1``.
+
+    Returns:
+        Nothing when every check passes.
+
+    Raises:
+        SystemExit: On the first missing snippet, naming which check failed.
+    """
     assert_contains(py, 'path.name.lower().startswith(".env")', "Python broad .env* matching")
     assert_contains(py, "flags=re.IGNORECASE", "Python private-key case-insensitive rule")
     assert_contains(py, "def sort_findings", "Python deterministic sort helper")
     assert_contains(py, "sort_findings(findings)", "Python sorted output usage")
     assert_contains(py, "version = version.strip()", "Python package.json trim")
-    assert_contains(py, "ext.lower() if ext.startswith", "Python include-ext lowercase normalization")
+    assert_contains(
+        py,
+        "ext.lower() if ext.startswith",
+        "Python include-ext lowercase normalization",
+    )
 
     assert_contains(ps, "[string[]]$IncludeExt = @()", "PowerShell IncludeExt parameter")
-    assert_contains(ps, "@(Get-Content -Path $File.FullName -ErrorAction Stop)", "PowerShell line-array Get-Content")
+    assert_contains(
+        ps,
+        "@(Get-Content -Path $File.FullName -ErrorAction Stop)",
+        "PowerShell line-array Get-Content",
+    )
     assert_contains(ps, "MakeRelativeUri", "PowerShell relative path fallback")
     assert_contains(ps, "$Version = ([string]$Prop.Value).Trim()", "PowerShell package.json trim")
     assert_contains(ps, "$Json = '[]'", "PowerShell empty JSON array")
-    assert_contains(ps, "$Sorted[0] | ConvertTo-Json -Depth 5", "PowerShell single finding JSON array")
+    assert_contains(
+        ps,
+        "$Sorted[0] | ConvertTo-Json -Depth 5",
+        "PowerShell single finding JSON array",
+    )
 
 
-PY_MODULE_DOC = '''"""
-Teaching version of the local high-risk security pattern scanner.
+# The summary sentence must sit on the same line as the opening triple quotes,
+# otherwise the generated file fails linter rule D212.
+PY_MODULE_DOC = '''"""Teaching version of the local high-risk security pattern scanner.
 
 This file keeps the scanner's executable behaviour aligned with security_scan.py
 and adds explanatory docstrings for learning and review. The comments and
@@ -187,7 +289,63 @@ Exit codes:
 }
 
 
+def build_docstring_block(doc: str, indent: str = "    ") -> list[str]:
+    """Turn plain text into the lines of a correctly formatted Python docstring.
+
+    The formatting rules here are not cosmetic - they are what keeps the
+    generated files passing the same linter as hand-written code:
+
+    - The summary sentence goes on the *same* line as the opening triple
+      quotes. Putting it on the next line triggers the linter rule D212.
+    - A blank line inside the docstring is emitted as a bare newline, never
+      as indentation followed by a newline. A line containing only spaces
+      triggers the linter rule W293.
+
+    Args:
+        doc: The docstring text, as ordinary prose. Leading and trailing
+            blank lines are ignored, so you can write it as a triple-quoted
+            constant without worrying about the edges.
+        indent: The whitespace prefix for every line, matching the indentation
+            of the thing being documented. Defaults to four spaces, which is
+            correct for a method or a top-level function's body.
+
+    Returns:
+        A list of strings, each already ending in a newline character, ready
+        to be spliced straight into a list of source lines. The first item is
+        the opening quotes plus the summary; the last item is the closing
+        quotes on their own line.
+    """
+    parts = [part.rstrip() for part in doc.strip().splitlines()]
+    if not parts:
+        return [indent + '"""Undocumented.\n', indent + '"""\n']
+
+    # D212: the summary must begin immediately after the opening quotes.
+    block = [indent + '"""' + parts[0] + "\n"]
+    # W293: a blank line must be truly blank, with no trailing indentation.
+    block += [(indent + part + "\n") if part else "\n" for part in parts[1:]]
+    block.append(indent + '"""\n')
+    return block
+
+
 def replace_python_module_docstring(source: str) -> str:
+    """Swap the module docstring at the top of ``security_scan.py`` for the teaching one.
+
+    The original file opens with an optional ``#!`` shebang line followed by a
+    triple-quoted module docstring. This finds that docstring and replaces it
+    with :data:`PY_MODULE_DOC`, keeping the shebang if there was one.
+
+    Args:
+        source: The full text of the original ``security_scan.py``.
+
+    Returns:
+        The same text with the module docstring replaced.
+
+    Raises:
+        SystemExit: If no module docstring was found at the top of the file,
+            or if more than the expected one was replaced. Either means the
+            input file's opening has changed shape and this function needs
+            updating.
+    """
     pattern = r'\A(#![^\n]*\n)?""".*?"""'
 
     def replacement(match: re.Match[str]) -> str:
@@ -200,6 +358,27 @@ def replace_python_module_docstring(source: str) -> str:
 
 
 def add_class_docstring(source: str, class_name: str, doc: str) -> str:
+    """Insert a teaching docstring directly beneath a class definition.
+
+    If the class already has a docstring, the source is returned unchanged.
+    That makes the generator safe to run twice in a row without stacking
+    duplicate docstrings on top of each other.
+
+    Args:
+        source: The full text of the Python file being annotated.
+        class_name: The class to document, without the ``class`` keyword or
+            the trailing colon, for example ``"Finding"``.
+        doc: The docstring text to insert, as ordinary prose.
+
+    Returns:
+        The source text with the docstring inserted, or unchanged if the
+        class already had one.
+
+    Raises:
+        SystemExit: If no line reading ``class <class_name>:`` was found.
+            Check that the class still exists and has not been renamed or
+            given a base class in the input file.
+    """
     lines = source.splitlines(keepends=True)
     target = f"class {class_name}:"
 
@@ -208,17 +387,35 @@ def add_class_docstring(source: str, class_name: str, doc: str) -> str:
             if index + 1 < len(lines) and lines[index + 1].lstrip().startswith('"""'):
                 return source
 
-            indent = "    "
-            block = [indent + '"""\n']
-            block += [indent + part.rstrip() + "\n" for part in doc.strip().splitlines()]
-            block += [indent + '"""\n']
-            lines[index + 1:index + 1] = block
+            lines[index + 1 : index + 1] = build_docstring_block(doc)
             return "".join(lines)
 
     raise SystemExit(f"Could not find class {class_name}")
 
 
 def add_function_docstring(source: str, function_name: str, doc: str) -> str:
+    """Insert a teaching docstring directly beneath a function definition.
+
+    A function signature can span several lines, so this counts opening and
+    closing brackets to find the line that actually ends the signature before
+    inserting anything. As with :func:`add_class_docstring`, a function that
+    already has a docstring is left alone, so re-running is safe.
+
+    Args:
+        source: The full text of the Python file being annotated.
+        function_name: The function to document, without the ``def`` keyword
+            or the parentheses, for example ``"sort_findings"``.
+        doc: The docstring text to insert, as ordinary prose.
+
+    Returns:
+        The source text with the docstring inserted, or unchanged if the
+        function already had one.
+
+    Raises:
+        SystemExit: If the function was not found, or if its signature had no
+            closing colon. Check that the function still exists and has not
+            been renamed in the input file.
+    """
     lines = source.splitlines(keepends=True)
     start_prefix = f"def {function_name}("
 
@@ -241,17 +438,31 @@ def add_function_docstring(source: str, function_name: str, doc: str) -> str:
         if signature_end + 1 < len(lines) and lines[signature_end + 1].lstrip().startswith('"""'):
             return source
 
-        indent = "    "
-        block = [indent + '"""\n']
-        block += [indent + part.rstrip() + "\n" for part in doc.strip().splitlines()]
-        block += [indent + '"""\n']
-        lines[signature_end + 1:signature_end + 1] = block
+        lines[signature_end + 1 : signature_end + 1] = build_docstring_block(doc)
         return "".join(lines)
 
     raise SystemExit(f"Could not find function {function_name}")
 
 
 def make_python_teaching(py: str) -> str:
+    """Build the complete teaching version of the Python scanner.
+
+    This is the Python half of the pack: it replaces the module docstring,
+    then adds a docstring to every class and function listed in
+    :data:`CLASS_DOCS` and :data:`FUNCTION_DOCS`. The scanner's actual logic
+    is never touched, so the teaching copy behaves identically to the
+    original.
+
+    Args:
+        py: The full text of the original ``security_scan.py``.
+
+    Returns:
+        The annotated source, ready to be written out as
+        ``security_scan_teaching_docstrings.py``.
+
+    Raises:
+        SystemExit: If any documented class or function could not be located.
+    """
     py = replace_python_module_docstring(py)
 
     for class_name, doc in CLASS_DOCS.items():
@@ -262,7 +473,8 @@ def make_python_teaching(py: str) -> str:
 
     return py
 
-PS_HELP = dedent(r'''
+
+PS_HELP = dedent(r"""
 <#
 .SYNOPSIS
   Teaching version of the local high-risk security pattern scanner.
@@ -327,10 +539,31 @@ PS_HELP = dedent(r'''
   This teaching file explains how the scanner works. It does not replace formal
   security tooling, approved review processes, or human judgement.
 #>
-''').strip()
+""").strip()
 
 
 def before_once(source: str, marker: str, comment: str) -> str:
+    """Insert a teaching comment immediately above a marker line, at most once.
+
+    "At most once" matters because the generator may be re-run. The check
+    looks for the comment's own first line already being present; if it is,
+    nothing is inserted and the source comes back untouched.
+
+    Args:
+        source: The full text of the PowerShell script being annotated.
+        marker: The exact snippet of the script to insert above, for example
+            ``"$SeverityOrder = @{"``. Only the first occurrence is used.
+        comment: The teaching comment to insert, including its leading ``#``
+            characters. It is placed on the line before ``marker``.
+
+    Returns:
+        The source text with the comment inserted, or unchanged if the
+        comment was already present.
+
+    Raises:
+        SystemExit: If ``marker`` does not appear in ``source``. That means
+            the PowerShell script has changed and the marker needs updating.
+    """
     first_comment_line = comment.strip().splitlines()[0]
 
     if first_comment_line in source:
@@ -343,9 +576,27 @@ def before_once(source: str, marker: str, comment: str) -> str:
 
 
 def make_powershell_teaching(ps: str) -> str:
+    """Build the complete teaching version of the PowerShell scanner.
+
+    This is the PowerShell half of the pack. It replaces the comment-based
+    help block at the top of the script with :data:`PS_HELP`, then inserts a
+    teaching note above each marker in the ``inserts`` list. As with the
+    Python half, the scanner's logic is never altered.
+
+    Args:
+        ps: The full text of the original ``security_scan.ps1``.
+
+    Returns:
+        The annotated source, ready to be written out as
+        ``security_scan_teaching_comments.ps1``.
+
+    Raises:
+        SystemExit: If the help block could not be replaced, or if any marker
+            could not be found in the script.
+    """
     ps, count = re.subn(
         r"\A<#.*?#>",
-        lambda match: PS_HELP,
+        lambda _match: PS_HELP,
         ps,
         count=1,
         flags=re.S,
@@ -357,39 +608,48 @@ def make_powershell_teaching(ps: str) -> str:
     inserts = [
         (
             "$SeverityOrder = @{",
-            "# TEACHING NOTE: Severity values are numeric so sorting and threshold comparisons are simple.",
+            "# TEACHING NOTE: Severity values are numeric so sorting and"
+            " threshold comparisons are simple.",
         ),
         (
             "$ExcludedDirs = @(",
-            "# TEACHING NOTE: These folders are skipped to avoid dependencies, caches, build output, and generated files.",
+            "# TEACHING NOTE: These folders are skipped to avoid dependencies,"
+            " caches, build output, and generated files.",
         ),
         (
             "$IncludedExts = @(",
-            "# TEACHING NOTE: This is the default scan scope. Extra extensions can be added with -IncludeExt.",
+            "# TEACHING NOTE: This is the default scan scope. Extra extensions"
+            " can be added with -IncludeExt.",
         ),
         (
             "$Rules = @(",
-            "# TEACHING NOTE: Each rule is data: id, severity, extension scope, regex, description, and fix guidance.",
+            "# TEACHING NOTE: Each rule is data: id, severity, extension scope,"
+            " regex, description, and fix guidance.",
         ),
         (
             "function Test-IncludedFile {",
-            "# TEACHING NOTE: File inclusion is based on extension, except .env* files are always included.",
+            "# TEACHING NOTE: File inclusion is based on extension, except"
+            " .env* files are always included.",
         ),
         (
             "function Test-ExcludedPath {",
-            "# TEACHING NOTE: Exclusion is checked against the path below the scan root, not parent folders above it.",
+            "# TEACHING NOTE: Exclusion is checked against the path below the"
+            " scan root, not parent folders above it.",
         ),
         (
             "function Get-RelativePathSafe {",
-            "# TEACHING NOTE: Findings should show relative paths. This helper keeps that behaviour across platforms.",
+            "# TEACHING NOTE: Findings should show relative paths. This helper"
+            " keeps that behaviour across platforms.",
         ),
         (
             "function Protect-Snippet {",
-            "# TEACHING NOTE: Snippets are redacted before output so likely secrets are not reprinted.",
+            "# TEACHING NOTE: Snippets are redacted before output so likely"
+            " secrets are not reprinted.",
         ),
         (
             "function Add-Finding {",
-            "# TEACHING NOTE: All findings use the same object shape so text and JSON output stay consistent.",
+            "# TEACHING NOTE: All findings use the same object shape so text"
+            " and JSON output stay consistent.",
         ),
         (
             "try {\n    $RootPath = (Resolve-Path",
@@ -397,11 +657,13 @@ def make_powershell_teaching(ps: str) -> str:
         ),
         (
             "$Files = Get-ChildItem",
-            "# TEACHING NOTE: File discovery happens once, then each selected file is scanned in the loop below.",
+            "# TEACHING NOTE: File discovery happens once, then each selected"
+            " file is scanned in the loop below.",
         ),
         (
             "foreach ($File in $Files) {",
-            "# TEACHING NOTE: The main scan loop handles generic rules plus requirements and package.json checks.",
+            "# TEACHING NOTE: The main scan loop handles generic rules plus"
+            " requirements and package.json checks.",
         ),
         (
             "$Sorted = $Findings | Sort-Object",
@@ -710,6 +972,28 @@ and deterministic comparison.
 
 
 def main() -> int:
+    """Generate the whole security-scan teaching pack into the current folder.
+
+    Run this from the folder that contains ``security_scan.py`` and
+    ``security_scan.ps1``. It reads those two scripts, checks they still
+    contain everything the generator relies on, then writes seven files: an
+    annotated Python scanner, an annotated PowerShell scanner, and five
+    Markdown teaching documents.
+
+    Every generated file is checked for pure ASCII before it is written, so a
+    stray curly quote fails the build rather than reaching a project that
+    rejects non-ASCII characters.
+
+    Returns:
+        ``0`` when every file was generated successfully. The function does
+        not return a non-zero code - any problem stops the run by raising
+        ``SystemExit`` with an explanatory message instead.
+
+    Raises:
+        SystemExit: If an input file is missing, if an expected snippet or
+            marker has disappeared from one of the input scripts, or if any
+            generated file would contain non-ASCII characters.
+    """
     py = read_required(PY_IN)
     ps = read_required(PS_IN)
 

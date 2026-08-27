@@ -106,6 +106,12 @@ ignore = [
     "PLC0415", # lazy imports inside tests are a legitimate isolation pattern
 ]
 
+# NOTE: files under _copilot-shared/scaffold/ are NOT governed by this table.
+# That folder contains its own pyproject.toml (the template copied into new
+# projects), and ruff uses the nearest pyproject.toml it can find. Per-file
+# ignores for scaffold files must therefore be added to
+# _copilot-shared/scaffold/pyproject.toml instead.
+
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
