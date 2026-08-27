@@ -11,6 +11,58 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2026-08-27]
+
+### Changed
+
+- `_copilot-shared/scaffold/security_scan.py` now passes `ruff format` and
+  `ruff check` cleanly (53 findings resolved: 36 line-length, 13 missing
+  docstrings, plus 4 auto-fixable items). The scanner is the file every project
+  in the workspace runs, and until now it was the least-inspected file in the
+  workspace.
+- Long rule `description` and `recommendation` strings are wrapped as
+  implicitly-concatenated literals rather than single over-long lines. The
+  resulting message text is unchanged - see Notes.
+- `collections.abc.Iterable` moved into a `TYPE_CHECKING` block. It is used
+  only in annotations, and `from __future__ import annotations` means it never
+  needs to be imported at run time.
+
+### Added
+
+- Complete beginner-standard docstrings for both public classes (`Rule`,
+  `Finding`) and all eleven public functions in `security_scan.py`, covering
+  arguments, return values, raised exceptions and non-obvious behaviour - for
+  example why an unreadable file becomes a `LOW` finding instead of aborting
+  the scan, and why `scan_package_json` reports every finding at line 1.
+- `_copilot-shared/docs/scope-scaffold-lint-coverage.md` - scope document for
+  bringing the remaining scaffold Python files under the quality gate,
+  recording the measured remediation cost and the blast radius of editing
+  force-synced files.
+
+### Notes
+
+- **Behaviour is unchanged and was verified, not assumed.** Five baselines were
+  captured before any edit and re-run afterwards: a scan with 49 findings
+  (251 lines of output), a scan with no findings, a JavaScript/frontend scan,
+  `--help`, and a non-zero exit via `--fail-on HIGH`. All five outputs are
+  byte-identical and the exit codes match. This mattered because wrapping 32
+  message strings by hand could silently have altered the security advice the
+  scanner prints.
+- A doctest example added during this work contained a secret-shaped literal
+  (`password = "..."`), which `detect-secrets` correctly flagged. Rather than
+  record it as a baseline false positive - which would have pushed a new
+  baseline entry into three sibling repositories - the example was rewritten as
+  prose. The docstring now explains why no literal example is given.
+- The `SECRETISH_WORDS` constant keeps its single long line under
+  `# noqa: E501`. `detect-secrets` matches its allow-list pragma per line, so
+  splitting the string would require repeating the pragma on every fragment.
+- Step 4 of the gate (bandit) still reports `SKIPPED` in this repository.
+  `security_scan.py` already passes bandit and mypy; only the `sanity.bat`
+  targeting change is missing, and that is deliberately sequenced last. See the
+  scope document.
+
+---
+
 ## [2026-08-26]
 
 ### Added
