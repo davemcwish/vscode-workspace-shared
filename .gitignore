@@ -20,6 +20,16 @@
 !.markdownlint.json
 !*.ps1
 
+# Quality-gate configuration for THIS repository (the workspace-root repo).
+# sanity.bat needs all three to run: pyproject.toml configures ruff, mypy,
+# pytest, and bandit; requirements-dev.txt pins the tool versions; and
+# .secrets.baseline is what step 5 scans against (without it, detect-secrets
+# is skipped entirely). These are the workspace-root repo's own config - the
+# sibling project folders each have their own copies, still ignored by "*".
+!pyproject.toml
+!requirements-dev.txt
+!.secrets.baseline
+
 # Re-ignore the scanner convenience copies synced to the workspace root.
 # The canonical, tracked versions live in _copilot-shared/scaffold/; the root
 # copies exist only so the parent repo can run sanity.bat and must not be

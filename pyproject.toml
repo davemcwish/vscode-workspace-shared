@@ -1,0 +1,220 @@
+# ============================================================================
+#  Shared Copilot Workspace - Project Configuration
+#
+#  This file configures the Python tooling for the WORKSPACE-ROOT repository
+#  only (the repo that owns `_copilot-shared/` and `powershell/`). It does NOT
+#  configure the sibling projects (Salesforce, trails-and-tails, eu-spm,
+#  woprcrt-terminal-main) - each of those has its own pyproject.toml.
+#
+#  It is adapted from _copilot-shared/scaffold/pyproject.toml. The important
+#  difference: this repository has no `src/` package. Its Python consists of
+#  the shared-artefact test suite in `_copilot-shared/tests/` plus a small
+#  number of standalone scaffold scripts. The tool configuration below is
+#  therefore pointed at those paths instead of `src` and `scripts`.
+#
+#  Adding this file also un-skips the bandit step in sanity.bat, which is
+#  skipped whenever no pyproject.toml is present (bandit requires
+#  `-c pyproject.toml`).
+# ============================================================================
+
+[project]
+name = "vscode-workspace-shared"
+version = "0.1.0"
+description = "Shared Copilot artefacts, scaffold templates, and workspace-root tooling."
+requires-python = ">=3.13"
+readme = "README.md"
+
+# ============================================================================
+#  Ruff - linter and formatter
+#  Docs: https://docs.astral.sh/ruff/
+#  Kept aligned with _copilot-shared/scaffold/pyproject.toml. If you change a
+#  shared default here, apply the same change in the scaffold and in every
+#  project that inherits it (see scaffold-README.md, "Cross-project drift").
+# ============================================================================
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+force-exclude = true
+extend-exclude = [
+    ".venv",
+    "build",
+    "dist",
+    ".git",
+    "__pycache__",
+    # Sibling project repositories - each has its own pyproject.toml and gate.
+    "Salesforce",
+    "trails-and-tails",
+    "eu-spm",
+    "woprcrt-terminal-main",
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+skip-magic-trailing-comma = false
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F", "I", "B", "C4", "UP", "N", "D", "S",
+    "A", "RET", "SIM", "ARG", "PTH", "ERA", "PL", "TRY",
+    "TCH", "RUF",
+]
+
+ignore = [
+    # --- Docstring convention conflicts (must pick one of each pair) -------
+    "D203",   # conflicts with D211 (we use D211: no blank line before class docstring)
+    "D213",   # conflicts with D212 (we use D212: summary on first line)
+    "D107",   # __init__ documented in class docstring (Google convention)
+
+    # --- Style preferences (informed team choices) ------------------------
+    "SIM108", # ternary often less readable than if/else
+    "SIM117", # nested 'with' acceptable
+    "TRY003", # long exception messages are useful for debugging
+    "TRY300", # `else` block preference is subjective
+    "TRY301", # adding inner functions for `raise` adds indirection
+    "RET504", # named-variable-before-return is clearer for debugging
+    "ERA001", # we use commented examples as inline documentation
+
+    # --- Pylint thresholds we don't enforce ------------------------------
+    "PLR0913", # too many arguments - sometimes unavoidable for CLI/wrappers
+    "PLR2004", # magic value comparison - too noisy in app code
+    "PLR0911", # too many returns - readable as-is
+    "PLR0915", # too many statements - main() orchestrators legitimately long
+
+    # --- Modernization suggestions we're deferring ----------------------
+    "PTH123",  # builtin open() works fine; Path.open() rewrite is a future PR
+    "PTH118",  # os.path.join works fine; pathlib migration is a future PR
+    "PTH110",  # os.path.exists works fine
+    "PTH119",  # os.path.basename works fine
+    "TRY400",  # log.error vs log.exception -- minor difference in tracebacks
+    "TC001",   # imports outside TYPE_CHECKING block are fine for runtime safety
+    "PLW1510", # subprocess.run without check= is intentional in update_packages
+    "PLW2901", # 'line' reassignment in for-loop is conventional Python
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests: relax docstrings, allow assert, allow hardcoded test data.
+"_copilot-shared/tests/**/*.py" = [
+    "D",       # docstrings not required in tests
+    "S101",    # use of assert is the point of pytest
+    "S105",    # hardcoded "tokens" in tests are obviously test data
+    "S106",    # same: test password args are not real secrets
+    "PLR2004", # magic numbers acceptable in test assertions
+    "ARG",     # unused fixture args are normal
+    "SLF001",  # private-member access acceptable for testing internals
+    "PLC0415", # lazy imports inside tests are a legitimate isolation pattern
+]
+
+# NOTE: files under _copilot-shared/scaffold/ are NOT governed by this table.
+# That folder contains its own pyproject.toml (the template copied into new
+# projects), and ruff uses the nearest pyproject.toml it can find. Per-file
+# ignores for scaffold files must therefore be added to
+# _copilot-shared/scaffold/pyproject.toml instead.
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+force-sort-within-sections = false
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 12
+
+# ============================================================================
+#  Mypy - static type checking
+#  Docs: https://mypy.readthedocs.io/
+#
+#  `files` points at the shared-artefact test suite. Unlike the scaffold
+#  template, tests are NOT excluded here, because they are the only Python
+#  this repository owns - excluding them would leave mypy with nothing to
+#  check and make the step meaningless.
+# ============================================================================
+[tool.mypy]
+python_version = "3.13"
+# The scaffold folder holds the template files copied into every new project
+# (the security scanner, its teaching-pack generator, the generated teaching
+# copy, and the dependency updater). They are shared code that every project
+# ends up running, so they are type-checked to the same standard as the
+# contract tests. Note that ruff resolves ITS config from the nearest
+# pyproject.toml, which for that folder is _copilot-shared/scaffold/pyproject.toml
+# - mypy is different and reads this table, because it is invoked from here.
+files = ["_copilot-shared/tests", "_copilot-shared/scaffold"]
+exclude = [
+    "\\.venv/",
+    "build/",
+    "dist/",
+    "Salesforce/",
+    "trails-and-tails/",
+    "eu-spm/",
+    "woprcrt-terminal-main/",
+]
+
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+no_implicit_optional = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+ignore_missing_imports = true
+show_error_codes = true
+show_column_numbers = true
+pretty = true
+
+# Tests can be looser - fixtures and parametrize make typing painful.
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+disallow_untyped_decorators = false
+warn_unused_ignores = false
+
+# ============================================================================
+#  Pytest + Coverage
+#  Docs: https://docs.pytest.org/  |  https://coverage.readthedocs.io/
+#
+#  Coverage is deliberately NOT enabled in addopts for this repository.
+#  The scaffold template measures `src` and `scripts`, neither of which
+#  exists here. The test suite validates Markdown artefact pairing and ASCII
+#  enforcement rather than exercising an importable package, so a line-
+#  coverage percentage would be meaningless. If an importable package is ever
+#  added at this level, restore the --cov flags here (never in sanity.bat or
+#  ci.yml - see copilot-instructions.md, "Canonical Quality Gate").
+# ============================================================================
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["_copilot-shared/tests"]
+addopts = "--strict-markers"
+
+# ============================================================================
+#  Bandit - Security Linter
+#  Docs: https://bandit.readthedocs.io/
+#
+#  NOTE: Bandit's `exclude_dirs` is unreliable on Windows due to path
+#  separator handling. We rely primarily on the CLI --exclude flag set in
+#  sanity.bat. The entries below are kept as defensive backup.
+# ============================================================================
+[tool.bandit]
+exclude_dirs = [
+    "tests",
+    ".venv",
+    "build",
+    "dist",
+    "Salesforce",
+    "trails-and-tails",
+    "eu-spm",
+    "woprcrt-terminal-main",
+]
+# Skipped checks (with justification):
+#   B101 - assert_used:             fine in tests and defensive code
+#   B105 - hardcoded password:      empty string initialisers are not passwords  # pragma: allowlist secret
+#   B404 - import_subprocess:       informational; we need subprocess for CLI calls
+#   B603 - subprocess_without_shell: the SAFE pattern; not a real risk
+#   B608 - hardcoded SQL:           SOQL is not SQL; bind-variable patterns are safe
+skips = ["B101", "B105", "B404", "B603", "B608"]

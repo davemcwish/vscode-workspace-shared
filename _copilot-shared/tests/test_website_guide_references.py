@@ -12,6 +12,7 @@ The website start guide contains two kinds of backticked markdown references:
 """
 
 import re
+from collections.abc import Iterator
 from pathlib import Path
 
 
@@ -25,9 +26,7 @@ def _find_project_root() -> Path:
     docs_guide = project_root / "docs" / "START-HERE-WEBSITE.md"
     if docs_guide.exists():
         return project_root
-    raise FileNotFoundError(
-        f"Could not find docs/START-HERE-WEBSITE.md in {project_root}"
-    )
+    raise FileNotFoundError(f"Could not find docs/START-HERE-WEBSITE.md in {project_root}")
 
 
 PROJECT_ROOT = _find_project_root()
@@ -83,11 +82,9 @@ INTENTIONAL_WEBSITE_PROJECT_ARTIFACTS = {
 }
 
 
-def iter_markdown_references():
+def iter_markdown_references() -> Iterator[tuple[int, str]]:
     """Yield line-numbered backticked markdown references from START-HERE-WEBSITE.md."""
-    for line_number, line in enumerate(
-        GUIDE.read_text(encoding="utf-8").splitlines(), start=1
-    ):
+    for line_number, line in enumerate(GUIDE.read_text(encoding="utf-8").splitlines(), start=1):
         for match in MARKDOWN_REFERENCE_RE.finditer(line):
             reference = match.group(1).strip().replace("\\", "/")
             if reference.startswith(("http://", "https://", "/", "./", "../")):

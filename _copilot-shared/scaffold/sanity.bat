@@ -91,6 +91,19 @@ if exist "_copilot-shared\tests\" (
     )
 )
 
+REM Also lint the shared scaffold sources in the workspace root repo. These
+REM are the template files copied into every new project, so a defect here
+REM propagates everywhere. The root copies of security_scan.py and
+REM update_packages.py are deliberately NOT linted: they are synced duplicates
+REM of these originals, so linting both would double every finding and invite
+REM someone to "fix" the generated copy instead of the source.
+if exist "_copilot-shared\scaffold\" (
+    dir /b /s "_copilot-shared\scaffold\*.py" >nul 2>nul
+    if not errorlevel 1 (
+        set "PY_TARGETS=!PY_TARGETS! _copilot-shared\scaffold"
+    )
+)
+
 REM Strip leading space
 if defined PY_TARGETS (set "PY_TARGETS=!PY_TARGETS:~1!")
 
@@ -127,7 +140,7 @@ echo ===========================================================================
 echo  [1/7] Ruff format check
 echo ============================================================================
 if not defined PY_TARGETS (
-    echo  SKIPPED: No Python source directories found ^(src, tests, scripts, frontend, _copilot-shared\tests^).
+    echo  SKIPPED: No Python source directories found ^(src, tests, scripts, frontend, _copilot-shared\tests, _copilot-shared\scaffold^).
 ) else (
     %PY_CMD% -m ruff format --check %PY_TARGETS%
     if errorlevel 1 set /a FAIL_COUNT+=1
@@ -173,12 +186,15 @@ if %HAS_PYPROJECT% EQU 0 (
     if exist src (set "BANDIT_TARGETS=!BANDIT_TARGETS! src")
     if exist scripts (set "BANDIT_TARGETS=!BANDIT_TARGETS! scripts")
     if exist frontend (set "BANDIT_TARGETS=!BANDIT_TARGETS! frontend")
+    REM Workspace root repo: the shared scaffold sources are the templates
+    REM copied into every project, so they get the same security scan.
+    if exist "_copilot-shared\scaffold\" (set "BANDIT_TARGETS=!BANDIT_TARGETS! _copilot-shared\scaffold")
     if defined BANDIT_TARGETS (
         set "BANDIT_TARGETS=!BANDIT_TARGETS:~1!"
         %PY_CMD% -m bandit -c pyproject.toml -r !BANDIT_TARGETS! --exclude tests --quiet
         if errorlevel 1 set /a FAIL_COUNT+=1
     ) else (
-        echo  SKIPPED: pyproject.toml found but no src, scripts, or frontend directories to scan.
+        echo  SKIPPED: pyproject.toml found but no src, scripts, frontend, or shared scaffold directories to scan.
     )
 )
 

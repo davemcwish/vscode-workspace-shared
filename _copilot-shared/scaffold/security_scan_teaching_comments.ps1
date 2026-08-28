@@ -105,7 +105,11 @@ foreach ($ext in $IncludeExt) {
     if ($IncludedExts -notcontains $norm) { $IncludedExts += $norm }
 }
 
-$SecretWords = 'api[_-]?key|secret|token|password|passwd|pwd|session[_-]?id|client[_-]?secret|private[_-]?key|access[_-]?token|refresh[_-]?token'
+# NOTE: This is a list of secret-ish KEYWORD NAMES the scanner searches for,
+# not an actual secret. The inline pragma tells detect-secrets to ignore this
+# line so the scanner stays clean when it is synced into a project whose
+# pre-commit gate runs detect-secrets.
+$SecretWords = 'api[_-]?key|secret|token|password|passwd|pwd|session[_-]?id|client[_-]?secret|private[_-]?key|access[_-]?token|refresh[_-]?token'  # pragma: allowlist secret
 
 # TEACHING NOTE: Each rule is data: id, severity, extension scope, regex, description, and fix guidance.
 $Rules = @(
@@ -141,7 +145,7 @@ $Rules = @(
     }
     [pscustomobject]@{
         Id = 'PY-EVAL-EXEC'; Severity = 'CRITICAL'; Exts = @('.py')
-        Regex = '\b(eval|exec|compile)\s*\('
+        Regex = '(?<![\w.])(eval|exec|compile)\s*\('
         Description = 'Dynamic Python code execution via eval/exec/compile.'
         Fix = 'Avoid dynamic code execution. Use allow-listed functions or data-driven dispatch tables.'
     }
@@ -162,6 +166,18 @@ $Rules = @(
         Regex = '\.extractall\s*\('
         Description = 'ZipFile.extractall() can allow ZIP Slip path traversal if archive members are untrusted.'
         Fix = 'Validate every ZIP member destination stays under the intended target directory before extracting.'
+    }
+    [pscustomobject]@{
+        Id = 'PY-SHUTIL-DYNAMIC-PATH'; Severity = 'MEDIUM'; Exts = @('.py')
+        Regex = '\bshutil\.(move|copy|copy2|copyfile|copytree)\s*\('
+        Description = 'shutil file operation uses a path argument; Cycode flags unsanitized dynamic input in file paths.'
+        Fix = 'Validate the source and destination with resolve_safe_path() before the shutil call; only then wrap the OS call (e.g. to_long_path). Never pass a raw or tainted path.'
+    }
+    [pscustomobject]@{
+        Id = 'PY-ZIPFILE-DYNAMIC-PATH'; Severity = 'MEDIUM'; Exts = @('.py')
+        Regex = '\bzipfile\.ZipFile\s*\(\s*(?![''\"])'
+        Description = 'zipfile.ZipFile() opens a non-literal path; Cycode flags unsanitized dynamic input in file paths.'
+        Fix = 'Pass a resolve_safe_path()-validated path into zipfile.ZipFile(); never open an archive at a raw user- or Salesforce-derived path.'
     }
     [pscustomobject]@{
         Id = 'PY-XML-STDLIB'; Severity = 'HIGH'; Exts = @('.py')
@@ -268,6 +284,18 @@ function Test-IncludedFile {
     return $IncludedExts -contains $File.Extension.ToLower()
 }
 
+function Test-OwnScannerFile {
+    # Why this exists: this scanner's rule table literally contains the code
+    # patterns it hunts for (e.g. the text 'eval(' and 'verify=False' appear as
+    # regex strings). If it scans its own source, each rule string is reported
+    # as a false-positive finding. The shared sync copies this scanner into
+    # every project root, so it must skip its own files wherever it runs. A real
+    # project would never legitimately name a file 'security_scan*'.
+    param([string]$Name)
+    $lower = $Name.ToLower()
+    return $lower.StartsWith('security_scan') -or ($lower -eq 'create_security_scan_pack.py')
+}
+
 # TEACHING NOTE: Exclusion is checked against the path below the scan root, not parent folders above it.
 function Test-ExcludedPath {
     # ALIGNED (item 8): test only the path relative to root (not ancestor folders
@@ -355,13 +383,33 @@ catch {
     [Console]::Error.WriteLine("Root path does not exist: $Root")
     exit 2
 }
+
+# Validate the optional -Output path BEFORE any file is written. The value comes
+# from the command line (untrusted input), so we contain it inside the current
+# directory to block path traversal or an absolute path escaping elsewhere. The
+# trailing separator on the base defeats a sibling like "<cwd>-evil" that a plain
+# StartsWith without a separator would wrongly accept. Windows PowerShell 5.1 has
+# no Path.is_relative_to, so GetFullPath + separator-anchored prefix is the
+# genuine containment equivalent.
+$SafeOutput = ''
+if ($Output) {
+    $OutputBase = (Get-Location).Path
+    $ResolvedOutput = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($OutputBase, $Output))
+    $BaseWithSep = $OutputBase.TrimEnd([System.IO.Path]::DirectorySeparatorChar) + [System.IO.Path]::DirectorySeparatorChar
+    if (-not $ResolvedOutput.StartsWith($BaseWithSep, [System.StringComparison]::OrdinalIgnoreCase)) {
+        [Console]::Error.WriteLine("Output path escapes base directory: $Output")
+        exit 2
+    }
+    $SafeOutput = $ResolvedOutput
+}
+
 $Findings = [System.Collections.Generic.List[object]]::new()
 
 # TEACHING NOTE: File discovery happens once, then each selected file is scanned in the loop below.
 $Files = Get-ChildItem -Path $RootPath -File -Recurse -Force |
     Where-Object {
         $relForExclude = Get-RelativePathSafe -BasePath $RootPath -ChildPath $_.FullName
-        (-not (Test-ExcludedPath $relForExclude)) -and (Test-IncludedFile $_)
+        (-not (Test-ExcludedPath $relForExclude)) -and (Test-IncludedFile $_) -and (-not (Test-OwnScannerFile $_.Name))
     }
 
 # TEACHING NOTE: The main scan loop handles generic rules plus requirements and package.json checks.
@@ -459,7 +507,7 @@ if ($Format -eq 'Json') {
     else {
         $Json = $Sorted | ConvertTo-Json -Depth 5
     }
-    if ($Output) { Set-Content -Path $Output -Value $Json -Encoding UTF8 } else { $Json }
+    if ($Output) { Set-Content -Path $SafeOutput -Value $Json -Encoding UTF8 } else { $Json }
 }
 else {
     $LinesOut = [System.Collections.Generic.List[string]]::new()
@@ -482,7 +530,7 @@ else {
         $LinesOut.Add("  TOTAL: $($Findings.Count)") | Out-Null
     }
 
-    if ($Output) { Set-Content -Path $Output -Value $LinesOut -Encoding UTF8 } else { $LinesOut | ForEach-Object { Write-Host $_ } }
+    if ($Output) { Set-Content -Path $SafeOutput -Value $LinesOut -Encoding UTF8 } else { $LinesOut | ForEach-Object { Write-Host $_ } }
 }
 
 # TEACHING NOTE: The final block converts findings into the script exit code.

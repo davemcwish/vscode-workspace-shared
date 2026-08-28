@@ -1,0 +1,35 @@
+# ============================================================================
+#  DEVELOPMENT DEPENDENCIES - workspace-root repository
+# ============================================================================
+#  These are the tools the quality gate (`sanity.bat`) needs in order to run.
+#  Without them, steps 1-6 silently fail with "No module named ..." even
+#  though the gate script itself is working correctly.
+#
+#  This repository has no runtime dependencies - it contains shared Copilot
+#  artefacts (Markdown), PowerShell helper scripts, and the Python test suite
+#  that validates them. So there is no matching `requirements.in`; everything
+#  here is a development tool.
+#
+#  INSTALL INTO THE WORKSPACE-ROOT VIRTUAL ENVIRONMENT:
+#
+#      .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+#
+#  Versions are pinned exactly, and deliberately match the pins used by the
+#  sibling projects (Salesforce, eu-spm) so that a rule which passes locally
+#  in one repository behaves identically in the others. If you upgrade a tool
+#  here, upgrade it in those projects too - a newer ruff or mypy can enable
+#  new rules and make the gates disagree.
+# ============================================================================
+
+# --- Testing -----------------------------------------------------------------
+pytest==9.0.3                   # Test framework for the shared-artefact suite
+pytest-cov==7.0.0               # Coverage plugin (not enabled here - see pyproject.toml)
+pytest-xdist==3.8.0             # Parallel execution; provides the `-n auto` flag
+
+# --- Linting / formatting / typing ------------------------------------------
+ruff==0.15.7                    # Linter and formatter (replaces flake8/black/isort)
+mypy==1.19.1                    # Static type checker
+
+# --- Security scanning -------------------------------------------------------
+bandit==1.7.9                   # Python security linter
+detect-secrets==1.5.0           # Detects secrets accidentally committed to git

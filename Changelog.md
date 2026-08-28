@@ -11,6 +11,284 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2026-08-27] - Scaffold lint coverage, stage 3 (gate targeting)
+
+### Changed
+
+- `_copilot-shared/scaffold/sanity.bat` now includes
+  `_copilot-shared\scaffold` in both `PY_TARGETS` (ruff format, ruff lint) and
+  `BANDIT_TARGETS`. This is the change the previous two stages were sequenced
+  ahead of: the scaffold sources are now held to the same standard as the rest
+  of the workspace, and a regression in them will fail the gate.
+- `[tool.mypy] files` in the workspace-root `pyproject.toml` extended to
+  `["_copilot-shared/tests", "_copilot-shared/scaffold"]`. Mypy now checks
+  9 source files rather than 5.
+- **Step 4 (bandit) no longer reports `SKIPPED` in this repository.** It had
+  skipped on every run since the gate was written, because the target list
+  only ever considered `src`, `scripts`, and `frontend` - none of which exist
+  here. It now scans the scaffold sources and passes.
+- `trails-and-tails/pyproject.toml`: `[tool.mypy] files` corrected from the
+  uncustomised scaffold default `["src", "scripts"]` to `["tests"]`. That
+  project has no `src/` package and no `.py` files under `scripts/`, so mypy
+  aborted with *"There are no .py[i] files in directory 'scripts'"* and failed
+  the gate on **every** run. Its gate now passes for the first time.
+- The subprocess hardening from `update_packages.py` propagated to the three
+  projects holding copies:
+  - `trails-and-tails` and `eu-spm` received the fixed file directly, as their
+    copies were byte-identical to the previous version.
+  - `Salesforce/scripts/update_packages.py` was hand-ported rather than
+    overwritten, because its copy has diverged. It already validated through
+    the shared `validate_subprocess_command`, so only two gaps remained:
+    `shell=False` is now explicit at both call sites, and the `pip show`
+    probe gained a `PIP_SHOW_TIMEOUT_SECONDS` timeout so a hung pip cannot
+    block the script indefinitely.
+  - `Salesforce/tests/test_update_packages.py` updated to assert
+    `shell=False` explicitly, rather than merely tolerating it.
+
+### Notes
+
+- **The root copies of `security_scan.py` and `update_packages.py` are
+  deliberately excluded from linting.** They are synced duplicates of the
+  scaffold originals. Linting both would double every finding and invite
+  someone to "fix" the generated copy, where the change would be silently
+  overwritten by the next sync.
+- **The new guards cannot fire in sibling projects.** Both are conditional on
+  `_copilot-shared\scaffold\` existing, and that folder is present only in the
+  workspace root repository - verified absent in all four siblings after the
+  sync. All four gates were run after the change: workspace root 1509 passed,
+  eu-spm 470 passed, trails-and-tails 223 passed, Salesforce passed.
+
+---
+
+### Changed
+
+- `_copilot-shared/scaffold/update_packages.py` now passes `ruff check`
+  cleanly. Two findings were resolved, both properly rather than suppressed:
+  - **`S603` (subprocess without validated input).** The script may now only
+    launch programs on an explicit allow-list (`python`, `bash`, and the
+    project's own `sanity` script). The program path is additionally
+    re-verified inline against a deny-list pattern immediately before
+    `subprocess.run`, and `shell=False` is now explicit. Anything else raises
+    `ValueError`. The remaining `# noqa: S603` carries a written rationale.
+  - **`PLR0912` (too many branches).** `main()` was split into four named
+    helpers - `warn_if_not_in_virtualenv`, `compile_requirements`,
+    `install_upgraded_packages`, and `run_sanity_gate` - each with a
+    complete-beginner docstring.
+- `_copilot-shared/scaffold/create_security_scan_pack.py` now passes
+  `ruff check` cleanly (33 findings). Thirteen docstrings were added, an
+  unused lambda argument renamed, and eleven teaching-note strings wrapped as
+  implicitly-concatenated literals.
+- **The generator was emitting lint errors into its own output.** Docstrings
+  were built with the opening `"""` alone on its own line (rule `D212`) and
+  blank lines were emitted as indentation followed by a newline (rule `W293`).
+  Both are now handled by a single new helper, `build_docstring_block`, which
+  documents why each rule matters.
+- `_copilot-shared/scaffold/security_scan_teaching_docstrings.py` and
+  `security_scan_teaching_comments.ps1` regenerated. Both are **generated
+  artefacts**, not source, and both were stale - the PowerShell copy predated
+  the `shutil` and `zipfile` rules added to `security_scan.ps1`.
+
+### Added
+
+- `[tool.ruff.lint.per-file-ignores]` entry in
+  `_copilot-shared/scaffold/pyproject.toml` ignoring `E501` for
+  `create_security_scan_pack.py` only. That file embeds the verbatim text of
+  the documents it generates, and a few of those lines are longer than 100
+  characters because the target format requires it. Re-wrapping them in the
+  Python source would change the generated documents.
+- A pointer comment in the workspace-root `pyproject.toml` recording that it
+  does **not** govern `_copilot-shared/scaffold/`.
+
+### Notes
+
+- **`security_scan_teaching_docstrings.py` was never a hand-editable file.**
+  It had 62 lint findings, but hand-fixing them would have been undone by the
+  next generator run. Three of those findings (`C420`, `PLR5501`, `UP035`)
+  were inherited copies of errors already fixed in `security_scan.py`, which
+  is what revealed the file was stale. Regenerating dropped it from 62
+  findings to 3; fixing the generator dropped it to zero.
+- **Ruff resolves configuration from the nearest `pyproject.toml`.**
+  `_copilot-shared/scaffold/` contains its own `pyproject.toml` - the template
+  copied into new projects - so the workspace-root config does not apply to
+  anything in that folder. This matters for the sequenced gate-targeting
+  change, which must account for two config files rather than one.
+- **Behaviour was verified, not assumed.** The regenerated teaching scanner
+  and the real scanner produce byte-identical JSON output and the same exit
+  code when run over the same tree. All five generated Markdown documents are
+  byte-identical to the committed copies, which proves the generator refactor
+  changed only what it was meant to change.
+- `update_packages.py` is **not** in `$ScaffoldSyncFiles`, so this change does
+  not propagate automatically. Copies exist in three sibling repositories:
+  `trails-and-tails` and `eu-spm` hold byte-identical copies of the previous
+  version, and `Salesforce` holds a diverged copy under `scripts/` with its
+  own test. Propagating the subprocess allow-list to those copies is tracked
+  separately.
+
+---
+
+## [2026-08-27] - Scaffold lint coverage, stage 1
+
+### Changed
+
+- `_copilot-shared/scaffold/security_scan.py` now passes `ruff format` and
+  `ruff check` cleanly (53 findings resolved: 36 line-length, 13 missing
+  docstrings, plus 4 auto-fixable items). The scanner is the file every project
+  in the workspace runs, and until now it was the least-inspected file in the
+  workspace.
+- Long rule `description` and `recommendation` strings are wrapped as
+  implicitly-concatenated literals rather than single over-long lines. The
+  resulting message text is unchanged - see Notes.
+- `collections.abc.Iterable` moved into a `TYPE_CHECKING` block. It is used
+  only in annotations, and `from __future__ import annotations` means it never
+  needs to be imported at run time.
+
+### Added
+
+- Complete beginner-standard docstrings for both public classes (`Rule`,
+  `Finding`) and all eleven public functions in `security_scan.py`, covering
+  arguments, return values, raised exceptions and non-obvious behaviour - for
+  example why an unreadable file becomes a `LOW` finding instead of aborting
+  the scan, and why `scan_package_json` reports every finding at line 1.
+- `_copilot-shared/docs/scope-scaffold-lint-coverage.md` - scope document for
+  bringing the remaining scaffold Python files under the quality gate,
+  recording the measured remediation cost and the blast radius of editing
+  force-synced files.
+
+### Notes
+
+- **Behaviour is unchanged and was verified, not assumed.** Five baselines were
+  captured before any edit and re-run afterwards: a scan with 49 findings
+  (251 lines of output), a scan with no findings, a JavaScript/frontend scan,
+  `--help`, and a non-zero exit via `--fail-on HIGH`. All five outputs are
+  byte-identical and the exit codes match. This mattered because wrapping 32
+  message strings by hand could silently have altered the security advice the
+  scanner prints.
+- A doctest example added during this work contained a secret-shaped literal
+  (`password = "..."`), which `detect-secrets` correctly flagged. Rather than
+  record it as a baseline false positive - which would have pushed a new
+  baseline entry into three sibling repositories - the example was rewritten as
+  prose. The docstring now explains why no literal example is given.
+- The `SECRETISH_WORDS` constant keeps its single long line under
+  `# noqa: E501`. `detect-secrets` matches its allow-list pragma per line, so
+  splitting the string would require repeating the pragma on every fragment.
+- Step 4 of the gate (bandit) still reports `SKIPPED` in this repository.
+  `security_scan.py` already passes bandit and mypy; only the `sanity.bat`
+  targeting change is missing, and that is deliberately sequenced last. See the
+  scope document.
+
+---
+
+## [2026-08-26]
+
+### Added
+
+- **Working quality gate for the workspace-root repository.** `sanity.bat` was
+  present but five of its seven steps were failing with `No module named ...`,
+  so this repository had no effective linting, type-checking, secret-scanning,
+  or test enforcement at all. The gate now reports
+  `SUCCESS: All checks passed` with **1505 tests passing**.
+  - `requirements-dev.txt` (new) - pins the gate toolchain: `ruff==0.15.7`,
+    `mypy==1.19.1`, `bandit==1.7.9`, `detect-secrets==1.5.0`,
+    `pytest-xdist==3.8.0`, alongside the already-present `pytest` and
+    `pytest-cov`. Versions deliberately match the sibling projects so a rule
+    that passes in one repository behaves identically in the others. There is
+    no matching `requirements.in` - this repository has no runtime
+    dependencies.
+  - `pyproject.toml` (new) - adapted from
+    `_copilot-shared/scaffold/pyproject.toml`. The scaffold assumes a
+    `src/` + `scripts/` layout; this repository has neither, so ruff, mypy,
+    and pytest are pointed at `_copilot-shared/tests` instead. Sibling project
+    directories are excluded from every tool so the workspace-root gate never
+    reaches into a repository that owns its own gate. Coverage thresholds are
+    deliberately **not** enabled - the suite validates Markdown artefact
+    pairing and ASCII rules rather than exercising an importable package, so a
+    line-coverage percentage would be meaningless.
+  - `.secrets.baseline` (new) - generated across the 252 tracked files. It
+    contains one reviewed false positive: a regex in
+    `security_scan_teaching_comments.ps1` that *lists* secret keywords
+    (`api_key|secret|token|...`) as scanner rule data. Path separators were
+    converted to POSIX `/` per the cross-platform rule, and the UTF-8 BOM that
+    PowerShell 5.1 writes was stripped - with it, detect-secrets fails with
+    `Unable to read baseline`.
+
+- **`powershell/Compare-Folders.ps1`** - a read-only helper that compares two
+  directory trees recursively and reports three kinds of difference: missing in
+  destination, content mismatch, and extra item in destination. Two comparison
+  modes: the default fingerprints each file by size plus last-write timestamp
+  (fast), and `-UseChecksums` fingerprints by SHA256 (slower, but proof against
+  a change that preserves both size and timestamp). The script never creates,
+  modifies, or deletes anything in either folder.
+  - Completed the comment-based help to meet the repository PowerShell
+    documentation standard: `.PARAMETER` blocks for all three parameters, two
+    `.EXAMPLE` blocks, and a `.NOTES` block recording the read-only guarantee.
+    The description now explains the speed-versus-reliability trade-off of
+    `-UseChecksums`, including the fact that it forces OneDrive to download any
+    "cloud-only" files it touches.
+
+### Fixed
+
+- **`Compare-Folders.ps1` silently ignored hidden and system files.**
+  `Get-ChildItem` omits them unless `-Force` is supplied, so two folders that
+  differed only by a hidden file were reported as **"Success: Folders are
+  identical!"**. For a tool whose entire purpose is verifying that a backup
+  matches its source, a false pass is the worst possible failure mode. Now
+  scans with `-Force`.
+- **`Compare-Folders.ps1` hard-coded the Windows path separator.** The relative
+  path was derived with `.TrimStart('\')`, so under PowerShell Core on
+  Linux/macOS every relative key retained a leading `/` and *every* file was
+  reported as differing. Now trims both `DirectorySeparatorChar` and
+  `AltDirectorySeparatorChar`.
+- **`Compare-Folders.ps1` miscalculated relative paths when the caller supplied
+  a trailing separator.** `$item.FullName.Substring($Path.Length)` shifted by
+  one character for `"D:\Reports\"` versus `"D:\Reports"`, corrupting every key
+  in the snapshot. The root is now normalised with `Resolve-Path` and its
+  trailing separator stripped before any offset arithmetic.
+- Switched `Get-ChildItem` and `Get-FileHash` to `-LiteralPath` so folder names
+  containing PowerShell wildcard characters (`[`, `]`, `*`, `?`) are treated as
+  literal text rather than glob patterns.
+- **Stripped UTF-8 BOMs from `powershell/Compare-Folders.ps1` and
+  `powershell/count-pdf-total-enhanced.ps1`.** A BOM decodes to `U+FEFF`, which
+  is non-ASCII, so both files violated the repository's pure-ASCII rule for
+  code files. This was a pre-existing failure in
+  `count-pdf-total-enhanced.ps1` that had never been visible because the test
+  suite could not run.
+- **Annotated `iter_markdown_references()` in
+  `_copilot-shared/tests/test_website_guide_references.py`** with
+  `-> Iterator[tuple[int, str]]`. Under mypy `strict`, calling an unannotated
+  function from a typed context raises `no-untyped-call`; this was the only
+  type error in the repository.
+
+### Changed
+
+- Regenerated `_copilot-shared/MANIFEST.md` (automatic timestamp update from
+  the last `sync-shared-copilot.ps1` run).
+
+### Notes
+
+- `Compare-Folders.ps1` verified manually against temporary fixtures: a
+  hidden-only difference is now detected; identical trees report success both
+  with and without a trailing separator on the input paths; and `-UseChecksums`
+  agrees with the fast path.
+- Two known `Compare-Folders.ps1` limitations were reviewed and deliberately
+  left as-is. The fast comparison mode can report spurious `Content Mismatch`
+  results when comparing across filesystems, because NTFS stores timestamps at
+  100-nanosecond resolution while FAT/exFAT stores them at 2-second resolution
+  - use `-UseChecksums` for drive-to-USB verification. The script also reports
+  differences but does not offer to reconcile them, which is intentional: it is
+  read-only by design.
+- **Step 4 (bandit) still reports `SKIPPED`.** `sanity.bat` looks for `src`,
+  `scripts`, or `frontend` directories, and this repository has none - its
+  Python lives in `_copilot-shared/tests/` and `_copilot-shared/scaffold/`.
+  Fixing this means changing the shared scaffold `sanity.bat`, which is synced
+  to every project, so it was left for a separate deliberate change rather
+  than bundled here.
+- **`security_scan.py` and `_copilot-shared/scaffold/*.py` are outside the
+  gate's target list** for the same reason: `sanity.bat` only collects `src`,
+  `tests`, `scripts`, `frontend`, and `_copilot-shared\tests`. They are linted
+  by neither ruff nor mypy today.
+
+---
+
 ## [2026-07-16]
 
 ### Changed

@@ -154,6 +154,20 @@ ignore = [
 # Scripts: module-level docstrings often summary-only.
 "scripts/*" = ["D205", "D415"]
 
+# The teaching-pack generator embeds the verbatim text of the documents it
+# produces (PowerShell comment-based help, Markdown walkthroughs, cheat
+# sheets) as triple-quoted string constants. A few of those lines exceed 100
+# characters because the target format requires it - for example a complete
+# "powershell -ExecutionPolicy Bypass -File ..." example command. Re-wrapping
+# them in the Python source would change the generated documents, so E501 is
+# ignored for this one file. This is NOT a licence to write long code lines:
+# every line of actual Python logic in that file is within the limit.
+#
+# This entry lives here rather than in the workspace-root pyproject.toml
+# because ruff resolves configuration from the nearest pyproject.toml, and
+# this file is the nearest one to _copilot-shared/scaffold/.
+"**/create_security_scan_pack.py" = ["E501"]
+
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
