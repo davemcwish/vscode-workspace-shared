@@ -11,7 +11,54 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
-## [2026-08-27] - Scaffold lint coverage, stage 2
+## [2026-08-27] - Scaffold lint coverage, stage 3 (gate targeting)
+
+### Changed
+
+- `_copilot-shared/scaffold/sanity.bat` now includes
+  `_copilot-shared\scaffold` in both `PY_TARGETS` (ruff format, ruff lint) and
+  `BANDIT_TARGETS`. This is the change the previous two stages were sequenced
+  ahead of: the scaffold sources are now held to the same standard as the rest
+  of the workspace, and a regression in them will fail the gate.
+- `[tool.mypy] files` in the workspace-root `pyproject.toml` extended to
+  `["_copilot-shared/tests", "_copilot-shared/scaffold"]`. Mypy now checks
+  9 source files rather than 5.
+- **Step 4 (bandit) no longer reports `SKIPPED` in this repository.** It had
+  skipped on every run since the gate was written, because the target list
+  only ever considered `src`, `scripts`, and `frontend` - none of which exist
+  here. It now scans the scaffold sources and passes.
+- `trails-and-tails/pyproject.toml`: `[tool.mypy] files` corrected from the
+  uncustomised scaffold default `["src", "scripts"]` to `["tests"]`. That
+  project has no `src/` package and no `.py` files under `scripts/`, so mypy
+  aborted with *"There are no .py[i] files in directory 'scripts'"* and failed
+  the gate on **every** run. Its gate now passes for the first time.
+- The subprocess hardening from `update_packages.py` propagated to the three
+  projects holding copies:
+  - `trails-and-tails` and `eu-spm` received the fixed file directly, as their
+    copies were byte-identical to the previous version.
+  - `Salesforce/scripts/update_packages.py` was hand-ported rather than
+    overwritten, because its copy has diverged. It already validated through
+    the shared `validate_subprocess_command`, so only two gaps remained:
+    `shell=False` is now explicit at both call sites, and the `pip show`
+    probe gained a `PIP_SHOW_TIMEOUT_SECONDS` timeout so a hung pip cannot
+    block the script indefinitely.
+  - `Salesforce/tests/test_update_packages.py` updated to assert
+    `shell=False` explicitly, rather than merely tolerating it.
+
+### Notes
+
+- **The root copies of `security_scan.py` and `update_packages.py` are
+  deliberately excluded from linting.** They are synced duplicates of the
+  scaffold originals. Linting both would double every finding and invite
+  someone to "fix" the generated copy, where the change would be silently
+  overwritten by the next sync.
+- **The new guards cannot fire in sibling projects.** Both are conditional on
+  `_copilot-shared\scaffold\` existing, and that folder is present only in the
+  workspace root repository - verified absent in all four siblings after the
+  sync. All four gates were run after the change: workspace root 1509 passed,
+  eu-spm 470 passed, trails-and-tails 223 passed, Salesforce passed.
+
+---
 
 ### Changed
 

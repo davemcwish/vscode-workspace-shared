@@ -136,7 +136,14 @@ max-complexity = 12
 # ============================================================================
 [tool.mypy]
 python_version = "3.13"
-files = ["_copilot-shared/tests"]
+# The scaffold folder holds the template files copied into every new project
+# (the security scanner, its teaching-pack generator, the generated teaching
+# copy, and the dependency updater). They are shared code that every project
+# ends up running, so they are type-checked to the same standard as the
+# contract tests. Note that ruff resolves ITS config from the nearest
+# pyproject.toml, which for that folder is _copilot-shared/scaffold/pyproject.toml
+# - mypy is different and reads this table, because it is invoked from here.
+files = ["_copilot-shared/tests", "_copilot-shared/scaffold"]
 exclude = [
     "\\.venv/",
     "build/",
