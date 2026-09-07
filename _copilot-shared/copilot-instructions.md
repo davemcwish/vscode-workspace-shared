@@ -328,10 +328,49 @@ ruff format --check src tests scripts
 ruff check src tests scripts
 mypy
 bandit -c pyproject.toml -r src scripts --exclude scripts/archive,tests
-python -m detect_secrets scan --baseline .secrets.baseline
+python secrets_gate.py
 pytest -n auto
 npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"
 ```
+
+**Step 5 must be `secrets_gate.py`, never `detect_secrets scan --baseline`.**
+`scan --baseline` is a baseline-*maintenance* command: it writes any newly
+discovered secret into `.secrets.baseline` and then exits `0`. A real
+credential committed to the repository would therefore be silently added to
+the allow-list while the gate reported success. This was confirmed by
+experiment - a fake AWS key was staged, the command exited `0`, and the key
+appeared in the baseline as an approved entry.
+
+`secrets_gate.py` (shared-owned, `_copilot-shared\scaffold\secrets_gate.py`,
+synced to every project root) wraps `detect_secrets.pre_commit_hook`, which
+*checks* against the baseline, exits `1` on a new secret, and never rewrites
+the file. It batches the file list because a large repo exceeds the Windows
+8,191-character command-line limit, and that truncation would be silent. It
+covers **git-tracked files only** - the same scope as the command it replaced;
+widening it to untracked files is separately scoped work.
+
+It also runs the scanner with **`PYTHONUTF8=1`**. `detect-secrets` opens files
+using Python's default encoding, which on Windows is `cp1252`. Files containing
+emoji or accented characters fail to decode and are skipped **silently** while
+still being reported as scanned. Measured on the Salesforce repo, 76 of 576
+tracked files (13%) were never scanned locally, while Linux CI scanned all of
+them - so the two environments disagreed on identical content. Never remove
+this environment variable: doing so reopens a silent under-scan, the same
+failure class the script exists to close.
+
+`.secrets.baseline` **must use POSIX forward slashes**. Windows tolerates
+backslash entries locally; Linux CI does not, so a backslash baseline fails in
+CI only. Normalise the baseline before switching a project to `secrets_gate.py`.
+
+The gate fails if `.secrets.baseline` is edited but not staged. This is
+deliberate - `detect-secrets` will not trust an unstaged baseline, because a
+secret could otherwise be hidden by editing the file without committing it. The
+script reports this case explicitly as *not* a secret finding.
+
+A related symptom disappears with this change: `.secrets.baseline` no longer
+shows as modified after every run. That churn was not cosmetic noise - it was
+the visible evidence of the file being rewritten, the same mechanism that
+absorbed new secrets.
 
 **Coverage flags are defined once** in `pyproject.toml` under
 `[tool.pytest.ini_options] addopts` and are automatically inherited by every

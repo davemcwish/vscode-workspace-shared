@@ -186,10 +186,20 @@ echo.
 echo ============================================================================
 echo  [5/7] detect-secrets (secret scanning)
 echo ============================================================================
+REM  Runs secrets_gate.py, NOT "detect_secrets scan --baseline".
+REM  "scan --baseline" is a baseline-MAINTENANCE command: it writes newly
+REM  discovered secrets into .secrets.baseline and then exits 0, so a real
+REM  committed credential would be silently allow-listed and the gate would
+REM  report success. secrets_gate.py wraps detect_secrets.pre_commit_hook,
+REM  which CHECKS against the baseline, exits 1 on a new secret, and never
+REM  rewrites the file. See secrets_gate.py for the full explanation.
 if %HAS_SECRETS_BASELINE% EQU 0 (
     echo  SKIPPED: No .secrets.baseline file found.
+) else if not exist "secrets_gate.py" (
+    echo  FAILED: secrets_gate.py not found. Re-run the shared scaffold sync.
+    set /a FAIL_COUNT+=1
 ) else (
-    %PY_CMD% -m detect_secrets scan --baseline .secrets.baseline
+    %PY_CMD% secrets_gate.py
     if errorlevel 1 set /a FAIL_COUNT+=1
 )
 

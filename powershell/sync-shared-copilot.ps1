@@ -18,9 +18,9 @@
 
     SCAFFOLD SYNC: Certain scaffold files (listed in $ScaffoldSyncFiles) are
     always synced into the project ROOT on every run.  These are shared-owned
-    files (sanity.bat, sanity_v.bat, .markdownlint.json, security_scan.py,
-    security_scan.ps1) that must stay consistent across all projects.  Edit
-    them in _copilot-shared\scaffold\.
+    files (sanity.bat, sanity_v.bat, .markdownlint.json, secrets_gate.py,
+    security_scan.py, security_scan.ps1) that must stay consistent across all
+    projects.  Edit them in _copilot-shared\scaffold\.
 
     NEW PROJECTS: use -Scaffold -ScaffoldTarget <folder> to copy the starter
     files (README.md, CONTRIBUTING.md, requirements.in, etc.) from
@@ -128,6 +128,7 @@ $ScaffoldSyncFiles = @(
     ".markdownlint.json",
     "sanity.bat",
     "sanity_v.bat",
+    "secrets_gate.py",
     "security_scan.py",
     "security_scan.ps1",
     "sync-backups.ps1"

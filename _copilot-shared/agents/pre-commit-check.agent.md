@@ -151,7 +151,7 @@ ruff format --check src tests scripts
 ruff check src tests scripts
 mypy
 bandit -c pyproject.toml -r src scripts --exclude scripts/archive,tests
-python -m detect_secrets scan --baseline .secrets.baseline
+python secrets_gate.py
 pytest -n auto
 
 ## Results
@@ -240,9 +240,11 @@ functions.
 - If detect-secrets finds a potential secret, flag it as CRITICAL.
 - Compare test count against last known count (from docs) and flag if lower.
 - Run `sanity.bat` (the canonical local mirror of `ci.yml`). Do not substitute
-  simpler variants of the underlying commands (e.g. `detect-secrets scan`
-  without `--baseline`, or a `pytest` run that bypasses `addopts` and so skips
-  the `--cov-fail-under=90` threshold).
+  simpler variants of the underlying commands. In particular, **never replace
+  step 5 (`python secrets_gate.py`) with `detect_secrets scan --baseline`** -
+  that command writes new secrets into the baseline and exits `0`, so it
+  reports success while disarming the gate. Likewise do not use a `pytest` run
+  that bypasses `addopts` and so skips the `--cov-fail-under=90` threshold.
 - **⚠ Check `Changelog.md` is updated.** Before declaring the gate green,
   confirm that `Changelog.md` contains an entry for the current session's
   changes (code, config, docs, tooling - anything). If no entry exists,

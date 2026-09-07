@@ -36,6 +36,7 @@
 # double-tracked. The leading "/" anchors to the workspace root, so the
 # scaffold/ copies are unaffected. (security_scan.py is already ignored by the
 # "*" rule above - there is no "!*.py" whitelist - but it is listed here too so
-# the intent is explicit and both scanners are treated identically.)
+# the intent is explicit and all three scanners are treated identically.)
 /security_scan.py
 /security_scan.ps1
+/secrets_gate.py

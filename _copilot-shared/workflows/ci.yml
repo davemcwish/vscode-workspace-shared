@@ -69,8 +69,8 @@ jobs:
       - name: bandit security scan
         run: bandit -c pyproject.toml -r src scripts --exclude scripts/archive,tests --quiet
 
-      - name: detect-secrets scan
-        run: python -m detect_secrets scan --baseline .secrets.baseline
+      - name: detect-secrets gate
+        run: python secrets_gate.py
 
       - name: pytest
         # Coverage flags (--cov, --cov-report, --cov-fail-under, --strict-markers)

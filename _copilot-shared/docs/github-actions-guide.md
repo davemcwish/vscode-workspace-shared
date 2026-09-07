@@ -215,8 +215,13 @@ jobs:
       - name: bandit security scan
         run: bandit -c pyproject.toml -r src scripts --exclude scripts/archive,tests --quiet
 
-      - name: detect-secrets scan
-        run: python -m detect_secrets scan --baseline .secrets.baseline
+      - name: secret scan
+        # Must be secrets_gate.py, NOT "detect_secrets scan --baseline".
+        # "scan --baseline" writes newly found secrets into the baseline and
+        # then exits 0, so a committed credential would be silently
+        # allow-listed while the step reported success. secrets_gate.py wraps
+        # detect_secrets.pre_commit_hook, which checks and exits 1 instead.
+        run: python secrets_gate.py
 
       - name: pytest
         # Coverage flags live in pyproject.toml [tool.pytest.ini_options]
@@ -274,7 +279,7 @@ Open `sanity.bat` and compare it to the CI steps. The commands should match:
 | `ruff check src tests scripts` | `ruff check src tests scripts` |
 | `mypy` | `mypy` |
 | `bandit -c pyproject.toml -r src scripts --exclude scripts/archive,tests --quiet` | `bandit -c pyproject.toml -r src scripts --exclude scripts/archive,tests --quiet` |
-| `python -m detect_secrets scan --baseline .secrets.baseline` | `python -m detect_secrets scan --baseline .secrets.baseline` |
+| `python secrets_gate.py` | `python secrets_gate.py` |
 | `pytest -n auto` | `pytest -n auto` |
 | `npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"` | `npx markdownlint-cli2@0.22.1 "docs/**/*.md" "*.md"` |
 

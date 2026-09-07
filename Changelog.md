@@ -11,6 +11,98 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2026-09-04] - Security: secret-scanning gate no longer absorbs new secrets
+
+### Security
+
+**The secret-scanning gate did not gate.** Step 5 of the quality pipeline ran
+`python -m detect_secrets scan --baseline .secrets.baseline` in `sanity.bat`,
+`sanity_v.bat` and every project's `ci.yml`. `scan --baseline` is a
+baseline-*maintenance* command: when it finds a secret that is not already in
+the baseline it **writes that secret into the baseline as an approved entry and
+exits `0`**. A real credential committed to any of these repositories would
+have been silently allow-listed while both the local gate and CI reported
+success.
+
+Confirmed by experiment before any code was changed. A staged file containing a
+fake AWS access key produced exit `0`, four new baseline entries, and no
+failure anywhere. The same canary against the replacement exits `1`, reports
+the file and line, and leaves the baseline untouched.
+
+- Added `_copilot-shared/scaffold/secrets_gate.py`, synced to every project
+  root. It wraps `detect_secrets.pre_commit_hook`, which *checks* against the
+  baseline, exits `1` on a new secret, and never rewrites the file.
+- `scaffold/sanity.bat` and `scaffold/sanity_v.bat` (step 5) now call it.
+- `workflows/ci.yml` - the **reference template used when scaffolding new
+  projects** - updated too. Leaving it would have seeded the vulnerability into
+  every future project.
+- `powershell/sync-shared-copilot.ps1` - `secrets_gate.py` added to
+  `$ScaffoldSyncFiles`. Without this, projects would receive the new
+  `sanity.bat` but not the script it calls.
+
+**Why a script rather than an inline command.** The hook takes an explicit file
+list. The Salesforce repo has 575 tracked files totalling ~28,000 characters,
+against the Windows command-line limit of 8,191 - and that truncation would be
+**silent**, quietly shrinking coverage. `secrets_gate.py` batches the list in
+chunks of 150 and fails closed if it cannot enumerate files at all.
+
+**A second, separate silent under-scan was found while proving the fix.**
+`detect-secrets` opens each file using Python's default text encoding, which on
+Windows is `cp1252`. Files containing emoji or accented characters fail to
+decode and are skipped **silently** while still being reported as scanned. The
+local gate passed while CI failed on identical content. Measured per repo:
+
+| Repository | Tracked | Silently skipped on Windows |
+| --- | --- | --- |
+| Salesforce | 576 | 76 (13%) |
+| eu-spm | 307 | 14 |
+| trails-and-tails | 233 | 11 |
+| workspace root | 256 | 8 |
+
+`secrets_gate.py` runs the scanner with `PYTHONUTF8=1`, making Windows behave
+exactly as Linux does. It is a no-op on Linux and macOS. **This variable must
+never be removed** - doing so reopens the blind spot.
+
+**Scope: git-tracked files only** - deliberately identical to the command it
+replaces, so this fixes the gating defect without silently altering coverage.
+Untracked files were never scanned by the previous command either; widening
+coverage to them is separately scoped work.
+
+### Fixed
+
+- `_copilot-shared/scaffold/secrets_gate.py` normalised to LF line endings, so
+  it matches every other scaffold file rather than being the only CRLF one.
+- An unstaged `.secrets.baseline` is now reported as a **configuration error**
+  with the exact remediation (`git add .secrets.baseline`), rather than as
+  "N batch(es) reported a potential secret". `detect-secrets` refuses to trust
+  an unstaged baseline - correctly, since a secret could otherwise be hidden by
+  editing the file without committing - but its message is easily misread as a
+  finding.
+- `.gitignore` re-ignores the root `secrets_gate.py` convenience copy, matching
+  how `security_scan.py` and `security_scan.ps1` are already handled. The
+  canonical copy is the tracked one in `_copilot-shared/scaffold/`.
+
+### Removed
+
+- The `.secrets.baseline` churn that dirtied the working tree after every
+  `sanity.bat` run, in every repository. That churn was not cosmetic noise - it
+  was the visible evidence of the file being rewritten, the same mechanism that
+  absorbed new secrets.
+
+### Changed
+
+- `copilot-instructions.md` canonical quality gate updated: step 5 is now
+  `python secrets_gate.py`, with the rationale, the `PYTHONUTF8` warning, the
+  POSIX-separator requirement for `.secrets.baseline`, and the unstaged-baseline
+  behaviour all recorded.
+- `chatmodes/pre-commit-check.chatmode.md` deduplicated, 587 to 351 lines.
+  Steps 1-3 appeared twice and had drifted apart, each copy holding content the
+  other lacked. Unique content merged, duplicate removed.
+- `agents/pre-commit-check.agent.md`, `prompts/pre-commit-check.prompt.md` and
+  `docs/github-actions-guide.md` updated to match.
+
+---
+
 ## [2026-08-27] - Scaffold lint coverage, stage 3 (gate targeting)
 
 ### Changed

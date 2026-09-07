@@ -55,7 +55,7 @@ Short plain-English summary of what happened and whether it is safe to commit.
 | 2 | ruff check | PASS/FAIL |  |
 | 3 | mypy | PASS/FAIL |  |
 | 4 | bandit | PASS/FAIL |  |
-| 5 | detect-secrets | PASS/FAIL |  |
+| 5 | secrets gate (`secrets_gate.py`) | PASS/FAIL |  |
 | 6 | pytest + coverage | PASS/FAIL |  |
 
 ## Failures (if any)
