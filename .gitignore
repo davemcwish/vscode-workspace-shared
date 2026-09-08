@@ -41,6 +41,15 @@
 /security_scan.ps1
 /secrets_gate.py
 
+# Temporary pull-request body files written by "gh pr create --body-file".
+# The "*" rule above already ignores these, so this entry adds no new
+# behaviour - it is listed explicitly because the file has twice been left
+# behind after a PR was raised, and a named rule makes the intent obvious to
+# the next person who greps for it. Sibling project repos do NOT inherit this
+# (they have their own .gitignore files) and need the same entry adding
+# separately.
+.pr-body-tmp.md
+
 # Temporary pull-request body files. `gh pr create --body-file` needs a real
 # file on disk, so one is written here and deleted immediately afterwards. It
 # is already covered by the "*" rule above; it is named explicitly so that a
