@@ -1,4 +1,4 @@
-﻿# Getting Started: Windows 11
+# Getting Started: Windows 11
 
 **For macOS or Linux users:** The principles here apply, but replace Step 2 activation and Step 4 shell commands with your OS's native tools. A detailed Linux/macOS guide is coming soon.
 

@@ -1,4 +1,4 @@
-﻿---
+---
 description: "Review HTML and CSS for accessibility, responsiveness, maintainability, and beginner readability."
 mode: ask
 ---
