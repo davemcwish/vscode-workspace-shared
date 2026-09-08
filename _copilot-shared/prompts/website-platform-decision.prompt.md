@@ -1,4 +1,4 @@
-﻿---
+---
 description: "Help choose the simplest sustainable platform for a website, report, dashboard, or tool."
 mode: ask
 ---

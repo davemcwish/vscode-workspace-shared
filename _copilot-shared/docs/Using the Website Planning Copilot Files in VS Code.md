@@ -1,4 +1,4 @@
-﻿# Guide: Using the Website Planning Copilot Files in VS Code
+# Guide: Using the Website Planning Copilot Files in VS Code
 
 > **This document has been consolidated.**
 >
