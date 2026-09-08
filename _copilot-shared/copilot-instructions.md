@@ -10,6 +10,14 @@ Shared Copilot artefact ownership:
 - Normal project code loops must operate in one project repo only.
 - Shared Copilot system loops may edit _copilot-shared, sync to all projects, and inspect downstream diffs.
 - No loop may merge, push, deploy, or touch Salesforce Production without explicit human approval.
+- Never push directly to a protected `main`. Push a branch and open a PR, even
+  when the change is already reviewed. A direct push to `main` can silently
+  bypass a required status check (this happened on 2026-09-08 - `Cycode:
+  Secrets` was skipped, and the commit could not afterwards be scanned because
+  GitHub refuses to open a PR with no commits between the branch and `main`).
+  The bypass is not recoverable without rewriting a protected branch.
+- Delete PR-body temp files (`.pr-body-tmp.md`) immediately after
+  `gh pr create`, and verify with `git status --porcelain` before committing.
 
 ## Project Context
 
