@@ -40,3 +40,9 @@
 /security_scan.py
 /security_scan.ps1
 /secrets_gate.py
+
+# Temporary pull-request body files. `gh pr create --body-file` needs a real
+# file on disk, so one is written here and deleted immediately afterwards. It
+# is already covered by the "*" rule above; it is named explicitly so that a
+# forgotten temp file can never be staged by accident during a hurried commit.
+/.pr-body-tmp.md
