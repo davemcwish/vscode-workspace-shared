@@ -66,19 +66,22 @@ The one thing the May 2026 change did not account for is that ``scan
 --baseline`` does not fail on a new secret - it records it and exits ``0``.
 That is what this script fixes.
 
-Scope: tracked files only
--------------------------
-The file list comes from ``git ls-files``, so it covers files that Git is
-tracking. A secret sitting in a brand-new file that has never been ``git
-add``-ed is therefore not checked.
+Scope: tracked files plus untracked files that are not ignored
+--------------------------------------------------------------
+The file list comes from ``git ls-files --cached --others
+--exclude-standard``. That covers everything Git is tracking **and** any new
+file you have created but not yet ``git add``-ed.
 
-This matches - and does not weaken - the behaviour of the command it replaces,
-which also only scanned tracked files. Widening the net to untracked files is
-a deliberate, separately-scoped piece of work: done naively it would scan
-``.venv``, ``output``, and other large ignored directories, making the gate
-slow and noisy. Until that work happens, the protection you have is: a secret
-becomes visible to this gate as soon as it is staged, which is before it can
-be committed.
+Untracked files are included because a secret in a brand-new file is
+otherwise invisible right up to the moment you commit it - which is exactly
+the moment you most want to be warned. Catching it beforehand means it never
+enters Git history, where removing it is far harder.
+
+Files ignored by ``.gitignore`` are **not** scanned. Those are build output,
+virtual environments, and local ``.env`` files: usually enormous, never
+committed, and scanning them would make the gate slow and noisy without
+protecting anything. If you keep a real credential in an ignored file, that is
+correct and this gate will not complain about it.
 
 Usage
 -----
@@ -97,7 +100,7 @@ Exit codes - these are what the build system reacts to:
 Example of a failing run::
 
     $ python secrets_gate.py
-    Checking 575 tracked file(s) for secrets...
+    Checking 575 file(s) for secrets (tracked + untracked)...
     ERROR: Potential secrets about to be committed to git repo!
     Secret Type: AWS Access Key
     Location:    scripts/example.py:10
@@ -192,8 +195,21 @@ def _resolve_executable(name: str) -> str:
     return match.group(0)
 
 
-def get_tracked_files(project_root: Path) -> list[str]:
-    """Return every file Git is tracking in ``project_root``.
+def get_files_to_scan(project_root: Path) -> list[str]:
+    """Return every file in ``project_root`` that the gate should scan.
+
+    This is **tracked files plus untracked files that are not ignored**.
+
+    Why untracked files are included: a brand-new file containing a
+    credential is invisible to a tracked-only scan right up until the moment
+    you commit it - which is exactly the moment you most want to be warned.
+    Including untracked files means the gate can object *before* the secret
+    enters Git history, where removing it is far harder.
+
+    Ignored files (anything matched by ``.gitignore``) are deliberately left
+    out. Those are build output, virtual environments, and local ``.env``
+    files, which are frequently enormous and are never committed. Scanning
+    them would make the gate slow and noisy without protecting anything.
 
     Args:
         project_root: The folder to inspect. This should be the root of the
@@ -216,7 +232,7 @@ def get_tracked_files(project_root: Path) -> list[str]:
             "failing closed".
 
     Example:
-        >>> files = get_tracked_files(Path("."))
+        >>> files = get_files_to_scan(Path("."))
         >>> ".secrets.baseline" in files
         False
     """
@@ -226,11 +242,23 @@ def get_tracked_files(project_root: Path) -> list[str]:
         # only safe separator, because a filename may legitimately contain a
         # newline but can never contain a NUL byte.
         #
+        # --cached           tracked files
+        # --others           untracked files
+        # --exclude-standard honour .gitignore, so build output and .env files
+        #                    are skipped
+        #
         # Suppression rationale: the executable is resolved via shutil.which()
         # and re-verified, every other argument is a string literal, and
         # shell=False. There is no user-controlled input in this command.
         result = subprocess.run(  # noqa: S603  # nosec B603
-            [git_executable, "ls-files", "-z"],
+            [
+                git_executable,
+                "ls-files",
+                "-z",
+                "--cached",
+                "--others",
+                "--exclude-standard",
+            ],
             cwd=project_root,
             capture_output=True,
             text=True,
@@ -247,9 +275,15 @@ def get_tracked_files(project_root: Path) -> list[str]:
     except subprocess.CalledProcessError as exc:
         raise RuntimeError("'git ls-files' failed. Are you inside a Git repository?") from exc
 
-    return [
-        name for name in result.stdout.split("\0") if name and Path(name).name != BASELINE_FILENAME
-    ]
+    # A file can be listed twice if it is both tracked and reported as other;
+    # dict.fromkeys removes duplicates while preserving the original order.
+    return list(
+        dict.fromkeys(
+            name
+            for name in result.stdout.split("\0")
+            if name and Path(name).name != BASELINE_FILENAME
+        )
+    )
 
 
 def scan_chunk(filenames: list[str], project_root: Path) -> bool:
@@ -375,7 +409,10 @@ def baseline_has_unstaged_changes(project_root: Path) -> bool:
 
 
 def run_gate(project_root: Path) -> int:
-    """Check every tracked file for new secrets and return an exit code.
+    """Check every scannable file for new secrets and return an exit code.
+
+    "Scannable" means tracked files plus untracked files that are not ignored
+    by ``.gitignore`` - see :func:`get_files_to_scan`.
 
     Args:
         project_root: The project root - the folder containing
@@ -409,14 +446,14 @@ def run_gate(project_root: Path) -> int:
         return 1
 
     try:
-        files = get_tracked_files(project_root)
+        files = get_files_to_scan(project_root)
     except RuntimeError as exc:
         # Fail closed: if we cannot list the files, we cannot claim the
         # repository is clean.
         print(f"FAILED: {exc}")
         return 1
 
-    print(f"Checking {len(files)} tracked file(s) for secrets...")
+    print(f"Checking {len(files)} file(s) for secrets (tracked + untracked)...")
 
     failed_batches = 0
     for start in range(0, len(files), CHUNK_SIZE):

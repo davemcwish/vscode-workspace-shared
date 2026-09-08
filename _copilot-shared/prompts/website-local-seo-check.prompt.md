@@ -1,4 +1,4 @@
-﻿---
+---
 description: Review local SEO readiness for a small business, local organisation, service-area business, or location-based website.
 ---
 

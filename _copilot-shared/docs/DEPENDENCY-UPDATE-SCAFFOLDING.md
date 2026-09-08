@@ -1,4 +1,4 @@
-﻿# Dependency Update Scaffolding
+# Dependency Update Scaffolding
 
 **Date:** June 12, 2026  
 **Status:** Complete  -  Ready for sync across all projects

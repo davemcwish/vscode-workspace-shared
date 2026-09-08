@@ -1,4 +1,4 @@
-﻿---
+---
 description: Review a website plan, page, HTML/CSS project, CMS site, eCommerce site, or no-code website for beginner-friendly SEO, search visibility, and findability.
 ---
 
