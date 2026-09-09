@@ -19,6 +19,31 @@ Shared Copilot artefact ownership:
 - Delete PR-body temp files (`.pr-body-tmp.md`) immediately after
   `gh pr create`, and verify with `git status --porcelain` before committing.
 
+## Remote Push Order
+
+Some repositories have more than one remote. Where they do, **raise the pull
+request against the remote that runs the most review tooling first**, then
+propagate to the others once it has merged. Reviewing on the weakest remote
+first wastes the strong remote's feedback: the change is already approved by
+the time the bots see it.
+
+The `Salesforce` repository has three remotes:
+
+| Remote | Repository | Review tooling |
+| --- | --- | --- |
+| `origin` | `ford-innersource/eu-crm-sf-admin-utils` | **Cycode SAST, plus `Copilot`, `codeguardians-cloud[bot]`, `cycode-security-2[bot]`, `ford-qodo-merge-agent[bot]`** |
+| `ford-personal` | `ford-personal/dwishar1--Salesforce` | Cycode: Secrets only |
+| `personal` | `davemcwish/Salesforce` | none |
+
+So for `Salesforce`: **push the branch and open the PR on `origin` first.**
+Only `origin` has the full SAST and bot review set, so it is the only remote
+that can tell you the change is actually sound. After it merges there, push
+`main` to `ford-personal` and `personal`, which act as mirrors.
+
+Do not open feature-branch PRs on `ford-personal` or `personal` for this
+repository - they carry no review capability the `origin` PR has not already
+provided, and a second PR splits the review history across remotes.
+
 ## Project Context
 
 - **Language:** Python 3.13+
