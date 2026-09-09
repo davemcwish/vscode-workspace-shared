@@ -21,11 +21,42 @@ Shared Copilot artefact ownership:
 
 ## Remote Push Order
 
-Some repositories have more than one remote. Where they do, **raise the pull
-request against the remote that runs the most review tooling first**, then
-propagate to the others once it has merged. Reviewing on the weakest remote
-first wastes the strong remote's feedback: the change is already approved by
-the time the bots see it.
+Some repositories have more than one remote. Two separate rules apply, and they
+must not be confused: **where the review happens**, and **how each remote is
+allowed to receive `main`**.
+
+### Which remotes accept a direct push to `main`
+
+This is a hard constraint set by the hosting accounts. It cannot be changed
+from this workspace, so plan around it rather than pushing and hoping.
+
+| Host | Repositories | Direct push to `main`? |
+| --- | --- | --- |
+| `github.com:ford-innersource` | `eu-crm-sf-admin-utils` | **No - pull request only** |
+| `github.com:ford-personal` | every `dwishar1--*` mirror | **No - pull request only** |
+| `github-personal` (`davemcwish`) | `vscode-workspace-shared`, `eu-spm`, `Salesforce`, `Trails-and-Tails` | Yes |
+
+Never push `main` directly to a `github.com` remote, even to propagate a tree
+that has already been reviewed and merged elsewhere. Doing so does not fail
+cleanly - the account has admin bypass (`enforce_admins: false`), so the push
+**succeeds while skipping the required `Cycode: Secrets` check** and prints:
+
+```text
+remote: Bypassed rule violations for refs/heads/main:
+remote: - Required status check "Cycode: Secrets" is expected.
+```
+
+That warning is the only signal, and it looks identical whether the tree was
+reviewed or not. It is unrecoverable: GitHub refuses to open a retro-PR when
+there are no commits between the branch and `main`, so the commit can never
+afterwards be scanned. This happened five times on 2026-09-09 before the
+constraint was understood. **Treat that message as a defect, never as noise.**
+
+### Where the review happens
+
+Raise the pull request against the remote that runs the most review tooling
+first. Reviewing on the weakest remote first wastes the strong remote's
+feedback: the change is already approved by the time the bots see it.
 
 The `Salesforce` repository has three remotes:
 
@@ -37,12 +68,41 @@ The `Salesforce` repository has three remotes:
 
 So for `Salesforce`: **push the branch and open the PR on `origin` first.**
 Only `origin` has the full SAST and bot review set, so it is the only remote
-that can tell you the change is actually sound. After it merges there, push
-`main` to `ford-personal` and `personal`, which act as mirrors.
+that can tell you the change is actually sound.
 
-Do not open feature-branch PRs on `ford-personal` or `personal` for this
-repository - they carry no review capability the `origin` PR has not already
-provided, and a second PR splits the review history across remotes.
+### Propagating after the review PR merges
+
+Once the PR has merged on the strongest remote:
+
+1. Fast-forward local `main` from that remote.
+2. **`github-personal` remotes**: push `main` directly. This is the only
+   propagation path that needs no ceremony.
+3. **`github.com` remotes**: push the *branch* and open a second PR. Do not
+   push `main`. The second PR carries no new review value, but it is the only
+   way to move `main` without bypassing the required check.
+
+Where a mirror is many commits behind and the content is already identical,
+prefer leaving it behind over bypassing the gate to level it up. A stale
+mirror is a cosmetic problem; an unscanned commit on a protected branch is not.
+
+### Merging the same branch on two remotes forks the history
+
+If the same branch is merged as a PR on two remotes, each produces its own
+merge commit. The trees stay byte-identical but the histories diverge, and the
+next push is rejected as a non-fast-forward. This happened twice on 2026-09-09
+(the two workspace-root pull requests for the same branch, and the `.gitignore`
+rule earlier the same day).
+
+Reconcile with a **merge**, never a force-push, and verify the reconciliation
+changed nothing:
+
+```powershell
+git merge refs/remotes/<other>/main -m "Merge <other> mirror history into main"
+git diff --stat refs/remotes/<other>/main HEAD   # must be empty
+```
+
+An empty diff proves the merge was history-only. If it is not empty, stop -
+the remotes have genuinely diverged and that needs understanding first.
 
 ## Project Context
 
